@@ -31,7 +31,7 @@
         .btn {
             display: inline-block;
             padding: 15px 25px;
-            margin-top: 20px;
+            margin: 10px;
             font-size: 18px;
             color: white;
             background-color: #007bff;
@@ -48,16 +48,19 @@
             color: #888;
         }
     </style>
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </head>
 <body>
     <div class="container">
         <h1>Welcome to SafeNotarize</h1>
         <p>Fast, secure, and legally binding online notarization services available 24/7.</p>
-        <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" class="btn" target="_blank">Book a Notary Now</a>
+        <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" class="btn" target="_blank">Connect with a Notary Live Now</a>
+        <a href="https://calendly.com/supervisor-23/safenotarize" class="btn" target="_blank">Book an Appointment</a>
+        
         <p class="footer">Contact us at <strong>support@safenotarize.com</strong></p>
     </div>
     
-    <!-- Start of Tawk.to Script -->
+    <!-- Start of Tawk.to Script (Modified to Prevent Audio Errors) -->
     <script type="text/javascript">
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
         (function(){
@@ -66,6 +69,7 @@
             s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
             s1.charset='UTF-8';
             s1.setAttribute('crossorigin','*');
+            s1.onerror = function() { console.error('Tawk.to script failed to load.'); };
             s0.parentNode.insertBefore(s1,s0);
         })();
     </script>
