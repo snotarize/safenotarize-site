@@ -35,7 +35,13 @@
     .hero {
       background-color: #ffffff;
       padding: 60px 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .hero-text {
+      max-width: 540px;
     }
     .hero h2 {
       font-size: 32px;
@@ -49,7 +55,7 @@
     }
     .cta-buttons a {
       display: inline-block;
-      margin: 10px;
+      margin: 10px 10px 10px 0;
       padding: 14px 24px;
       font-size: 16px;
       background-color: #007bff;
@@ -60,6 +66,10 @@
     }
     .cta-buttons a:hover {
       background-color: #0056b3;
+    }
+    .hero-graphic {
+      max-width: 400px;
+      flex-shrink: 0;
     }
     .section {
       max-width: 900px;
@@ -94,6 +104,11 @@
       margin-top: 10px;
       font-weight: bold;
     }
+    .calendly-container {
+      max-width: 900px;
+      margin: 0 auto 60px;
+      height: 700px;
+    }
     footer {
       background-color: #00274d;
       color: #ccc;
@@ -115,12 +130,15 @@
   </header>
 
   <div class="hero">
-    <h2>Secure & Convenient Online Notarization</h2>
-    <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
-    <div class="cta-buttons">
-      <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect with a Notary Now</a>
-      <a href="#book" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/supervisor-23'});return false;">Book an Appointment</a>
+    <div class="hero-text">
+      <h2>Secure & Convenient Online Notarization</h2>
+      <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
+      <div class="cta-buttons">
+        <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect with a Notary Now</a>
+        <a href="#book">Book an Appointment</a>
+      </div>
     </div>
+    <img src="https://raw.githubusercontent.com/snotarize/assets/main/agent-graphic.png" alt="Online Notary Graphic" class="hero-graphic">
   </div>
 
   <div class="section">
@@ -137,6 +155,10 @@
   <div class="section testimonial">
     <blockquote>“I was able to notarize my real estate documents in less than 10 minutes — and it was way easier than going in person. Highly recommend SafeNotarize!”</blockquote>
     <cite>— Rachel M., Florida</cite>
+  </div>
+
+  <div class="calendly-container" id="book">
+    <div class="calendly-inline-widget" data-url="https://calendly.com/supervisor-23" style="min-width:320px;height:100%;"></div>
   </div>
 
   <footer>
