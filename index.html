@@ -1,3 +1,4 @@
+<!-- Full optimized landing page with How It Works block, animations, and icons -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,15 +19,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 30px;
+      padding: 10px 20px;
+      flex-wrap: wrap;
     }
     .logo {
       height: 48px;
       filter: brightness(0) invert(1);
     }
+    nav {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
     nav a {
       color: white;
-      margin-left: 20px;
       text-decoration: none;
       font-weight: 500;
     }
@@ -45,14 +51,15 @@
     .hero-text {
       max-width: 600px;
       text-align: center;
+      animation: fadeInUp 1.2s ease-out;
     }
     .hero h2 {
-      font-size: 32px;
+      font-size: 2em;
       margin-bottom: 10px;
       color: #003366;
     }
     .hero p {
-      font-size: 18px;
+      font-size: 1em;
       color: #555;
       margin-bottom: 30px;
     }
@@ -61,11 +68,12 @@
       justify-content: center;
       gap: 20px;
       flex-wrap: wrap;
+      animation: fadeIn 2s ease-in;
     }
     .cta-buttons a {
       display: inline-block;
       padding: 14px 24px;
-      font-size: 16px;
+      font-size: 1em;
       background-color: #007bff;
       color: white;
       text-decoration: none;
@@ -82,15 +90,47 @@
     }
     .section h3 {
       text-align: center;
-      font-size: 24px;
+      font-size: 1.5em;
       margin-bottom: 20px;
     }
     .section ul {
       list-style: none;
       padding: 0;
-      font-size: 18px;
+      font-size: 1em;
     }
     .section ul li {
+      margin-bottom: 10px;
+    }
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 40px auto;
+      max-width: 900px;
+      padding: 0 20px;
+    }
+    .step {
+      flex: 1 1 250px;
+      margin: 20px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: transform 0.3s ease;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .step:hover {
+      transform: translateY(-8px);
+    }
+    .step h4 {
+      font-size: 1.2em;
+      color: #003366;
+      margin-bottom: 10px;
+    }
+    .step img {
+      width: 60px;
+      height: 60px;
       margin-bottom: 10px;
     }
     .testimonial {
@@ -109,7 +149,7 @@
       font-weight: bold;
     }
     .calendly-container {
-      max-width: 900px;
+      max-width: 100%;
       margin: 0 auto 60px;
       height: 700px;
     }
@@ -118,7 +158,30 @@
       color: #ccc;
       text-align: center;
       padding: 20px;
-      font-size: 14px;
+      font-size: 0.9em;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      .cta-buttons a {
+        width: 100%;
+        text-align: center;
+      }
+      nav {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
   <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
@@ -128,61 +191,52 @@
   <header>
     <img src="logo.png" alt="SafeNotarize Logo" class="logo">
     <nav>
-      <a href="#book">Book Appointment</a>
-      <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect Now</a>
+      <a href="#">Home</a>
+      <a href="#">Services</a>
+      <a href="#">FAQ</a>
+      <a href="#">Contact</a>
     </nav>
   </header>
-
-  <div class="hero">
+  <section class="hero">
     <div class="hero-text">
       <h2>Secure & Convenient Online Notarization</h2>
       <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
       <div class="cta-buttons">
         <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect with a Notary Now</a>
-        <a href="#book">Book an Appointment</a>
+        <a href="https://calendly.com/supervisor-23" target="_blank">Book an Appointment</a>
       </div>
     </div>
-  </div>
-
-  <div class="section">
-    <h3>Why Choose SafeNotarize?</h3>
+  </section>
+  <section class="steps">
+    <div class="step">
+      <img src="https://img.icons8.com/ios-filled/100/document--v1.png" alt="Upload">
+      <h4>Upload Your Document</h4>
+      <p>Securely upload the document you need notarized. We accept a wide range of formats.</p>
+    </div>
+    <div class="step">
+      <img src="https://img.icons8.com/ios-filled/100/verified-badge.png" alt="Verify">
+      <h4>Verify Your Identity</h4>
+      <p>Use secure identity verification methods to ensure compliance with notary laws.</p>
+    </div>
+    <div class="step">
+      <img src="https://img.icons8.com/ios-filled/100/video-call.png" alt="Meet">
+      <h4>Meet the Notary</h4>
+      <p>Connect with a certified notary in a live video call and get your document notarized.</p>
+    </div>
+  </section>
+  <section class="calendly-container">
+    <div class="calendly-inline-widget" data-url="https://calendly.com/supervisor-23" style="min-width:320px;height:700px;"></div>
+  </section>
+  <section class="section">
+    <h3>Frequently Asked Questions</h3>
     <ul>
-      <li>✔ Fully licensed and certified online notary professionals</li>
-      <li>✔ Legal in all states that allow Remote Online Notarization (RON)</li>
-      <li>✔ HIPAA & SOC 2 compliant platform with advanced encryption</li>
-      <li>✔ Real human notaries, not AI or bots</li>
-      <li>✔ Services in English, French, and Haitian Creole</li>
+      <li><strong>Is online notarization legal?</strong> Yes, online notarization is legally accepted in most states and jurisdictions.</li>
+      <li><strong>What documents can be notarized?</strong> We notarize affidavits, power of attorney, travel consent forms, and more.</li>
+      <li><strong>How do I connect with a notary?</strong> You can either book an appointment or connect instantly using our secure link.</li>
     </ul>
-  </div>
-
-  <div class="section testimonial">
-    <blockquote>“I was able to notarize my real estate documents in less than 10 minutes — and it was way easier than going in person. Highly recommend SafeNotarize!”</blockquote>
-    <cite>— Rachel M., Florida</cite>
-  </div>
-
-  <div class="calendly-container" id="book">
-    <div class="calendly-inline-widget" data-url="https://calendly.com/supervisor-23" style="min-width:320px;height:100%;"></div>
-  </div>
-
+  </section>
   <footer>
-    &copy; 2022 SafeNotarize — All rights reserved.<br />
-    <a href="mailto:support@safenotarize.com" style="color: #ccc; text-decoration: underline;">support@safenotarize.com</a>
-    <br />
-    <span style="color: #ccc; margin: 0 10px; cursor: default;">Privacy Policy</span> |
-    <span style="color: #ccc; margin: 0 10px; cursor: default;">Terms of Use</span>
+    © 2022 SafeNotarize — All rights reserved. support@safenotarize.com | Privacy Policy | Terms of Use
   </footer>
-
-  <!-- Tawk.to Live Chat -->
-  <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
-  </script>
 </body>
 </html>
