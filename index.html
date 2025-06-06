@@ -34,6 +34,7 @@
     }
     .hero {
       background-color: #ffffff;
+      background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
       padding: 60px 20px;
       display: flex;
       align-items: center;
@@ -66,10 +67,6 @@
     }
     .cta-buttons a:hover {
       background-color: #0056b3;
-    }
-    .hero-graphic {
-      max-width: 400px;
-      flex-shrink: 0;
     }
     .section {
       max-width: 900px;
@@ -130,15 +127,14 @@
   </header>
 
   <div class="hero">
-    <div class="hero-text">
+    <div class="hero-text" style="margin: 0 auto; text-align: center;">
       <h2>Secure & Convenient Online Notarization</h2>
       <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
-      <div class="cta-buttons">
+      <div class="cta-buttons" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
         <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect with a Notary Now</a>
         <a href="#book">Book an Appointment</a>
       </div>
     </div>
-    <img src="https://raw.githubusercontent.com/snotarize/assets/main/agent-graphic.png" alt="Online Notary Graphic" class="hero-graphic">
   </div>
 
   <div class="section">
@@ -162,8 +158,11 @@
   </div>
 
   <footer>
-    &copy; 2025 SafeNotarize — All rights reserved.<br />
-    support@safenotarize.com | Privacy Policy | Terms of Use
+    &copy; 2022 SafeNotarize — All rights reserved.<br />
+    <a href="mailto:support@safenotarize.com" style="color: #ccc; text-decoration: underline;">support@safenotarize.com</a>
+    <br />
+    <span style="color: #ccc; margin: 0 10px;">Privacy Policy</span> |
+    <span style="color: #ccc; margin: 0 10px;">Terms of Use</span>
   </footer>
 
   <!-- Tawk.to Live Chat -->
