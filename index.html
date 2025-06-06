@@ -1,78 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeNotarize - Online Notary Services</title>
-    <meta name="description" content="SafeNotarize provides secure, fast, and legal online notarization services. Book a session today!">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        h1 {
-            color: #007bff;
-        }
-        p {
-            font-size: 18px;
-            color: #555;
-        }
-        .btn {
-            display: inline-block;
-            padding: 15px 25px;
-            margin: 10px;
-            font-size: 18px;
-            color: white;
-            background-color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #888;
-        }
-    </style>
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeNotarize | Trusted Online Notary Services</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
+      color: #222;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #00274d;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .hero {
+      background-color: #ffffff;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .hero h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #003366;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .cta-buttons a {
+      display: inline-block;
+      margin: 10px;
+      padding: 14px 24px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    .cta-buttons a:hover {
+      background-color: #0056b3;
+    }
+    .section {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .section h3 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .section ul {
+      list-style: none;
+      padding: 0;
+      font-size: 18px;
+    }
+    .section ul li {
+      margin-bottom: 10px;
+    }
+    .testimonial {
+      background-color: #fff;
+      padding: 40px 20px;
+      border-top: 1px solid #ddd;
+      text-align: center;
+    }
+    .testimonial blockquote {
+      font-style: italic;
+      color: #444;
+    }
+    .testimonial cite {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    footer {
+      background-color: #00274d;
+      color: #ccc;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+  </style>
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to SafeNotarize</h1>
-        <p>Fast, secure, and legally binding online notarization services available 24/7.</p>
-        <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" class="btn" target="_blank">Connect with a Notary Live Now</a>
-        <a href="https://calendly.com/supervisor-23/safenotarize" class="btn" target="_blank">Book an Appointment</a>
-        
-        <p class="footer">Contact us at <strong>support@safenotarize.com</strong></p>
+  <header>
+    <img src="https://raw.githubusercontent.com/snotarize/assets/main/logo-transparent-small.png" alt="SafeNotarize Logo" class="logo">
+    <nav>
+      <a href="#book">Book Appointment</a>
+      <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect Now</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h2>Secure & Convenient Online Notarization</h2>
+    <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
+    <div class="cta-buttons">
+      <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect with a Notary Now</a>
+      <a href="#book" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/supervisor-23'});return false;">Book an Appointment</a>
     </div>
-    
-    <!-- Start of Tawk.to Script (Modified to Prevent Audio Errors) -->
-    <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-            s1.async=true;
-            s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
-            s1.charset='UTF-8';
-            s1.setAttribute('crossorigin','*');
-            s1.onerror = function() { console.error('Tawk.to script failed to load.'); };
-            s0.parentNode.insertBefore(s1,s0);
-        })();
-    </script>
-    <!-- End of Tawk.to Script -->
+  </div>
+
+  <div class="section">
+    <h3>Why Choose SafeNotarize?</h3>
+    <ul>
+      <li>✔ Fully licensed and certified online notary professionals</li>
+      <li>✔ Legal in all states that allow Remote Online Notarization (RON)</li>
+      <li>✔ HIPAA & SOC 2 compliant platform with advanced encryption</li>
+      <li>✔ Real human notaries, not AI or bots</li>
+      <li>✔ Services in English, French, and Haitian Creole</li>
+    </ul>
+  </div>
+
+  <div class="section testimonial">
+    <blockquote>“I was able to notarize my real estate documents in less than 10 minutes — and it was way easier than going in person. Highly recommend SafeNotarize!”</blockquote>
+    <cite>— Rachel M., Florida</cite>
+  </div>
+
+  <footer>
+    &copy; 2025 SafeNotarize — All rights reserved.<br />
+    support@safenotarize.com | Privacy Policy | Terms of Use
+  </footer>
+
+  <!-- Tawk.to Live Chat -->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
 </body>
 </html>
