@@ -13,6 +13,23 @@
     gtag('js', new Date());
     gtag('config', 'AW-17162532783');
   </script>
+  <!-- Event snippet for Book appointment conversion page -->
+  <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-17162532783/YJzTC0mKv9QaEK_ytsQ',
+          'value': 1.0,
+          'currency': 'USD',
+          'event_callback': callback
+      });
+      return false;
+    }
+  </script>
   <style>
     html {
       scroll-behavior: smooth;
@@ -217,7 +234,7 @@
       <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
       <div class="cta-buttons">
         <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect with a Notary Now</a>
-        <a href="https://calendly.com/supervisor-23" target="_blank">Book an Appointment</a>
+        <a href="https://calendly.com/supervisor-23" onclick="return gtag_report_conversion('https://calendly.com/supervisor-23');" target="_blank">Book an Appointment</a>
       </div>
     </div>
   </section>
