@@ -13,7 +13,7 @@
     gtag('js', new Date());
     gtag('config', 'AW-17162532783');
   </script>
-  <!-- Event snippet for Book appointment conversion page -->
+  <!-- Conversion events -->
   <script>
     function gtag_report_conversion(url) {
       var callback = function () {
@@ -29,194 +29,44 @@
       });
       return false;
     }
+    function gtag_report_notary(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-17162532783/Hc5hC6CZm9QaEK_ytsQ',
+          'value': 1.0,
+          'currency': 'USD',
+          'event_callback': callback
+      });
+      return false;
+    }
   </script>
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f6f8;
-      color: #222;
-      line-height: 1.6;
-    }
-    header {
-      background-color: #00274d;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .logo {
-      height: 48px;
-      filter: brightness(0) invert(1);
-    }
-    nav {
-      display: flex;
-      gap: 15px;
-      margin-top: 10px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    .hero {
-      background-color: #ffffff;
-      background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-      padding: 60px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .hero-text {
-      max-width: 600px;
-      text-align: center;
-      animation: fadeInUp 1.2s ease-out;
-    }
-    .hero h2 {
-      font-size: 2em;
-      margin-bottom: 10px;
-      color: #003366;
-    }
-    .hero p {
-      font-size: 1em;
-      color: #555;
-      margin-bottom: 30px;
-    }
-    .cta-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      animation: fadeIn 2s ease-in;
-    }
-    .cta-buttons a {
-      display: inline-block;
-      padding: 14px 24px;
-      font-size: 1em;
-      background-color: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-    }
-    .cta-buttons a:hover {
-      background-color: #0056b3;
-    }
-    .section {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-    .section h3 {
-      text-align: center;
-      font-size: 1.5em;
-      margin-bottom: 20px;
-    }
-    .section ul {
-      list-style: none;
-      padding: 0;
-      font-size: 1em;
-    }
-    .section ul li {
-      margin-bottom: 10px;
-    }
-    .steps {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      margin: 40px auto;
-      max-width: 900px;
-      padding: 0 20px;
-    }
-    .step {
-      flex: 1 1 250px;
-      margin: 20px;
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      text-align: center;
-      transition: transform 0.3s ease;
-      animation: fadeInUp 1s ease forwards;
-    }
-    .step:hover {
-      transform: translateY(-8px);
-    }
-    .step h4 {
-      font-size: 1.2em;
-      color: #003366;
-      margin-bottom: 10px;
-    }
-    .step img {
-      width: 60px;
-      height: 60px;
-      margin-bottom: 10px;
-    }
-    .testimonial {
-      background-color: #fff;
-      padding: 40px 20px;
-      border-top: 1px solid #ddd;
-      text-align: center;
-    }
-    .testimonial blockquote {
-      font-style: italic;
-      color: #444;
-    }
-    .testimonial cite {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    .calendly-container {
-      max-width: 100%;
-      margin: 0 auto 60px;
-      height: 700px;
-    }
-    footer {
-      background-color: #00274d;
-      color: #ccc;
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @media (max-width: 600px) {
-      .cta-buttons a {
-        width: 100%;
-        text-align: center;
-      }
-      nav {
-        width: 100%;
-        justify-content: center;
-        margin-top: 10px;
-      }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
   <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
   <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; color: #222; line-height: 1.6; }
+    header { background-color: #00274d; color: white; display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; flex-wrap: wrap; position: sticky; top: 0; z-index: 1000; }
+    .logo { height: 48px; filter: brightness(0) invert(1); }
+    nav { display: flex; gap: 15px; margin-top: 10px; }
+    nav a { color: white; text-decoration: none; font-weight: 500; }
+    nav a:hover { text-decoration: underline; }
+    .hero { background-color: #ffffff; padding: 60px 20px; text-align: center; }
+    .hero h2 { font-size: 2em; margin-bottom: 10px; color: #003366; }
+    .hero p { font-size: 1em; color: #555; margin-bottom: 30px; }
+    .cta-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .cta-buttons a { display: inline-block; padding: 14px 24px; font-size: 1em; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; transition: background 0.3s ease; }
+    .cta-buttons a:hover { background-color: #0056b3; }
+    .steps { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 40px auto; max-width: 900px; padding: 0 20px; }
+    .step { flex: 1 1 250px; margin: 20px; padding: 20px; background: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); text-align: center; }
+    .step img { width: 60px; height: 60px; margin-bottom: 10px; }
+    .step h4 { font-size: 1.2em; color: #003366; margin-bottom: 10px; }
+    .calendly-container { max-width: 100%; margin: 0 auto 60px; height: 700px; }
+    footer { background-color: #00274d; color: #ccc; text-align: center; padding: 20px; font-size: 0.9em; }
+  </style>
 </head>
 <body>
   <header>
@@ -229,30 +79,28 @@
     </nav>
   </header>
   <section class="hero">
-    <div class="hero-text">
-      <h2>Secure & Convenient Online Notarization</h2>
-      <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
-      <div class="cta-buttons">
-        <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" target="_blank">Connect with a Notary Now</a>
-        <a href="https://calendly.com/supervisor-23" onclick="return gtag_report_conversion('https://calendly.com/supervisor-23');" target="_blank">Book an Appointment</a>
-      </div>
+    <h2>Secure & Convenient Online Notarization</h2>
+    <p>Notarize your documents quickly and safely with SafeNotarize. Schedule an appointment or connect with a notary instantly — all from the comfort of your home.</p>
+    <div class="cta-buttons">
+      <a href="#" onclick="return gtag_report_notary('https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY')">Connect with a Notary Now</a>
+      <a href="#" onclick="return gtag_report_conversion('https://calendly.com/supervisor-23')">Book an Appointment</a>
     </div>
   </section>
   <section class="steps" id="steps">
     <div class="step">
       <img src="https://img.icons8.com/ios-filled/100/document--v1.png" alt="Upload">
       <h4>Upload Your Document</h4>
-      <p>Securely upload the document you need notarized. We accept a wide range of formats.</p>
+      <p>Securely upload the document you need notarized.</p>
     </div>
     <div class="step">
       <img src="https://img.icons8.com/color/96/ok--v1.png" alt="Verify">
       <h4>Verify Your Identity</h4>
-      <p>Use secure identity verification methods to ensure compliance with notary laws.</p>
+      <p>Use secure identity verification methods to ensure compliance.</p>
     </div>
     <div class="step">
       <img src="https://img.icons8.com/ios-filled/100/video-call.png" alt="Meet">
       <h4>Meet the Notary</h4>
-      <p>Connect with a certified notary in a live video call and get your document notarized.</p>
+      <p>Connect with a certified notary in a live video call.</p>
     </div>
   </section>
   <section class="calendly-container">
@@ -261,26 +109,25 @@
   <section class="section" id="faq">
     <h3>Frequently Asked Questions</h3>
     <ul>
-      <li><strong>Is online notarization legal?</strong> Yes, online notarization is legally accepted in most states and jurisdictions.</li>
-      <li><strong>What documents can be notarized?</strong> We notarize affidavits, power of attorney, travel consent forms, and more.</li>
-      <li><strong>How do I connect with a notary?</strong> You can either book an appointment or connect instantly using our secure link.</li>
+      <li><strong>Is online notarization legal?</strong> Yes, it’s accepted in most states.</li>
+      <li><strong>What documents can be notarized?</strong> Affidavits, POAs, travel forms, and more.</li>
+      <li><strong>How do I connect with a notary?</strong> Book an appointment or use the instant link.</li>
     </ul>
   </section>
   <footer id="footer">
     © 2022 SafeNotarize — All rights reserved. support@safenotarize.com | Privacy Policy | Terms of Use
   </footer>
-  <!--Start of Tawk.to Script-->
+  <!-- Tawk.to live chat script -->
   <script type="text/javascript">
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-  })();
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
   </script>
-  <!--End of Tawk.to Script-->
 </body>
 </html>
