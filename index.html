@@ -20,20 +20,54 @@
       position: sticky;
       top: 0;
       z-index: 999;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #00274d;
+      padding: 10px 30px;
     }
     header nav {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      overflow: hidden;
+    }
+    header nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      background: white;
+      height: 3px;
+      margin: 4px 0;
+      width: 25px;
     }
     @media (max-width: 768px) {
       header {
         flex-direction: column;
         align-items: flex-start;
       }
+      .menu-toggle {
+        display: flex;
+      }
       header nav {
         flex-direction: column;
         align-items: flex-start;
+        width: 100%;
+        max-height: 0;
+        opacity: 0;
+      }
+      header nav.show {
+        max-height: 500px;
+        opacity: 1;
       }
       header nav a {
         padding: 10px 0;
@@ -72,23 +106,33 @@
       display: none;
     }
   </style>
+  <script>
+    function toggleMenu() {
+      var nav = document.querySelector('header nav');
+      nav.classList.toggle('show');
+    }
+  </script>
 </head>
 <body>
-<a href="https://calendly.com/supervisor-23" class="mobile-only">Book an Appointment</a>
+  <header>
+    <div style="display:flex; align-items:center;">
+      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+      <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#services">Services</a>
+      <a href="#pricing-block">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-<header style="background-color:#00274d; color:white; padding:10px 30px; display:flex; align-items:center; justify-content:space-between;">
-  <div style="display:flex; align-items:center;"><img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;"><span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
-  </div>
-  <nav>
-    <a href="#" style="color:white; margin:0 10px; text-decoration:none;">Home</a>
-    <a href="#pricing-block" style="color:white; margin:0 10px; text-decoration:none;">Pricing</a>
-    <a href="#services" style="color:white; margin:0 10px; text-decoration:none;">Services</a>
-    <a href="#faq" style="color:white; margin:0 10px; text-decoration:none;">FAQ</a>
-    <a href="#contact" style="color:white; margin:0 10px; text-decoration:none;">Contact</a>
-  </nav>
-</header>
-
-<!DOCTYPE html>
 
   <section style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; background:#fff; padding:60px 20px;">
     <div style="flex:1; max-width:500px; padding:20px;">
@@ -144,10 +188,6 @@
         <img src="https://img.icons8.com/ios-filled/50/wifi.png" alt="Internet" style="margin-bottom:10px;">
         <p>Reliable internet connection</p>
       </div>
-      <div style="text-align:center; max-width:200px;">
-        <img src="https://img.icons8.com/ios-filled/50/bank-card-back-side.png" alt="Payment" style="margin-bottom:10px;">
-        <p>Payment method (card)</p>
-      </div>
     </div>
   </section>
 
@@ -198,7 +238,32 @@
   </div>
 </section>
 
-
+<section id="pricing-block" style="background:#ffffff; padding:50px 20px; text-align:center;">
+  <h3 style="font-size:26px; color:#003366; margin-bottom:30px;">Simple, Transparent Pricing</h3>
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; max-width:1000px; margin:auto;">
+    <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+      <h4 style="color:#003366; margin-bottom:10px;">Basic Notarization</h4>
+      <p style="font-size:20px; font-weight:bold; color:#28a745;">$25</p>
+      <p style="font-size:14px; color:#555;">Includes one notarized document and one signer.</p>
+    </div>
+    <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+      <h4 style="color:#003366; margin-bottom:10px;">Additional Signers</h4>
+      <p style="font-size:20px; font-weight:bold; color:#28a745;">+ $6 each</p>
+      <p style="font-size:14px; color:#555;">For each extra signer added to the session.</p>
+    </div>
+    <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+      <h4 style="color:#003366; margin-bottom:10px;">Extra Stamps</h4>
+      <p style="font-size:20px; font-weight:bold; color:#28a745;">+ $5 each</p>
+      <p style="font-size:14px; color:#555;">Per additional notarial stamp required.</p>
+    </div>
+  </div>
+</section>
+<section style="background:#ffffff; padding:30px 20px; text-align:center;">
+  <div style="max-width:700px; margin:auto;">
+    <h4 style="color:#003366; font-size:20px; margin-bottom:15px;">Need Witnesses?</h4>
+    <p style="color:#555; font-size:16px;">We provide witness as a service for just <strong>$10 per witness</strong>. Let us know in advance, and we’ll take care of the rest.</p>
+  </div>
+</section>
 
 <!-- Calendly Embed -->
 <div style="background:#f9f9f9; padding:40px 20px; text-align:center;">
@@ -241,6 +306,36 @@
       <p style="text-align:right; font-weight:bold; margin-top:10px;">– Andrian D.</p>
 </div>
 </div>
+
+<section style="background:#fffefc; padding:50px 20px; text-align:center;">
+    <div style="max-width:800px; margin:auto;">
+      <div style="margin-bottom:30px;">
+        <img src="https://img.icons8.com/ios-filled/80/000000/security-checked.png" alt="Trusted Shield" style="margin-bottom:15px;">
+      </div>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
+        <div style="min-width:200px;">
+          <h4 style="color:#28a745; font-size:22px; margin-bottom:5px;">10,000+</h4>
+          <p style="font-size:14px; color:#555;">Documents Notarized</p>
+        </div>
+        <div style="min-width:200px;">
+          <h4 style="color:#28a745; font-size:22px; margin-bottom:5px;">5-Star Rated</h4>
+          <p style="font-size:14px; color:#555;">Across All Platforms</p>
+        </div>
+        <div style="min-width:200px;">
+          <h4 style="color:#28a745; font-size:22px; margin-bottom:5px;">Nationwide</h4>
+          <p style="font-size:14px; color:#555;">Available in All 50 States</p>
+        </div>
+      </div>
+      <h3 style="color:#003366; font-size:26px; margin-bottom:20px;">Why Thousands Trust SafeNotarize</h3>
+      <p style="color:#555; font-size:16px; line-height:1.6;">
+        With over 5 years of experience, SafeNotarize has helped clients across the U.S. get their documents notarized securely from the comfort of home. Our certified notaries are available 24/7, and every session is legally compliant, encrypted, and recorded for your peace of mind.
+      </p>
+      <p style="color:#555; font-size:16px; margin-top:20px;">
+        Not sure if this is right for you? <a href="https://calendly.com/supervisor-23" style="color:#007bff; text-decoration:underline;">Book a free consultation</a> and speak with one of our notaries today.
+      </p>
+    </div>
+  </section>
+  
 </section>
 
   <!-- Tawk.to Script -->
@@ -302,3 +397,6 @@
 </body>
 
 
+
+</body>
+</html>
