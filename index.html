@@ -89,6 +89,11 @@
         max-width: 100% !important;
         height: auto !important;
       }
+      header img {
+        max-height: 40px !important;
+        width: auto !important;
+        object-fit: contain !important;
+      }
       .mobile-only {
         display: block !important;
         position: fixed;
@@ -114,10 +119,9 @@
   </script>
 </head>
 <body>
- 
   <header>
     <div style="display:flex; align-items:center;">
-      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px; object-fit:contain;">
       <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
     </div>
     <div class="menu-toggle" onclick="toggleMenu()">
@@ -133,7 +137,8 @@
       <a href="#contact">Contact</a>
     </nav>
   </header>
-
+</body>
+</html>
   <section style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; background:#fff; padding:60px 20px;">
     <div style="flex:1; max-width:500px; padding:20px;">
       <h2 style="color:#003366; font-size:30px;">Notarize Your Documents Online — Fast & Secure</h2>
