@@ -96,7 +96,7 @@
         height: auto !important;
       }
       header img {
-        max-height: 40px !important;
+        max-height: 32px !important;
         width: auto !important;
         object-fit: contain !important;
       }
@@ -122,6 +122,17 @@
       var nav = document.querySelector('header nav');
       nav.classList.toggle('show');
     }
+    window.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('header nav a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const nav = document.querySelector('header nav');
+          if (nav.classList.contains('show')) {
+            nav.classList.remove('show');
+          }
+        });
+      });
+    });
   </script>
 </head>
 <body>
