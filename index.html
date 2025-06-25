@@ -21,11 +21,35 @@
       top: 0;
       z-index: 999;
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       background-color: #00274d;
       padding: 10px 30px;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    .logo-container img {
+      height: 40px;
+      margin-right: 10px;
+      object-fit: contain;
+    }
+    .logo-container span {
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      background: white;
+      height: 3px;
+      margin: 4px 0;
+      width: 25px;
     }
     header nav {
       display: flex;
@@ -39,17 +63,6 @@
       margin: 0 10px;
       text-decoration: none;
     }
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .menu-toggle span {
-      background: white;
-      height: 3px;
-      margin: 4px 0;
-      width: 25px;
-    }
     .mobile-only {
       display: none;
     }
@@ -57,11 +70,9 @@
       header {
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
       }
       .menu-toggle {
         display: flex;
-        order: 2;
         margin-left: auto;
       }
       header nav {
@@ -95,11 +106,6 @@
         max-width: 100% !important;
         height: auto !important;
       }
-      header img {
-        max-height: 40px !important;
-        width: auto !important;
-        object-fit: contain !important;
-      }
       .mobile-only {
         display: block !important;
         position: fixed;
@@ -122,25 +128,13 @@
       var nav = document.querySelector('header nav');
       nav.classList.toggle('show');
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      const navLinks = document.querySelectorAll('header nav a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          const nav = document.querySelector('header nav');
-          if (nav.classList.contains('show')) {
-            nav.classList.remove('show');
-          }
-        });
-      });
-    });
   </script>
 </head>
 <body>
   <header>
-    <div style="display:flex; align-items:center;">
-      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px; object-fit:contain;">
-      <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
+    <div class="logo-container">
+      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo">
+      <span>SafeNotarize</span>
     </div>
     <div class="menu-toggle" onclick="toggleMenu()">
       <span></span>
