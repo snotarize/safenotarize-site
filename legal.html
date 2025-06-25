@@ -24,6 +24,9 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 30px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
     header img {
       height: 40px;
@@ -201,6 +204,27 @@
         link.addEventListener('click', function () {
           navLinks.forEach(l => l.classList.remove('active'));
           this.classList.add('active');
+        });
+      });
+
+      // Highlight active section
+      const sections = document.querySelectorAll('main section');
+      const navItems = document.querySelectorAll('nav a');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 100;
+          if (pageYOffset >= sectionTop) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navItems.forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href').includes(current)) {
+            a.classList.add('active');
+          }
         });
       });
     });
