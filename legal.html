@@ -39,6 +39,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
+      transition: max-height 0.3s ease-in-out;
     }
     nav a {
       color: white;
@@ -170,6 +171,19 @@
       const menu = document.getElementById('mobileMenu');
       menu.classList.toggle('show');
     }
+
+    // Auto-close the menu after link click
+    document.addEventListener('DOMContentLoaded', () => {
+      const navLinks = document.querySelectorAll('#mobileMenu a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const menu = document.getElementById('mobileMenu');
+          if (menu.classList.contains('show')) {
+            menu.classList.remove('show');
+          }
+        });
+      });
+    });
   </script>
 </body>
 </html>
