@@ -121,8 +121,10 @@
 <body>
   <header>
     <div style="display: flex; align-items: center;">
-      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" />
-      <span>SafeNotarize</span>
+      <a href="https://safenotarize.com" style="display: flex; align-items: center; text-decoration: none;">
+        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" />
+        <span>SafeNotarize</span>
+      </a>
     </div>
     <div class="nav-container">
       <div class="hamburger" onclick="toggleMenu()">
@@ -186,7 +188,6 @@
       menu.classList.toggle('show');
     }
 
-    // Auto-close the menu after link click
     document.addEventListener('DOMContentLoaded', () => {
       const navLinks = document.querySelectorAll('#mobileMenu a');
       navLinks.forEach(link => {
@@ -197,7 +198,6 @@
           }
         });
 
-        // Highlight current section link
         link.addEventListener('click', function () {
           navLinks.forEach(l => l.classList.remove('active'));
           this.classList.add('active');
