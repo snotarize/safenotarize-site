@@ -17,8 +17,9 @@
       background-color: #00274d;
       color: white;
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       justify-content: space-between;
+      align-items: center;
       padding: 10px 30px;
     }
     header img {
@@ -29,6 +30,46 @@
       font-weight: bold;
       font-size: 18px;
       color: white;
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      margin: 4px 0;
+    }
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #00274d;
+        padding: 10px 0;
+      }
+      nav.show {
+        display: flex;
+      }
+      .hamburger {
+        display: flex;
+      }
     }
     main {
       max-width: 800px;
@@ -67,6 +108,20 @@
     <div style="display: flex; align-items: center;">
       <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" />
       <span>SafeNotarize</span>
+    </div>
+    <div class="nav-container">
+      <div class="hamburger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <nav id="mobileMenu">
+        <a href="/">Home</a>
+        <a href="/#services">Services</a>
+        <a href="/#pricing-block">Pricing</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/#contact">Contact</a>
+      </nav>
     </div>
   </header>
 
@@ -109,5 +164,12 @@
     <a href="/legal.html#privacy">Privacy Policy</a> |
     <a href="/legal.html#terms">Terms</a></p>
   </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('show');
+    }
+  </script>
 </body>
 </html>
