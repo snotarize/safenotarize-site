@@ -55,11 +55,13 @@
     }
     @media (max-width: 768px) {
       header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
       }
       .menu-toggle {
         display: flex;
+        order: 2;
       }
       header nav {
         flex-direction: column;
@@ -120,7 +122,7 @@
 </head>
 <body>
   <header>
-    <div style="display:flex; align-items:center;">
+    <div style="display:flex; align-items:center; flex:1;">
       <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px; object-fit:contain;">
       <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
     </div>
@@ -139,6 +141,7 @@
   </header>
 </body>
 </html>
+
   <section style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; background:#fff; padding:60px 20px;">
     <div style="flex:1; max-width:500px; padding:20px;">
       <h2 style="color:#003366; font-size:30px;">Notarize Your Documents Online — Fast & Secure</h2>
