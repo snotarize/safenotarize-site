@@ -96,10 +96,10 @@
 </head>
 <body>
   <header>
-   <a href="/" onclick="location.reload(); return false;" style="display:flex; align-items:center; flex:1; text-decoration:none;">
-  <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px; object-fit:contain;">
-  <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
-  </a>
+   <a href="/" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; flex:1; text-decoration:none;">
+    <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px; object-fit:contain;">
+    <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
+   </a>
     <div class="menu-toggle" onclick="toggleMenu()">
       <span></span>
       <span></span>
@@ -355,8 +355,8 @@
 
     <!-- Logo + About -->
     <div style="flex:1; min-width:250px;">
-      <a href="/" onclick="location.reload(); return false;" style="text-decoration:none; color:white;">
-       <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:50px; margin-bottom:10px;">
+      <a href="/" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="text-decoration:none; color:white;">
+      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:50px; margin-bottom:10px;">
        <h4 style="margin:0;">SafeNotarize</h4>
       </a>
 
