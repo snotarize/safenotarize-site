@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Legal | SafeNotarize</title>
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
@@ -45,6 +48,17 @@
       color: white;
       text-decoration: none;
       font-size: 14px;
+      position: relative;
+    }
+    nav a.active::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: #ffffff;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
     }
     .hamburger {
       display: none;
@@ -181,6 +195,12 @@
           if (menu.classList.contains('show')) {
             menu.classList.remove('show');
           }
+        });
+
+        // Highlight current section link
+        link.addEventListener('click', function () {
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
         });
       });
     });
