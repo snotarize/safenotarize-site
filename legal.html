@@ -1,347 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeNotarize</title>
- 
-  <!-- SEO Meta Description -->
-  <meta name="description" content="SafeNotarize offers fast, secure, and legal online notarization services from the comfort of your device. Book now.">
-
-  <!-- Favicon -->
-  <link rel="icon" href="https://safenotarize.com/favicon.ico" type="image/x-icon">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legal | SafeNotarize</title>
   <style>
-    html { scroll-behavior: smooth; }
-    * { box-sizing: border-box; }
-    body, html { margin: 0; padding: 0; font-family: sans-serif; }
-    header { position: sticky; top: 0; z-index: 999; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background-color: #00274d; padding: 10px 30px; }
-    header nav { display: flex; flex-wrap: wrap; justify-content: center; transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; overflow: hidden; }
-    header nav a { color: white; margin: 0 10px; text-decoration: none; }
-    .menu-toggle { display: none; flex-direction: column; cursor: pointer; }
-    .menu-toggle span { background: white; height: 3px; margin: 4px 0; width: 25px; }
-    .mobile-only { display: none; }
-    .desktop-hero { display: block; }
-
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #222;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #00274d;
+      color: white;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    header span {
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      transition: max-height 0.3s ease-in-out;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      margin: 4px 0;
+    }
     @media (max-width: 768px) {
-  header {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-  }
-}
-    .menu-toggle {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-}
-      header nav { flex-direction: column; align-items: flex-start; width: 100%; max-height: 0; opacity: 0; }
-      header nav.show { max-height: 500px; opacity: 1; }
-      header nav a { padding: 10px 20px; width: 100%; background: #00274d; border-top: 1px solid #ffffff22; }
-
-     /* Mobile styles (default) */
-.mobile-hero-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 30px 20px;
-  background: #ffffff;
-}
-
-.desktop-hero {
-  display: none;
-}
-
-/* Desktop styles (≥768px) */
-@media (min-width: 768px) {
-  .mobile-hero-stack {
-    display: none;
-  }
-
-  .desktop-hero {
-    display: block !important;
-  }
-}
-  
-      .mobile-hero-stack h2 {
-        font-size: 24px;
-        color: #003366;
-        margin-bottom: 20px;
-      }
-      .mobile-hero-stack img {
+      nav {
+        display: none;
+        flex-direction: column;
         width: 100%;
-        max-width: 420px;
-        border-radius: 12px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
+        background-color: #00274d;
+        padding: 10px 0;
       }
-      .mobile-hero-stack p {
-        font-size: 16px;
-        color: #555;
-        margin-bottom: 20px;
-        padding: 0 10px;
+      nav.show {
+        display: flex;
       }
-      .mobile-hero-stack .btn-group a {
-        display: block;
-        background: #28a745;
-        color: white;
-        text-decoration: none;
-        padding: 14px 20px;
-        border-radius: 30px;
-        margin: 10px auto;
-        font-weight: bold;
-        max-width: 300px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      .hamburger {
+        display: flex;
       }
-      .mobile-hero-stack .btn-group a:last-child {
-        background: #007bff;
-      }
-      
     }
-
-   /* Fix logo and hamburger alignment on mobile */
-    header img { max-height: 40px; }
-
-    @media (max-width: 768px) {
-      header div:first-child { flex: none; }
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
     }
-
-    /* Reset base layout */
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 40px;
-  background-color: #00274d;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-}
-
-/* Force flex spacing for all header children */
-.header-left,
-.header-center,
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
-/* Center nav links */
-.header-center {
-  flex: 1;
-  justify-content: center;
-  gap: 30px;
-}
-
-/* Button spacing */
-.header-right a {
-  background: #28a745;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* Nav link styling */
-.header-center a {
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-/* MOBILE: stack everything */
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-  }
-
-  .header-center {
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 10px;
-  }
-
-  .header-right {
-    align-self: stretch;
-    margin-top: 10px;
-  }
-}
-    /* Hide/show headers */
-.desktop-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 40px;
-  background-color: #00274d;
-}
-
-.mobile-header {
-  display: none;
-  background-color: #00274d;
-  padding: 10px 20px;
-  flex-direction: column;
-}
-.mobile-header .header-left img {
-  vertical-align: middle;
-}
-
-/* Mobile menu toggle */
-.menu-toggle {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.menu-toggle span {
-  background: white;
-  height: 3px;
-  margin: 4px 0;
-  width: 25px;
-}
-
-/* Mobile nav */
-.mobile-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.mobile-nav {
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  background: #003366;
-  padding: 15px 20px;
-}
-
-.mobile-nav a {
-  color: white;
-  text-decoration: none;
-}
-
-/* Toggle class */
-.mobile-nav.show {
-  display: flex;
-}
-
-/* Responsive visibility */
-@media (max-width: 768px) {
-  .desktop-header {
-    display: none;
-  }
-  .mobile-header {
-    display: flex;
-  }
-}
-    /* Fine-tune logo alignment on mobile */
-@media (max-width: 768px) {
-  .mobile-header .header-left img {
-    margin-top: 6px; /* You can adjust this value if needed */
-  }
-}
-.white-bg-icon {
-  position: relative;
-  background: #ffffff;
-  overflow: hidden;
-  z-index: 1;
-}
-.white-bg-icon::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: -1;
-  opacity: 0.01;
-  background-image: 
-    url('https://img.icons8.com/ios/50/stamp.png'),
-    url('https://img.icons8.com/ios/50/signature.png'),
-    url('https://img.icons8.com/ios/50/pen.png');
-  background-repeat: repeat;
-  background-position: 
-    5% 10%, 
-    60% 30%, 
-    30% 70%;
-  background-size: 
-    50px, 
-    80px, 
-    40px;
-}
+    h1, h2 {
+      color: #00274d;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    footer {
+      background-color: #00274d;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+    footer a {
+      color: #ffffff;
+      text-decoration: underline;
+      margin: 0 5px;
+    }
   </style>
-  <script>
-    function toggleMenu() {
-      var nav = document.querySelector('header nav');
-      nav.classList.toggle('show');
-    }
-    window.addEventListener('DOMContentLoaded', function() {
-      const navLinks = document.querySelectorAll('header nav a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          const nav = document.querySelector('header nav');
-          if (nav.classList.contains('show')) {
-            nav.classList.remove('show');
-          }
-        });
-      });
-    });
-  </script>
 </head>
 <body>
-  <!-- Desktop Header -->
-<header class="desktop-header">
-  <div class="header-left">
-    <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
-      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
-      <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
-    </a>
-  </div>
-  <div class="header-center">
-    <a href="#">Home</a>
-    <a href="#services">Services</a>
-    <a href="#pricing-block">Pricing</a>
-    <a href="#faq">FAQ</a>
-    <a href="mailto:support@safenotarize.com">Contact</a>
-  </div>
-  <div class="header-right">
-    <a href="#calendly-block">Schedule Your Notary</a>
-  </div>
-</header>
+  <header>
+    <div style="display: flex; align-items: center;">
+      <a href="https://safenotarize.com" style="display: flex; align-items: center; text-decoration: none;">
+        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" />
+        <span>SafeNotarize</span>
+      </a>
+    </div>
+    <div class="nav-container">
+      <div class="hamburger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <nav id="mobileMenu">
+        <a href="/">Home</a>
+        <a href="/#services">Services</a>
+        <a href="/#pricing-block">Pricing</a>
+        <a href="/#faq">FAQ</a>
+        <a href="mailto:support@safenotarize.com">Contact</a>
 
-<!-- Mobile Header -->
-<header class="mobile-header">
-  <!-- Left: Logo -->
-  <div class="header-left">
-    <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
-      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
-      <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
-    </a>
-  </div>
-
-  <!-- Hamburger Menu Toggle (for mobile) -->
-  <div class="menu-toggle" onclick="toggleMenu()">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-
-  <!-- Nav Links -->
-  <nav class="header-center">
-    <a href="#">Home</a>
-    <a href="#services">Services</a>
-    <a href="#pricing-block">Pricing</a>
-    <a href="#faq">FAQ</a>
-    <a href="mailto:support@safenotarize.com">Contact</a>
-  </nav>
-</header>
-
+      </nav>
+    </div>
+  </header>
 
   <main>
     <h1>Legal Information</h1>
@@ -377,72 +169,29 @@ header {
     </p>
   </main>
 
-</section>
+  <footer>
+    <p>&copy; 2025 SafeNotarize. All rights reserved.<br>
+    <a href="/legal.html#privacy">Privacy Policy</a> |
+    <a href="/legal.html#terms">Terms</a></p>
+  </footer>
 
-  <!-- Tawk.to Script -->
-  <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('show');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const navLinks = document.querySelectorAll('#mobileMenu a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const menu = document.getElementById('mobileMenu');
+          if (menu.classList.contains('show')) {
+            menu.classList.remove('show');
+          }
+        });
+      });
+    });
   </script>
-
-
-<!-- Updated Footer with Facebook Icon and Action Button -->
-<footer style="background-color:#00274d; color:white; padding:40px 20px; font-family:sans-serif;">
-  <div style="display:flex; flex-wrap:wrap; justify-content:space-between; max-width:1200px; margin:auto; gap:40px; align-items:flex-start;">
-
-    <!-- Logo + About -->
-    <div style="flex:1; min-width:250px;">
-      <a href="/" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="text-decoration:none; color:white;">
-      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:50px; margin-bottom:10px;">
-       <h4 style="margin:0;">SafeNotarize</h4>
-      </a>
-
-      <p style="line-height:1.6; margin-top:10px;">
-        We make notarization secure, fast, and legally compliant — all from the comfort of your device.
-      </p>
-    </div>
-
-    <!-- Navigation -->
-    <div style="flex:1; min-width:180px;">
-      <h4 style="font-size:18px; margin-bottom:15px;">Quick Links</h4>
-      <ul style="list-style:none; padding:0; line-height:2;">
-        <li><a href="/#services" style="color:#90caf9; text-decoration:none;">Services</a></li>
-        <li><a href="/#pricing-block" style="color:#90caf9; text-decoration:none;">Pricing</a></li>
-        <li><a href="/#faq" style="color:#90caf9; text-decoration:none;">FAQ</a></li>
-        <li><a href="#calendly-block" style="color:#90caf9; text-decoration:none;">Contact</a></li>
-        <li><a href="mailto:support@safenotarize.com" style="color:#90caf9; text-decoration:none;">Support</a></li>
-      </ul>
-    </div>
-
-    <!-- Legal -->
-    <div style="flex:1; min-width:180px;">
-      <h4 style="font-size:18px; margin-bottom:15px;">Legal</h4>
-      <ul style="list-style:none; padding:0; line-height:2;">
-        <li><a href="/legal.html#privacy" style="color:#90caf9; text-decoration:none;">Privacy Policy</a></li>
-        <li><a href="/legal.html#terms" style="color:#90caf9; text-decoration:none;">Terms of Service</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Social and CTA -->
-  <div style="text-align:center; margin-top:40px;">
-    <a href="https://www.facebook.com/profile.php?id=61577290756700" target="_blank">
-      <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="margin-bottom:10px;">
-    </a>
-    <div style="margin-top:10px;">
-    <a href="#calendly-block" target="_blank" style="display:inline-block; background:#28a745; color:white; padding:12px 24px; border-radius:5px; text-decoration:none; font-weight:bold;">Book a Notary</a>
-    </div>
-  </div>
-
-  <!-- Bottom -->
-  <div style="text-align:center; margin-top:30px; padding-top:20px; border-top:1px solid #444;">
-    <p style="font-size:14px;">&copy; 2025 SafeNotarize. All rights reserved.</p>
-  </div>
-</footer>
+</body>
+</html>
