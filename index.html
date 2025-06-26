@@ -251,7 +251,7 @@ header {
 }
 .white-bg-icon {
   position: relative;
-  background-color: #ffffff;
+  background: #ffffff;
   overflow: hidden;
   z-index: 1;
 }
@@ -259,14 +259,21 @@ header {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-image: url('https://img.icons8.com/ios/50/000000/stamp--v1.png'),
-                    url('https://img.icons8.com/ios/50/000000/document--v1.png'),
-                    url('https://img.icons8.com/ios/50/000000/edit--v1.png');
-  background-repeat: repeat;
-  background-size: 80px;
-  opacity: 0.04; /* Faded effect */
-  pointer-events: none; /* So it doesn’t block text/buttons */
   z-index: -1;
+  opacity: 0.02;
+  background-image: 
+    url('https://img.icons8.com/ios/50/stamp.png'),
+    url('https://img.icons8.com/ios/50/signature.png'),
+    url('https://img.icons8.com/ios/50/pen.png');
+  background-repeat: repeat;
+  background-position: 
+    5% 10%, 
+    60% 30%, 
+    30% 70%;
+  background-size: 
+    50px, 
+    80px, 
+    40px;
 }
   </style>
   <script>
