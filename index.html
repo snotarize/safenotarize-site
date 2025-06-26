@@ -36,14 +36,32 @@
       header nav { flex-direction: column; align-items: flex-start; width: 100%; max-height: 0; opacity: 0; }
       header nav.show { max-height: 500px; opacity: 1; }
       header nav a { padding: 10px 20px; width: 100%; background: #00274d; border-top: 1px solid #ffffff22; }
-      .mobile-hero-stack {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 30px 20px;
-        background: #ffffff;
-      }
+
+     /* Mobile styles (default) */
+.mobile-hero-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30px 20px;
+  background: #ffffff;
+}
+
+.desktop-hero {
+  display: none;
+}
+
+/* Desktop styles (≥768px) */
+@media (min-width: 768px) {
+  .mobile-hero-stack {
+    display: none;
+  }
+
+  .desktop-hero {
+    display: block !important;
+  }
+}
+  
       .mobile-hero-stack h2 {
         font-size: 24px;
         color: #003366;
@@ -77,11 +95,7 @@
       .mobile-hero-stack .btn-group a:last-child {
         background: #007bff;
       }
-      .desktop-hero { display: block !important; }
-    }
-    @media (min-width: 768px) {
-      .mobile-hero-stack { display: none; }
-      .desktop-hero { display: block !important; }
+      
     }
 
    /* Fix logo and hamburger alignment on mobile */
