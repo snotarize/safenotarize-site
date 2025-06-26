@@ -169,6 +169,70 @@ header {
     margin-top: 10px;
   }
 }
+    /* Hide/show headers */
+.desktop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background-color: #00274d;
+}
+
+.mobile-header {
+  display: none;
+  background-color: #00274d;
+  padding: 10px 20px;
+  flex-direction: column;
+}
+
+/* Mobile menu toggle */
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  background: white;
+  height: 3px;
+  margin: 4px 0;
+  width: 25px;
+}
+
+/* Mobile nav */
+.mobile-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  background: #003366;
+  padding: 15px 20px;
+}
+
+.mobile-nav a {
+  color: white;
+  text-decoration: none;
+}
+
+/* Toggle class */
+.mobile-nav.show {
+  display: flex;
+}
+
+/* Responsive visibility */
+@media (max-width: 768px) {
+  .desktop-header {
+    display: none;
+  }
+  .mobile-header {
+    display: flex;
+  }
+}
   </style>
   <script>
     function toggleMenu() {
@@ -189,16 +253,14 @@ header {
   </script>
 </head>
 <body>
-  <header>
-  <!-- Left: Logo -->
+  <!-- Desktop Header -->
+<header class="desktop-header">
   <div class="header-left">
     <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
       <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
       <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
     </a>
   </div>
-
-  <!-- Center: Nav Links -->
   <div class="header-center">
     <a href="#">Home</a>
     <a href="#services">Services</a>
@@ -206,12 +268,34 @@ header {
     <a href="#faq">FAQ</a>
     <a href="mailto:support@safenotarize.com">Contact</a>
   </div>
-
-  <!-- Right: CTA Button -->
   <div class="header-right">
     <a href="#calendly-block">Schedule Your Notary</a>
   </div>
 </header>
+
+<!-- Mobile Header -->
+<header class="mobile-header">
+  <div class="mobile-bar">
+    <a href="#" style="display:flex; align-items:center; text-decoration:none;">
+      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+      <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+    </a>
+    <div class="menu-toggle" onclick="document.querySelector('.mobile-nav').classList.toggle('show');">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-nav">
+    <a href="#">Home</a>
+    <a href="#services">Services</a>
+    <a href="#pricing-block">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="mailto:support@safenotarize.com">Contact</a>
+    <a href="#calendly-block" style="background:#28a745; margin-top:10px; padding:10px 15px; border-radius:5px;">Schedule Your Notary</a>
+  </nav>
+</header>
+
 
   <div class="mobile-hero-stack">
     <h2>Notarize Your Documents Online — Fast & Secure</h2>
