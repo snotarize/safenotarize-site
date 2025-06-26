@@ -32,7 +32,14 @@
     padding: 10px 20px;
   }
 }
-      .menu-toggle { display: flex; order: 2; margin-left: auto; }
+    .menu-toggle {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
       header nav { flex-direction: column; align-items: flex-start; width: 100%; max-height: 0; opacity: 0; }
       header nav.show { max-height: 500px; opacity: 1; }
       header nav a { padding: 10px 20px; width: 100%; background: #00274d; border-top: 1px solid #ffffff22; }
@@ -274,27 +281,32 @@ header {
 </header>
 
 <!-- Mobile Header -->
-<header class="mobile-header">
-  <div class="mobile-bar">
-    <a href="#" style="display:flex; align-items:center; text-decoration:none;">
+<header>
+  <!-- Left: Logo -->
+  <div class="header-left">
+    <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
       <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
       <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
     </a>
-    <div class="menu-toggle" onclick="document.querySelector('.mobile-nav').classList.toggle('show');">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
   </div>
-  <nav class="mobile-nav">
+
+  <!-- Hamburger Menu Toggle (for mobile) -->
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Nav Links -->
+  <nav class="header-center">
     <a href="#">Home</a>
     <a href="#services">Services</a>
     <a href="#pricing-block">Pricing</a>
     <a href="#faq">FAQ</a>
     <a href="mailto:support@safenotarize.com">Contact</a>
-    <a href="#calendly-block" style="background:#28a745; margin-top:10px; padding:10px 15px; border-radius:5px;">Schedule Your Notary</a>
   </nav>
 </header>
+
 
 
   <div class="mobile-hero-stack">
