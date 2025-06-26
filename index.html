@@ -249,14 +249,24 @@ header {
     margin-top: 6px; /* You can adjust this value if needed */
   }
 }
-    /* Background icon overlay for white sections */
 .white-bg-icon {
-  background-image: url('https://img.icons8.com/ios-filled/100/000000/seal.png'); /* Example icon */
+  position: relative;
+  background-color: #ffffff;
+  overflow: hidden;
+  z-index: 1;
+}
+.white-bg-icon::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url('https://img.icons8.com/ios/50/000000/stamp--v1.png'),
+                    url('https://img.icons8.com/ios/50/000000/document--v1.png'),
+                    url('https://img.icons8.com/ios/50/000000/edit--v1.png');
   background-repeat: repeat;
-  background-position: center;
-  background-size: 100px;
-  opacity: 0.03; /* Subtle fade */
-  pointer-events: none; /* So users can click through */
+  background-size: 80px;
+  opacity: 0.04; /* Faded effect */
+  pointer-events: none; /* So it doesn’t block text/buttons */
+  z-index: -1;
 }
   </style>
   <script>
