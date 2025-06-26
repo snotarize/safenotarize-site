@@ -104,6 +104,71 @@
     @media (max-width: 768px) {
       header div:first-child { flex: none; }
     }
+
+    /* Reset base layout */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background-color: #00274d;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* Force flex spacing for all header children */
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Center nav links */
+.header-center {
+  flex: 1;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Button spacing */
+.header-right a {
+  background: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Nav link styling */
+.header-center a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+/* MOBILE: stack everything */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  .header-center {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  .header-right {
+    align-self: stretch;
+    margin-top: 10px;
+  }
+}
   </style>
   <script>
     function toggleMenu() {
@@ -124,24 +189,28 @@
   </script>
 </head>
 <body>
-  <header style="position: sticky; top: 0; z-index: 999; background-color: #00274d; padding: 15px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+  <header>
   <!-- Left: Logo -->
-  <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none; color:white;">
-    <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px; object-fit:contain;">
-    <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
-  </a>
+  <div class="header-left">
+    <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
+      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+      <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+    </a>
+  </div>
 
   <!-- Center: Nav Links -->
-  <nav class="desktop-nav" style="display:flex; gap:30px;">
-    <a href="#" style="color:white; text-decoration:none;">Home</a>
-    <a href="#services" style="color:white; text-decoration:none;">Services</a>
-    <a href="#pricing-block" style="color:white; text-decoration:none;">Pricing</a>
-    <a href="#faq" style="color:white; text-decoration:none;">FAQ</a>
-    <a href="mailto:support@safenotarize.com" style="color:white; text-decoration:none;">Contact</a>
-  </nav>
+  <div class="header-center">
+    <a href="#">Home</a>
+    <a href="#services">Services</a>
+    <a href="#pricing-block">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="mailto:support@safenotarize.com">Contact</a>
+  </div>
 
   <!-- Right: CTA Button -->
-  <a href="#calendly-block" style="background:#28a745; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold;">Schedule Your Notary</a>
+  <div class="header-right">
+    <a href="#calendly-block">Schedule Your Notary</a>
+  </div>
 </header>
 
   <div class="mobile-hero-stack">
