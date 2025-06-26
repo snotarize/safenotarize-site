@@ -249,6 +249,15 @@ header {
     margin-top: 6px; /* You can adjust this value if needed */
   }
 }
+    /* Background icon overlay for white sections */
+.white-bg-icon {
+  background-image: url('https://img.icons8.com/ios-filled/100/000000/seal.png'); /* Example icon */
+  background-repeat: repeat;
+  background-position: center;
+  background-size: 100px;
+  opacity: 0.03; /* Subtle fade */
+  pointer-events: none; /* So users can click through */
+}
   </style>
   <script>
     function toggleMenu() {
@@ -329,7 +338,7 @@ header {
   </div>
 
   <div class="desktop-hero">
-    <section style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; background:#fff; padding:60px 20px;">
+    <section class="white-bg-icon" section style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; background:#fff; padding:60px 20px;">
       <div style="flex:1; max-width:500px; padding:20px;">
         <h2 style="color:#003366; font-size:30px;">Notarize Your Documents Online — Fast & Secure</h2>
         <p style="color:#555; font-size:18px;">Book an appointment or connect instantly with a certified notary — all from your phone or computer.</p>
