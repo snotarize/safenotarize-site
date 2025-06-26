@@ -243,6 +243,12 @@ header {
     display: flex;
   }
 }
+    /* Fine-tune logo alignment on mobile */
+@media (max-width: 768px) {
+  .mobile-header .header-left img {
+    margin-top: 6px; /* You can adjust this value if needed */
+  }
+}
   </style>
   <script>
     function toggleMenu() {
