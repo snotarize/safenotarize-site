@@ -105,6 +105,13 @@
       header div:first-child { flex: none; }
     }
 
+    @media (min-width: 768px) {
+  .menu-toggle,
+  .mobile-hero-stack {
+    display: none !important;
+  }
+}
+
   </style>
   <script>
     function toggleMenu() {
@@ -125,24 +132,25 @@
   </script>
 </head>
 <body>
-  <header>
-   <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="text-decoration:none; color:white;">
+  <header style="position: sticky; top: 0; z-index: 999; background-color: #00274d; padding: 15px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+  <!-- Left: Logo -->
+  <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none; color:white;">
     <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px; object-fit:contain;">
     <span style="font-weight:bold; font-size:18px; color:white;">SafeNotarize</span>
-   </a>
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#services">Services</a>
-      <a href="#pricing-block">Pricing</a>
-      <a href="#faq">FAQ</a>
-      <a href="mailto:support@safenotarize.com">Contact</a>
-    </nav>
-  </header>
+  </a>
+
+  <!-- Center: Nav Links -->
+  <nav class="desktop-nav" style="display:flex; gap:30px;">
+    <a href="#" style="color:white; text-decoration:none;">Home</a>
+    <a href="#services" style="color:white; text-decoration:none;">Services</a>
+    <a href="#pricing-block" style="color:white; text-decoration:none;">Pricing</a>
+    <a href="#faq" style="color:white; text-decoration:none;">FAQ</a>
+    <a href="mailto:support@safenotarize.com" style="color:white; text-decoration:none;">Contact</a>
+  </nav>
+
+  <!-- Right: CTA Button -->
+  <a href="#calendly-block" style="background:#28a745; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold;">Schedule Your Notary</a>
+</header>
 
   <div class="mobile-hero-stack">
     <h2>Notarize Your Documents Online — Fast & Secure</h2>
