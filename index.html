@@ -9,16 +9,16 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17220906816"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'AW-17220906816');
   </script>
 
-  <!-- Conversion helper (optional) -->
+  <!-- Conversion helper (call gtag_report_conversion(url) on click if you want) -->
   <script>
     function gtag_report_conversion(url) {
       var callback = function () {
-        if (typeof(url) !== 'undefined') window.location = url;
+        if (typeof url !== 'undefined') window.location = url;
       };
       gtag('event', 'conversion', {
         'send_to': 'AW-17220906816/YExtCKSUwucaEMDeyJNA',
@@ -36,149 +36,147 @@
     * { box-sizing: border-box; }
     body, html { margin: 0; padding: 0; font-family: sans-serif; }
 
-    /* Desktop header */
-    .desktop-header {
+    /* ===== Desktop Header ===== */
+    .desktop-header{
       position: sticky;
       top: 0;
       z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 40px;
-      background-color: #00274d;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:15px 40px;
+      background:#00274d;
     }
     .desktop-header .header-left,
     .desktop-header .header-center,
-    .desktop-header .header-right {
-      display: flex;
-      align-items: center;
+    .desktop-header .header-right{ display:flex; align-items:center; }
+
+    .desktop-header .header-center{
+      flex:1;
+      justify-content:center;
+      gap:30px;
+      flex-wrap:wrap;
     }
-    .desktop-header .header-center {
-      flex: 1;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
+    .desktop-header .header-center a{
+      color:#fff;
+      text-decoration:none;
+      font-size:16px;
     }
-    .desktop-header .header-center a {
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .desktop-header .header-right a {
-      background: #28a745;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
+    .desktop-header .header-right a{
+      background:#28a745;
+      color:#fff;
+      padding:10px 20px;
+      border-radius:5px;
+      text-decoration:none;
+      font-weight:bold;
     }
 
-    /* Mobile header */
-    .mobile-header {
-      display: none;
+    /* ===== Mobile Header ===== */
+    .mobile-header{
+      display:none;
       position: sticky;
       top: 0;
       z-index: 999;
-      background-color: #00274d;
-      padding: 10px 20px;
+      background:#00274d;
+      padding:10px 20px;
     }
-    .mobile-header .header-left { display: flex; align-items: center; }
+    .mobile-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .menu-toggle{
+      display:flex;
+      flex-direction:column;
+      cursor:pointer;
+      z-index:1000;
+    }
+    .menu-toggle span{
+      background:#fff;
+      height:3px;
+      margin:4px 0;
+      width:25px;
+    }
+    .mobile-header nav{
+      display:none;
+      flex-direction:column;
+      gap:10px;
+      background:#003366;
+      padding:15px 20px;
+      margin-top:12px;
+      border-radius:10px;
+    }
+    .mobile-header nav a{
+      color:#fff;
+      text-decoration:none;
+      padding:8px 6px;
+    }
+    .mobile-header nav.show{ display:flex; }
 
-    .menu-toggle {
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      position: absolute;
-      top: 18px;
-      right: 20px;
-      z-index: 1000;
-    }
-    .menu-toggle span {
-      background: white;
-      height: 3px;
-      margin: 4px 0;
-      width: 25px;
+    @media (max-width: 768px){
+      .desktop-header{ display:none; }
+      .mobile-header{ display:block; }
     }
 
-    .mobile-header nav {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      background: #003366;
-      padding: 15px 20px;
-      margin-top: 12px;
-      border-radius: 10px;
+    /* Subtle icons on white sections */
+    .white-bg-icon{
+      position:relative;
+      background:#fff;
+      overflow:hidden;
+      z-index:1;
     }
-    .mobile-header nav a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 6px;
-    }
-    .mobile-header nav.show { display: flex; }
-
-    @media (max-width: 768px) {
-      .desktop-header { display: none; }
-      .mobile-header { display: block; }
-    }
-
-    /* Subtle icons background on white sections */
-    .white-bg-icon {
-      position: relative;
-      background: #ffffff;
-      overflow: hidden;
-      z-index: 1;
-    }
-    .white-bg-icon::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      z-index: -1;
-      opacity: 0.01;
+    .white-bg-icon::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      opacity:0.01;
       background-image:
         url('https://img.icons8.com/ios/50/stamp.png'),
         url('https://img.icons8.com/ios/50/signature.png'),
         url('https://img.icons8.com/ios/50/pen.png');
-      background-repeat: repeat;
+      background-repeat:repeat;
       background-position: 5% 10%, 60% 30%, 30% 70%;
       background-size: 50px, 80px, 40px;
     }
 
-    /* Testimonials carousel (fix) */
-    .testimonial-slides {
-      display: flex;
-      gap: 20px;
-      padding: 20px 0;
-      overflow-x: auto;              /* ✅ was hidden, so it couldn't scroll */
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    /* Testimonials carousel (fix scrolling) */
+    .testimonial-slides{
+      display:flex;
+      gap:20px;
+      padding:20px 0;
+      overflow-x:auto;                 /* ✅ allow scroll */
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      -ms-overflow-style:none;
+      scrollbar-width:none;
     }
-    .testimonial-slides::-webkit-scrollbar { display: none; }
-    .testimonial-card {
-      flex: 0 0 auto;
-      width: 300px;
-      scroll-snap-align: start;
-      background: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    .testimonial-slides::-webkit-scrollbar{ display:none; }
+
+    .testimonial-card{
+      flex:0 0 auto;
+      width:300px;
+      background:#fff;
+      border-radius:10px;
+      padding:20px;
+      box-shadow:0 0 8px rgba(0,0,0,0.05);
+      scroll-snap-align:start;
     }
   </style>
 
   <script>
     function toggleMenu() {
       const nav = document.querySelector('.mobile-header nav');
-      const toggle = document.querySelector('.mobile-header .menu-toggle');
-      if (!nav || !toggle) return;
+      if (!nav) return;
 
       nav.classList.toggle('show');
-      toggle.classList.toggle('open');
+
+      // lock/unlock background scroll
       document.body.style.overflow = nav.classList.contains('show') ? 'hidden' : '';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // close menu on outside click
+      // close menu when clicking outside
       document.addEventListener('click', (e) => {
         const nav = document.querySelector('.mobile-header nav');
         const toggle = document.querySelector('.mobile-header .menu-toggle');
@@ -189,9 +187,9 @@
         }
       });
 
-      // smooth scroll for anchors
+      // smooth scroll anchors
       document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', function(e) {
+        a.addEventListener('click', function(e){
           const href = this.getAttribute('href');
           const target = document.querySelector(href);
           if (!target) return;
@@ -234,17 +232,19 @@
 
   <!-- Mobile Header -->
   <header class="mobile-header">
-    <div class="header-left">
-      <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });"
-         style="display:flex; align-items:center; text-decoration:none;">
-        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"
-             alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
-        <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
-      </a>
-    </div>
+    <div class="mobile-top">
+      <div class="header-left">
+        <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });"
+           style="display:flex; align-items:center; text-decoration:none;">
+          <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"
+               alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+          <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+        </a>
+      </div>
 
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
     </div>
 
     <nav class="header-center">
@@ -276,26 +276,29 @@
         <p style="font-size:1.1rem; color:#333; margin-bottom:30px; line-height:1.6;">
           Get your documents legally notarized in minutes with our certified remote notaries. 100% secure, legally binding, and available 24/7.
         </p>
+
         <div style="display:flex; flex-wrap:wrap; gap:15px;">
           <a href="#calendly-block" style="background:#00274d; color:white; padding:12px 30px; border-radius:30px; text-decoration:none; font-weight:bold; display:inline-flex; align-items:center;">
-            <img src="https://img.icons8.com/ios-filled/20/ffffff/calendar.png" style="margin-right:8px;" alt=""> Book Appointment
+            <img src="https://img.icons8.com/ios-filled/20/ffffff/calendar.png" alt="Calendar" style="margin-right:8px;"> Book Appointment
           </a>
-          <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY" style="background:#28a745; color:white; padding:12px 30px; border-radius:30px; text-decoration:none; font-weight:bold; display:inline-flex; align-items:center;">
-            <img src="https://img.icons8.com/ios-filled/20/ffffff/clock.png" style="margin-right:8px;" alt=""> Instant Notary
+
+          <a href="https://app.proof.com/easy-link?ApiKey=5MKEJ8ghFujyBqDhB6t6HcvY"
+             style="background:#28a745; color:white; padding:12px 30px; border-radius:30px; text-decoration:none; font-weight:bold; display:inline-flex; align-items:center;">
+            <img src="https://img.icons8.com/ios-filled/20/ffffff/clock.png" alt="Clock" style="margin-right:8px;"> Instant Notary
           </a>
         </div>
 
         <div style="display:flex; align-items:center; margin-top:30px; gap:15px; flex-wrap:wrap;">
           <div style="display:flex; align-items:center;">
-            <img src="https://img.icons8.com/ios-filled/30/4CAF50/checkmark.png" style="margin-right:5px;" alt="">
+            <img src="https://img.icons8.com/ios-filled/30/4CAF50/checkmark.png" alt="Check" style="margin-right:5px;">
             <span style="font-size:0.9rem;">100% Legally Binding</span>
           </div>
           <div style="display:flex; align-items:center;">
-            <img src="https://img.icons8.com/ios-filled/30/4CAF50/checkmark.png" style="margin-right:5px;" alt="">
+            <img src="https://img.icons8.com/ios-filled/30/4CAF50/checkmark.png" alt="Check" style="margin-right:5px;">
             <span style="font-size:0.9rem;">Bank-Level Security</span>
           </div>
           <div style="display:flex; align-items:center;">
-            <img src="https://img.icons8.com/ios-filled/30/4CAF50/checkmark.png" style="margin-right:5px;" alt="">
+            <img src="https://img.icons8.com/ios-filled/30/4CAF50/checkmark.png" alt="Check" style="margin-right:5px;">
             <span style="font-size:0.9rem;">Available 24/7</span>
           </div>
         </div>
@@ -303,12 +306,14 @@
 
       <div style="flex:1; min-width:300px; max-width:500px; position:relative;">
         <div style="border-radius:15px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.1); border:15px solid white; transform:rotate(3deg);">
-          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=640&h=360&q=80" alt="Professional notary service" style="width:100%; display:block;">
+          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=640&h=360&q=80"
+               alt="Professional notary service" style="width:100%; display:block;">
         </div>
+
         <div style="position:absolute; bottom:-20px; right:-20px; background:white; padding:15px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transform:rotate(-5deg);">
           <div style="display:flex; align-items:center;">
             <div style="background:#28a745; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-right:10px;">
-              <img src="https://img.icons8.com/ios-filled/20/ffffff/verified-account.png" alt="">
+              <img src="https://img.icons8.com/ios-filled/20/ffffff/verified-account.png" alt="Verified">
             </div>
             <div>
               <div style="font-weight:bold; color:#00274d;">Certified Notary</div>
@@ -320,13 +325,74 @@
     </div>
 
     <div style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; opacity:0.05;">
-      <img src="https://img.icons8.com/ios/100/00274d/stamp.png" style="position:absolute; top:20%; left:10%;" alt="">
-      <img src="https://img.icons8.com/ios/100/00274d/signature.png" style="position:absolute; top:70%; left:80%;" alt="">
-      <img src="https://img.icons8.com/ios/100/00274d/document.png" style="position:absolute; top:30%; right:10%;" alt="">
+      <img src="https://img.icons8.com/ios/100/00274d/stamp.png" alt="" style="position:absolute; top:20%; left:10%;">
+      <img src="https://img.icons8.com/ios/100/00274d/signature.png" alt="" style="position:absolute; top:70%; left:80%;">
+      <img src="https://img.icons8.com/ios/100/00274d/document.png" alt="" style="position:absolute; top:30%; right:10%;">
     </div>
   </section>
 
-  <!-- Services + Process -->
+  <!-- Trust Indicators -->
+  <section style="background:#00274d; color:white; padding:40px 20px;">
+    <div style="max-width:1200px; margin:0 auto; text-align:center;">
+      <h2 style="font-size:1.8rem; margin-bottom:40px;">Trusted by Thousands Across All 50 States</h2>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:40px;">
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:2.5rem; font-weight:bold; color:#28a745;">10,000+</div>
+          <div>Documents Notarized</div>
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:2.5rem; font-weight:bold; color:#28a745;">4.9/5</div>
+          <div>Customer Rating</div>
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:2.5rem; font-weight:bold; color:#28a745;">24/7</div>
+          <div>Availability</div>
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:2.5rem; font-weight:bold; color:#28a745;">100%</div>
+          <div>Legal Compliance</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Multilingual -->
+  <section style="padding:60px 20px; background:#f0f8ff;">
+    <div style="max-width:1200px; margin:0 auto; text-align:center;">
+      <h3 style="font-size:28px; color:#003366; margin-bottom:40px; position:relative; display:inline-block;">
+        Multilingual Notarization
+        <span style="position:absolute; bottom:-10px; left:0; right:0; height:4px; background:linear-gradient(90deg, #28a745, #007bff); border-radius:2px;"></span>
+      </h3>
+
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; margin-top:40px;">
+        <div style="flex:1; min-width:300px; background:white; border-radius:12px; padding:30px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+          <div style="font-size:40px; margin-bottom:15px;">🇺🇸</div>
+          <h4 style="font-size:20px; color:#003366; margin-bottom:10px;">English</h4>
+          <p style="color:#555; line-height:1.6;">Native English-speaking notaries available 24/7 for all your document needs.</p>
+        </div>
+
+        <div style="flex:1; min-width:300px; background:white; border-radius:12px; padding:30px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+          <div style="font-size:40px; margin-bottom:15px;">🇭🇹</div>
+          <h4 style="font-size:20px; color:#003366; margin-bottom:10px;">Creole</h4>
+          <p style="color:#555; line-height:1.6;">Fluent Creole-speaking notaries dedicated to serving the Haitian community.</p>
+        </div>
+
+        <div style="flex:1; min-width:300px; background:white; border-radius:12px; padding:30px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+          <div style="font-size:40px; margin-bottom:15px;">🇫🇷</div>
+          <h4 style="font-size:20px; color:#003366; margin-bottom:10px;">French</h4>
+          <p style="color:#555; line-height:1.6;">Professional French-speaking notaries for international documents and contracts.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:50px;">
+        <a href="#calendly-block" style="display:inline-block; background:linear-gradient(90deg, #28a745, #007bff); color:white; padding:12px 30px; border-radius:30px; text-decoration:none; font-weight:bold;">
+          Book Your Multilingual Notary
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
   <section id="services" style="background:#f4f6f8; padding:40px 20px;">
     <h3 style="text-align:center; font-size:24px; color:#003366; margin-bottom:30px;">Popular Services</h3>
 
@@ -422,7 +488,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="white-bg-icon" style="background:#ffffff; padding:60px 20px;" id="faq">
+  <section class="white-bg-icon" style="padding:60px 20px;" id="faq">
     <h3 style="text-align:center; font-size:24px; color:#003366; margin-bottom:30px;">Frequently Asked Questions</h3>
     <div style="max-width:800px; margin:0 auto;">
       <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
@@ -471,7 +537,7 @@
   </section>
 
   <!-- Pricing -->
-  <section class="white-bg-icon" id="pricing-block" style="background:#ffffff; padding:50px 20px; text-align:center;">
+  <section class="white-bg-icon" id="pricing-block" style="padding:50px 20px; text-align:center;">
     <h3 style="font-size:26px; color:#003366; margin-bottom:30px;">Simple, Transparent Pricing</h3>
     <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; max-width:1000px; margin:auto;">
       <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
@@ -500,8 +566,8 @@
     </div>
   </section>
 
-  <!-- Witnesses -->
-  <section class="white-bg-icon" style="background:#ffffff; padding:30px 20px; text-align:center;">
+  <!-- Witness -->
+  <section class="white-bg-icon" style="padding:30px 20px; text-align:center;">
     <div style="max-width:700px; margin:auto;">
       <h4 style="color:#003366; font-size:20px; margin-bottom:15px;">Need Witnesses?</h4>
       <p style="color:#555; font-size:16px;">We provide witness as a service for just <strong>$10 per witness</strong>. Let us know in advance, and we’ll take care of the rest.</p>
@@ -526,7 +592,11 @@
         <div class="testimonial-card">
           <p style="font-style:italic;">"SafeNotarize made the process so easy. I had my lease agreement signed and notarized without leaving home!"</p>
           <div style="margin:10px 0;">
-            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/>
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
           </div>
           <p style="font-size:13px; color:#555;">✔ Verified Client</p>
           <p style="text-align:right; font-weight:bold; margin-top:10px;">– Aisha K.</p>
@@ -535,7 +605,11 @@
         <div class="testimonial-card">
           <p style="font-style:italic;">"Highly professional and quick. The notary was friendly and explained everything clearly."</p>
           <div style="margin:10px 0;">
-            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/>
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
           </div>
           <p style="font-size:13px; color:#555;">✔ Verified Client</p>
           <p style="text-align:right; font-weight:bold; margin-top:10px;">– Daniel P.</p>
@@ -544,7 +618,11 @@
         <div class="testimonial-card">
           <p style="font-style:italic;">"I was nervous doing this online, but it worked flawlessly. Will use again!"</p>
           <div style="margin:10px 0;">
-            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/>
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
           </div>
           <p style="font-size:13px; color:#555;">✔ Verified Client</p>
           <p style="text-align:right; font-weight:bold; margin-top:10px;">– Jason R.</p>
@@ -553,7 +631,11 @@
         <div class="testimonial-card">
           <p style="font-style:italic;">"The notary was kind and professional. This service saved me a trip and a lot of time. Thank you!"</p>
           <div style="margin:10px 0;">
-            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/>
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
           </div>
           <p style="font-size:13px; color:#555;">✔ Verified Client</p>
           <p style="text-align:right; font-weight:bold; margin-top:10px;">– Melissa G.</p>
@@ -562,7 +644,11 @@
         <div class="testimonial-card">
           <p style="font-style:italic;">"Notary from Florida made our day trying to ship my car from Maui to Honolulu and had less than 24 hours to give my husband paperwork while I was away..."</p>
           <div style="margin:10px 0;">
-            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png"/>
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
+            <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="star">
           </div>
           <p style="font-size:13px; color:#555;">✔ Verified Client</p>
           <p style="text-align:right; font-weight:bold; margin-top:10px;">– Andrian D.</p>
@@ -571,29 +657,14 @@
     </div>
   </section>
 
-  <!-- Trust Section -->
+  <!-- Trust closing section -->
   <section class="white-bg-icon" style="background:#fffefc; padding:50px 20px; text-align:center;">
     <div style="max-width:800px; margin:auto;">
       <div style="margin-bottom:30px;">
         <img src="https://img.icons8.com/ios-filled/80/000000/security-checked.png" alt="Trusted Shield" style="margin-bottom:15px;">
       </div>
 
-      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
-        <div style="min-width:200px;">
-          <h4 style="color:#28a745; font-size:22px; margin-bottom:5px;">10,000+</h4>
-          <p style="font-size:14px; color:#555;">Documents Notarized</p>
-        </div>
-        <div style="min-width:200px;">
-          <h4 style="color:#28a745; font-size:22px; margin-bottom:5px;">5-Star Rated</h4>
-          <p style="font-size:14px; color:#555;">Across All Platforms</p>
-        </div>
-        <div style="min-width:200px;">
-          <h4 style="color:#28a745; font-size:22px; margin-bottom:5px;">Nationwide</h4>
-          <p style="font-size:14px; color:#555;">Available in All 50 States</p>
-        </div>
-      </div>
-
-      <h3 style="color:#003366; font-size:26px; margin-bottom:20px; margin-top:30px;">Why Thousands Trust SafeNotarize</h3>
+      <h3 style="color:#003366; font-size:26px; margin-bottom:20px;">Why Thousands Trust SafeNotarize</h3>
       <p style="color:#555; font-size:16px; line-height:1.6;">
         With over 5 years of experience, SafeNotarize helps clients across the U.S. and internationally notarize documents securely from the comfort of home. Our certified notaries are available 24/7, and every session is legally compliant, encrypted, and recorded for your peace of mind.
       </p>
@@ -604,21 +675,19 @@
     </div>
   </section>
 
-  <!-- Optional UI elements (safe) -->
+  <!-- Optional UI elements -->
   <loading-spinner id="page-loader"></loading-spinner>
   <back-to-top></back-to-top>
   <cookie-consent></cookie-consent>
 
-  <!-- Tawk + Carousel + Loader -->
+  <!-- Tawk + loader + carousel auto-scroll -->
   <script>
-    // Loader safe
     const loader = document.getElementById('page-loader');
     if (loader) loader.style.display = 'block';
 
     window.addEventListener('load', () => {
       if (loader) loader.style.display = 'none';
 
-      // Carousel auto-scroll
       const carousel = document.querySelector('.testimonial-slides');
       if (carousel && carousel.children.length) {
         let currentIndex = 0;
@@ -647,7 +716,6 @@
   <!-- Footer -->
   <footer style="background-color:#00274d; color:white; padding:40px 20px; font-family:sans-serif;">
     <div style="display:flex; flex-wrap:wrap; justify-content:space-between; max-width:1200px; margin:auto; gap:40px; align-items:flex-start;">
-
       <div style="flex:1; min-width:250px;">
         <a href="/" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="text-decoration:none; color:white;">
           <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:50px; margin-bottom:10px;">
