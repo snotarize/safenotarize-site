@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://safenotarize.com/sitemap.xml
