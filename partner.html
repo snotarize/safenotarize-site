@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner Notarization | SafeNotarize</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17220906816"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17220906816');
+  </script>
+
+  <!-- Conversion helper (call gtag_report_conversion(url) on click if you want) -->
+  <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof url !== 'undefined') window.location = url;
+      };
+      gtag('event', 'conversion', {
+        'send_to': 'AW-17220906816/YExtCKSUwucaEMDeyJNA',
+        'event_callback': callback
+      });
+      return false;
+    }
+  </script>
+
+  <meta name="description" content="SafeNotarize partner link: fast, secure online notarization. Book your appointment in minutes. U.S. and international signers supported." />
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#00274d">
+
+  <style>
+    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; }
+    body, html { margin: 0; padding: 0; font-family: sans-serif; }
+
+    /* ===== Desktop Header ===== */
+    .desktop-header{
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:15px 40px;
+      background:#00274d;
+    }
+    .desktop-header .header-left,
+    .desktop-header .header-center,
+    .desktop-header .header-right{ display:flex; align-items:center; }
+
+    .desktop-header .header-center{
+      flex:1;
+      justify-content:center;
+      gap:30px;
+      flex-wrap:wrap;
+    }
+    .desktop-header .header-center a{
+      color:#fff;
+      text-decoration:none;
+      font-size:16px;
+    }
+    .desktop-header .header-right a{
+      background:#28a745;
+      color:#fff;
+      padding:10px 20px;
+      border-radius:5px;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    /* ===== Mobile Header ===== */
+    .mobile-header{
+      display:none;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background:#00274d;
+      padding:10px 20px;
+    }
+    .mobile-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .menu-toggle{
+      display:flex;
+      flex-direction:column;
+      cursor:pointer;
+      z-index:1000;
+    }
+    .menu-toggle span{
+      background:#fff;
+      height:3px;
+      margin:4px 0;
+      width:25px;
+    }
+    .mobile-header nav{
+      display:none;
+      flex-direction:column;
+      gap:10px;
+      background:#003366;
+      padding:15px 20px;
+      margin-top:12px;
+      border-radius:10px;
+    }
+    .mobile-header nav a{
+      color:#fff;
+      text-decoration:none;
+      padding:8px 6px;
+    }
+    .mobile-header nav.show{ display:flex; }
+
+    @media (max-width: 768px){
+      .desktop-header{ display:none; }
+      .mobile-header{ display:block; }
+    }
+
+    /* Subtle icons on white sections */
+    .white-bg-icon{
+      position:relative;
+      background:#fff;
+      overflow:hidden;
+      z-index:1;
+    }
+    .white-bg-icon::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      opacity:0.01;
+      background-image:
+        url('https://img.icons8.com/ios/50/stamp.png'),
+        url('https://img.icons8.com/ios/50/signature.png'),
+        url('https://img.icons8.com/ios/50/pen.png');
+      background-repeat:repeat;
+      background-position: 5% 10%, 60% 30%, 30% 70%;
+      background-size: 50px, 80px, 40px;
+    }
+
+    /* Partner page helpers */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:12px 22px;
+      border-radius:30px;
+      text-decoration:none;
+      font-weight:bold;
+      cursor:pointer;
+      border:0;
+    }
+    .btn-primary{
+      background:#28a745;
+      color:#fff;
+    }
+    .btn-navy{
+      background:#00274d;
+      color:#fff;
+    }
+    .btn-outline{
+      background:#fff;
+      color:#00274d;
+      border:1px solid #cbd5e1;
+      font-weight:600;
+    }
+    .card{
+      background:#fff;
+      border-radius:12px;
+      padding:22px;
+      box-shadow:0 2px 15px rgba(0,0,0,0.05);
+    }
+    .tiny{
+      font-size:13px;
+      color:#556;
+      line-height:1.5;
+    }
+    .toast{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      background:#00274d;
+      color:#fff;
+      padding:12px 14px;
+      border-radius:10px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.15);
+      opacity:0;
+      transform: translateY(10px);
+      transition: all .2s ease;
+      z-index: 9999;
+      font-size:14px;
+    }
+    .toast.show{ opacity:1; transform: translateY(0); }
+  </style>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.querySelector('.mobile-header nav');
+      if (!nav) return;
+
+      nav.classList.toggle('show');
+      document.body.style.overflow = nav.classList.contains('show') ? 'hidden' : '';
+    }
+
+    // Always copy the canonical partner URL path (not whatever query params someone has)
+    function copyPartnerLink(){
+      const partnerUrl = window.location.origin + "/partner.html";
+      const toast = document.getElementById('toast');
+      const label = document.getElementById('copyLabel');
+
+      function showToast(msg){
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2200);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(partnerUrl).then(() => {
+          if (label) label.textContent = "Copied";
+          showToast("Partner link copied");
+          setTimeout(() => { if (label) label.textContent = "Copy link"; }, 2000);
+        }).catch(() => {
+          showToast("Copy failed. Please copy: " + partnerUrl);
+        });
+      } else {
+        showToast("Please copy: " + partnerUrl);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const nav = document.querySelector('.mobile-header nav');
+        const toggle = document.querySelector('.mobile-header .menu-toggle');
+        if (!nav || !toggle) return;
+
+        if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('show')) {
+          toggleMenu();
+        }
+      });
+
+      // smooth scroll anchors
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function(e){
+          const href = this.getAttribute('href');
+          const target = document.querySelector(href);
+          if (!target) return;
+
+          e.preventDefault();
+          window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+
+          const nav = document.querySelector('.mobile-header nav');
+          if (nav && nav.classList.contains('show')) toggleMenu();
+        });
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Desktop Header -->
+  <header class="desktop-header">
+    <div class="header-left">
+      <a href="/" style="display:flex; align-items:center; text-decoration:none;">
+        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"
+             alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+        <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+      </a>
+    </div>
+
+    <div class="header-center">
+      <a href="/">Home</a>
+      <a href="/partner.html#how-it-works">How it works</a>
+      <a href="/partner.html#pricing-block">Pricing</a>
+      <a href="/partner.html#faq">FAQ</a>
+      <a href="mailto:support@safenotarize.com">Contact</a>
+    </div>
+
+    <div class="header-right">
+      <a href="/partner.html#calendly-block">Book Appointment</a>
+    </div>
+  </header>
+
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <div class="mobile-top">
+      <div class="header-left">
+        <a href="/" style="display:flex; align-items:center; text-decoration:none;">
+          <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"
+               alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+          <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+        </a>
+      </div>
+
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <nav class="header-center">
+      <a href="/">Home</a>
+      <a href="/partner.html#how-it-works">How it works</a>
+      <a href="/partner.html#pricing-block">Pricing</a>
+      <a href="/partner.html#faq">FAQ</a>
+      <a href="mailto:support@safenotarize.com">Contact</a>
+      <a href="/partner.html#calendly-block">Book Appointment</a>
+    </nav>
+  </header>
+
+  <!-- Trust Badges -->
+  <div class="trust-badges" style="background:#f8fafc; padding:20px 0; text-align:center;">
+    <div style="max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
+      <img src="https://img.icons8.com/ios-filled/50/4CAF50/security-checked.png" alt="Secure" style="height:40px;">
+      <img src="https://img.icons8.com/ios-filled/50/2196F3/certificate.png" alt="Certified" style="height:40px;">
+      <img src="https://img.icons8.com/ios-filled/50/FF9800/lock--v1.png" alt="Encrypted" style="height:40px;">
+      <img src="https://img.icons8.com/ios-filled/50/607D8B/verified-account.png" alt="Verified" style="height:40px;">
+    </div>
+  </div>
+
+  <!-- Partner Hero -->
+  <section class="hero-gradient white-bg-icon" style="padding:70px 20px; position:relative; overflow:hidden;">
+    <div style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:30px; position:relative; z-index:2;">
+      <div style="flex:1; min-width:300px;">
+        <h1 style="font-size:2.2rem; color:#00274d; line-height:1.25; margin:0 0 14px;">
+          Welcome — You’re on a SafeNotarize Partner Link
+        </h1>
+        <p style="font-size:1.05rem; color:#333; margin:0 0 18px; line-height:1.6;">
+          If a business, agency, translator, immigration prep service, title office, or partner sent you here,
+          you can book your notarization appointment below.
+        </p>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin:18px 0 10px;">
+          <a class="btn btn-navy" href="/partner.html#calendly-block"
+             onclick="return gtag_report_conversion('/partner.html#calendly-block');">
+            <img src="https://img.icons8.com/ios-filled/20/ffffff/calendar.png" alt="Calendar" style="margin-right:2px;">
+            Book Appointment
+          </a>
+
+          <button class="btn btn-outline" type="button" onclick="copyPartnerLink()">
+            <img src="https://img.icons8.com/ios-filled/20/00274d/link--v1.png" alt="Link" style="margin-right:2px;">
+            <span id="copyLabel">Copy partner link</span>
+          </button>
+
+          <a class="btn btn-primary" href="mailto:support@safenotarize.com">
+            <img src="https://img.icons8.com/ios-filled/20/ffffff/new-post.png" alt="Email" style="margin-right:2px;">
+            Email Support
+          </a>
+        </div>
+
+        <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:18px;">
+          <div style="display:flex; align-items:center;">
+            <img src="https://img.icons8.com/ios-filled/26/4CAF50/checkmark.png" alt="Check" style="margin-right:6px;">
+            <span style="font-size:0.92rem;">Fast turnaround</span>
+          </div>
+          <div style="display:flex; align-items:center;">
+            <img src="https://img.icons8.com/ios-filled/26/4CAF50/checkmark.png" alt="Check" style="margin-right:6px;">
+            <span style="font-size:0.92rem;">Secure and recorded sessions</span>
+          </div>
+          <div style="display:flex; align-items:center;">
+            <img src="https://img.icons8.com/ios-filled/26/4CAF50/checkmark.png" alt="Check" style="margin-right:6px;">
+            <span style="font-size:0.92rem;">U.S. and international signers</span>
+          </div>
+        </div>
+
+        <p class="tiny" style="margin-top:14px;">
+          Language support: English, Haitian Creole, and French.
+        </p>
+      </div>
+
+      <div style="flex:1; min-width:300px; max-width:480px;">
+        <div class="card" style="border-left:6px solid #28a745;">
+          <h3 style="margin:0 0 10px; color:#00274d;">What to have ready</h3>
+          <ul style="margin:0; padding-left:18px; color:#334; line-height:1.7;">
+            <li>Valid, unexpired government photo ID</li>
+            <li>Your document ready to sign (PDF preferred)</li>
+            <li>Phone or computer with camera, mic, and stable internet</li>
+            <li>If witnesses are required, tell us before the appointment</li>
+          </ul>
+          <p class="tiny" style="margin:12px 0 0;">
+            International signers are often verified using a valid passport, subject to platform verification rules.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; opacity:0.05;">
+      <img src="https://img.icons8.com/ios/100/00274d/stamp.png" alt="" style="position:absolute; top:18%; left:10%;">
+      <img src="https://img.icons8.com/ios/100/00274d/signature.png" alt="" style="position:absolute; top:70%; left:80%;">
+      <img src="https://img.icons8.com/ios/100/00274d/document.png" alt="" style="position:absolute; top:30%; right:10%;">
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works" style="background:#f4f6f8; padding:45px 20px;">
+    <div style="max-width:1100px; margin:0 auto;">
+      <h2 style="text-align:center; font-size:24px; color:#003366; margin-bottom:25px;">How Online Notarization Works</h2>
+
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:18px;">
+        <div class="card" style="flex:1; min-width:260px; max-width:340px; text-align:center;">
+          <img src="https://img.icons8.com/ios-filled/50/document.png" alt="Document" style="margin-bottom:10px;">
+          <h4 style="margin:0 0 8px;">1) Prepare your document</h4>
+          <p class="tiny" style="margin:0;">Have your PDF ready. If your provider gave you a form, use that exact document.</p>
+        </div>
+
+        <div class="card" style="flex:1; min-width:260px; max-width:340px; text-align:center;">
+          <img src="https://img.icons8.com/ios-filled/50/verified-account.png" alt="Verify ID" style="margin-bottom:10px;">
+          <h4 style="margin:0 0 8px;">2) Verify your identity</h4>
+          <p class="tiny" style="margin:0;">Use a valid photo ID. International signers may use a passport (verification rules apply).</p>
+        </div>
+
+        <div class="card" style="flex:1; min-width:260px; max-width:340px; text-align:center;">
+          <img src="https://img.icons8.com/ios-filled/50/video-call.png" alt="Video" style="margin-bottom:10px;">
+          <h4 style="margin:0 0 8px;">3) Complete the session</h4>
+          <p class="tiny" style="margin:0;">Join the video call at your appointment time and finish your notarization.</p>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:28px;">
+        <a class="btn btn-navy" href="/partner.html#calendly-block"
+           onclick="return gtag_report_conversion('/partner.html#calendly-block');">
+          Book Appointment
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="white-bg-icon" id="pricing-block" style="padding:50px 20px; text-align:center;">
+    <h2 style="font-size:26px; color:#003366; margin-bottom:30px;">Simple, Transparent Pricing</h2>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; max-width:1000px; margin:auto;">
+      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+        <h4 style="color:#003366; margin-bottom:10px;">Basic Notarization</h4>
+        <p style="font-size:20px; font-weight:bold; color:#28a745;">$23</p>
+        <p style="font-size:14px; color:#555;">One document and one signer.</p>
+      </div>
+
+      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+        <h4 style="color:#003366; margin-bottom:10px;">Additional Signers</h4>
+        <p style="font-size:20px; font-weight:bold; color:#28a745;">+ $6 each</p>
+        <p style="font-size:14px; color:#555;">Per extra signer added to the session.</p>
+      </div>
+
+      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+        <h4 style="color:#003366; margin-bottom:10px;">Extra Stamps</h4>
+        <p style="font-size:20px; font-weight:bold; color:#28a745;">+ $5 each</p>
+        <p style="font-size:14px; color:#555;">Per additional notarial stamp.</p>
+      </div>
+
+      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+        <h4 style="color:#003366; margin-bottom:10px;">International Signers</h4>
+        <p style="font-size:20px; font-weight:bold; color:#28a745;">$37</p>
+        <p style="font-size:14px; color:#555;">For signers outside the United States.</p>
+      </div>
+    </div>
+
+    <div class="white-bg-icon" style="padding:30px 20px; margin-top:18px;">
+      <div style="max-width:900px; margin:auto;">
+        <h4 style="color:#003366; font-size:20px; margin:0 0 10px;">Need witnesses?</h4>
+        <p style="color:#555; font-size:16px; margin:0;">
+          Witness service is available for <strong>$10 per witness</strong>. Tell us ahead of time so we can confirm availability.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="white-bg-icon" style="padding:60px 20px;" id="faq">
+    <h2 style="text-align:center; font-size:24px; color:#003366; margin-bottom:30px;">Frequently Asked Questions</h2>
+    <div style="max-width:850px; margin:0 auto;">
+      <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
+        <summary style="font-weight:bold; cursor:pointer;">Do I need to upload my document somewhere?</summary>
+        <p style="margin-top:10px;">
+          You can bring your document to the appointment. If your provider gave you a form, use that exact form.
+        </p>
+      </details>
+
+      <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
+        <summary style="font-weight:bold; cursor:pointer;">Can you notarize documents for immigration packages?</summary>
+        <p style="margin-top:10px;">
+          We can notarize affidavits, consent forms, authorizations, and other supporting documents. We do not provide legal advice.
+        </p>
+      </details>
+
+      <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
+        <summary style="font-weight:bold; cursor:pointer;">I am outside the U.S. Can I still book?</summary>
+        <p style="margin-top:10px;">
+          Yes. Many international signers can be verified using a valid passport, subject to platform verification requirements.
+        </p>
+      </details>
+
+      <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
+        <summary style="font-weight:bold; cursor:pointer;">Do you support Creole and French?</summary>
+        <p style="margin-top:10px;">
+          Yes. We support English, Haitian Creole, and French.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Calendly -->
+  <div class="white-bg-icon" id="calendly-block" style="background:#f9f9f9; padding:90px 20px; text-align:center;">
+    <h2 style="font-size:24px; color:#003366; margin-bottom:20px;">Book Your Appointment</h2>
+    <p class="tiny" style="max-width:780px; margin:0 auto 18px;">
+      Pick a time that works for you. After booking, you will receive appointment details by email.
+    </p>
+
+    <div class="calendly-inline-widget"
+      data-url="https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1"
+      style="min-width:320px;height:760px; margin:0 auto;"></div>
+  </div>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+  <!-- Optional UI elements (safe even if not used) -->
+  <loading-spinner id="page-loader"></loading-spinner>
+  <back-to-top></back-to-top>
+  <cookie-consent></cookie-consent>
+
+  <!-- Tawk + loader -->
+  <script>
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.style.display = 'block';
+
+    window.addEventListener('load', () => {
+      if (loader) loader.style.display = 'none';
+    });
+
+    // Tawk.to
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
+
+  <!-- Footer -->
+  <footer style="background-color:#00274d; color:white; padding:40px 20px; font-family:sans-serif;">
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; max-width:1200px; margin:auto; gap:40px; align-items:flex-start;">
+      <div style="flex:1; min-width:250px;">
+        <a href="/" style="text-decoration:none; color:white;">
+          <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"
+               alt="SafeNotarize Logo" style="height:50px; margin-bottom:10px;">
+          <h4 style="margin:0;">SafeNotarize</h4>
+        </a>
+        <p style="line-height:1.6; margin-top:10px;">
+          We make notarization secure, fast, and legally compliant, from the comfort of your device.
+        </p>
+      </div>
+
+      <div style="flex:1; min-width:180px;">
+        <h4 style="font-size:18px; margin-bottom:15px;">Quick Links</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="/#services" style="color:#90caf9; text-decoration:none;">Services</a></li>
+          <li><a href="/#pricing-block" style="color:#90caf9; text-decoration:none;">Pricing</a></li>
+          <li><a href="/#faq" style="color:#90caf9; text-decoration:none;">FAQ</a></li>
+          <li><a href="mailto:support@safenotarize.com" style="color:#90caf9; text-decoration:none;">Support</a></li>
+        </ul>
+      </div>
+
+      <div style="flex:1; min-width:180px;">
+        <h4 style="font-size:18px; margin-bottom:15px;">Legal</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="/legal.html#privacy" style="color:#90caf9; text-decoration:none;">Privacy Policy</a></li>
+          <li><a href="/legal.html#terms" style="color:#90caf9; text-decoration:none;">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:40px;">
+      <a href="https://www.facebook.com/profile.php?id=61577290756700" target="_blank" rel="noreferrer">
+        <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="margin-bottom:10px;">
+      </a>
+      <div style="margin-top:10px;">
+        <a href="/partner.html#calendly-block" class="btn btn-primary" style="border-radius:5px; padding:12px 24px;"
+           onclick="return gtag_report_conversion('/partner.html#calendly-block');">
+          Book a Notary
+        </a>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:30px; padding-top:20px; border-top:1px solid #444;">
+      <p style="font-size:14px;">&copy; 2026 SafeNotarize. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="toast">Partner link copied</div>
+</body>
+</html>
