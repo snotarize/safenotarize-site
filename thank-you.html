@@ -1,16 +1,17 @@
 <head>
   <meta charset="UTF-8">
-  <title>Thank You | SafeNotarize</title>
+  <title>Your Appointment Is Confirmed | SafeNotarize</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #ffffff;
+      background: linear-gradient(to bottom, #f7fbff 0%, #ffffff 100%);
       color: #003366;
       display: flex;
       align-items: center;
@@ -18,89 +19,188 @@
       min-height: 100vh;
       flex-direction: column;
     }
+
     .container {
       background: #fff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      padding: 42px 32px;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(0, 51, 102, 0.08);
       text-align: center;
-      max-width: 600px;
-      width: 90%;
+      max-width: 640px;
+      width: 92%;
+      border: 1px solid #e6eef7;
     }
+
     .logo {
-      height: 40px;
-      margin-bottom: 15px;
+      height: 44px;
+      margin-bottom: 14px;
     }
+
     .checkmark {
-      width: 80px;
-      height: 80px;
-      margin: 20px auto;
+      width: 86px;
+      height: 86px;
+      margin: 18px auto 22px;
+      display: block;
     }
+
     h1 {
-      font-size: 28px;
+      font-size: 30px;
       color: #00274d;
-      margin-bottom: 15px;
+      margin: 0 0 14px;
+      font-weight: 700;
     }
+
     p {
       font-size: 16px;
-      color: #444;
-      line-height: 1.6;
+      color: #44556b;
+      line-height: 1.65;
+      margin: 0 0 14px;
     }
+
+    .info-box {
+      margin: 24px 0 16px;
+      padding: 18px 18px;
+      background: #f8fbff;
+      border: 1px solid #d8e7f5;
+      border-radius: 12px;
+      text-align: left;
+    }
+
+    .info-box p {
+      margin: 0 0 10px;
+      color: #32465a;
+      font-size: 15px;
+    }
+
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight {
+      color: #00274d;
+      font-weight: 700;
+    }
+
+    .upload-box {
+      margin: 24px 0 8px;
+      padding: 22px 20px;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+      border: 1px solid #d7e6f5;
+      border-radius: 14px;
+    }
+
+    .upload-box p {
+      margin-bottom: 10px;
+    }
+
+    .upload-btn {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #003366;
+      color: white;
+      text-decoration: none;
+      padding: 13px 22px;
+      font-size: 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .upload-btn:hover {
+      background-color: #00274d;
+      transform: translateY(-1px);
+    }
+
+    .small-note {
+      font-size: 14px;
+      color: #6a7b8c;
+      margin-top: 12px;
+    }
+
     form {
       margin-top: 30px;
       text-align: left;
+      padding-top: 10px;
     }
+
     label {
       font-weight: 600;
       display: block;
-      margin: 10px 0 5px;
+      margin: 12px 0 6px;
+      color: #00274d;
     }
+
     input, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       font-size: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border: 1px solid #cfd8e3;
+      border-radius: 8px;
       font-family: 'Inter', sans-serif;
+      background: #fff;
     }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #7aa7d9;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.08);
+    }
+
     textarea {
       resize: vertical;
+      min-height: 110px;
     }
+
     .submit-btn {
       margin-top: 20px;
       background-color: #28a745;
       color: white;
       border: none;
-      padding: 12px 20px;
+      padding: 13px 22px;
       font-size: 16px;
-      border-radius: 5px;
-      font-weight: 600;
+      border-radius: 8px;
+      font-weight: 700;
       cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
     }
+
     .submit-btn:hover {
       background-color: #218838;
+      transform: translateY(-1px);
     }
+
     @media (max-width: 480px) {
-      h1 { font-size: 24px; }
-      p { font-size: 15px; }
+      .container {
+        padding: 34px 20px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+
+      .upload-btn,
+      .submit-btn {
+        width: 100%;
+      }
     }
   </style>
 
-  <!-- ✅ Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17220906816"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'AW-17220906816');
-    
-    // Optional conversion tracking (replace with your label if needed)
+
     gtag('event', 'conversion', {
       'send_to': 'AW-17220906816/YOUR_CONVERSION_LABEL'
     });
   </script>
 
-  <!-- ✅ Tawk.to Chat Widget for SafeNotarize -->
   <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
@@ -113,28 +213,51 @@
     })();
   </script>
 </head>
+
 <body>
   <div class="container">
     <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" class="logo">
-    
-    <!-- ✅ Checkmark SVG Animation -->
-    <svg class="checkmark" viewBox="0 0 52 52">
+
+    <svg class="checkmark" viewBox="0 0 52 52" aria-hidden="true">
       <circle cx="26" cy="26" r="25" fill="none" stroke="#28a745" stroke-width="3"/>
       <path fill="none" stroke="#28a745" stroke-width="3" d="M14 27l7 7 17-17"/>
     </svg>
 
-    <h1>Thank You for Booking!</h1>
-    <p>Your appointment is confirmed. A notary will reach out if needed.<br>Check your email for confirmation details.</p>
+    <h1>Your Appointment Is Confirmed</h1>
+
+    <p>Thank you for booking with SafeNotarize.</p>
+
+    <div class="info-box">
+      <p>Please check your email for your confirmation details.</p>
+      <p>You may receive <span class="highlight">two emails</span>:</p>
+      <p>1. A confirmation email from <span class="highlight">SafeNotarize</span></p>
+      <p>2. A separate invitation email from <span class="highlight">BlueNotary</span> with your secure session link</p>
+      <p>Please use the <span class="highlight">BlueNotary invitation email</span> to join your appointment at the scheduled time.</p>
+    </div>
+
+    <div class="upload-box">
+      <p><strong>To avoid delays, please upload your document before your appointment.</strong></p>
+      <a href="https://forms.gle/yrTemvRZFMniJpDP6" target="_blank" rel="noopener noreferrer" class="upload-btn">
+        Upload Your Document
+      </a>
+      <p class="small-note">This opens in a new tab and helps us prepare your notarization faster.</p>
+    </div>
+
+    <p>If you have any questions, feel free to send us a message below.</p>
 
     <form action="https://formsubmit.co/info@safenotarize.com" method="POST">
       <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_subject" value="SafeNotarize Contact from Thank You Page">
+      <input type="hidden" name="_subject" value="SafeNotarize Contact from Confirmation Page">
+
       <label for="name">Full Name</label>
       <input type="text" name="name" required>
+
       <label for="email">Email Address</label>
       <input type="email" name="email" required>
+
       <label for="message">Message</label>
       <textarea name="message" rows="4" required></textarea>
+
       <button type="submit" class="submit-btn">Send Message</button>
     </form>
   </div>
