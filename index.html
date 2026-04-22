@@ -183,6 +183,59 @@
       .desktop-header{ display:none; }
       .mobile-header{ display:block; }
       .section-pad{ padding:52px 18px; }
+
+      #calendly-block {
+        padding: 28px 14px !important;
+      }
+
+      #calendly-block > div {
+        max-width: 100% !important;
+      }
+
+      #calendly-block .booking-copy {
+        display: none !important;
+      }
+
+      #calendly-block .booking-widget {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        padding: 10px !important;
+      }
+
+      #calendly-block .section-title {
+        margin: 0 auto 14px !important;
+        max-width: 100% !important;
+      }
+
+      #calendly-block .section-title h3 {
+        font-size: 1.5rem !important;
+        margin-bottom: 8px !important;
+        line-height: 1.2 !important;
+      }
+
+      #calendly-block .section-title p {
+        font-size: 0.92rem !important;
+        line-height: 1.45 !important;
+        margin: 0 !important;
+      }
+
+      #calendly-block .pill,
+      #calendly-block .section-title > div:first-child {
+        margin-bottom: 10px !important;
+        font-size: 0.76rem !important;
+        padding: 6px 10px !important;
+      }
+
+      #calendly-block .booking-widget > div:first-child {
+        margin-bottom: 10px !important;
+        padding: 0 !important;
+      }
+
+      #calendly-block .calendly-inline-widget {
+        min-width: 100% !important;
+        height: 640px !important;
+      }
     }
 
     .white-bg-icon{
@@ -551,7 +604,11 @@
           const target = document.querySelector(href);
           if (!target) return;
           e.preventDefault();
-          window.scrollTo({ top: target.offsetTop - 78, behavior: 'smooth' });
+          const isMobile = window.innerWidth <= 768;
+          window.scrollTo({
+            top: target.offsetTop - (isMobile ? 18 : 78),
+            behavior: 'smooth'
+          });
           const nav = document.querySelector('.mobile-header nav');
           if (nav && nav.classList.contains('show')) toggleMenu();
         });
@@ -859,7 +916,7 @@
   <div style="max-width:1100px; margin:0 auto;">
 
     <!-- Header -->
-    <div style="text-align:center; max-width:700px; margin:0 auto 30px;">
+    <div class="section-title" style="text-align:center; max-width:700px; margin:0 auto 30px;">
       <div style="display:inline-block; background:#e9f7ef; color:#1f7a36; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:12px;">
         Preferred booking method
       </div>
@@ -877,7 +934,7 @@
     <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:stretch; justify-content:center;">
 
       <!-- LEFT SIDE (SHORT + CLEAN) -->
-      <div style="flex:1 1 320px; max-width:420px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
+      <div class="booking-copy" style="flex:1 1 320px; max-width:420px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
 
         <div style="font-size:0.8rem; font-weight:700; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:12px;">
           Fast & Simple
@@ -930,7 +987,7 @@
       </div>
 
       <!-- RIGHT SIDE (CALENDLY) -->
-      <div style="flex:1 1 480px; max-width:650px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
+      <div class="booking-widget" style="flex:1 1 480px; max-width:650px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
 
         <div style="margin-bottom:10px; font-weight:700; color:#003366; font-size:1rem;">
           Select your date & time
