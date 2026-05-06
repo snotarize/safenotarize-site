@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Documents | SafeNotarize</title>
+  <meta name="description" content="Upload your document securely after booking your SafeNotarize online notary appointment.">
+  <style>
+    :root{--navy:#00274d;--green:#28a745;--text:#233445;--muted:#5a6b7b;--border:#dce7f2;--bg:#f7fbff;--shadow:0 12px 30px rgba(0,39,77,0.08);}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:linear-gradient(180deg,#f7fbff 0%,#eef6ff 100%);}
+    header{background:var(--navy);padding:16px 20px;}
+    .header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+    .brand{display:flex;align-items:center;gap:10px;color:white;text-decoration:none;font-weight:800;font-size:18px;}
+    .brand img{height:42px}
+    .home-link{color:#fff;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.35);padding:9px 14px;border-radius:999px;}
+    .wrap{max-width:1050px;margin:0 auto;padding:46px 18px 64px;}
+    .hero{text-align:center;max-width:820px;margin:0 auto 26px;}
+    .pill{display:inline-block;background:#e9f7ef;color:#1f7a36;padding:7px 13px;border-radius:999px;font-size:.85rem;font-weight:800;margin-bottom:14px;}
+    h1{color:var(--navy);font-size:2.15rem;line-height:1.2;margin:0 0 12px;}
+    p{color:var(--muted);line-height:1.7;margin:0 0 10px;}
+    .notice{background:#fff;border:1px solid var(--border);border-left:5px solid var(--green);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);margin:0 auto 22px;max-width:860px;}
+    .notice strong{color:var(--navy);}
+    .form-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);}
+    iframe{width:100%;min-height:820px;border:0;border-radius:12px;}
+    .help{text-align:center;margin-top:18px;font-size:.95rem;}
+    .help a{color:var(--navy);font-weight:800;}
+    @media(max-width:700px){h1{font-size:1.75rem}.wrap{padding-top:32px}iframe{min-height:900px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="brand" href="/">
+        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo">
+        <span>SafeNotarize</span>
+      </a>
+      <a class="home-link" href="/">Back to Home</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="pill">Step 2: Upload your document</div>
+      <h1>Upload Your Document for Your Notary Session</h1>
+      <p>Please upload the document you need notarized. This helps us prepare your session and avoid delays.</p>
+    </section>
+
+    <section class="notice">
+      <p><strong>After you submit your document:</strong> SafeNotarize will review your information and send your secure session link before your scheduled appointment time. Please check your inbox for a <strong>SAFENOTARIZE email</strong> and be ready with a valid, unexpired government-issued photo ID.</p>
+    </section>
+
+    <section class="form-card">
+      <!-- Replace YOUR_TALLY_FORM_ID with your real Tally form ID -->
+      <iframe data-tally-src="https://tally.so/embed/YOUR_TALLY_FORM_ID?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" title="SafeNotarize Document Upload Form"></iframe>
+      <script>
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+          if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
+          else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
+        };
+        if(typeof Tally !== "undefined") v();
+        else if(d.querySelector('script[src="'+w+'"]') == null){
+          var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
+        }
+      </script>
+    </section>
+
+    <p class="help">Need help uploading? Email <a href="mailto:supervisor@safenotarize.com">supervisor@safenotarize.com</a></p>
+  </main>
+</body>
+</html>
