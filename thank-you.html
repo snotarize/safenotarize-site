@@ -13,7 +13,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thank You | SafeNotarize</title>
-  <meta name="description" content="Thank you for booking with SafeNotarize. Your document has been submitted and your online notary session link will be sent before your appointment.">
+  <meta name="description" content="Thank you for booking with SafeNotarize. Check your email for your secure session invite.">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -22,7 +22,6 @@
 
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom, #f7fbff 0%, #ffffff 100%);
       color: #003366;
@@ -30,19 +29,18 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      flex-direction: column;
+      padding: 18px;
     }
 
     .container {
       background: #fff;
-      padding: 42px 32px;
+      padding: 34px 24px;
       border-radius: 18px;
       box-shadow: 0 12px 35px rgba(0, 51, 102, 0.08);
       text-align: center;
-      max-width: 660px;
-      width: 92%;
+      max-width: 600px;
+      width: 100%;
       border: 1px solid #e6eef7;
-      margin: 24px 0;
     }
 
     .logo {
@@ -51,73 +49,51 @@
     }
 
     .checkmark {
-      width: 86px;
-      height: 86px;
-      margin: 18px auto 22px;
+      width: 74px;
+      height: 74px;
+      margin: 14px auto 20px;
       display: block;
     }
 
     h1 {
-      font-size: 30px;
+      font-size: 28px;
       color: #00274d;
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       font-weight: 700;
     }
 
     p {
       font-size: 16px;
       color: #44556b;
-      line-height: 1.65;
+      line-height: 1.55;
       margin: 0 0 14px;
     }
 
-    .info-box {
-      margin: 24px 0 16px;
+    .email-box {
+      margin: 22px 0;
       padding: 20px 18px;
-      background: #f8fbff;
-      border: 1px solid #d8e7f5;
-      border-radius: 12px;
-      text-align: left;
-    }
-
-    .info-box p {
-      margin: 0 0 10px;
-      color: #32465a;
-      font-size: 15px;
-    }
-
-    .info-box p:last-child {
-      margin-bottom: 0;
-    }
-
-    .highlight {
-      color: #00274d;
-      font-weight: 700;
-    }
-
-    .next-box {
-      margin: 24px 0 8px;
-      padding: 22px 20px;
-      background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+      background: #f0f8ff;
       border: 1px solid #d7e6f5;
       border-radius: 14px;
-      text-align: left;
     }
 
-    .next-box h2 {
-      margin: 0 0 12px;
+    .email-box strong {
       color: #00274d;
-      font-size: 20px;
+    }
+
+    .steps {
+      margin: 22px 0 10px;
+      text-align: left;
     }
 
     .step {
       display: flex;
       gap: 10px;
       align-items: flex-start;
-      margin: 12px 0;
+      margin: 14px 0;
       color: #44556b;
-      line-height: 1.55;
       font-size: 15px;
+      line-height: 1.5;
     }
 
     .step-number {
@@ -137,7 +113,7 @@
 
     .home-btn {
       display: inline-block;
-      margin-top: 14px;
+      margin-top: 18px;
       background-color: #003366;
       color: white;
       text-decoration: none;
@@ -145,87 +121,28 @@
       font-size: 16px;
       border-radius: 8px;
       font-weight: 700;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .home-btn:hover {
-      background-color: #00274d;
-      transform: translateY(-1px);
     }
 
     .small-note {
       font-size: 14px;
       color: #6a7b8c;
-      margin-top: 12px;
-    }
-
-    form {
-      margin-top: 28px;
-      text-align: left;
-      padding-top: 10px;
-    }
-
-    label {
-      font-weight: 600;
-      display: block;
-      margin: 12px 0 6px;
-      color: #00274d;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      font-size: 15px;
-      border: 1px solid #cfd8e3;
-      border-radius: 8px;
-      font-family: 'Inter', sans-serif;
-      background: #fff;
-    }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #7aa7d9;
-      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.08);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .submit-btn {
-      margin-top: 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 13px 22px;
-      font-size: 16px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .submit-btn:hover {
-      background-color: #218838;
-      transform: translateY(-1px);
+      margin-top: 16px;
     }
 
     @media (max-width: 480px) {
       .container {
-        padding: 34px 20px;
+        padding: 30px 18px;
       }
 
       h1 {
-        font-size: 25px;
+        font-size: 24px;
       }
 
       p {
         font-size: 15px;
       }
 
-      .home-btn,
-      .submit-btn {
+      .home-btn {
         width: 100%;
       }
     }
@@ -253,57 +170,35 @@
       <path fill="none" stroke="#28a745" stroke-width="3" d="M14 27l7 7 17-17"/>
     </svg>
 
-    <h1>Thank You — Your Information Was Received</h1>
+    <h1>Your Appointment Is Booked</h1>
 
-    <p>Thank you for booking with <strong>SafeNotarize</strong>. Your document upload has been received.</p>
+    <p>Thank you for booking with <strong>SafeNotarize</strong>.</p>
 
-    <div class="info-box">
-      <p><span class="highlight">What happens next?</span></p>
-      <p>SafeNotarize will review your appointment details and document before your scheduled time.</p>
-      <p>You will receive your secure session link from <span class="highlight">SAFENOTARIZE</span> before your appointment.</p>
-      <p>Please check your inbox and spam/junk folder so you do not miss the link.</p>
+    <div class="email-box">
+      <p><strong>Next step:</strong> Please check your email for your SafeNotarize invite.</p>
+      <p>You will use that invite to join your session, verify your identity, upload your document, and meet with a live online notary.</p>
     </div>
 
-    <div class="next-box">
-      <h2>Before your session</h2>
-
+    <div class="steps">
       <div class="step">
         <span class="step-number">1</span>
-        <span>Have a valid, unexpired government-issued photo ID ready.</span>
+        <span>Open the invite email from <strong>SafeNotarize</strong>.</span>
       </div>
 
       <div class="step">
         <span class="step-number">2</span>
-        <span>Join from a phone, tablet, or computer with a working camera and microphone.</span>
+        <span>Click the session link to verify your identity and upload your document.</span>
       </div>
 
       <div class="step">
         <span class="step-number">3</span>
-        <span>Join the session around 10 minutes before your scheduled time so everything can start smoothly.</span>
+        <span>Join with a valid photo ID and meet with your live notary.</span>
       </div>
     </div>
 
-    <p class="small-note">No further action is needed right now unless we contact you for additional information.</p>
+    <p class="small-note">Please check your inbox, spam, or junk folder if you do not see the invite email.</p>
 
     <a href="https://safenotarize.com" class="home-btn">Back to SafeNotarize</a>
-
-    <p style="margin-top:26px;">If you have any questions, send us a message below.</p>
-
-    <form action="https://formsubmit.co/info@safenotarize.com" method="POST">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_subject" value="SafeNotarize Contact from Thank You Page">
-
-      <label for="name">Full Name</label>
-      <input type="text" name="name" required>
-
-      <label for="email">Email Address</label>
-      <input type="email" name="email" required>
-
-      <label for="message">Message</label>
-      <textarea name="message" rows="4" required></textarea>
-
-      <button type="submit" class="submit-btn">Send Message</button>
-    </form>
   </div>
 </body>
 </html>
