@@ -13,7 +13,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thank You | SafeNotarize</title>
-  <meta name="description" content="Thank you for booking with SafeNotarize. Check your email for your secure session invite.">
+  <meta name="description" content="Thank you for uploading your document. SafeNotarize will review your information and send your secure session link.">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -34,7 +34,7 @@
 
     .container {
       background: #fff;
-      padding: 34px 24px;
+      padding: 30px 24px;
       border-radius: 18px;
       box-shadow: 0 12px 35px rgba(0, 51, 102, 0.08);
       text-align: center;
@@ -45,33 +45,33 @@
 
     .logo {
       height: 44px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .checkmark {
-      width: 74px;
-      height: 74px;
-      margin: 14px auto 20px;
+      width: 68px;
+      height: 68px;
+      margin: 12px auto 18px;
       display: block;
     }
 
     h1 {
-      font-size: 28px;
+      font-size: 27px;
       color: #00274d;
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       font-weight: 700;
     }
 
     p {
       font-size: 16px;
       color: #44556b;
-      line-height: 1.55;
-      margin: 0 0 14px;
+      line-height: 1.5;
+      margin: 0 0 12px;
     }
 
     .email-box {
-      margin: 22px 0;
-      padding: 20px 18px;
+      margin: 20px 0;
+      padding: 18px 16px;
       background: #f0f8ff;
       border: 1px solid #d7e6f5;
       border-radius: 14px;
@@ -82,7 +82,7 @@
     }
 
     .steps {
-      margin: 22px 0 10px;
+      margin: 18px 0 8px;
       text-align: left;
     }
 
@@ -90,10 +90,10 @@
       display: flex;
       gap: 10px;
       align-items: flex-start;
-      margin: 14px 0;
+      margin: 12px 0;
       color: #44556b;
       font-size: 15px;
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
     .step-number {
@@ -113,7 +113,7 @@
 
     .home-btn {
       display: inline-block;
-      margin-top: 18px;
+      margin-top: 16px;
       background-color: #003366;
       color: white;
       text-decoration: none;
@@ -126,24 +126,50 @@
     .small-note {
       font-size: 14px;
       color: #6a7b8c;
-      margin-top: 16px;
+      margin-top: 14px;
     }
 
     @media (max-width: 480px) {
+      body {
+        padding: 12px;
+        align-items: flex-start;
+      }
+
       .container {
-        padding: 30px 18px;
+        padding: 26px 16px;
+      }
+
+      .logo {
+        height: 40px;
+      }
+
+      .checkmark {
+        width: 58px;
+        height: 58px;
+        margin-bottom: 14px;
       }
 
       h1 {
-        font-size: 24px;
+        font-size: 23px;
       }
 
       p {
         font-size: 15px;
+        line-height: 1.45;
+      }
+
+      .email-box {
+        padding: 15px 14px;
+      }
+
+      .step {
+        font-size: 14.5px;
+        margin: 10px 0;
       }
 
       .home-btn {
         width: 100%;
+        padding: 13px 16px;
       }
     }
   </style>
@@ -170,33 +196,33 @@
       <path fill="none" stroke="#28a745" stroke-width="3" d="M14 27l7 7 17-17"/>
     </svg>
 
-    <h1>Your Appointment Is Booked</h1>
+    <h1>Document Received</h1>
 
-    <p>Thank you for booking with <strong>SafeNotarize</strong>.</p>
+    <p>Thank you. Your document was successfully submitted to <strong>SafeNotarize</strong>.</p>
 
     <div class="email-box">
-      <p><strong>Next step:</strong> Please check your email for your SafeNotarize invite.</p>
-      <p>You will use that invite to join your session, verify your identity, upload your document, and meet with a live online notary.</p>
+      <p><strong>Next:</strong> We’ll review your document and send your secure session link by email invite before your appointment.</p>
+      <p>Please check your inbox for a <strong>SAFENOTARIZE email invite</strong>.</p>
     </div>
 
     <div class="steps">
       <div class="step">
         <span class="step-number">1</span>
-        <span>Open the invite email from <strong>SafeNotarize</strong>.</span>
+        <span>We review your document and booking details.</span>
       </div>
 
       <div class="step">
         <span class="step-number">2</span>
-        <span>Click the session link to verify your identity and upload your document.</span>
+        <span>You receive your secure session email invite.</span>
       </div>
 
       <div class="step">
         <span class="step-number">3</span>
-        <span>Join with a valid photo ID and meet with your live notary.</span>
+        <span>Join at your appointment time with a valid photo ID.</span>
       </div>
     </div>
 
-    <p class="small-note">Please check your inbox, spam, or junk folder if you do not see the invite email.</p>
+    <p class="small-note">Please check your spam or junk folder if you do not see our email.</p>
 
     <a href="https://safenotarize.com" class="home-btn">Back to SafeNotarize</a>
   </div>
