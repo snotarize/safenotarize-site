@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18058269024"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18058269024');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeNotarize</title>
+  <meta name="description" content="Start your online notarization in minutes with SafeNotarize. Pick a time, upload your document after booking, and receive your secure session email invite.">
+
+  <style>
+    :root{
+      --navy:#00274d;
+      --navy-2:#0b3b67;
+      --green:#28a745;
+      --green-soft:#e9f7ef;
+      --blue-soft:#f3f8fe;
+      --text:#233445;
+      --muted:#5a6b7b;
+      --border:#dce7f2;
+      --card:#ffffff;
+      --bg:#f7fbff;
+      --shadow:0 12px 30px rgba(0,39,77,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; }
+    body, html { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; color:var(--text); background:#fff; }
+
+    .container{ max-width:1200px; margin:0 auto; }
+    .section-pad{ padding:64px 20px; }
+    .section-title{ text-align:center; max-width:780px; margin:0 auto 34px; }
+    .section-title h2, .section-title h3{
+      color:var(--navy);
+      margin:0 0 12px;
+      line-height:1.2;
+    }
+    .section-title p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:16px;
+    }
+
+    .pill{
+      display:inline-block;
+      background:var(--green-soft);
+      color:#1f7a36;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:.85rem;
+      font-weight:700;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+      font-weight:700;
+      border-radius:10px;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:hover{ transform:translateY(-1px); }
+    .btn-primary{
+      background:var(--green);
+      color:#fff;
+      padding:13px 24px;
+      box-shadow:0 10px 24px rgba(40,167,69,.18);
+    }
+    .btn-dark{
+      background:var(--navy);
+      color:#fff;
+      padding:15px 30px;
+      border-radius:999px;
+      box-shadow:0 10px 24px rgba(0,39,77,.18);
+    }
+    .btn-outline{
+      background:#fff;
+      color:var(--navy);
+      border:1px solid #cfd9e6;
+      padding:13px 22px;
+    }
+    .btn-outline-green{
+      background:#fff;
+      color:var(--green);
+      border:2px solid var(--green);
+      padding:11px 22px;
+      border-radius:999px;
+    }
+
+    .small-note{
+      color:#1f7a36;
+      font-weight:700;
+      font-size:.9rem;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #e7edf3;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .desktop-header{
+      position:sticky;
+      top:0;
+      z-index:999;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 28px;
+      background:var(--navy);
+    }
+    .desktop-header .header-left,
+    .desktop-header .header-center,
+    .desktop-header .header-right{ display:flex; align-items:center; }
+
+    .desktop-header .header-center{
+      flex:1;
+      justify-content:center;
+      gap:30px;
+      flex-wrap:wrap;
+    }
+    .desktop-header .header-center a{
+      color:#fff;
+      text-decoration:none;
+      font-size:16px;
+      font-weight:600;
+    }
+
+    .mobile-header{
+      display:none;
+      position:sticky;
+      top:0;
+      z-index:999;
+      background:var(--navy);
+      padding:10px 20px;
+    }
+    .mobile-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .menu-toggle{
+      display:flex;
+      flex-direction:column;
+      cursor:pointer;
+      z-index:1000;
+    }
+    .menu-toggle span{
+      background:#fff;
+      height:3px;
+      margin:4px 0;
+      width:25px;
+    }
+    .mobile-header nav{
+      display:none;
+      flex-direction:column;
+      gap:10px;
+      background:#003366;
+      padding:15px 20px;
+      margin-top:12px;
+      border-radius:10px;
+    }
+    .mobile-header nav a{
+      color:#fff;
+      text-decoration:none;
+      padding:8px 6px;
+      font-weight:600;
+    }
+    .mobile-header nav.show{ display:flex; }
+
+    @media (max-width: 768px){
+      .desktop-header{ display:none; }
+      .mobile-header{ display:block; }
+      .section-pad{ padding:52px 18px; }
+
+      #calendly-block {
+        padding: 28px 14px !important;
+      }
+
+      #calendly-block > div {
+        max-width: 100% !important;
+      }
+
+      #calendly-block .booking-copy {
+        display: none !important;
+      }
+
+      #calendly-block .booking-widget {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        padding: 10px !important;
+      }
+
+      #calendly-block .section-title {
+        margin: 0 auto 14px !important;
+        max-width: 100% !important;
+      }
+
+      #calendly-block .section-title h3 {
+        font-size: 1.5rem !important;
+        margin-bottom: 8px !important;
+        line-height: 1.2 !important;
+      }
+
+      #calendly-block .section-title p {
+        font-size: 0.92rem !important;
+        line-height: 1.45 !important;
+        margin: 0 !important;
+      }
+
+      #calendly-block .pill,
+      #calendly-block .section-title > div:first-child {
+        margin-bottom: 10px !important;
+        font-size: 0.76rem !important;
+        padding: 6px 10px !important;
+      }
+
+      #calendly-block .booking-widget > div:first-child {
+        margin-bottom: 10px !important;
+        padding: 0 !important;
+      }
+
+      #calendly-block .calendly-inline-widget {
+        min-width: 100% !important;
+        height: 640px !important;
+      }
+    }
+
+    .white-bg-icon{
+      position:relative;
+      background:#fff;
+      overflow:hidden;
+      z-index:1;
+    }
+    .white-bg-icon::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      opacity:.01;
+      background-image:
+        url('https://img.icons8.com/ios/50/stamp.png'),
+        url('https://img.icons8.com/ios/50/signature.png'),
+        url('https://img.icons8.com/ios/50/pen.png');
+      background-repeat:repeat;
+      background-position:5% 10%, 60% 30%, 30% 70%;
+      background-size:50px, 80px, 40px;
+    }
+
+    .hero-section{
+      padding:64px 20px;
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+    }
+    .hero-wrap{
+      max-width:1200px;
+      margin:0 auto;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      gap:40px;
+      position:relative;
+      z-index:2;
+    }
+    .hero-copy{ flex:1; min-width:300px; max-width:620px; }
+    .hero-copy h1{
+      font-size:2.75rem;
+      color:var(--navy);
+      line-height:1.15;
+      margin:0 0 18px;
+    }
+    .hero-copy p{
+      font-size:1.06rem;
+      color:#333;
+      margin:0 0 14px;
+      line-height:1.7;
+    }
+    .hero-points{
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+      margin-top:28px;
+    }
+    .hero-point{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:.95rem;
+      color:#31485c;
+      font-weight:600;
+    }
+    .hero-cta-col{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:12px;
+      margin-top:6px;
+    }
+    .hero-cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      align-items:center;
+    }
+
+    .hero-image-wrap{
+      flex:1;
+      min-width:300px;
+      max-width:520px;
+      position:relative;
+    }
+
+    .stat-strip{
+      background:var(--navy);
+      color:#fff;
+      padding:38px 20px;
+    }
+    .stat-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:26px;
+      text-align:center;
+    }
+    .stat-item .num{
+      font-size:2.4rem;
+      font-weight:800;
+      color:#39c45b;
+      margin-bottom:6px;
+    }
+    .stat-item .label{
+      color:#e7eef7;
+      line-height:1.4;
+    }
+
+    .services-section{ background:#f4f7fb; }
+    .services-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:24px;
+      align-items:stretch;
+    }
+    .service-card{
+      background:#fff;
+      padding:28px;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      border:1px solid #e7edf3;
+      display:flex;
+      flex-direction:column;
+      min-height:100%;
+    }
+    .service-icon{
+      width:58px;
+      height:58px;
+      border-radius:14px;
+      background:#f4f8fc;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      margin-bottom:18px;
+    }
+    .service-card h4{
+      color:var(--navy);
+      margin:0 0 12px;
+      font-size:1.18rem;
+      line-height:1.3;
+    }
+    .service-card p{
+      color:#556270;
+      line-height:1.75;
+      margin:0 0 16px;
+    }
+    .service-link{
+      margin-top:auto;
+      color:#007bff;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .step-grid, .need-grid, .security-grid, .pricing-grid{
+      display:grid;
+      gap:22px;
+    }
+    .step-grid{ grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); }
+    .need-grid{ grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); }
+    .security-grid{ grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); }
+    .pricing-grid{ grid-template-columns:1.3fr 1fr 1fr 1fr 1fr; }
+
+    .step-card, .need-card, .security-card, .price-card{
+      background:#fff;
+      border:1px solid #e5edf5;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+    }
+    .step-card{ padding:26px 22px; }
+    .need-card{ padding:24px 18px; text-align:center; }
+    .security-card{ padding:30px 22px; text-align:center; }
+    .price-card{ padding:28px 22px; text-align:center; }
+
+    .step-number{
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      background:var(--navy);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      margin-bottom:16px;
+    }
+
+    .pricing-featured{
+      border:2px solid #cfe8d7;
+      background:linear-gradient(180deg,#ffffff 0%, #f7fcf8 100%);
+      position:relative;
+    }
+    .price-big{
+      font-size:2.3rem;
+      line-height:1;
+      color:var(--green);
+      font-weight:800;
+      margin:10px 0 8px;
+    }
+
+    .business-box{
+      margin-top:28px;
+      background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+      border:1px solid #d9e4f0;
+      border-top:4px solid var(--green);
+      border-radius:18px;
+      padding:28px 30px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:22px;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:var(--shadow);
+    }
+
+    .booking-section{
+      background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%);
+    }
+    .booking-wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:28px;
+      align-items:stretch;
+      justify-content:center;
+    }
+    .booking-copy{
+      flex:1 1 340px;
+      min-width:320px;
+      max-width:430px;
+      padding:32px 28px;
+    }
+    .booking-widget{
+      flex:1 1 560px;
+      min-width:320px;
+      max-width:680px;
+      padding:22px;
+    }
+    .info-list{
+      display:grid;
+      gap:14px;
+      margin:22px 0;
+    }
+    .info-item{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      background:#f8fbff;
+      border:1px solid #e4edf7;
+      border-radius:12px;
+      padding:14px 15px;
+    }
+    .booking-chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:0 0 22px;
+    }
+    .booking-chip{
+      background:#eef5ff;
+      color:var(--navy);
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:.9rem;
+      font-weight:600;
+    }
+    .support-box{
+      margin-top:auto;
+      background:#f8fafc;
+      border:1px solid #e5edf5;
+      border-radius:14px;
+      padding:18px;
+    }
+
+    .testimonial-slides{
+      display:flex;
+      gap:20px;
+      padding:20px 0;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      -ms-overflow-style:none;
+      scrollbar-width:none;
+    }
+    .testimonial-slides::-webkit-scrollbar{ display:none; }
+    .testimonial-card{
+      flex:0 0 auto;
+      width:300px;
+      background:#fff;
+      border-radius:18px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      border:1px solid #e7edf3;
+      scroll-snap-align:start;
+    }
+
+    .faq-wrap{
+      max-width:840px;
+      margin:0 auto;
+    }
+    .faq-wrap details{
+      margin-bottom:15px;
+      border:1px solid #dde6ef;
+      border-radius:12px;
+      padding:16px 18px;
+      background:#fff;
+      box-shadow:0 4px 10px rgba(0,0,0,0.03);
+    }
+    .faq-wrap summary{
+      font-weight:700;
+      cursor:pointer;
+      color:var(--navy);
+    }
+    .faq-wrap p{
+      margin:12px 0 0;
+      color:#556270;
+      line-height:1.7;
+    }
+
+    .final-cta{
+      background:#fffefc;
+      text-align:center;
+    }
+    .footer{
+      background:var(--navy);
+      color:#fff;
+      padding:40px 20px;
+    }
+
+    @media (max-width: 980px){
+      .pricing-grid{ grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); }
+      .stat-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 700px){
+      .hero-copy h1{ font-size:2.2rem; }
+      .section-title h2, .section-title h3{ font-size:1.85rem; }
+      .stat-grid{ grid-template-columns:1fr; }
+      .business-box{ padding:24px 20px; }
+      .hero-section{ padding:52px 18px; }
+    }
+  </style>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.querySelector('.mobile-header nav');
+      if (!nav) return;
+      nav.classList.toggle('show');
+      document.body.style.overflow = nav.classList.contains('show') ? 'hidden' : '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('click', (e) => {
+        const nav = document.querySelector('.mobile-header nav');
+        const toggle = document.querySelector('.mobile-header .menu-toggle');
+        if (!nav || !toggle) return;
+        if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('show')) {
+          toggleMenu();
+        }
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function(e){
+          const href = this.getAttribute('href');
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          const isMobile = window.innerWidth <= 768;
+          window.scrollTo({
+            top: target.offsetTop - (isMobile ? 18 : 78),
+            behavior: 'smooth'
+          });
+          const nav = document.querySelector('.mobile-header nav');
+          if (nav && nav.classList.contains('show')) toggleMenu();
+        });
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <header class="desktop-header">
+    <div class="header-left">
+      <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
+        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+        <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+      </a>
+    </div>
+
+    <div class="header-center">
+      <a href="#">Akèy</a>
+      <a href="#services">Sèvis</a>
+      <a href="#pricing-block">Pri</a>
+      <a href="#faq">FAQ</a>
+      <a href="/upload.html">Voye Dokiman</a>
+      <a href="mailto:supervisor@safenotarize.com">Kontakte Nou</a>
+    </div>
+
+    <div class="header-right">
+      <a class="btn btn-primary" href="#calendly-block" style="padding:10px 20px; border-radius:8px; box-shadow:none;">Kòmanse Notarizasyon Online</a>
+    </div>
+  </header>
+
+  <header class="mobile-header">
+    <div class="mobile-top">
+      <div class="header-left">
+        <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
+          <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+          <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+        </a>
+      </div>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <nav class="header-center">
+      <a href="#">Akèy</a>
+      <a href="#services">Sèvis</a>
+      <a href="#pricing-block">Pri</a>
+      <a href="#faq">FAQ</a>
+      <a href="/upload.html">Voye Dokiman</a>
+      <a href="mailto:supervisor@safenotarize.com">Kontakte Nou</a>
+    </nav>
+  </header>
+
+  <div class="trust-badges" style="background:#f8fafc; padding:18px 0; text-align:center;">
+    <div class="container" style="display:flex; flex-wrap:wrap; justify-content:center; gap:26px;">
+      <img src="https://img.icons8.com/ios-filled/50/4CAF50/security-checked.png" alt="Sekirize" style="height:38px;">
+      <img src="https://img.icons8.com/ios-filled/50/2196F3/certificate.png" alt="Sètifye" style="height:38px;">
+      <img src="https://img.icons8.com/ios-filled/50/FF9800/lock--v1.png" alt="Ankripte" style="height:38px;">
+      <img src="https://img.icons8.com/ios-filled/50/607D8B/verified-account.png" alt="Verifye" style="height:38px;">
+    </div>
+  </div>
+
+  <section class="hero-section">
+    <div class="hero-wrap">
+      <div class="hero-copy">
+        <div class="pill" style="margin-bottom:18px;">Rekòmande pou pifò kliyan</div>
+        <h1>Notè Online pou Dokiman Legal, Vwayaj, Biznis ak Pèsonèl</h1>
+        <p>Kòmanse notarizasyon online ou nan kèk minit. Chwazi yon lè, voye dokiman ou apre ou fin pran randevou a, epi w ap resevwa envitasyon sesyon sekirize a pa imèl.</p>
+        <p style="font-size:.96rem; color:var(--navy-2); font-weight:600; margin-bottom:28px;">Randevou rapid, voye dokiman an an sekirite, epi resevwa yon imèl klè pou sesyon notè online ou.</p>
+
+        <div class="hero-cta-col">
+          <div class="hero-cta-row">
+            <a href="#calendly-block" class="btn btn-dark">
+              <img src="https://img.icons8.com/ios-filled/20/ffffff/calendar.png" alt="Kalandriye">
+              Kòmanse Notarizasyon Online
+            </a>
+            <span class="small-note">Chwazi lè pa ou. Voye dokiman an apre randevou a.</span>
+          </div>
+        </div>
+
+        <div class="hero-points">
+          <div class="hero-point">
+            <img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Tcheke">
+            Chwazi Lè Pa Ou
+          </div>
+          <div class="hero-point">
+            <img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Tcheke">
+            Voye Dokiman Apre Randevou
+          </div>
+          <div class="hero-point">
+            <img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Tcheke">
+            Envitasyon Sekirize pa Imèl
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-image-wrap">
+        <div style="border-radius:18px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.10); border:15px solid white; transform:rotate(3deg);">
+          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=640&h=360&q=80" alt="Sèvis notè pwofesyonèl" style="width:100%; display:block;">
+        </div>
+
+        <div style="position:absolute; bottom:-18px; right:-18px; background:white; padding:16px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.12); transform:rotate(-4deg);">
+          <div style="display:flex; align-items:center;">
+            <div style="background:var(--green); width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-right:10px;">
+              <img src="https://img.icons8.com/ios-filled/20/ffffff/verified-account.png" alt="Verifye">
+            </div>
+            <div>
+              <div style="font-weight:bold; color:var(--navy);">Notè Sètifye</div>
+              <div style="font-size:.82rem; color:#666;">Envitasyon sekirize pou sesyon online</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; opacity:.05;">
+      <img src="https://img.icons8.com/ios/100/00274d/stamp.png" alt="" style="position:absolute; top:20%; left:10%;">
+      <img src="https://img.icons8.com/ios/100/00274d/signature.png" alt="" style="position:absolute; top:70%; left:80%;">
+      <img src="https://img.icons8.com/ios/100/00274d/document.png" alt="" style="position:absolute; top:30%; right:10%;">
+    </div>
+  </section>
+
+  <section class="stat-strip">
+    <div class="container">
+      <div class="section-title" style="margin-bottom:28px;">
+        <h2 style="color:#fff; margin-bottom:10px;">Plizyè Milye Moun Fè Nou Konfyans Nan Tout 50 Eta yo</h2>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="num">10,000+</div>
+          <div class="label">Dokiman Notarye</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">4.9/5</div>
+          <div class="label">Nòt Kliyan yo Bay</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">24/7</div>
+          <div class="label">Randevou Fleksib</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">100%</div>
+          <div class="label">Konfòm ak Règ Legal yo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="services-section section-pad">
+    <div class="container">
+      <div class="section-title">
+        <h3>Sèvis Popilè</h3>
+        <p>Sèvis notè online ki pi souvan mande pou moun, fanmi, ak kliyan biznis ki bezwen sèvis souvan.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">⚖️</div>
+          <h4>Dokiman Tribinal, Legal ak Fanmi</h4>
+          <p>Power of Attorney (POA), fòm tribinal, deklarasyon sou sèman, affidavit, fòm fanmi, ak lòt dokiman legal ou ka fè notarye online.</p>
+          <div style="margin-bottom:18px; background:#f8fbff; border:1px solid #dbe8f4; border-radius:12px; padding:12px 14px; color:#32485c; line-height:1.6; font-size:14px;">
+            <strong>Sa gen ladan:</strong> Power of Attorney (POA), affidavit, dokiman tribinal, ak plis ankò.
+          </div>
+          <a href="#calendly-block" class="service-link">Fè Dokiman Ou Notarye Online →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📄</div>
+          <h4>Fòm Vwayaj, Paspò ak Otorizasyon</h4>
+          <p>Otorizasyon vwayaj, DS-3053, PS Form 1583, ak fòm otorizasyon machin ou ka fè notarye rapid online.</p>
+          <a href="#calendly-block" class="service-link">Fè Dokiman Ou Notarye Online →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📁</div>
+          <h4>Voye Pwòp Dokiman Ou</h4>
+          <p>Ou gen yon dosye prè, dokiman biznis, affidavit, oswa PDF ki pare? Voye li epi fè li notarye online.</p>
+          <a href="#calendly-block" class="service-link">Fè Dokiman Ou Notarye Online →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="white-bg-icon section-pad">
+    <div class="container">
+      <div class="section-title">
+        <h3>Kijan Notarizasyon Online Lan Mache</h3>
+        <p>Yon pwosesis senp, etap pa etap, pou sesyon ou mache rapid, fasil, epi an sekirite.</p>
+      </div>
+
+      <div class="step-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/document.png" alt="Voye" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Pran Randevou Ou</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">Chwazi yon lè online nan kèk minit epi kòmanse pwosesis la an sekirite.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/verified-account.png" alt="Verifye ID" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Voye Dokiman</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">Apre ou fin pran randevou a, voye dokiman ou an sekirite anvan sesyon an.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/video-call.png" alt="Rankontre" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Verifye ID Ou epi Rankontre ak Notè a</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">Sèvi ak yon ID ki valid epi antre nan sesyon live online ou sou telefòn oswa òdinatè.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/checked--v1.png" alt="Konplete" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Resevwa Dokiman Notarye a</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">Fini sesyon an epi resevwa dokiman ou ki fin notarye a atravè pwosesis platfòm lan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" id="pricing-block" style="background:#f7fbff;">
+    <div class="container">
+      <div class="section-title">
+        <h3>Pri Senp ak Klè</h3>
+        <p>Pri klè pou pifò sesyon yo, ak frè adisyonèl ki senp lè sa nesesè.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card pricing-featured">
+          <div class="pill">Sesyon ki pi komen</div>
+          <h4 style="color:var(--navy); margin:12px 0 6px;">Notarizasyon Online Debaz</h4>
+          <div class="price-big">$25</div>
+          <p style="margin:0 0 16px; color:#556270; line-height:1.7;">Gen ladan 1 moun k ap siyen ak 1 so notè.</p>
+          <a href="#calendly-block" class="btn btn-primary">Kòmanse Notarizasyon Online</a>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Moun Anplis k ap Siyen</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$10</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Pou chak moun anplis ki ajoute nan sesyon an.</p>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">So Anplis</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$5</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Pou chak so notè anplis ki nesesè.</p>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Temwen</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$15</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Sèvis temwen lè li disponib epi lè ou mande l davans.</p>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Moun k ap Siyen Aletranje</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">$40</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Pou moun k ap siyen ki pa Ozetazini.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" style="background:#e9f5ff;">
+    <div class="container">
+      <div class="section-title">
+        <h3>Sa Ou Bezwen Anvan Sesyon Ou</h3>
+        <p>Prepare bagay sa yo pou notarizasyon ou ka mache pi vit epi pi fasil.</p>
+      </div>
+
+      <div class="need-grid">
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/id-verified.png" alt="ID ak foto" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">ID ak foto gouvènman bay ki valid</p>
+        </div>
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/pdf.png" alt="Dokiman" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">Dokiman ou bezwen fè notarye a (PDF pi bon)</p>
+        </div>
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/laptop.png" alt="Aparèy" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">Telefòn, tablèt, oswa òdinatè ki gen kamera ak mikwofòn</p>
+        </div>
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/wifi.png" alt="Entènèt" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">Bon koneksyon entènèt</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Seksyon Randevou Calendly -->
+<section id="calendly-block" style="background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%); padding:60px 20px;">
+  <div style="max-width:1100px; margin:0 auto;">
+
+    <!-- Antèt -->
+    <div class="section-title" style="text-align:center; max-width:700px; margin:0 auto 30px;">
+      <div style="display:inline-block; background:#e9f7ef; color:#1f7a36; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:12px;">
+        Pi bon fason pou pran randevou
+      </div>
+
+      <h3 style="font-size:1.8rem; color:#003366; margin-bottom:10px;">
+        Kòmanse Notarizasyon Online
+      </h3>
+
+      <p style="color:#555; font-size:0.95rem; line-height:1.6;">
+  Chwazi yon lè, voye dokiman ou apre randevou a, epi resevwa envitasyon sesyon sekirize a pa imèl.
+</p>
+
+<p style="color:#1f7a36; font-weight:600; font-size:0.9rem; margin-top:8px;">
+  ⚡ Pran randevou nan mwens pase 2 minit
+</p>
+    </div>
+
+    <!-- Griy -->
+    <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:stretch; justify-content:center;">
+
+      <!-- Bò gòch (kout + pwòp) -->
+      <div class="booking-copy" style="flex:1 1 320px; max-width:420px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
+
+        <div style="font-size:0.8rem; font-weight:700; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:12px;">
+          Rapid & Senp
+        </div>
+
+        <h4 style="font-size:1.3rem; color:#003366; margin-bottom:10px;">
+          Pran randevou ak notè ou nan kèk minit
+        </h4>
+
+        <p style="color:#555; font-size:0.95rem; margin-bottom:16px;">
+          Randevou rapid, voye dokiman an an sekirite, epi fè sesyon online lan san tèt chaje.
+        </p>
+
+        <!-- 3 avantaj sèlman -->
+        <div style="display:grid; gap:10px; margin-bottom:20px;">
+
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/checkmark.png">
+            <span style="font-size:0.9rem; color:#444;">Chwazi lè pa ou</span>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/upload.png">
+            <span style="font-size:0.9rem; color:#444;">Voye dokiman an</span>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/video-call.png">
+            <span style="font-size:0.9rem; color:#444;">Resevwa envitasyon sesyon an pa imèl</span>
+          </div>
+
+        </div>
+
+        <!-- Sipò -->
+        <div style="background:#f8fafc; border:1px solid #e5edf5; border-radius:12px; padding:14px;">
+          <div style="font-weight:700; color:#003366; margin-bottom:6px; font-size:0.95rem;">
+            Ou bezwen èd?
+          </div>
+
+          <p style="font-size:0.85rem; color:#555; margin-bottom:10px;">
+            Ou gen kesyon anvan ou pran randevou?
+          </p>
+
+          <a href="mailto:supervisor@safenotarize.com"
+             style="display:inline-block; font-size:0.85rem; font-weight:700; color:#003366; text-decoration:none; border:1px solid #ccd6e2; padding:8px 12px; border-radius:8px;">
+            Kontakte Sipò
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Bò dwat (Calendly) -->
+      <div class="booking-widget" style="flex:1 1 480px; max-width:650px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
+
+        <div style="margin-bottom:10px; font-weight:700; color:#003366; font-size:1rem;">
+          Chwazi dat ak lè pa ou
+        </div>
+
+        <div class="calendly-inline-widget"
+             data-url="https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1"
+             style="min-width:320px; height:650px;">
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Script Calendly -->
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+  <section class="white-bg-icon section-pad" style="background:#f8fafc;">
+    <div class="container">
+      <div class="section-title">
+        <h3>Sa Kliyan Nou yo Di</h3>
+        <p>Kòmantè reyèl nan men kliyan ki te itilize SafeNotarize pou bezwen ijan, legal, vwayaj, ak dokiman pèsonèl.</p>
+      </div>
+
+      <div style="max-width:1000px; margin:0 auto;">
+        <div class="testimonial-slides">
+          <div class="testimonial-card">
+            <p style="font-style:italic; line-height:1.7;">"SafeNotarize te fè pwosesis la fasil anpil. Mwen te fè kontra lokasyon mwen siyen epi notarye san mwen pa kite kay mwen!"</p>
+            <div style="margin:12px 0;">
+              <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal">
+            </div>
+            <p style="font-size:13px; color:#555;">✔ Kliyan Verifye</p>
+            <p style="text-align:right; font-weight:bold; margin-top:10px;">– Aisha K.</p>
+          </div>
+
+          <div class="testimonial-card">
+            <p style="font-style:italic; line-height:1.7;">"Trè pwofesyonèl epi rapid. Notè a te janti epi li te eksplike tout bagay klè."</p>
+            <div style="margin:12px 0;">
+              <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal">
+            </div>
+            <p style="font-size:13px; color:#555;">✔ Kliyan Verifye</p>
+            <p style="text-align:right; font-weight:bold; margin-top:10px;">– Daniel P.</p>
+          </div>
+
+          <div class="testimonial-card">
+            <p style="font-style:italic; line-height:1.7;">"Mwen te yon ti jan strese pou fè sa online, men tout bagay te mache byen. M ap itilize sèvis la ankò!"</p>
+            <div style="margin:12px 0;">
+              <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal">
+            </div>
+            <p style="font-size:13px; color:#555;">✔ Kliyan Verifye</p>
+            <p style="text-align:right; font-weight:bold; margin-top:10px;">– Jason R.</p>
+          </div>
+
+          <div class="testimonial-card">
+            <p style="font-style:italic; line-height:1.7;">"Notè a te janti epi pwofesyonèl. Sèvis sa a te fè m evite deplasman epi li te fè m ekonomize anpil tan. Mèsi!"</p>
+            <div style="margin:12px 0;">
+              <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal">
+            </div>
+            <p style="font-size:13px; color:#555;">✔ Kliyan Verifye</p>
+            <p style="text-align:right; font-weight:bold; margin-top:10px;">– Melissa G.</p>
+          </div>
+
+          <div class="testimonial-card">
+            <p style="font-style:italic; line-height:1.7;">"Notè ki soti Florid la te ede nou anpil pandan nou t ap eseye voye machin mwen soti Maui pou ale Honolulu, e mwen te gen mwens pase 24 èdtan pou bay mari m dokiman yo pandan mwen pa t la..."</p>
+            <div style="margin:12px 0;">
+              <img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal"><img src="https://img.icons8.com/ios-filled/20/faad14/star--v1.png" alt="zetwal">
+            </div>
+            <p style="font-size:13px; color:#555;">✔ Kliyan Verifye</p>
+            <p style="text-align:right; font-weight:bold; margin-top:10px;">– Andrian D.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" style="background:#f0faff;">
+    <div class="container">
+      <div class="section-title">
+        <h3>Sekirite Ou Se Priyorite Nou</h3>
+        <p>Ankripte, konfòm ak règleman yo, epi jere pa notè remote ki sètifye.</p>
+      </div>
+
+      <div class="security-grid">
+        <div class="security-card">
+          <img src="https://img.icons8.com/ios-filled/100/lock-2.png" alt="Sekirite Done" style="height:60px; margin-bottom:15px;">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Ankriptyon 256-Bit</h4>
+          <p style="color:#555; line-height:1.7; margin:0;">Dokiman ou ak enfòmasyon pèsonèl ou pwoteje ak ankriptyon nivo pwofesyonèl nan chak etap.</p>
+        </div>
+
+        <div class="security-card">
+          <img src="https://img.icons8.com/ios-filled/100/shield.png" alt="Konfòmite" style="height:60px; margin-bottom:15px;">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Konfòm Legalman</h4>
+          <p style="color:#555; line-height:1.7; margin:0;">Nou swiv règleman notarizasyon remote Ozetazini epi nou anrejistre sesyon yo lè sa nesesè pou pwoteksyon legal.</p>
+        </div>
+
+        <div class="security-card">
+          <img src="https://img.icons8.com/ios-filled/100/approval.png" alt="Notè Verifye" style="height:60px; margin-bottom:15px;">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Notè Verifye</h4>
+          <p style="color:#555; line-height:1.7; margin:0;">Notè ki sètifye ap gide sesyon ou epi ede w konplete notarizasyon ou online an sekirite.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="white-bg-icon section-pad" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <h3>Kesyon Moun Poze Souvan</h3>
+        <p>Repons pou kesyon ki pi komen anvan ou pran randevou pou sesyon notè online ou.</p>
+      </div>
+
+      <div class="faq-wrap">
+        <details>
+          <summary>Kisa notarizasyon online ye?</summary>
+          <p>Notarizasyon online pèmèt ou fè dokiman ou notarye a distans atravè yon apèl videyo sekirize ak yon notè piblik ki sètifye.</p>
+        </details>
+
+        <details>
+          <summary>Èske yo aksepte l legalman?</summary>
+          <p>Notarizasyon online a distans itilize anpil epi li rekonèt legalman nan anpil ka. Men akseptasyon an ka depann de ajans oswa enstitisyon k ap resevwa dokiman an, kidonk verifye kondisyon dokiman ou si sa nesesè.</p>
+        </details>
+
+        <details>
+          <summary>Ki dokiman ki ka notarye online?</summary>
+          <p>Ou ka fè anpil kalite dokiman notarye, tankou affidavit, Power of Attorney, fòm otorizasyon vwayaj, dokiman biznis, fòm otorizasyon machin, ak plis ankò.</p>
+        </details>
+
+        <details>
+          <summary>Kijan mwen verifye idantite mwen?</summary>
+          <p>W ap itilize yon ID ak foto gouvènman bay ki valid ansanm ak teknoloji verifikasyon idantite sekirize atravè platfòm notarizasyon an.</p>
+        </details>
+
+        <details>
+          <summary>Èske moun ki aletranje ka itilize SafeNotarize?</summary>
+          <p>Wi. Moun k ap siyen aletranje ka kapab konplete yon notarizasyon online si yo satisfè kondisyon verifikasyon idantite yo epi yo gen pyès idantite ki akseptab.</p>
+        </details>
+
+        <details>
+          <summary>Èske sesyon an anrejistre?</summary>
+          <p>Wi. Sesyon yo anrejistre epi estoke kote sa nesesè kòm pati nan pwosesis notarizasyon remote lan pou ede pwoteje kont fwod epi sipòte konfòmite.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" style="background:#fff;">
+    <div class="container">
+      <div class="business-box">
+        <div style="flex:1 1 520px; min-width:280px;">
+          <div class="pill" style="margin-bottom:12px;">Sipò Pou Patnè</div>
+          <h3 style="color:var(--navy); margin:0 0 10px; font-size:2rem; line-height:1.2;">Pou Biznis, Closings ak Kliyan ki Retounen Souvan</h3>
+          <p style="color:#556270; line-height:1.75; margin:0; max-width:760px;">Bon pou biwo avoka, konpayi tit, dokiman prè, siyati ki bezwen temwen, ak bezwen notarizasyon ki repete. Pran yon lè epi n ap gide ou nan pwosesis sesyon sekirize a.</p>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:flex-start;">
+          <a href="#calendly-block" class="btn btn-primary">Kòmanse Notarizasyon Online</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta section-pad">
+    <div class="container">
+      <div class="card" style="max-width:860px; margin:0 auto; padding:34px 28px;">
+        <h3 style="color:var(--navy); font-size:2rem; margin:0 0 12px;">Ou pare pou fè dokiman ou notarye?</h3>
+        <p style="color:#556270; line-height:1.7; margin:0 0 22px;">Kòmanse notarizasyon online ou nan kèk minit. Chwazi yon lè, voye dokiman ou, epi resevwa envitasyon sesyon sekirize a pa imèl.</p>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
+          <a href="#calendly-block" class="btn btn-primary">Kòmanse Notarizasyon Online</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <loading-spinner id="page-loader"></loading-spinner>
+  <back-to-top></back-to-top>
+  <cookie-consent></cookie-consent>
+
+  <script>
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.style.display = 'block';
+
+    window.addEventListener('load', () => {
+      if (loader) loader.style.display = 'none';
+
+      const carousel = document.querySelector('.testimonial-slides');
+      if (carousel && carousel.children.length) {
+        let currentIndex = 0;
+        const gap = 20;
+        setInterval(() => {
+          const first = carousel.children[0];
+          const slideWidth = first.getBoundingClientRect().width + gap;
+          currentIndex = (currentIndex + 1) % carousel.children.length;
+          carousel.scrollTo({ left: currentIndex * slideWidth, behavior: 'smooth' });
+        }, 5000);
+      }
+    });
+
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
+
+  <footer class="footer">
+    <div class="container" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px; align-items:flex-start;">
+      <div style="flex:1; min-width:250px;">
+        <a href="/" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="text-decoration:none; color:white;">
+          <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:50px; margin-bottom:10px;">
+          <h4 style="margin:0;">SafeNotarize</h4>
+        </a>
+        <p style="line-height:1.7; margin-top:10px; color:#d6e2ef;">
+          Chwazi yon lè, voye dokiman ou apre randevou a, epi konplete notarizasyon ou online an sekirite.
+        </p>
+      </div>
+
+      <div style="flex:1; min-width:180px;">
+        <h4 style="font-size:18px; margin-bottom:15px;">Lyen Rapid</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="/#services" style="color:#90caf9; text-decoration:none;">Sèvis</a></li>
+          <li><a href="/#pricing-block" style="color:#90caf9; text-decoration:none;">Pri</a></li>
+          <li><a href="/#faq" style="color:#90caf9; text-decoration:none;">FAQ</a></li>
+          <li><a href="#calendly-block" style="color:#90caf9; text-decoration:none;">Kòmanse Notarizasyon Online</a></li>
+          <li><a href="/upload.html" style="color:#90caf9; text-decoration:none;">Voye Dokiman</a></li>
+          <li><a href="mailto:supervisor@safenotarize.com" style="color:#90caf9; text-decoration:none;">Sipò</a></li>
+        </ul>
+      </div>
+
+      <div style="flex:1; min-width:180px;">
+        <h4 style="font-size:18px; margin-bottom:15px;">Legal</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="/legal.html#privacy" style="color:#90caf9; text-decoration:none;">Règleman sou Vi Prive</a></li>
+          <li><a href="/legal.html#terms" style="color:#90caf9; text-decoration:none;">Kondisyon Sèvis</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:40px;">
+      <a href="https://www.facebook.com/profile.php?id=61577290756700" target="_blank" rel="noreferrer">
+        <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="margin-bottom:10px;">
+      </a>
+      <div style="margin-top:10px;">
+        <a href="#calendly-block" class="btn btn-primary">Kòmanse Notarizasyon Online</a>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:30px; padding-top:20px; border-top:1px solid #24415f;">
+      <p style="font-size:14px; color:#d6e2ef;">&copy; 2026 SafeNotarize. Tout dwa rezève.</p>
+    </div>
+  </footer>
+</body>
+</html>
