@@ -20,8 +20,7 @@
     h1{color:var(--navy);font-size:2.05rem;line-height:1.2;margin:0 0 10px;}
     p{color:var(--muted);line-height:1.55;margin:0 0 10px;}
     .notice{background:#fff;border:1px solid var(--border);border-left:5px solid var(--green);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);margin:0 auto 22px;max-width:860px;}
-    .notice p{margin-bottom:8px;}
-    .notice p:last-child{margin-bottom:0;}
+    .notice p{margin-bottom:0;}
     .notice strong{color:var(--navy);}
     .form-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);}
     iframe{width:100%;min-height:820px;border:0;border-radius:12px;}
@@ -63,13 +62,40 @@
     </section>
 
     <section class="notice">
-      <p><strong>Upload:</strong> Please send a completed document. If it’s already signed, we’ll review it and let you know if anything needs to be signed again.</p>
-      <p><strong>Next:</strong> We’ll send your secure session link before your appointment. Check your inbox for a <strong>SAFENOTARIZE email</strong> and have a valid photo ID ready.</p>
+      <p><strong>Upload:</strong> Please send your completed document for review.</p>
     </section>
 
     <section class="form-card">
-      <iframe data-tally-src="https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" title="SafeNotarize Document Upload Form"></iframe>
+      <iframe id="tally-upload-form" loading="lazy" title="SafeNotarize Document Upload Form"></iframe>
+
       <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const calendlyEmail =
+          params.get("invitee_email") ||
+          params.get("email") ||
+          "";
+
+        const calendlyName =
+          params.get("invitee_full_name") ||
+          params.get("invitee_name") ||
+          params.get("name") ||
+          "";
+
+        let tallyUrl = "https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1";
+
+        if (calendlyEmail) {
+          tallyUrl += "&email=" + encodeURIComponent(calendlyEmail);
+          tallyUrl += "&invitee_email=" + encodeURIComponent(calendlyEmail);
+        }
+
+        if (calendlyName) {
+          tallyUrl += "&name=" + encodeURIComponent(calendlyName);
+          tallyUrl += "&invitee_full_name=" + encodeURIComponent(calendlyName);
+        }
+
+        document.getElementById("tally-upload-form").setAttribute("data-tally-src", tallyUrl);
+
         var d=document,w="https://tally.so/widgets/embed.js",v=function(){
           if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
           else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
