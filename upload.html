@@ -61,47 +61,24 @@
       <p>Please upload a filled-out document that is ready to sign or review.</p>
     </section>
 
-    <section class="form-card">
-      <iframe id="tally-upload-form" loading="lazy" title="SafeNotarize Document Upload Form"></iframe>
+   <section class="form-card">
+  <iframe 
+    data-tally-src="https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+    loading="lazy"
+    title="SafeNotarize Document Upload Form">
+  </iframe>
 
-      <script>
-        const params = new URLSearchParams(window.location.search);
-
-        const calendlyEmail =
-          params.get("invitee_email") ||
-          params.get("email") ||
-          "";
-
-        const calendlyName =
-          params.get("invitee_full_name") ||
-          params.get("invitee_name") ||
-          params.get("name") ||
-          "";
-
-        let tallyUrl = "https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1";
-
-        if (calendlyEmail) {
-          tallyUrl += "&email=" + encodeURIComponent(calendlyEmail);
-          tallyUrl += "&invitee_email=" + encodeURIComponent(calendlyEmail);
-        }
-
-        if (calendlyName) {
-          tallyUrl += "&name=" + encodeURIComponent(calendlyName);
-          tallyUrl += "&invitee_full_name=" + encodeURIComponent(calendlyName);
-        }
-
-        document.getElementById("tally-upload-form").setAttribute("data-tally-src", tallyUrl);
-
-        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
-          if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
-          else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
-        };
-        if(typeof Tally !== "undefined") v();
-        else if(d.querySelector('script[src="'+w+'"]') == null){
-          var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
-        }
-      </script>
-    </section>
+  <script>
+    var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+      if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
+      else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
+    };
+    if(typeof Tally !== "undefined") v();
+    else if(d.querySelector('script[src="'+w+'"]') == null){
+      var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
+    }
+  </script>
+</section>
 
     <p class="help">Need help uploading? Email <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a></p>
   </main>
