@@ -585,41 +585,64 @@
     }
   </style>
 
-  <script>
-    function toggleMenu() {
-      const nav = document.querySelector('.mobile-header nav');
-      if (!nav) return;
-      nav.classList.toggle('show');
-      document.body.style.overflow = nav.classList.contains('show') ? 'hidden' : '';
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('.mobile-header nav');
+    if (!nav) return;
+    nav.classList.toggle('show');
+    document.body.style.overflow = nav.classList.contains('show') ? 'hidden' : '';
+  }
+
+  function closeMobileMenu() {
+    const nav = document.querySelector('.mobile-header nav');
+    if (nav && nav.classList.contains('show')) {
+      nav.classList.remove('show');
+      document.body.style.overflow = '';
     }
+  }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.addEventListener('click', (e) => {
-        const nav = document.querySelector('.mobile-header nav');
-        const toggle = document.querySelector('.mobile-header .menu-toggle');
-        if (!nav || !toggle) return;
-        if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('show')) {
-          toggleMenu();
-        }
-      });
+  document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('click', (e) => {
+      const nav = document.querySelector('.mobile-header nav');
+      const toggle = document.querySelector('.mobile-header .menu-toggle');
+      if (!nav || !toggle) return;
 
-      document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', function(e){
-          const href = this.getAttribute('href');
-          const target = document.querySelector(href);
-          if (!target) return;
+      if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('show')) {
+        closeMobileMenu();
+      }
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+
+        // Fix Home link
+        if (href === "#") {
           e.preventDefault();
-          const isMobile = window.innerWidth <= 768;
           window.scrollTo({
-            top: target.offsetTop - (isMobile ? 18 : 78),
+            top: 0,
             behavior: 'smooth'
           });
-          const nav = document.querySelector('.mobile-header nav');
-          if (nav && nav.classList.contains('show')) toggleMenu();
+          closeMobileMenu();
+          return;
+        }
+
+        const target = document.querySelector(href);
+        if (!target) return;
+
+        e.preventDefault();
+        const isMobile = window.innerWidth <= 768;
+
+        window.scrollTo({
+          top: target.offsetTop - (isMobile ? 18 : 78),
+          behavior: 'smooth'
         });
+
+        closeMobileMenu();
       });
     });
-  </script>
+  });
+</script>
 </head>
 
 <body>
