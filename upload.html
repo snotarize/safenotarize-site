@@ -19,9 +19,6 @@
     .pill{display:inline-block;background:#e9f7ef;color:#1f7a36;padding:7px 13px;border-radius:999px;font-size:.85rem;font-weight:800;margin-bottom:12px;}
     h1{color:var(--navy);font-size:2.05rem;line-height:1.2;margin:0 0 10px;}
     p{color:var(--muted);line-height:1.55;margin:0 0 10px;}
-    .notice{background:#fff;border:1px solid var(--border);border-left:5px solid var(--green);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);margin:0 auto 22px;max-width:860px;}
-    .notice p{margin-bottom:0;}
-    .notice strong{color:var(--navy);}
     .form-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);}
     iframe{width:100%;min-height:820px;border:0;border-radius:12px;}
     .help{text-align:center;margin-top:18px;font-size:.95rem;}
@@ -37,7 +34,6 @@
       .pill{font-size:.8rem;padding:6px 11px;margin-bottom:10px;}
       h1{font-size:1.6rem;}
       p{font-size:.95rem;line-height:1.45;}
-      .notice{padding:14px 15px;border-radius:14px;margin-bottom:18px;}
       .form-card{padding:10px;border-radius:16px;}
       iframe{min-height:900px;}
     }
@@ -61,99 +57,99 @@
       <p>Please upload a filled-out document that is ready to sign or review.</p>
     </section>
 
-   <section class="form-card">
-  <iframe id="tally-upload-form" loading="lazy" title="SafeNotarize Document Upload Form"></iframe>
+    <section class="form-card">
+      <iframe id="tally-upload-form" loading="lazy" title="SafeNotarize Document Upload Form"></iframe>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
+      <script>
+        const params = new URLSearchParams(window.location.search);
 
-    const inviteeEmail = params.get("invitee_email") || "";
-    const firstName = params.get("invitee_first_name") || "";
-    const lastName = params.get("invitee_last_name") || "";
-    const fullNameFromCalendly = params.get("invitee_full_name") || "";
-    const fullName = fullNameFromCalendly || `${firstName} ${lastName}`.trim();
+        const inviteeEmail = params.get("invitee_email") || "";
+        const firstName = params.get("invitee_first_name") || "";
+        const lastName = params.get("invitee_last_name") || "";
+        const fullNameFromCalendly = params.get("invitee_full_name") || "";
+        const fullName = fullNameFromCalendly || `${firstName} ${lastName}`.trim();
 
-    const tallyParams = new URLSearchParams({
-      alignLeft: "1",
-      hideTitle: "1",
-      transparentBackground: "1",
-      dynamicHeight: "1"
-    });
+        const tallyParams = new URLSearchParams({
+          alignLeft: "1",
+          hideTitle: "1",
+          transparentBackground: "1",
+          dynamicHeight: "1"
+        });
 
-    if (inviteeEmail) {
-      tallyParams.set("invitee_email", inviteeEmail);
-      tallyParams.set("email", inviteeEmail);
-    }
+        if (inviteeEmail) {
+          tallyParams.set("invitee_email", inviteeEmail);
+          tallyParams.set("email", inviteeEmail);
+        }
 
-    if (fullName) {
-      tallyParams.set("invitee_full_name", fullName);
-      tallyParams.set("name", fullName);
-    }
+        if (fullName) {
+          tallyParams.set("invitee_full_name", fullName);
+          tallyParams.set("name", fullName);
+        }
 
-    if (firstName) {
-      tallyParams.set("invitee_first_name", firstName);
-    }
+        if (firstName) {
+          tallyParams.set("invitee_first_name", firstName);
+        }
 
-    if (lastName) {
-      tallyParams.set("invitee_last_name", lastName);
-    }
+        if (lastName) {
+          tallyParams.set("invitee_last_name", lastName);
+        }
 
-    const tallyUrl = "https://tally.so/embed/xXyJkd?" + tallyParams.toString();
+        const tallyUrl = "https://tally.so/embed/xXyJkd?" + tallyParams.toString();
 
-    const iframe = document.getElementById("tally-upload-form");
-    iframe.setAttribute("data-tally-src", tallyUrl);
-    iframe.setAttribute("src", tallyUrl);
+        const iframe = document.getElementById("tally-upload-form");
+        iframe.setAttribute("data-tally-src", tallyUrl);
+        iframe.setAttribute("src", tallyUrl);
 
-    var d=document,w="https://tally.so/widgets/embed.js",v=function(){
-      if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
-    };
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+          if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
+        };
 
-    if(typeof Tally !== "undefined") v();
-    else if(d.querySelector('script[src="'+w+'"]') == null){
-      var s=d.createElement("script");
-      s.src=w;
-      s.onload=v;
-      d.body.appendChild(s);
-    }
-  </script>
-</section>
+        if(typeof Tally !== "undefined") v();
+        else if(d.querySelector('script[src="'+w+'"]') == null){
+          var s=d.createElement("script");
+          s.src=w;
+          s.onload=v;
+          d.body.appendChild(s);
+        }
+      </script>
+    </section>
 
     <p class="help">Need help uploading? Email <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a></p>
   </main>
 
   <script>
-  let allowLeaving = false;
+    let allowLeaving = false;
 
-  // Add a fake history step so we can catch the browser back button
-  history.pushState({ uploadPage: true }, "", window.location.href);
+    // Protect against accidental browser back button
+    history.pushState({ uploadPage: true }, "", window.location.href);
 
-  window.addEventListener("popstate", function () {
-    if (allowLeaving) return;
+    window.addEventListener("popstate", function () {
+      if (allowLeaving) return;
 
-    const leave = confirm("Your document upload is not complete yet. Do you want to leave this page?");
+      const leave = confirm("Your document upload is not complete yet. Do you want to leave this page?");
 
-    if (leave) {
-      allowLeaving = true;
-      history.back();
-    } else {
-      history.pushState({ uploadPage: true }, "", window.location.href);
-    }
-  });
-
-  // Warn if they refresh, close tab, or leave the page
-  window.addEventListener("beforeunload", function (e) {
-    if (!allowLeaving) {
-      e.preventDefault();
-      e.returnValue = "";
-    }
-  });
-
-  // Let normal SafeNotarize links work without warning
-  document.querySelectorAll("a").forEach(function(link) {
-    link.addEventListener("click", function () {
-      allowLeaving = true;
+      if (leave) {
+        allowLeaving = true;
+        history.back();
+      } else {
+        history.pushState({ uploadPage: true }, "", window.location.href);
+      }
     });
-  });
-</script>
+
+    // Allow Tally to redirect normally after form submission
+    window.addEventListener("message", function (e) {
+      const data = typeof e.data === "string" ? e.data : JSON.stringify(e.data || {});
+      if (data.includes("Tally.FormSubmitted")) {
+        allowLeaving = true;
+      }
+    });
+
+    // Let normal SafeNotarize links work without warning
+    document.querySelectorAll("a").forEach(function(link) {
+      link.addEventListener("click", function () {
+        allowLeaving = true;
+      });
+    });
+  </script>
 </body>
 </html>
