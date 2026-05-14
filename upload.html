@@ -57,62 +57,55 @@
       <p>Please upload a filled-out document that is ready to sign or review.</p>
     </section>
 
-    <section class="form-card">
-      <iframe id="tally-upload-form" loading="lazy" title="SafeNotarize Document Upload Form"></iframe>
+<section class="form-card">
+  <iframe
+    data-tally-src="https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+    loading="lazy"
+    title="SafeNotarize Document Upload Form">
+  </iframe>
 
-      <script>
-        const params = new URLSearchParams(window.location.search);
+  <script>
+    // Read Calendly values from the page URL
+    const params = new URLSearchParams(window.location.search);
 
-        const inviteeEmail = params.get("invitee_email") || "";
-        const firstName = params.get("invitee_first_name") || "";
-        const lastName = params.get("invitee_last_name") || "";
-        const fullNameFromCalendly = params.get("invitee_full_name") || "";
-        const fullName = fullNameFromCalendly || `${firstName} ${lastName}`.trim();
+    const inviteeEmail = params.get("invitee_email") || "";
+    const firstName = params.get("invitee_first_name") || "";
+    const lastName = params.get("invitee_last_name") || "";
+    const calendlyFullName = params.get("invitee_full_name") || "";
+    const fullName = calendlyFullName || `${firstName} ${lastName}`.trim();
 
-        const tallyParams = new URLSearchParams({
-          alignLeft: "1",
-          hideTitle: "1",
-          transparentBackground: "1",
-          dynamicHeight: "1"
-        });
+    // Add clean fields to the PAGE URL so Tally can capture them automatically
+    if (inviteeEmail || fullName || firstName || lastName) {
+      const cleanParams = new URLSearchParams(window.location.search);
 
-        if (inviteeEmail) {
-          tallyParams.set("invitee_email", inviteeEmail);
-          tallyParams.set("email", inviteeEmail);
-        }
+      if (inviteeEmail) {
+        cleanParams.set("invitee_email", inviteeEmail);
+        cleanParams.set("email", inviteeEmail);
+      }
 
-        if (fullName) {
-          tallyParams.set("invitee_full_name", fullName);
-          tallyParams.set("name", fullName);
-        }
+      if (fullName) {
+        cleanParams.set("invitee_full_name", fullName);
+        cleanParams.set("name", fullName);
+      }
 
-        if (firstName) {
-          tallyParams.set("invitee_first_name", firstName);
-        }
+      if (firstName) cleanParams.set("invitee_first_name", firstName);
+      if (lastName) cleanParams.set("invitee_last_name", lastName);
 
-        if (lastName) {
-          tallyParams.set("invitee_last_name", lastName);
-        }
+      const newUrl = window.location.pathname + "?" + cleanParams.toString();
+      window.history.replaceState({}, "", newUrl);
+    }
 
-        const tallyUrl = "https://tally.so/embed/xXyJkd?" + tallyParams.toString();
-
-        const iframe = document.getElementById("tally-upload-form");
-        iframe.setAttribute("data-tally-src", tallyUrl);
-        iframe.setAttribute("src", tallyUrl);
-
-        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
-          if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
-        };
-
-        if(typeof Tally !== "undefined") v();
-        else if(d.querySelector('script[src="'+w+'"]') == null){
-          var s=d.createElement("script");
-          s.src=w;
-          s.onload=v;
-          d.body.appendChild(s);
-        }
-      </script>
-    </section>
+    // Load Tally embed
+    var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+      if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
+      else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
+    };
+    if(typeof Tally !== "undefined") v();
+    else if(d.querySelector('script[src="'+w+'"]') == null){
+      var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
+    }
+  </script>
+</section>
 
     <p class="help">Need help uploading? Email <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a></p>
   </main>
