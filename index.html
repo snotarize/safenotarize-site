@@ -1204,11 +1204,39 @@
   });
 
   var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+  let inactivityTimer;
+  let chatOpened = false;
 
-  Tawk_API.onLoad = function(){
-    setTimeout(function(){
-      Tawk_API.maximize();
-    }, 15000);
+  function isMobileScreen() {
+    return window.innerWidth <= 768;
+  }
+
+  function openChatAfterInactivity() {
+    if (chatOpened) return;
+    chatOpened = true;
+
+    if (typeof Tawk_API !== "undefined") {
+      if (isMobileScreen()) {
+        Tawk_API.showWidget();
+      } else {
+        Tawk_API.maximize();
+      }
+    }
+  }
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(openChatAfterInactivity, 15000);
+  }
+
+  Tawk_API.onLoad = function () {
+    Tawk_API.showWidget();
+
+    resetInactivityTimer();
+
+    ["mousemove", "mousedown", "click", "scroll", "keydown", "touchstart"].forEach(function(event) {
+      document.addEventListener(event, resetInactivityTimer, { passive: true });
+    });
   };
 
   (function(){
