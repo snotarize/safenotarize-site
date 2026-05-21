@@ -1184,35 +1184,42 @@
   <cookie-consent></cookie-consent>
 
   <script>
-    const loader = document.getElementById('page-loader');
-    if (loader) loader.style.display = 'block';
+  const loader = document.getElementById('page-loader');
+  if (loader) loader.style.display = 'block';
 
-    window.addEventListener('load', () => {
-      if (loader) loader.style.display = 'none';
+  window.addEventListener('load', () => {
+    if (loader) loader.style.display = 'none';
 
-      const carousel = document.querySelector('.testimonial-slides');
-      if (carousel && carousel.children.length) {
-        let currentIndex = 0;
-        const gap = 20;
-        setInterval(() => {
-          const first = carousel.children[0];
-          const slideWidth = first.getBoundingClientRect().width + gap;
-          currentIndex = (currentIndex + 1) % carousel.children.length;
-          carousel.scrollTo({ left: currentIndex * slideWidth, behavior: 'smooth' });
-        }, 5000);
-      }
-    });
+    const carousel = document.querySelector('.testimonial-slides');
+    if (carousel && carousel.children.length) {
+      let currentIndex = 0;
+      const gap = 20;
+      setInterval(() => {
+        const first = carousel.children[0];
+        const slideWidth = first.getBoundingClientRect().width + gap;
+        currentIndex = (currentIndex + 1) % carousel.children.length;
+        carousel.scrollTo({ left: currentIndex * slideWidth, behavior: 'smooth' });
+      }, 5000);
+    }
+  });
 
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
-  </script>
+  var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+
+  Tawk_API.onLoad = function(){
+    setTimeout(function(){
+      Tawk_API.maximize();
+    }, 4000);
+  };
+
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
+</script>
 
   <footer class="footer">
     <div class="container" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px; align-items:flex-start;">
