@@ -1199,7 +1199,7 @@
         const slideWidth = first.getBoundingClientRect().width + gap;
         currentIndex = (currentIndex + 1) % carousel.children.length;
         carousel.scrollTo({ left: currentIndex * slideWidth, behavior: 'smooth' });
-      }, 15000);
+      }, 10000);
     }
   });
 
@@ -1208,7 +1208,7 @@
   Tawk_API.onLoad = function(){
     setTimeout(function(){
       Tawk_API.maximize();
-    }, 5000);
+    }, 15000);
   };
 
   (function(){
