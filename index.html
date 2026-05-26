@@ -584,6 +584,137 @@
       .business-box{ padding:24px 20px; }
       .hero-section{ padding:52px 18px; }
     }
+
+
+    /* Compact booking block: keeps Calendly visible faster, especially on mobile */
+    #calendly-block {
+      padding:40px 18px !important;
+    }
+    #calendly-block .compact-booking-title {
+      text-align:center;
+      max-width:720px;
+      margin:0 auto 18px;
+    }
+    #calendly-block .compact-booking-title h3 {
+      font-size:1.75rem;
+      color:#003366;
+      margin:0 0 8px;
+      line-height:1.15;
+    }
+    #calendly-block .compact-booking-title p {
+      color:#555;
+      font-size:0.95rem;
+      line-height:1.5;
+      margin:0;
+    }
+    #calendly-block .booking-type-selector {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+      margin:0 auto 18px;
+      max-width:760px;
+    }
+    #calendly-block .booking-option {
+      cursor:pointer;
+      text-align:left;
+      background:#ffffff;
+      border:2px solid #dce7f2;
+      border-radius:14px;
+      padding:14px 16px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
+      transition:all .18s ease;
+    }
+    #calendly-block .booking-option:hover {
+      transform:translateY(-1px);
+      box-shadow:0 10px 24px rgba(0,39,77,0.08);
+    }
+    #calendly-block .booking-option.active {
+      border-color:#28a745 !important;
+      background:#f7fcf8 !important;
+      box-shadow:0 10px 24px rgba(40,167,69,0.12) !important;
+    }
+    #calendly-block .option-tag {
+      font-size:0.75rem;
+      font-weight:800;
+      display:inline-block;
+      padding:4px 9px;
+      border-radius:999px;
+      margin-bottom:8px;
+    }
+    #calendly-block .booking-option h4 {
+      margin:0 0 4px;
+      color:#003366;
+      font-size:1.08rem;
+      line-height:1.25;
+    }
+    #calendly-block .booking-option p {
+      margin:0;
+      color:#556270;
+      font-size:0.86rem;
+      line-height:1.35;
+    }
+
+    @media (max-width: 768px){
+      #calendly-block {
+        padding:18px 10px !important;
+      }
+      #calendly-block .compact-booking-title {
+        margin:0 auto 10px !important;
+      }
+      #calendly-block .compact-booking-title .pill {
+        display:none !important;
+      }
+      #calendly-block .compact-booking-title h3 {
+        font-size:1.25rem !important;
+        margin-bottom:4px !important;
+      }
+      #calendly-block .compact-booking-title p {
+        font-size:0.82rem !important;
+        line-height:1.25 !important;
+      }
+      #calendly-block .compact-booking-title .desktop-booking-note {
+        display:none !important;
+      }
+      #calendly-block .booking-type-selector {
+        gap:8px !important;
+        margin-bottom:10px !important;
+        max-width:100% !important;
+      }
+      #calendly-block .booking-option {
+        padding:10px 9px !important;
+        border-radius:12px !important;
+        min-height:82px;
+      }
+      #calendly-block .option-tag {
+        font-size:0.67rem !important;
+        padding:3px 7px !important;
+        margin-bottom:5px !important;
+      }
+      #calendly-block .booking-option h4 {
+        font-size:0.9rem !important;
+        margin-bottom:2px !important;
+      }
+      #calendly-block .booking-option p {
+        font-size:0.73rem !important;
+        line-height:1.22 !important;
+      }
+      #calendly-widget-title {
+        font-size:0.95rem !important;
+        margin-bottom:4px !important;
+      }
+      #calendly-helper-text {
+        display:none !important;
+      }
+      #calendly-frame {
+        min-width:100% !important;
+        height:700px !important;
+        border-radius:10px !important;
+      }
+      .booking-widget {
+        margin-top:0 !important;
+      }
+    }
+
   </style>
 
 <script>
@@ -949,55 +1080,33 @@
 <section id="calendly-block" style="background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%); padding:60px 20px;">
   <div style="max-width:1100px; margin:0 auto;">
 
-    <!-- Header -->
-    <div class="section-title" style="text-align:center; max-width:760px; margin:0 auto 30px;">
-      <div style="display:inline-block; background:#e9f7ef; color:#1f7a36; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:12px;">
-        Start here
-      </div>
-
-      <h3 style="font-size:1.8rem; color:#003366; margin-bottom:10px;">
-        Choose How You Want to Book
-      </h3>
-
-      <p style="color:#555; font-size:0.95rem; line-height:1.6;">
-        Book for yourself, or book/pay for someone else such as a client, family member, or signer.
-      </p>
-
-      <p style="color:#1f7a36; font-weight:600; font-size:0.9rem; margin-top:8px;">
-        ⚡ Secure online notarization from your phone or computer
-      </p>
+    <!-- Compact Header -->
+    <div class="compact-booking-title">
+      <div class="pill" style="margin-bottom:10px;">Start here</div>
+      <h3>Book Your Online Notary Session</h3>
+      <p class="desktop-booking-note">Choose who the session is for, then select a date and time below.</p>
     </div>
 
     <!-- Booking Type Selector -->
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:0 auto 26px; max-width:900px;">
-      <button type="button" id="book-self-option" onclick="setBookingType('self')"
-        style="cursor:pointer; text-align:left; background:#ffffff; border:2px solid #28a745; border-radius:16px; padding:18px; box-shadow:0 10px 25px rgba(0,0,0,0.06);">
-        <div style="font-size:0.8rem; font-weight:800; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:10px;">
-          I am the signer
-        </div>
-        <h4 style="margin:0 0 8px; color:#003366; font-size:1.15rem;">Book for Myself</h4>
-        <p style="margin:0; color:#556270; font-size:0.92rem; line-height:1.5;">
-          Use this if you are the person signing the document and joining the notary session.
-        </p>
+    <div class="booking-type-selector">
+      <button type="button" id="book-self-option" class="booking-option active" onclick="setBookingType('self')">
+        <div class="option-tag" style="color:#1f7a36; background:#e9f7ef;">Signer</div>
+        <h4>For Myself</h4>
+        <p>I will sign.</p>
       </button>
 
-      <button type="button" id="book-other-option" onclick="setBookingType('other')"
-        style="cursor:pointer; text-align:left; background:#ffffff; border:2px solid #dce7f2; border-radius:16px; padding:18px; box-shadow:0 10px 25px rgba(0,0,0,0.06);">
-        <div style="font-size:0.8rem; font-weight:800; color:#003366; background:#eef5ff; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:10px;">
-          Booking for someone else
-        </div>
-        <h4 style="margin:0 0 8px; color:#003366; font-size:1.15rem;">Book / Pay for Someone Else</h4>
-        <p style="margin:0; color:#556270; font-size:0.92rem; line-height:1.5;">
-          Best for businesses, referral partners, family members, or anyone booking for another signer.
-        </p>
+      <button type="button" id="book-other-option" class="booking-option" onclick="setBookingType('other')">
+        <div class="option-tag" style="color:#003366; background:#eef5ff;">Booker / Payer</div>
+        <h4>For Someone Else</h4>
+        <p>Another person will sign.</p>
       </button>
     </div>
 
     <!-- Grid -->
-    <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:stretch; justify-content:center;">
+    <div style="display:flex; flex-wrap:wrap; gap:18px; align-items:stretch; justify-content:center;">
 
       <!-- LEFT SIDE (SHORT + CLEAN) -->
-      <div class="booking-copy" style="flex:1 1 320px; max-width:420px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
+      <div class="booking-copy" style="flex:0 1 330px; max-width:360px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
 
         <div id="booking-badge" style="font-size:0.8rem; font-weight:700; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:12px;">
           Fast & Simple
@@ -1045,10 +1154,10 @@
       </div>
 
       <!-- RIGHT SIDE (CALENDLY) -->
-      <div class="booking-widget" style="flex:1 1 480px; max-width:650px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
+      <div class="booking-widget" style="flex:1 1 620px; max-width:760px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
 
         <div id="calendly-widget-title" style="margin-bottom:10px; font-weight:700; color:#003366; font-size:1rem;">
-          Select your date & time
+          Select a date & time
         </div>
 
         <div id="calendly-helper-text" style="font-size:0.86rem; color:#556270; line-height:1.5; margin-bottom:10px;">
@@ -1059,7 +1168,7 @@
           id="calendly-frame"
           class="calendly-inline-widget"
           src="https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1"
-          style="width:100%; min-width:320px; height:650px; border:0; border-radius:12px;"
+          style="width:100%; min-width:320px; height:700px; border:0; border-radius:12px;"
           frameborder="0"
           scrolling="yes"
           title="SafeNotarize Calendly Booking">
@@ -1094,8 +1203,8 @@
     if (type === "other") {
       loadCalendlyWidget(calendlyOtherUrl);
 
-      if (selfBtn) selfBtn.style.borderColor = "#dce7f2";
-      if (otherBtn) otherBtn.style.borderColor = "#28a745";
+      if (selfBtn) selfBtn.classList.remove("active");
+      if (otherBtn) otherBtn.classList.add("active");
 
       if (badge) {
         badge.innerText = "For clients, family, and partners";
@@ -1126,14 +1235,14 @@
         `;
       }
 
-      if (widgetTitle) widgetTitle.innerText = "Book for someone else";
-      if (helperText) helperText.innerText = "This booking collects payer/business information and signer/document receiver information.";
+      if (widgetTitle) widgetTitle.innerText = "Select a date & time";
+      if (helperText) helperText.innerText = "This booking is for someone scheduling or paying for another signer.";
 
     } else {
       loadCalendlyWidget(calendlySelfUrl);
 
-      if (selfBtn) selfBtn.style.borderColor = "#28a745";
-      if (otherBtn) otherBtn.style.borderColor = "#dce7f2";
+      if (selfBtn) selfBtn.classList.add("active");
+      if (otherBtn) otherBtn.classList.remove("active");
 
       if (badge) {
         badge.innerText = "Fast & Simple";
@@ -1164,7 +1273,7 @@
         `;
       }
 
-      if (widgetTitle) widgetTitle.innerText = "Select your date & time";
+      if (widgetTitle) widgetTitle.innerText = "Select a date & time";
       if (helperText) helperText.innerText = "This booking is for the signer who will join the session.";
     }
   }
