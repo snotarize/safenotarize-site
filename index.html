@@ -659,6 +659,7 @@
       <a href="#pricing-block">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="/upload.html">Upload Documents</a>
+      <a href="#calendly-block" onclick="setBookingType('other')">Book for Someone Else</a>
       <a href="mailto:supervisor@safenotarize.com">Contact</a>
     </div>
 
@@ -686,6 +687,7 @@
       <a href="#pricing-block">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="/upload.html">Upload Documents</a>
+      <a href="#calendly-block" onclick="setBookingType('other')">Book for Someone Else</a>
       <a href="mailto:supervisor@safenotarize.com">Contact</a>
     </nav>
   </header>
@@ -709,8 +711,11 @@
 
         <div class="hero-cta-col">
           <div class="hero-cta-row">
-            <a href="#calendly-block" class="btn btn-dark">
+            <a href="#calendly-block" class="btn btn-dark" onclick="setBookingType('self')">
               Notarize Online Now
+            </a>
+            <a href="#calendly-block" class="btn btn-outline-green" onclick="setBookingType('other')">
+              Book for Someone Else
             </a>
             <span class="small-note">Choose a time or request the next available notary.</span>
           </div>
@@ -815,6 +820,16 @@
           <p>Have a loan package, business document, affidavit, or prepared PDF? Upload it and get it notarized online.</p>
           <a href="#calendly-block" class="service-link">Notarize Online Now →</a>
         </div>
+
+        <div class="service-card">
+          <div class="service-icon">🤝</div>
+          <h4>Book or Pay for Someone Else</h4>
+          <p>For business partners, family members, real estate professionals, or anyone scheduling a notarization for another signer.</p>
+          <div style="margin-bottom:18px; background:#f8fbff; border:1px solid #dbe8f4; border-radius:12px; padding:12px 14px; color:#32485c; line-height:1.6; font-size:14px;">
+            <strong>Collects:</strong> payer/contact info, signer details, and document receiver information.
+          </div>
+          <a href="#calendly-block" onclick="setBookingType('other')" class="service-link">Book for Someone Else →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -871,7 +886,7 @@
           <h4 style="color:var(--navy); margin:12px 0 6px;">Basic Online Notarization</h4>
           <div class="price-big">$25</div>
           <p style="margin:0 0 16px; color:#556270; line-height:1.7;">Includes 1 signer and 1 stamp.</p>
-          <a href="#calendly-block" class="btn btn-primary">Notarize Online Now</a>
+          <a href="#calendly-block" onclick="setBookingType('self')" class="btn btn-primary">Notarize Online Now</a>
         </div>
 
         <div class="price-card">
@@ -934,22 +949,47 @@
   <div style="max-width:1100px; margin:0 auto;">
 
     <!-- Header -->
-    <div class="section-title" style="text-align:center; max-width:700px; margin:0 auto 30px;">
+    <div class="section-title" style="text-align:center; max-width:760px; margin:0 auto 30px;">
       <div style="display:inline-block; background:#e9f7ef; color:#1f7a36; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:12px;">
         Start here
       </div>
 
       <h3 style="font-size:1.8rem; color:#003366; margin-bottom:10px;">
-        Notarize Online Now
+        Choose How You Want to Book
       </h3>
 
       <p style="color:#555; font-size:0.95rem; line-height:1.6;">
-        Choose a time, upload your document, and get connected for your secure online notary session.
+        Book for yourself, or book/pay for someone else such as a client, family member, or signer.
       </p>
 
       <p style="color:#1f7a36; font-weight:600; font-size:0.9rem; margin-top:8px;">
-        ⚡ Start in under 2 minutes
+        ⚡ Secure online notarization from your phone or computer
       </p>
+    </div>
+
+    <!-- Booking Type Selector -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:0 auto 26px; max-width:900px;">
+      <button type="button" id="book-self-option" onclick="setBookingType('self')"
+        style="cursor:pointer; text-align:left; background:#ffffff; border:2px solid #28a745; border-radius:16px; padding:18px; box-shadow:0 10px 25px rgba(0,0,0,0.06);">
+        <div style="font-size:0.8rem; font-weight:800; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:10px;">
+          I am the signer
+        </div>
+        <h4 style="margin:0 0 8px; color:#003366; font-size:1.15rem;">Book for Myself</h4>
+        <p style="margin:0; color:#556270; font-size:0.92rem; line-height:1.5;">
+          Use this if you are the person signing the document and joining the notary session.
+        </p>
+      </button>
+
+      <button type="button" id="book-other-option" onclick="setBookingType('other')"
+        style="cursor:pointer; text-align:left; background:#ffffff; border:2px solid #dce7f2; border-radius:16px; padding:18px; box-shadow:0 10px 25px rgba(0,0,0,0.06);">
+        <div style="font-size:0.8rem; font-weight:800; color:#003366; background:#eef5ff; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:10px;">
+          Booking for someone else
+        </div>
+        <h4 style="margin:0 0 8px; color:#003366; font-size:1.15rem;">Book / Pay for Someone Else</h4>
+        <p style="margin:0; color:#556270; font-size:0.92rem; line-height:1.5;">
+          Best for businesses, referral partners, family members, or anyone booking for another signer.
+        </p>
+      </button>
     </div>
 
     <!-- Grid -->
@@ -958,19 +998,19 @@
       <!-- LEFT SIDE (SHORT + CLEAN) -->
       <div class="booking-copy" style="flex:1 1 320px; max-width:420px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
 
-        <div style="font-size:0.8rem; font-weight:700; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:12px;">
+        <div id="booking-badge" style="font-size:0.8rem; font-weight:700; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:12px;">
           Fast & Simple
         </div>
 
-        <h4 style="font-size:1.3rem; color:#003366; margin-bottom:10px;">
+        <h4 id="booking-title" style="font-size:1.3rem; color:#003366; margin-bottom:10px;">
           Start your notary session
         </h4>
 
-        <p style="color:#555; font-size:0.95rem; margin-bottom:16px;">
+        <p id="booking-description" style="color:#555; font-size:0.95rem; margin-bottom:16px;">
           Quick booking, secure upload, and a smooth online session.
         </p>
 
-        <div style="display:grid; gap:10px; margin-bottom:20px;">
+        <div id="booking-steps" style="display:grid; gap:10px; margin-bottom:20px;">
           <div style="display:flex; gap:10px; align-items:flex-start;">
             <img src="https://img.icons8.com/ios-filled/18/28a745/checkmark.png" alt="Check">
             <span style="font-size:0.9rem; color:#444;">Choose a time</span>
@@ -1006,12 +1046,16 @@
       <!-- RIGHT SIDE (CALENDLY) -->
       <div class="booking-widget" style="flex:1 1 480px; max-width:650px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
 
-        <div style="margin-bottom:10px; font-weight:700; color:#003366; font-size:1rem;">
+        <div id="calendly-widget-title" style="margin-bottom:10px; font-weight:700; color:#003366; font-size:1rem;">
           Select your date & time
         </div>
 
-        <div class="calendly-inline-widget"
-             data-url="https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1"
+        <div id="calendly-helper-text" style="font-size:0.86rem; color:#556270; line-height:1.5; margin-bottom:10px;">
+          This booking is for the signer who will join the session.
+        </div>
+
+        <div id="calendly-inline-widget"
+             class="calendly-inline-widget"
              style="min-width:320px; height:650px;">
         </div>
       </div>
@@ -1020,8 +1064,124 @@
   </div>
 </section>
 
-<!-- Calendly Script -->
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- Calendly Script + Booking Type Switcher -->
+<script>
+  const calendlySelfUrl = "https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1";
+
+  /*
+    Replace this placeholder with your new Calendly event link for people booking/paying for someone else.
+    Example:
+    https://calendly.com/supervisor-23/book-for-someone-else?hide_event_type_details=1&hide_gdpr_banner=1
+  */
+  const calendlyOtherUrl = "https://calendly.com/supervisor-23/book-for-someone-else?hide_event_type_details=1&hide_gdpr_banner=1";
+
+  let currentCalendlyUrl = calendlySelfUrl;
+
+  function loadCalendlyWidget(url) {
+    const widget = document.getElementById("calendly-inline-widget");
+    if (!widget) return;
+
+    widget.innerHTML = "";
+
+    if (window.Calendly) {
+      Calendly.initInlineWidget({
+        url: url,
+        parentElement: widget
+      });
+    }
+  }
+
+  function setBookingType(type) {
+    const selfBtn = document.getElementById("book-self-option");
+    const otherBtn = document.getElementById("book-other-option");
+    const badge = document.getElementById("booking-badge");
+    const title = document.getElementById("booking-title");
+    const description = document.getElementById("booking-description");
+    const steps = document.getElementById("booking-steps");
+    const widgetTitle = document.getElementById("calendly-widget-title");
+    const helperText = document.getElementById("calendly-helper-text");
+
+    if (type === "other") {
+      currentCalendlyUrl = calendlyOtherUrl;
+
+      if (selfBtn) selfBtn.style.borderColor = "#dce7f2";
+      if (otherBtn) otherBtn.style.borderColor = "#28a745";
+
+      if (badge) {
+        badge.innerText = "For clients, family, and partners";
+        badge.style.color = "#003366";
+        badge.style.background = "#eef5ff";
+      }
+
+      if (title) title.innerText = "Book or pay for someone else";
+
+      if (description) {
+        description.innerText = "Use this option when you are scheduling for another signer or want the final document/invoice handled by someone other than the signer.";
+      }
+
+      if (steps) {
+        steps.innerHTML = `
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/checkmark.png" alt="Check">
+            <span style="font-size:0.9rem; color:#444;">Enter payer or business contact information</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/checkmark.png" alt="Check">
+            <span style="font-size:0.9rem; color:#444;">Enter signer/document receiver information</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/upload.png" alt="Upload">
+            <span style="font-size:0.9rem; color:#444;">Upload the document after booking</span>
+          </div>
+        `;
+      }
+
+      if (widgetTitle) widgetTitle.innerText = "Book for someone else";
+      if (helperText) helperText.innerText = "This booking collects payer/business information and signer/document receiver information.";
+
+    } else {
+      currentCalendlyUrl = calendlySelfUrl;
+
+      if (selfBtn) selfBtn.style.borderColor = "#28a745";
+      if (otherBtn) otherBtn.style.borderColor = "#dce7f2";
+
+      if (badge) {
+        badge.innerText = "Fast & Simple";
+        badge.style.color = "#1f7a36";
+        badge.style.background = "#e9f7ef";
+      }
+
+      if (title) title.innerText = "Start your notary session";
+
+      if (description) {
+        description.innerText = "Quick booking, secure upload, and a smooth online session.";
+      }
+
+      if (steps) {
+        steps.innerHTML = `
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/checkmark.png" alt="Check">
+            <span style="font-size:0.9rem; color:#444;">Choose a time</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/upload.png" alt="Upload">
+            <span style="font-size:0.9rem; color:#444;">Upload your document</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <img src="https://img.icons8.com/ios-filled/18/28a745/video-call.png" alt="Video call">
+            <span style="font-size:0.9rem; color:#444;">Meet with a live notary</span>
+          </div>
+        `;
+      }
+
+      if (widgetTitle) widgetTitle.innerText = "Select your date & time";
+      if (helperText) helperText.innerText = "This booking is for the signer who will join the session.";
+    }
+
+    loadCalendlyWidget(currentCalendlyUrl);
+  }
+</script>
+<script src="https://assets.calendly.com/assets/external/widget.js" async onload="loadCalendlyWidget(currentCalendlyUrl)"></script>
 
   <section class="white-bg-icon section-pad" style="background:#f8fafc;">
     <div class="container">
@@ -1144,6 +1304,11 @@
         </details>
 
         <details>
+          <summary>Can I book or pay for someone else?</summary>
+          <p>Yes. Choose the “Book / Pay for Someone Else” option when scheduling. This is best for business partners, family members, real estate professionals, or anyone arranging the session for another signer.</p>
+        </details>
+
+        <details>
           <summary>Is the session recorded?</summary>
           <p>Yes. Sessions are recorded and stored where required as part of the remote notarization process to help protect against fraud and support compliance.</p>
         </details>
@@ -1161,7 +1326,8 @@
         </div>
 
         <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:flex-start;">
-          <a href="#calendly-block" class="btn btn-primary">Notarize Online Now</a>
+          <a href="#calendly-block" class="btn btn-primary" onclick="setBookingType('self')">Notarize Online Now</a>
+          <a href="#calendly-block" class="btn btn-outline" onclick="setBookingType('other')">Book for Someone Else</a>
         </div>
       </div>
     </div>
@@ -1173,7 +1339,8 @@
         <h3 style="color:var(--navy); font-size:2rem; margin:0 0 12px;">Ready to notarize your document online?</h3>
         <p style="color:#556270; line-height:1.7; margin:0 0 22px;">Upload your document, verify your identity, and meet with a live online notary.</p>
         <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
-          <a href="#calendly-block" class="btn btn-primary">Notarize Online Now</a>
+          <a href="#calendly-block" class="btn btn-primary" onclick="setBookingType('self')">Notarize Online Now</a>
+          <a href="#calendly-block" class="btn btn-outline-green" onclick="setBookingType('other')">Book for Someone Else</a>
         </div>
       </div>
     </div>
@@ -1269,6 +1436,7 @@
   <li><a href="/#faq" style="color:#90caf9; text-decoration:none;">FAQ</a></li>
   <li><a href="#calendly-block" style="color:#90caf9; text-decoration:none;">Start Now</a></li>
   <li><a href="/upload.html" style="color:#90caf9; text-decoration:none;">Upload Documents</a></li>
+  <li><a href="/#calendly-block" onclick="setBookingType('other')" style="color:#90caf9; text-decoration:none;">Book for Someone Else</a></li>
   <li><a href="mailto:supervisor@safenotarize.com" style="color:#90caf9; text-decoration:none;">Support</a></li>
   <li><a href="/power-of-attorney-notary.html" style="color:#90caf9; text-decoration:none;">Power of Attorney Notary</a></li>
   <li><a href="/online-notary.html" style="color:#90caf9; text-decoration:none;">Online Notary</a></li>
@@ -1296,7 +1464,7 @@
         <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="margin-bottom:10px;">
       </a>
       <div style="margin-top:10px;">
-        <a href="#calendly-block" class="btn btn-primary">Notarize Online Now</a>
+        <a href="#calendly-block" onclick="setBookingType('self')" class="btn btn-primary">Notarize Online Now</a>
       </div>
     </div>
 
