@@ -13,7 +13,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document Received | SafeNotarize</title>
-  <meta name="description" content="Your document was received. Watch for your SafeNotarize email invite around your chosen appointment time.">
+  <meta name="description" content="Your document was received. Your online notary session is being prepared.">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -81,6 +81,20 @@
       color: #00274d;
     }
 
+    .loader {
+      width: 42px;
+      height: 42px;
+      border: 5px solid #d7e6f5;
+      border-top: 5px solid #003366;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 18px auto 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .steps {
       margin: 18px 0 8px;
       text-align: left;
@@ -111,7 +125,8 @@
       margin-top: 1px;
     }
 
-    .home-btn {
+    .home-btn,
+    .join-btn {
       display: inline-block;
       margin-top: 16px;
       background-color: #003366;
@@ -123,10 +138,20 @@
       font-weight: 700;
     }
 
+    .join-btn {
+      background-color: #28a745;
+      font-size: 17px;
+      padding: 14px 24px;
+    }
+
     .small-note {
       font-size: 14px;
       color: #6a7b8c;
       margin-top: 14px;
+    }
+
+    .hidden {
+      display: none;
     }
 
     @media (max-width: 480px) {
@@ -167,7 +192,8 @@
         margin: 10px 0;
       }
 
-      .home-btn {
+      .home-btn,
+      .join-btn {
         width: 100%;
         padding: 13px 16px;
       }
@@ -206,13 +232,15 @@
       <path fill="none" stroke="#28a745" stroke-width="3" d="M14 27l7 7 17-17"/>
     </svg>
 
-    <h1>Document Received</h1>
+    <h1 id="main-title">Document Received</h1>
 
     <p>Your document was successfully submitted to <strong>SafeNotarize</strong>.</p>
 
     <div class="email-box">
-      <p><strong>Next:</strong> Your <strong>SAFENOTARIZE email invite</strong> will be sent around your chosen appointment time.</p>
-      <p>Use that invite to join your secure online notary session.</p>
+      <p id="session-message"><strong>Next:</strong> We are preparing your online notary session.</p>
+      <p id="session-submessage">Please keep this page open. Your join button will appear shortly.</p>
+      <div id="loader" class="loader"></div>
+      <div id="join-button-area"></div>
     </div>
 
     <div class="steps">
@@ -223,18 +251,98 @@
 
       <div class="step">
         <span class="step-number">2</span>
-        <span>Check your inbox around your appointment time.</span>
+        <span>Your secure online notary session is being prepared.</span>
       </div>
 
       <div class="step">
         <span class="step-number">3</span>
-        <span>Join with a valid photo ID and meet with your online notary.</span>
+        <span>When ready, click <strong>Join Your Session Now</strong> and have your valid photo ID ready.</span>
       </div>
     </div>
 
-    <p class="small-note">Please check your spam or junk folder if you do not see the invite.</p>
+    <p class="small-note" id="small-note">If the button does not appear, please check your email or chat with us for help.</p>
 
     <a href="https://safenotarize.com" class="home-btn">Back to SafeNotarize</a>
   </div>
+
+  <script>
+    const makeWebhookUrl = "https://hook.us2.make.com/oy9elq5ctxb9fl74lcwuimwb4zp2gxb2";
+
+    const params = new URLSearchParams(window.location.search);
+
+    // Accepts different possible names from Tally/Calendly redirect
+    const uuid =
+      params.get("uuid") ||
+      params.get("invitee_uuid") ||
+      params.get("calendly_uuid") ||
+      "";
+
+    const email =
+      params.get("email") ||
+      params.get("invitee_email") ||
+      params.get("client_email") ||
+      "";
+
+    let attempts = 0;
+    const maxAttempts = 20; // 20 attempts x 3 seconds = about 60 seconds
+
+    function showReadyButton(link) {
+      document.getElementById("main-title").innerText = "Your Session Is Ready";
+      document.getElementById("session-message").innerHTML = "<strong>Your online notary session is ready.</strong>";
+      document.getElementById("session-submessage").innerText = "Click below to join your secure session.";
+      document.getElementById("loader").classList.add("hidden");
+      document.getElementById("join-button-area").innerHTML =
+        `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Your Session Now</a>`;
+      document.getElementById("small-note").innerText = "Please have your valid photo ID ready before joining.";
+    }
+
+    function showStillPreparing() {
+      document.getElementById("main-title").innerText = "Your Session Is Being Prepared";
+      document.getElementById("session-message").innerHTML = "<strong>We are still preparing your session.</strong>";
+      document.getElementById("session-submessage").innerText =
+        "You can keep this page open, or check your email shortly for the session invite.";
+      document.getElementById("loader").classList.add("hidden");
+    }
+
+    async function checkSessionLink() {
+      attempts++;
+
+      // If no tracking info is in the URL, do not keep checking forever
+      if (!uuid && !email) {
+        showStillPreparing();
+        return;
+      }
+
+      try {
+        const url =
+          `${makeWebhookUrl}?uuid=${encodeURIComponent(uuid)}&email=${encodeURIComponent(email)}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.ready === true && data.link) {
+          showReadyButton(data.link);
+          return;
+        }
+
+        if (attempts >= maxAttempts) {
+          showStillPreparing();
+          return;
+        }
+
+        setTimeout(checkSessionLink, 3000);
+
+      } catch (error) {
+        if (attempts >= maxAttempts) {
+          showStillPreparing();
+          return;
+        }
+
+        setTimeout(checkSessionLink, 3000);
+      }
+    }
+
+    checkSessionLink();
+  </script>
 </body>
 </html>
