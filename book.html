@@ -771,6 +771,10 @@
       if(payload.primary_signer_name) url.searchParams.set("name", payload.primary_signer_name);
       if(payload.primary_signer_email) url.searchParams.set("email", payload.primary_signer_email);
 
+      // Phone prefill backup for Calendly custom question #1.
+      // In Calendly, make your first custom invitee question: "Phone number".
+      if(payload.primary_signer_phone) url.searchParams.set("a1", payload.primary_signer_phone);
+
       url.searchParams.set("utm_source", "safenotarize");
       url.searchParams.set("utm_medium", "booking_page");
       url.searchParams.set("utm_campaign", "online_notary");
@@ -815,7 +819,12 @@
           resize: true,
           prefill: {
             name: payload.primary_signer_name || "",
-            email: payload.primary_signer_email || ""
+            email: payload.primary_signer_email || "",
+            customAnswers: {
+              // This fills Calendly custom question #1.
+              // Set custom question #1 in Calendly to: Phone number
+              a1: payload.primary_signer_phone || ""
+            }
           },
           utm: {
             utmSource: "safenotarize",
