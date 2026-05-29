@@ -12,8 +12,8 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Online Notary Session | SafeNotarize</title>
-  <meta name="description" content="Book your SafeNotarize online notary session. Add signers, witnesses, observers, payer details, and choose a time.">
+  <title>Start Online Notarization | SafeNotarize</title>
+  <meta name="description" content="Start your SafeNotarize online notarization. Enter signer details, choose a time, and upload your document.">
 
   <style>
     :root{
@@ -168,10 +168,11 @@
       border:2px solid var(--border);
       border-radius:16px;
       background:#fff;
-      padding:16px;
+      padding:14px 16px;
       cursor:pointer;
       text-align:left;
       transition:.15s;
+      min-height:78px;
     }
 
     .choice.active{
@@ -183,15 +184,15 @@
     .choice strong{
       display:block;
       color:var(--navy);
-      margin-bottom:5px;
+      margin-bottom:4px;
       font-size:16px;
     }
 
     .choice span{
       display:block;
       color:var(--muted);
-      font-size:13px;
-      line-height:1.35;
+      font-size:12.5px;
+      line-height:1.25;
     }
 
     .card{
@@ -336,6 +337,42 @@
 
     .small-note{color:#637487;font-size:12.5px;line-height:1.45;margin-top:10px}
 
+    .booking-done{
+      display:none;
+      max-width:820px;
+      margin:0 auto 14px;
+      background:#effbf2;
+      color:#16652d;
+      border:1px solid #ccefd5;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:800;
+      text-align:center;
+    }
+    .booking-done.active{display:block}
+
+    .calendly-loading{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:260px;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .open-calendly-fallback{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--green);
+      color:#fff;
+      border-radius:10px;
+      padding:12px 16px;
+      font-weight:900;
+      text-decoration:none;
+      margin-top:12px;
+    }
+
     @media (max-width:900px){.layout{max-width:100%;}.side{position:static;order:-1}}
 
     @media (max-width:620px){
@@ -345,7 +382,8 @@
       h1{font-size:27px}
       .hero p{font-size:14px}
       .choice-row{grid-template-columns:1fr;gap:10px}
-      .choice{padding:13px}
+      .choice{padding:12px; min-height:64px}
+      .choice span{font-size:12px}
       .panel-pad{padding:15px}
       .grid-2,.grid-3{grid-template-columns:1fr;gap:0}
       .section-head{display:block}
@@ -371,7 +409,7 @@
   <main class="page">
     <section class="hero">
       <span class="pill">Fast • Secure • Online Notarization</span>
-      <h1>Create Your Online Notary Session</h1>
+      <h1>Start Your Online Notarization</h1>
       <p>Base online notarization starts at $25 for 1 signer and 1 stamp. Extra signers, witnesses, or international sessions may add cost.</p>
     </section>
 
@@ -380,8 +418,8 @@
         <div class="panel-pad">
           <div class="section-head">
             <div>
-              <h2>Session Details</h2>
-              <p>Use this for yourself, a client, family member, business customer, or someone else.</p>
+              <h2>Enter Your Details</h2>
+              <p>Signer, payer, witness, and delivery details.</p>
             </div>
             <span class="badge">Step 1 of 2</span>
           </div>
@@ -389,11 +427,11 @@
           <div class="choice-row" role="group" aria-label="Booking type">
             <button type="button" class="choice active" id="choice-self" onclick="setBookingType('self')">
               <strong>I am signing</strong>
-              <span>I am the person joining the session.</span>
+              <span>I will join the session.</span>
             </button>
             <button type="button" class="choice" id="choice-other" onclick="setBookingType('other')">
               <strong>Booking for someone else</strong>
-              <span>For a client, family member, or signer.</span>
+              <span>Client, family, or signer.</span>
             </button>
           </div>
 
@@ -523,28 +561,30 @@
 
           <div id="status-message" class="status-msg"></div>
 
-          <button type="submit" id="continue-btn" class="continue">Continue to Choose Time</button>
+          <button type="submit" id="continue-btn" class="continue">Continue</button>
           <p class="small-note">
-            After you choose a time, you will be sent to upload your document. The notary session may be prepared while you upload.
+            Next: choose a time, then upload your document.
           </p>
         </div>
       </form>
     </div>
 
+    <div id="booking-done" class="booking-done">Details saved. Choose your time below.</div>
+
     <section class="calendar-panel" id="calendar-panel">
       <div class="calendly-wrap">
         <div class="section-head" style="padding:6px 4px 14px;">
           <div>
-            <h2>Choose Your Appointment Time</h2>
-            <p>Calendly only handles the date and time. Your name and email should already be filled in.</p>
+            <h2>Choose Your Time</h2>
+            <p>Your name and email are already filled in.</p>
           </div>
           <span class="badge">Step 2 of 2</span>
         </div>
 
-        <div id="calendly-embed" class="calendly-frame" title="Schedule Online Notary Session"></div>
+        <div id="calendly-embed" class="calendly-frame calendly-inline-widget" title="Choose time"></div>
 
         <p class="small-note">
-          After you schedule, this page will automatically send you to upload your document. If it does not redirect, use the upload link from the confirmation message.
+          After you choose a time, you will go straight to upload your document.
         </p>
       </div>
     </section>
@@ -722,29 +762,80 @@
       });
     }
 
+    function buildCalendlyUrl(orderId, payload){
+      const url = new URL(CALENDLY_EVENT_URL);
+      url.searchParams.set("hide_event_type_details", "1");
+      url.searchParams.set("hide_gdpr_banner", "1");
+
+      // URL prefill backup. The Calendly widget also receives prefill below.
+      if(payload.primary_signer_name) url.searchParams.set("name", payload.primary_signer_name);
+      if(payload.primary_signer_email) url.searchParams.set("email", payload.primary_signer_email);
+
+      url.searchParams.set("utm_source", "safenotarize");
+      url.searchParams.set("utm_medium", "booking_page");
+      url.searchParams.set("utm_campaign", "online_notary");
+      if(orderId) url.searchParams.set("utm_content", orderId);
+      if(payload.booking_type) url.searchParams.set("utm_term", payload.booking_type);
+
+      return url.toString();
+    }
+
+    function showCalendlyFallback(orderId, payload){
+      const calendlyBox = document.getElementById("calendly-embed");
+      if(!calendlyBox) return;
+
+      const url = buildCalendlyUrl(orderId, payload);
+      calendlyBox.innerHTML = `
+        <iframe
+          src="${url}"
+          title="Choose your time"
+          style="width:100%;height:690px;border:0;border-radius:12px;background:#fff;"
+          frameborder="0"
+          scrolling="yes"></iframe>
+        <div style="text-align:center;">
+          <a class="open-calendly-fallback" href="${url}" target="_blank" rel="noopener">Open time picker</a>
+        </div>
+      `;
+    }
+
     async function loadCalendlyWithPrefill(orderId, payload){
       const calendlyBox = document.getElementById("calendly-embed");
       if(!calendlyBox) return;
 
-      calendlyBox.innerHTML = "";
-      await ensureCalendlyLoaded();
+      calendlyBox.innerHTML = `<div class="calendly-loading">Loading time picker...</div>`;
 
-      Calendly.initInlineWidget({
-        url: CALENDLY_EVENT_URL + "?hide_event_type_details=1&hide_gdpr_banner=1",
-        parentElement: calendlyBox,
-        resize: true,
-        prefill: {
-          name: payload.primary_signer_name || "",
-          email: payload.primary_signer_email || ""
-        },
-        utm: {
-          utmSource: "safenotarize",
-          utmMedium: "booking_page",
-          utmCampaign: "online_notary",
-          utmContent: orderId || "",
-          utmTerm: payload.booking_type || ""
-        }
-      });
+      try{
+        await ensureCalendlyLoaded();
+
+        calendlyBox.innerHTML = "";
+
+        Calendly.initInlineWidget({
+          url: buildCalendlyUrl(orderId, payload),
+          parentElement: calendlyBox,
+          resize: true,
+          prefill: {
+            name: payload.primary_signer_name || "",
+            email: payload.primary_signer_email || ""
+          },
+          utm: {
+            utmSource: "safenotarize",
+            utmMedium: "booking_page",
+            utmCampaign: "online_notary",
+            utmContent: orderId || "",
+            utmTerm: payload.booking_type || ""
+          }
+        });
+
+        // If Calendly's script does not inject the iframe, show a direct iframe backup.
+        setTimeout(function(){
+          if(!calendlyBox.querySelector("iframe")){
+            showCalendlyFallback(orderId, payload);
+          }
+        }, 2500);
+
+      }catch(error){
+        showCalendlyFallback(orderId, payload);
+      }
     }
 
     async function submitIntake(payload){
@@ -772,22 +863,24 @@
       if(!form.checkValidity()){ form.reportValidity(); return; }
       const btn = document.getElementById("continue-btn");
       btn.disabled = true;
-      btn.textContent = "Saving booking details...";
+      btn.textContent = "Saving...";
 
       try{
         const payload = getFormPayload();
         submittedPayload = payload;
         const orderId = await submitIntake(payload);
         currentOrderId = orderId;
-        showStatus("success", "Booking details saved. Now choose your appointment time.");
-        await loadCalendlyWithPrefill(orderId, payload);
+        showStatus("success", "Saved. Choose your time.");
+        document.getElementById("booking-form").style.display = "none";
+        document.getElementById("booking-done").classList.add("active");
         document.getElementById("calendar-panel").classList.add("active");
-        setTimeout(function(){ document.getElementById("calendar-panel").scrollIntoView({behavior:"smooth", block:"start"}); }, 250);
-        btn.textContent = "Booking details saved";
+        await loadCalendlyWithPrefill(orderId, payload);
+        setTimeout(function(){ document.getElementById("booking-done").scrollIntoView({behavior:"smooth", block:"start"}); }, 150);
+        btn.textContent = "Saved";
       }catch(error){
         showStatus("error", error.message || "Something went wrong. Please try again.");
         btn.disabled = false;
-        btn.textContent = "Continue to Choose Time";
+        btn.textContent = "Continue";
       }
     });
 
