@@ -18,72 +18,223 @@
 
   <style>
     * { box-sizing: border-box; }
+
     :root {
-      --navy: #003366; --navy-dark: #00274d; --green: #28a745; --green-dark: #1f7a36;
-      --soft-blue: #f3f8fe; --soft-green: #eefbf3; --border: #dce7f2;
-      --text: #40536a; --shadow: 0 14px 38px rgba(0, 51, 102, 0.09);
+      --navy: #003366;
+      --navy-dark: #00274d;
+      --green: #28a745;
+      --green-dark: #1f7a36;
+      --soft-blue: #f3f8fe;
+      --soft-green: #eefbf3;
+      --border: #dce7f2;
+      --text: #40536a;
+      --shadow: 0 14px 38px rgba(0, 51, 102, 0.09);
     }
+
     body {
-      margin: 0; font-family: 'Inter', sans-serif;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom, #f7fbff 0%, #ffffff 100%);
-      color: var(--navy); min-height: 100vh; display: flex; align-items: center;
-      justify-content: center; padding: 18px;
+      color: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
     }
+
     .container {
-      background: #fff; width: 100%; max-width: 560px; border: 1px solid #e6eef7;
-      border-radius: 20px; box-shadow: var(--shadow); padding: 26px 22px; text-align: center;
+      background: #fff;
+      width: 100%;
+      max-width: 540px;
+      border: 1px solid #e6eef7;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
+      text-align: center;
     }
-    .logo { height: 44px; margin-bottom: 12px; }
+
+    .logo {
+      height: 44px;
+      margin-bottom: 12px;
+    }
+
     .badge {
-      display: inline-block; background: var(--soft-green); color: var(--green-dark);
-      border-radius: 999px; padding: 7px 12px; font-size: 13px; font-weight: 800; margin-bottom: 12px;
+      display: inline-block;
+      background: var(--soft-green);
+      color: var(--green-dark);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 12px;
     }
-    h1 { font-size: 28px; line-height: 1.18; color: var(--navy-dark); margin: 0 0 9px; font-weight: 800; }
-    p { color: var(--text); font-size: 15.5px; line-height: 1.48; margin: 0 0 12px; }
+
+    h1 {
+      font-size: 27px;
+      line-height: 1.18;
+      color: var(--navy-dark);
+      margin: 0 0 9px;
+      font-weight: 800;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 15.5px;
+      line-height: 1.48;
+      margin: 0 0 12px;
+    }
+
     .status-card {
-      margin: 18px 0 14px; background: var(--soft-blue); border: 1px solid var(--border);
-      border-radius: 16px; padding: 18px 15px;
+      margin: 18px 0 14px;
+      background: var(--soft-blue);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 15px;
     }
+
     .loader {
-      width: 44px; height: 44px; border: 5px solid #d7e6f5; border-top: 5px solid var(--navy);
-      border-radius: 50%; animation: spin 1s linear infinite; margin: 10px auto 12px;
+      width: 44px;
+      height: 44px;
+      border: 5px solid #d7e6f5;
+      border-top: 5px solid var(--navy);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 10px auto 12px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .progress-wrap {
-      width: 100%; background: #dbeafe; border-radius: 999px; overflow: hidden; height: 9px; margin: 14px 0 7px;
+      width: 100%;
+      background: #dbeafe;
+      border-radius: 999px;
+      overflow: hidden;
+      height: 9px;
+      margin: 14px 0 7px;
     }
+
     .progress-bar {
-      height: 100%; width: 12%; background: var(--green); border-radius: 999px; transition: width 0.8s ease;
+      height: 100%;
+      width: 12%;
+      background: var(--green);
+      border-radius: 999px;
+      transition: width 0.8s ease;
     }
-    .live-status { color: var(--navy); font-size: 13.5px; font-weight: 800; margin-top: 8px; }
-    .dots::after { content: ""; animation: dots 1.4s infinite; }
-    @keyframes dots { 0% { content: ""; } 33% { content: "."; } 66% { content: ".."; } 100% { content: "..."; } }
+
+    .live-status {
+      color: var(--navy);
+      font-size: 13.5px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    .dots::after {
+      content: "";
+      animation: dots 1.4s infinite;
+    }
+
+    @keyframes dots {
+      0% { content: ""; }
+      33% { content: "."; }
+      66% { content: ".."; }
+      100% { content: "..."; }
+    }
+
     .join-btn {
-      display: inline-block; width: 100%; max-width: 340px; margin-top: 14px; background: var(--green);
-      color: #fff; text-decoration: none; padding: 15px 20px; border-radius: 10px; font-size: 17px;
-      font-weight: 900; box-shadow: 0 10px 24px rgba(40,167,69,.22);
+      display: inline-block;
+      width: 100%;
+      max-width: 340px;
+      margin-top: 14px;
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(40,167,69,.22);
     }
-    .secondary-note {
-      background: #f8fbff; border: 1px solid #e3edf8; border-radius: 14px; padding: 13px;
-      margin-top: 14px; color: var(--text); font-size: 14px; line-height: 1.45; text-align: left;
+
+    .invite-note {
+      background: #f8fbff;
+      border: 1px solid #e3edf8;
+      border-radius: 14px;
+      padding: 14px 15px;
+      margin-top: 14px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+      text-align: left;
     }
-    .mini-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-    .mini-card {
-      border: 1px solid #e3edf8; background: #fbfdff; border-radius: 14px; padding: 12px; text-align: left;
-      font-size: 13.5px; color: var(--text); line-height: 1.35;
+
+    .invite-note strong {
+      color: var(--navy-dark);
     }
-    .mini-card strong { display: block; color: var(--navy-dark); font-size: 14px; margin-bottom: 4px; }
-    .home-btn { display: inline-block; margin-top: 14px; color: var(--navy); text-decoration: underline; font-size: 14px; font-weight: 700; }
-    .hidden { display: none !important; }
+
+    .time-note {
+      display: none;
+      background: #fbfdff;
+      border: 1px solid #e3edf8;
+      border-radius: 12px;
+      padding: 11px 13px;
+      margin-top: 10px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .time-note strong {
+      color: var(--navy-dark);
+    }
+
+    .home-btn {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--navy);
+      text-decoration: underline;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
     @media (max-width: 520px) {
-      body { padding: 10px; align-items: flex-start; }
-      .container { padding: 22px 15px; border-radius: 16px; }
-      .logo { height: 40px; }
-      h1 { font-size: 23px; }
-      p { font-size: 14.5px; }
-      .status-card { padding: 16px 13px; margin-top: 14px; }
-      .mini-row { grid-template-columns: 1fr; }
-      .join-btn { max-width: 100%; }
+      body {
+        padding: 10px;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 22px 15px;
+        border-radius: 16px;
+      }
+
+      .logo {
+        height: 40px;
+      }
+
+      h1 {
+        font-size: 23px;
+      }
+
+      p {
+        font-size: 14.5px;
+      }
+
+      .status-card {
+        padding: 16px 13px;
+        margin-top: 14px;
+      }
+
+      .join-btn {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -94,12 +245,13 @@
 
     <div class="badge" id="top-badge">Document received</div>
     <h1 id="main-title">Getting Your Session Ready</h1>
-    <p id="main-text">We received your document. Your secure online notary room is being prepared.</p>
+    <p id="main-text">Your document was uploaded. We are checking for your secure session link.</p>
 
     <div class="status-card">
       <div id="loader" class="loader"></div>
+
       <p id="session-message"><strong>Please wait a moment.</strong></p>
-      <p id="session-submessage">Your join button will appear here when the session link is ready.</p>
+      <p id="session-submessage">If the session is ready, the join button will appear below.</p>
 
       <div class="progress-wrap" id="progress-wrap">
         <div class="progress-bar" id="progress-bar"></div>
@@ -112,21 +264,11 @@
       <div id="join-button-area"></div>
     </div>
 
-    <div class="secondary-note" id="help-note">
-      <strong>Not ready to start right now?</strong><br>
-      No problem. You can join later at your scheduled time using the same session link.
+    <div class="invite-note" id="invite-note">
+      <strong>Invite email:</strong> You can also join from the session invite email. If you booked for someone else, the signer can use their invite email at the scheduled time.
     </div>
 
-    <div class="mini-row">
-      <div class="mini-card">
-        <strong>Have your ID ready</strong>
-        You may be asked to verify your identity before entering.
-      </div>
-      <div class="mini-card" id="scheduled-time-card">
-        <strong>Scheduled time</strong>
-        Use the time you selected when booking.
-      </div>
-    </div>
+    <div class="time-note" id="scheduled-time-card"></div>
 
     <a href="https://safenotarize.com" class="home-btn">Back to SafeNotarize</a>
   </main>
@@ -165,9 +307,11 @@
 
     function showScheduledTime() {
       const formatted = formatScheduledTime(eventStartTime);
-      if (formatted) {
-        document.getElementById("scheduled-time-card").innerHTML =
-          `<strong>Scheduled time</strong>${formatted}`;
+      const card = document.getElementById("scheduled-time-card");
+
+      if (formatted && card) {
+        card.style.display = "block";
+        card.innerHTML = `<strong>Scheduled time:</strong> ${formatted}`;
       }
     }
 
@@ -178,9 +322,9 @@
 
     function showReadyButton(link) {
       document.getElementById("top-badge").innerText = "Session ready";
-      document.getElementById("main-title").innerText = "Your Session Is Ready";
+      document.getElementById("main-title").innerText = "Your Session Link Is Ready";
       document.getElementById("main-text").innerText =
-        "You can join now, or come back and use the same link at your scheduled time.";
+        "You can join now, or use the invite email later at your scheduled time.";
 
       document.getElementById("session-message").innerHTML = "<strong>Ready when you are.</strong>";
       document.getElementById("session-submessage").innerText = "Click below to enter your secure online notary room.";
@@ -192,8 +336,8 @@
       document.getElementById("join-button-area").innerHTML =
         `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session Now</a>`;
 
-      document.getElementById("help-note").innerHTML =
-        "<strong>Joining later?</strong><br>No problem. Keep this page or use your session invite at your scheduled time.";
+      document.getElementById("invite-note").innerHTML =
+        "<strong>Invite email:</strong> We also send the session invite by email. If you booked for someone else, the signer can join from their invite email at the scheduled time.";
     }
 
     function showStillPreparing() {
@@ -203,14 +347,14 @@
         "Your upload is complete. Your session link is still being prepared.";
 
       document.getElementById("session-message").innerHTML = "<strong>No action needed right now.</strong>";
-      document.getElementById("session-submessage").innerText = "You can check your email or return at your scheduled time.";
+      document.getElementById("session-submessage").innerText = "Check your email or come back at your scheduled time.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "92%";
       document.getElementById("live-status-text").innerText = "Still preparing";
       document.getElementById("dots").classList.add("hidden");
 
-      document.getElementById("help-note").innerHTML =
-        "<strong>Prefer to join later?</strong><br>That’s okay. Your session invite will be available for your scheduled time.";
+      document.getElementById("invite-note").innerHTML =
+        "<strong>Invite email:</strong> Your session invite will be sent by email. If you booked for someone else, the signer can use their invite email to join.";
     }
 
     async function checkSessionLink() {
@@ -243,6 +387,7 @@
           showStillPreparing();
           return;
         }
+
         setTimeout(checkSessionLink, 3000);
       }
     }
