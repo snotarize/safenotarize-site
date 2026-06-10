@@ -373,6 +373,87 @@
       margin-top:12px;
     }
 
+
+
+    /* Progressive mobile-friendly intake steps */
+    .progress-wrap{
+      margin:0 0 16px;
+      background:#f3f8fe;
+      border:1px solid #e0edf8;
+      border-radius:16px;
+      padding:12px;
+    }
+
+    .progress-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--navy);
+      font-weight:900;
+      font-size:13px;
+      margin-bottom:9px;
+    }
+
+    .progress-bar{
+      height:9px;
+      background:#dbeaf7;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress-fill{
+      width:25%;
+      height:100%;
+      background:var(--green);
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+
+    .step-card{
+      display:none;
+      animation:softIn .22s ease;
+    }
+
+    .step-card.active{display:block}
+
+    @keyframes softIn{
+      from{opacity:.25; transform:translateY(8px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .step-intro{
+      background:#f7fbff;
+      border:1px solid #e5eef8;
+      border-radius:14px;
+      padding:12px 13px;
+      color:#52667a;
+      line-height:1.45;
+      font-size:13px;
+      margin-bottom:14px;
+    }
+
+    .step-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top:12px;
+    }
+
+    .step-actions .continue{margin-top:0}
+
+    .back-btn{
+      border:1px solid #cbd8e6;
+      background:#fff;
+      color:var(--navy);
+      border-radius:12px;
+      padding:14px 15px;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+      min-width:96px;
+    }
+
     @media (max-width:900px){.layout{max-width:100%;}.side{position:static;order:-1}}
 
     @media (max-width:620px){
@@ -390,6 +471,8 @@
       .calendar-panel{margin-top:14px}
       .calendly-wrap{padding:8px}
       .calendly-frame{height:660px}
+      .step-actions{flex-direction:column-reverse}
+      .back-btn{width:100%}
     }
   </style>
 </head>
@@ -418,8 +501,8 @@
         <div class="panel-pad">
           <div class="section-head">
             <div>
-              <h2>Enter Your Details</h2>
-              <p>Signer, payer, witness, and delivery details.</p>
+              <h2>Let’s get your session ready</h2>
+              <p>We’ll only show a few questions at a time.</p>
             </div>
             <span class="badge">Step 1 of 2</span>
           </div>
@@ -617,6 +700,7 @@
     let observerCount = 0;
     let currentOrderId = "";
     let submittedPayload = null;
+    let currentStep = 1;
 
     function toBlueNotaryName(name){
       if(!name) return "";
@@ -641,6 +725,189 @@
             .join("-");
         })
         .join(" ");
+    }
+
+    function setupProgressiveIntake(){
+      const form = document.getElementById("booking-form");
+      const panel = form.querySelector(".panel-pad");
+      const sectionHead = panel.querySelector(".section-head");
+      const choiceRow = panel.querySelector(".choice-row");
+      const bookingTypeInput = document.getElementById("booking_type");
+      const bookerCard = document.getElementById("booker-card");
+      const statusMessage = document.getElementById("status-message");
+      const submitButton = document.getElementById("continue-btn");
+      const submitNote = submitButton ? submitButton.nextElementSibling : null;
+
+      if(document.getElementById("progressive-steps-ready")) return;
+
+      const progress = document.createElement("div");
+      progress.className = "progress-wrap";
+      progress.id = "progressive-steps-ready";
+      progress.innerHTML = `
+        <div class="progress-top">
+          <span id="progress-label">Signer info</span>
+          <span id="progress-count">1/4</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      `;
+      sectionHead.insertAdjacentElement("afterend", progress);
+
+      const step1 = makeStep("step-1", "Start with the signer’s basic information. Most customers only need this and a few quick questions.");
+      const step2 = makeStep("step-2", "One quick question so we can prepare the right type of session.");
+      const step3 = makeStep("step-3", "Only add extra people if needed. If it’s just one signer, you can skip this.");
+      const step4 = makeStep("step-4", "Last step before choosing a time. The default is simple: invoice and completed document go to the primary signer.");
+
+      panel.appendChild(step1);
+      panel.appendChild(step2);
+      panel.appendChild(step3);
+      panel.appendChild(step4);
+
+      const primaryCard = findCardByTitle("Primary signer");
+      const signerLocationCard = findCardByTitle("Signer location");
+      const participantsCard = findCardByTitle("Participants");
+      const paymentCard = findCardByTitle("Payment & delivery");
+
+      step1.appendChild(choiceRow);
+      step1.appendChild(bookingTypeInput);
+      step1.appendChild(bookerCard);
+      step1.appendChild(primaryCard);
+      step1.appendChild(makeContinueButton("Continue", function(){ goToStep(2, true); }));
+
+      step2.appendChild(signerLocationCard);
+      step2.appendChild(makeStepActions(function(){ goToStep(1, false); }, function(){ goToStep(3, false); }, "Continue"));
+
+      step3.appendChild(participantsCard);
+      step3.appendChild(makeStepActions(function(){ goToStep(2, false); }, function(){ goToStep(4, false); }, "Continue"));
+
+      step4.appendChild(paymentCard);
+      step4.appendChild(statusMessage);
+      const finalActions = document.createElement("div");
+      finalActions.className = "step-actions";
+      finalActions.appendChild(makeBackButton(function(){ goToStep(3, false); }));
+      submitButton.textContent = "Continue to choose time";
+      finalActions.appendChild(submitButton);
+      step4.appendChild(finalActions);
+      if(submitNote) step4.appendChild(submitNote);
+
+      document.getElementById("primary_name").addEventListener("input", softRevealIfReady);
+      document.getElementById("primary_email").addEventListener("input", softRevealIfReady);
+
+      goToStep(1, false);
+    }
+
+    function makeStep(id, introText){
+      const section = document.createElement("section");
+      section.className = "step-card";
+      section.id = id;
+      const intro = document.createElement("div");
+      intro.className = "step-intro";
+      intro.textContent = introText;
+      section.appendChild(intro);
+      return section;
+    }
+
+    function findCardByTitle(title){
+      const cards = Array.from(document.querySelectorAll(".card"));
+      return cards.find(function(card){
+        const h3 = card.querySelector("h3");
+        return h3 && h3.textContent.trim() === title;
+      });
+    }
+
+    function makeContinueButton(text, onClick){
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "continue";
+      btn.textContent = text;
+      btn.addEventListener("click", onClick);
+      return btn;
+    }
+
+    function makeBackButton(onClick){
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "back-btn";
+      btn.textContent = "Back";
+      btn.addEventListener("click", onClick);
+      return btn;
+    }
+
+    function makeStepActions(backClick, nextClick, nextText){
+      const actions = document.createElement("div");
+      actions.className = "step-actions";
+      actions.appendChild(makeBackButton(backClick));
+      actions.appendChild(makeContinueButton(nextText, nextClick));
+      return actions;
+    }
+
+    function updateProgress(step){
+      const titles = {
+        1: "Signer info",
+        2: "Quick question",
+        3: "Extra people",
+        4: "Payment & delivery"
+      };
+
+      const badge = document.querySelector(".section-head .badge");
+      if(badge) badge.textContent = `Step ${step} of 4`;
+      const label = document.getElementById("progress-label");
+      const count = document.getElementById("progress-count");
+      const fill = document.getElementById("progress-fill");
+      if(label) label.textContent = titles[step] || "Booking";
+      if(count) count.textContent = `${step}/4`;
+      if(fill) fill.style.width = `${step * 25}%`;
+    }
+
+    function goToStep(step, validateFirst){
+      if(validateFirst && !validateStepOne()) return;
+
+      currentStep = step;
+
+      document.querySelectorAll(".step-card").forEach(function(card){
+        card.classList.remove("active");
+      });
+
+      const next = document.getElementById(`step-${step}`);
+      if(next) next.classList.add("active");
+
+      updateProgress(step);
+
+      const form = document.getElementById("booking-form");
+      setTimeout(function(){
+        form.scrollIntoView({behavior:"smooth", block:"start"});
+      }, 60);
+    }
+
+    function validateStepOne(){
+      const fields = [
+        document.getElementById("primary_name"),
+        document.getElementById("primary_email")
+      ];
+
+      if(document.getElementById("booking_type").value === "other"){
+        fields.unshift(document.getElementById("booker_email"));
+        fields.unshift(document.getElementById("booker_name"));
+      }
+
+      for(const field of fields){
+        if(field && !field.checkValidity()){
+          field.reportValidity();
+          field.focus();
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function softRevealIfReady(){
+      const name = document.getElementById("primary_name").value.trim();
+      const email = document.getElementById("primary_email").value.trim();
+      const label = document.getElementById("progress-label");
+
+      if(currentStep === 1 && name.length > 1 && email.includes("@") && label){
+        label.textContent = "Signer info almost done";
+      }
     }
 
     function setBookingType(type){
@@ -943,6 +1210,12 @@
 
     document.getElementById("booking-form").addEventListener("submit", async function(e){
       e.preventDefault();
+
+      if(currentStep < 4){
+        goToStep(currentStep + 1, currentStep === 1);
+        return;
+      }
+
       clearStatus();
       const form = e.currentTarget;
       if(!form.checkValidity()){ form.reportValidity(); return; }
@@ -984,7 +1257,9 @@
       }
     });
 
+    setupProgressiveIntake();
     setBookingType("self");
+    updateProgress(1);
   </script>
 </body>
 </html>
