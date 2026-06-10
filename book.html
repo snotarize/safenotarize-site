@@ -485,6 +485,23 @@
 
           <div class="card">
             <div class="card-title">
+              <h3>Signer location</h3>
+              <span class="badge">Quick question</span>
+            </div>
+
+            <div class="field">
+              <label for="international_signer_passport">Is any signer outside of the U.S. using a valid passport?</label>
+              <select id="international_signer_passport" name="international_signer_passport">
+                <option value="no">No</option>
+                <option value="yes">Yes, at least one signer is outside the U.S.</option>
+                <option value="not_sure">Not sure</option>
+              </select>
+              <p class="small-note">International signers should have a valid, unexpired passport for identity verification.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
               <h3>Participants</h3>
               <span class="badge">Optional</span>
             </div>
@@ -601,6 +618,31 @@
     let currentOrderId = "";
     let submittedPayload = null;
 
+    function toBlueNotaryName(name){
+      if(!name) return "";
+
+      return name
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLowerCase()
+        .split(" ")
+        .map(function(part){
+          return part
+            .split("-")
+            .map(function(piece){
+              return piece
+                .split("'")
+                .map(function(subPiece){
+                  if(!subPiece) return "";
+                  return subPiece.charAt(0).toUpperCase() + subPiece.slice(1);
+                })
+                .join("'");
+            })
+            .join("-");
+        })
+        .join(" ");
+    }
+
     function setBookingType(type){
       const self = document.getElementById("choice-self");
       const other = document.getElementById("choice-other");
@@ -697,40 +739,74 @@
       const primaryName = data.primary_name || "";
       const primaryEmail = data.primary_email || "";
 
+      const bookerName = data.booking_type === "self" ? primaryName : (data.booker_name || "");
+      const invoiceName = data.invoice_to === "other" ? (data.invoice_name || "") : "";
+      const documentName = data.document_to === "other" ? (data.document_name || "") : "";
+
+      const primaryNameBlueNotary = toBlueNotaryName(primaryName);
+      const bookerNameBlueNotary = toBlueNotaryName(bookerName);
+      const invoiceNameBlueNotary = toBlueNotaryName(invoiceName);
+      const documentNameBlueNotary = toBlueNotaryName(documentName);
+
+      const additionalSigner1NameBlueNotary = toBlueNotaryName(data.additional_signer_1_name || "");
+      const additionalSigner2NameBlueNotary = toBlueNotaryName(data.additional_signer_2_name || "");
+      const additionalSigner3NameBlueNotary = toBlueNotaryName(data.additional_signer_3_name || "");
+
+      const witness1NameBlueNotary = toBlueNotaryName(data.witness_1_name || "");
+      const witness2NameBlueNotary = toBlueNotaryName(data.witness_2_name || "");
+
+      const observer1NameBlueNotary = toBlueNotaryName(data.observer_1_name || "");
+      const observer2NameBlueNotary = toBlueNotaryName(data.observer_2_name || "");
+
       return {
         source: "safenotarize_book_page",
         submitted_at: new Date().toISOString(),
         booking_type: data.booking_type,
-        booker_name: data.booking_type === "self" ? primaryName : (data.booker_name || ""),
+        international_signer_passport: data.international_signer_passport || "no",
+
+        booker_name: bookerName,
+        booker_name_bluenotary: bookerNameBlueNotary,
         booker_email: data.booking_type === "self" ? primaryEmail : (data.booker_email || ""),
         booker_phone: data.booking_type === "self" ? (data.primary_phone || "") : (data.booker_phone || ""),
+
         primary_signer_name: primaryName,
+        primary_signer_name_bluenotary: primaryNameBlueNotary,
         primary_signer_email: primaryEmail,
         primary_signer_phone: data.primary_phone || "",
         invoice_to: data.invoice_to || "",
-        invoice_name: data.invoice_to === "other" ? (data.invoice_name || "") : "",
+        invoice_name: invoiceName,
+        invoice_name_bluenotary: invoiceNameBlueNotary,
         invoice_email: data.invoice_to === "other" ? (data.invoice_email || "") : "",
+
         document_to: data.document_to || "",
-        document_name: data.document_to === "other" ? (data.document_name || "") : "",
+        document_name: documentName,
+        document_name_bluenotary: documentNameBlueNotary,
         document_email: data.document_to === "other" ? (data.document_email || "") : "",
         notes: data.notes || "",
         additional_signer_1_name: data.additional_signer_1_name || "",
+        additional_signer_1_name_bluenotary: additionalSigner1NameBlueNotary,
         additional_signer_1_email: data.additional_signer_1_email || "",
         additional_signer_2_name: data.additional_signer_2_name || "",
+        additional_signer_2_name_bluenotary: additionalSigner2NameBlueNotary,
         additional_signer_2_email: data.additional_signer_2_email || "",
         additional_signer_3_name: data.additional_signer_3_name || "",
+        additional_signer_3_name_bluenotary: additionalSigner3NameBlueNotary,
         additional_signer_3_email: data.additional_signer_3_email || "",
         witness_1_option: data.witness_1_option || "",
         witness_1_name: data.witness_1_name || "",
+        witness_1_name_bluenotary: witness1NameBlueNotary,
         witness_1_email: data.witness_1_email || "",
         witness_2_option: data.witness_2_option || "",
         witness_2_name: data.witness_2_name || "",
+        witness_2_name_bluenotary: witness2NameBlueNotary,
         witness_2_email: data.witness_2_email || "",
         observer_1_name: data.observer_1_name || "",
+        observer_1_name_bluenotary: observer1NameBlueNotary,
         observer_1_email: data.observer_1_email || "",
         observer_1_phone: data.observer_1_phone || "",
         observer_1_role: data.observer_1_role || "",
         observer_2_name: data.observer_2_name || "",
+        observer_2_name_bluenotary: observer2NameBlueNotary,
         observer_2_email: data.observer_2_email || "",
         observer_2_phone: data.observer_2_phone || "",
         observer_2_role: data.observer_2_role || "",
