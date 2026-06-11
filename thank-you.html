@@ -13,7 +13,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your Online Notary Session | SafeNotarize</title>
-  <meta name="description" content="Your document was received. Join your SafeNotarize online notary session now or later at your scheduled time.">
+  <meta name="description" content="Join your SafeNotarize online notary session or use your invite email at the scheduled time.">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
@@ -46,7 +46,7 @@
     .container {
       background: #fff;
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
       border: 1px solid #e6eef7;
       border-radius: 20px;
       box-shadow: var(--shadow);
@@ -146,16 +146,77 @@
     .join-btn {
       display: inline-block;
       width: 100%;
-      max-width: 340px;
       margin-top: 14px;
       background: var(--green);
       color: #fff;
       text-decoration: none;
-      padding: 15px 20px;
+      padding: 15px 18px;
       border-radius: 10px;
       font-size: 17px;
       font-weight: 900;
       box-shadow: 0 10px 24px rgba(40,167,69,.22);
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .small-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      color: var(--navy);
+      background: #fff;
+      border: 1px solid #cfddeb;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 12px;
+    }
+
+    .ready-box {
+      background: #ffffff;
+      border: 1px solid #e0eaf5;
+      border-radius: 14px;
+      padding: 13px 14px;
+      margin-top: 12px;
+      text-align: left;
+    }
+
+    .ready-box strong {
+      color: var(--navy-dark);
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .ready-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .ready-list li {
+      margin: 7px 0;
+      padding-left: 22px;
+      position: relative;
+    }
+
+    .ready-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--green-dark);
+      font-weight: 900;
     }
 
     .invite-note {
@@ -232,8 +293,8 @@
         margin-top: 14px;
       }
 
-      .join-btn {
-        max-width: 100%;
+      .action-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -243,15 +304,15 @@
   <main class="container">
     <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" class="logo">
 
-    <div class="badge" id="top-badge">Document received</div>
+    <div class="badge" id="top-badge">SafeNotarize session</div>
     <h1 id="main-title">Getting Your Session Ready</h1>
-    <p id="main-text">Your document was uploaded. We are checking for your secure session link.</p>
+    <p id="main-text">We are checking for your secure session link.</p>
 
     <div class="status-card">
       <div id="loader" class="loader"></div>
 
       <p id="session-message"><strong>Please wait a moment.</strong></p>
-      <p id="session-submessage">If the session is ready, the join button will appear below.</p>
+      <p id="session-submessage">If your session is ready, the Join Session button will appear below.</p>
 
       <div class="progress-wrap" id="progress-wrap">
         <div class="progress-bar" id="progress-bar"></div>
@@ -261,11 +322,25 @@
         <span id="live-status-text">Checking session status</span><span class="dots" id="dots"></span>
       </div>
 
+      <div id="ready-instructions" class="ready-box hidden">
+        <strong>Before you join:</strong>
+        <ul class="ready-list">
+          <li>No account is needed.</li>
+          <li>Allow camera and microphone access.</li>
+          <li>Have your valid ID ready for identity verification.</li>
+        </ul>
+      </div>
+
       <div id="join-button-area"></div>
+
+      <div class="action-row" id="secondary-actions">
+        <a class="small-btn" href="https://calendly.com/supervisor-23/online-notarization-safenotarize" target="_blank" rel="noopener">Reschedule / Update Time</a>
+        <a class="small-btn" href="mailto:supervisor@safenotarize.com">Need Help</a>
+      </div>
     </div>
 
     <div class="invite-note" id="invite-note">
-      <strong>Invite email:</strong> You can also join from the session invite email. If you booked for someone else, the signer can use their invite email at the scheduled time.
+      <strong>SafeNotarize invite email:</strong> Check your SafeNotarize invite email to join at your scheduled time. Each signer receives their own invite email.
     </div>
 
     <div class="time-note" id="scheduled-time-card"></div>
@@ -322,39 +397,41 @@
 
     function showReadyButton(link) {
       document.getElementById("top-badge").innerText = "Session ready";
-      document.getElementById("main-title").innerText = "Your Session Link Is Ready";
+      document.getElementById("main-title").innerText = "Your Session Is Ready";
       document.getElementById("main-text").innerText =
-        "You can join now, or use the invite email later at your scheduled time.";
+        "Only click Join Session when you are ready to start.";
 
       document.getElementById("session-message").innerHTML = "<strong>Ready when you are.</strong>";
-      document.getElementById("session-submessage").innerText = "Click below to enter your secure online notary room.";
+      document.getElementById("session-submessage").innerText = "Join opens in a new tab. You can return here or use your invite email if needed.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "100%";
       document.getElementById("live-status-text").innerText = "Session link ready";
       document.getElementById("dots").classList.add("hidden");
+      document.getElementById("ready-instructions").classList.remove("hidden");
 
       document.getElementById("join-button-area").innerHTML =
-        `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session Now</a>`;
+        `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session</a>`;
 
       document.getElementById("invite-note").innerHTML =
-        "<strong>Invite email:</strong> We also send the session invite by email. If you booked for someone else, the signer can join from their invite email at the scheduled time.";
+        "<strong>SafeNotarize invite email:</strong> Each signer has their own invite email. Use that email to join at the scheduled time or to return to the session.";
     }
 
     function showStillPreparing() {
       document.getElementById("top-badge").innerText = "All set";
       document.getElementById("main-title").innerText = "You’re All Set";
       document.getElementById("main-text").innerText =
-        "Your upload is complete. Your session link is still being prepared.";
+        "Check your SafeNotarize invite email to join at your scheduled time.";
 
       document.getElementById("session-message").innerHTML = "<strong>No action needed right now.</strong>";
-      document.getElementById("session-submessage").innerText = "Check your email or come back at your scheduled time.";
+      document.getElementById("session-submessage").innerText = "Each signer will use their own SafeNotarize invite email.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "92%";
-      document.getElementById("live-status-text").innerText = "Still preparing";
+      document.getElementById("live-status-text").innerText = "Invite email will be used";
       document.getElementById("dots").classList.add("hidden");
 
+      document.getElementById("ready-instructions").classList.add("hidden");
       document.getElementById("invite-note").innerHTML =
-        "<strong>Invite email:</strong> Your session invite will be sent by email. If you booked for someone else, the signer can use their invite email to join.";
+        "<strong>SafeNotarize invite email:</strong> Check your SafeNotarize invite email to join at your scheduled time. Each signer receives their own invite email.";
     }
 
     async function checkSessionLink() {
