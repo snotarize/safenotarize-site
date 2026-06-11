@@ -196,9 +196,7 @@
       animation:softIn .2s ease;
     }
 
-    .step-card.active{
-      display:block;
-    }
+    .step-card.active{display:block}
 
     @keyframes softIn{
       from{opacity:.25; transform:translateY(8px)}
@@ -341,9 +339,7 @@
       margin-top:12px;
     }
 
-    .step-actions .continue{
-      margin-top:0;
-    }
+    .step-actions .continue{margin-top:0}
 
     .back-btn{
       border:1px solid #cbd8e6;
@@ -869,10 +865,42 @@
       const data = Object.fromEntries(formData.entries());
       const primaryName = data.primary_name || "";
       const primaryEmail = data.primary_email || "";
+      const primaryPhone = data.primary_phone || "";
 
       const bookerName = data.booking_type === "self" ? primaryName : (data.booker_name || "");
-      const invoiceName = data.invoice_to === "other" ? (data.invoice_name || "") : "";
-      const documentName = data.document_to === "other" ? (data.document_name || "") : "";
+      const bookerEmail = data.booking_type === "self" ? primaryEmail : (data.booker_email || "");
+      const bookerPhone = data.booking_type === "self" ? primaryPhone : (data.booker_phone || "");
+
+      let invoiceName = "";
+      let invoiceEmail = "";
+
+      if(data.invoice_to === "primary_signer"){
+        invoiceName = primaryName;
+        invoiceEmail = primaryEmail;
+      } else if(data.invoice_to === "booker"){
+        invoiceName = bookerName;
+        invoiceEmail = bookerEmail;
+      } else if(data.invoice_to === "other"){
+        invoiceName = data.invoice_name || "";
+        invoiceEmail = data.invoice_email || "";
+      }
+
+      let documentName = "";
+      let documentEmail = "";
+
+      if(data.document_to === "primary_signer"){
+        documentName = primaryName;
+        documentEmail = primaryEmail;
+      } else if(data.document_to === "booker"){
+        documentName = bookerName;
+        documentEmail = bookerEmail;
+      } else if(data.document_to === "both"){
+        documentName = primaryName;
+        documentEmail = primaryEmail;
+      } else if(data.document_to === "other"){
+        documentName = data.document_name || "";
+        documentEmail = data.document_email || "";
+      }
 
       const primaryNameBlueNotary = toBlueNotaryName(primaryName);
       const bookerNameBlueNotary = toBlueNotaryName(bookerName);
@@ -897,22 +925,24 @@
 
         booker_name: bookerName,
         booker_name_bluenotary: bookerNameBlueNotary,
-        booker_email: data.booking_type === "self" ? primaryEmail : (data.booker_email || ""),
-        booker_phone: data.booking_type === "self" ? (data.primary_phone || "") : (data.booker_phone || ""),
+        booker_email: bookerEmail,
+        booker_phone: bookerPhone,
 
         primary_signer_name: primaryName,
         primary_signer_name_bluenotary: primaryNameBlueNotary,
         primary_signer_email: primaryEmail,
-        primary_signer_phone: data.primary_phone || "",
+        primary_signer_phone: primaryPhone,
+
         invoice_to: data.invoice_to || "",
         invoice_name: invoiceName,
         invoice_name_bluenotary: invoiceNameBlueNotary,
-        invoice_email: data.invoice_to === "other" ? (data.invoice_email || "") : "",
+        invoice_email: invoiceEmail,
 
         document_to: data.document_to || "",
         document_name: documentName,
         document_name_bluenotary: documentNameBlueNotary,
-        document_email: data.document_to === "other" ? (data.document_email || "") : "",
+        document_email: documentEmail,
+
         notes: data.notes || "",
         additional_signer_1_name: data.additional_signer_1_name || "",
         additional_signer_1_name_bluenotary: additionalSigner1NameBlueNotary,
