@@ -54,10 +54,7 @@
       text-align: center;
     }
 
-    .logo {
-      height: 44px;
-      margin-bottom: 12px;
-    }
+    .logo { height: 44px; margin-bottom: 12px; }
 
     .badge {
       display: inline-block;
@@ -103,9 +100,7 @@
       margin: 10px auto 12px;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .progress-wrap {
       width: 100%;
@@ -131,11 +126,7 @@
       margin-top: 8px;
     }
 
-    .dots::after {
-      content: "";
-      animation: dots 1.4s infinite;
-    }
-
+    .dots::after { content: ""; animation: dots 1.4s infinite; }
     @keyframes dots {
       0% { content: ""; }
       33% { content: "."; }
@@ -231,9 +222,7 @@
       text-align: left;
     }
 
-    .invite-note strong {
-      color: var(--navy-dark);
-    }
+    .invite-note strong { color: var(--navy-dark); }
 
     .time-note {
       display: none;
@@ -248,9 +237,7 @@
       text-align: left;
     }
 
-    .time-note strong {
-      color: var(--navy-dark);
-    }
+    .time-note strong { color: var(--navy-dark); }
 
     .home-btn {
       display: inline-block;
@@ -261,41 +248,16 @@
       font-weight: 700;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     @media (max-width: 520px) {
-      body {
-        padding: 10px;
-        align-items: flex-start;
-      }
-
-      .container {
-        padding: 22px 15px;
-        border-radius: 16px;
-      }
-
-      .logo {
-        height: 40px;
-      }
-
-      h1 {
-        font-size: 23px;
-      }
-
-      p {
-        font-size: 14.5px;
-      }
-
-      .status-card {
-        padding: 16px 13px;
-        margin-top: 14px;
-      }
-
-      .action-row {
-        grid-template-columns: 1fr;
-      }
+      body { padding: 10px; align-items: flex-start; }
+      .container { padding: 22px 15px; border-radius: 16px; }
+      .logo { height: 40px; }
+      h1 { font-size: 23px; }
+      p { font-size: 14.5px; }
+      .status-card { padding: 16px 13px; margin-top: 14px; }
+      .action-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -355,6 +317,8 @@
     const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
     const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
     const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
+    const signer = params.get("signer") || "";
+    const role = params.get("role") || params.get("viewer") || "";
     const eventStartTime = params.get("event_start_time") || params.get("start_time") || "";
 
     let attempts = 0;
@@ -416,6 +380,26 @@
         "<strong>SafeNotarize invite email:</strong> Each signer has their own invite email. Use that email to join at the scheduled time or to return to the session.";
     }
 
+    function showBookerMessage() {
+      document.getElementById("top-badge").innerText = "Session created";
+      document.getElementById("main-title").innerText = "You’re All Set";
+      document.getElementById("main-text").innerText =
+        "The session is being prepared for the signer(s).";
+
+      document.getElementById("session-message").innerHTML = "<strong>No action needed right now.</strong>";
+      document.getElementById("session-submessage").innerText =
+        "Each signer will receive their own SafeNotarize invite email to join at the scheduled time.";
+
+      document.getElementById("loader").classList.add("hidden");
+      document.getElementById("progress-bar").style.width = "100%";
+      document.getElementById("live-status-text").innerText = "Invite emails will be sent";
+      document.getElementById("dots").classList.add("hidden");
+      document.getElementById("ready-instructions").classList.add("hidden");
+
+      document.getElementById("invite-note").innerHTML =
+        "<strong>SafeNotarize invite email:</strong> Each signer will receive their own invite email. They should use that email to join at the scheduled time.";
+    }
+
     function showStillPreparing() {
       document.getElementById("top-badge").innerText = "All set";
       document.getElementById("main-title").innerText = "You’re All Set";
@@ -438,13 +422,20 @@
       attempts++;
       updateWaitingVisuals();
 
+      if (role === "booker" || signer === "booker") {
+        showBookerMessage();
+        return;
+      }
+
+      const signerToCheck = signer || "primary";
+
       if (!orderId && !uuid && !email) {
         showStillPreparing();
         return;
       }
 
       try {
-        const url = `${makeWebhookUrl}?order_id=${encodeURIComponent(orderId)}&uuid=${encodeURIComponent(uuid)}&email=${encodeURIComponent(email)}`;
+        const url = `${makeWebhookUrl}?order_id=${encodeURIComponent(orderId)}&uuid=${encodeURIComponent(uuid)}&email=${encodeURIComponent(email)}&signer=${encodeURIComponent(signerToCheck)}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -470,7 +461,17 @@
     }
 
     showScheduledTime();
-    checkSessionLink();
+
+    const testMode = params.get("test") || "";
+    if (testMode === "ready") {
+      showReadyButton("https://safenotarize.com");
+    } else if (testMode === "booker") {
+      showBookerMessage();
+    } else if (testMode === "waiting") {
+      showStillPreparing();
+    } else {
+      checkSessionLink();
+    }
   </script>
 </body>
 </html>
