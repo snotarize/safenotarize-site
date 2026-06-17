@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- SafeNotarize Haitian/Kreyol page updated booking flow - 2026-06-17 -->
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -13,7 +14,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Haitian Online Notary | SafeNotarize</title>
-  <meta name="description" content="Online notary support for Haitian and Haitian Creole-speaking clients. Book your SafeNotarize session, upload your document, and receive your secure session email invite." />
+  <meta name="description" content="Online notary support for Haitian and Haitian Creole-speaking clients. Start online, upload your document, verify your identity, and meet with a live notary from your phone or computer." />
   <link rel="canonical" href="https://safenotarize.com/haitian-online-notary.html" />
 
   <link rel="alternate" hreflang="en" href="https://safenotarize.com/" />
@@ -27,18 +28,14 @@
       --navy-2:#0b3b67;
       --green:#28a745;
       --green-soft:#e9f7ef;
-      --blue-soft:#f3f8fe;
       --text:#233445;
       --muted:#5a6b7b;
-      --border:#dce7f2;
-      --card:#ffffff;
-      --bg:#f7fbff;
       --shadow:0 12px 30px rgba(0,39,77,0.08);
     }
 
-    html { scroll-behavior: smooth; }
-    * { box-sizing: border-box; }
-    body, html { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; color:var(--text); background:#fff; }
+    html{ scroll-behavior:smooth; }
+    *{ box-sizing:border-box; }
+    body, html{ margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; color:var(--text); background:#fff; }
 
     .container{ max-width:1200px; margin:0 auto; }
     .section-pad{ padding:64px 20px; }
@@ -70,15 +67,24 @@
     .btn-primary{ background:var(--green); color:#fff; padding:13px 24px; box-shadow:0 10px 24px rgba(40,167,69,.18); }
     .btn-dark{ background:var(--navy); color:#fff; padding:15px 30px; border-radius:999px; box-shadow:0 10px 24px rgba(0,39,77,.18); }
     .btn-outline{ background:#fff; color:var(--navy); border:1px solid #cfd9e6; padding:13px 22px; }
+    .btn-outline-green{ background:#fff; color:var(--green); border:2px solid var(--green); padding:11px 22px; border-radius:999px; }
 
     .small-note{ color:#1f7a36; font-weight:700; font-size:.9rem; }
     .card{ background:#fff; border:1px solid #e7edf3; border-radius:18px; box-shadow:var(--shadow); }
 
     .desktop-header{
-      position:sticky; top:0; z-index:999; display:flex; align-items:center; justify-content:space-between;
-      padding:14px 28px; background:var(--navy);
+      position:sticky;
+      top:0;
+      z-index:999;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 28px;
+      background:var(--navy);
     }
-    .desktop-header .header-left, .desktop-header .header-center, .desktop-header .header-right{ display:flex; align-items:center; }
+    .desktop-header .header-left,
+    .desktop-header .header-center,
+    .desktop-header .header-right{ display:flex; align-items:center; }
     .desktop-header .header-center{ flex:1; justify-content:center; gap:30px; flex-wrap:wrap; }
     .desktop-header .header-center a{ color:#fff; text-decoration:none; font-size:16px; font-weight:600; }
 
@@ -90,39 +96,128 @@
     .mobile-header nav a{ color:#fff; text-decoration:none; padding:8px 6px; font-weight:600; }
     .mobile-header nav.show{ display:flex; }
 
-    .hero-section{ padding:64px 20px; position:relative; overflow:hidden; background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%); }
-    .hero-wrap{ max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:40px; position:relative; z-index:2; }
+    .trust-badges{ background:#f8fafc; padding:18px 0; text-align:center; }
+
+    .hero-section{
+      padding:64px 20px;
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+    }
+    .hero-wrap{
+      max-width:1200px;
+      margin:0 auto;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      gap:40px;
+      position:relative;
+      z-index:2;
+    }
     .hero-copy{ flex:1; min-width:300px; max-width:620px; }
     .hero-copy h1{ font-size:2.75rem; color:var(--navy); line-height:1.15; margin:0 0 18px; }
     .hero-copy p{ font-size:1.06rem; color:#333; margin:0 0 14px; line-height:1.7; }
-    .hero-cta-col{ display:flex; flex-direction:column; align-items:flex-start; gap:12px; margin-top:8px; }
+    .hero-cta-col{ display:flex; flex-direction:column; align-items:flex-start; gap:12px; margin-top:6px; }
     .hero-cta-row{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; }
     .hero-points{ display:flex; flex-wrap:wrap; gap:18px; margin-top:28px; }
     .hero-point{ display:flex; align-items:center; gap:8px; font-size:.95rem; color:#31485c; font-weight:600; }
     .hero-image-wrap{ flex:1; min-width:300px; max-width:520px; position:relative; }
 
-    .trust-badges{ background:#f8fafc; padding:18px 0; text-align:center; }
-    .service-grid, .step-grid, .doc-grid, .pricing-grid{ display:grid; gap:22px; }
-    .service-grid{ grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
+    .stat-strip{ background:var(--navy); color:#fff; padding:38px 20px; }
+    .stat-grid{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:26px; text-align:center; }
+    .stat-item .num{ font-size:2.4rem; font-weight:800; color:#39c45b; margin-bottom:6px; }
+    .stat-item .label{ color:#e7eef7; line-height:1.4; }
+
+    .white-bg-icon{
+      position:relative;
+      background:#fff;
+      overflow:hidden;
+      z-index:1;
+    }
+    .white-bg-icon::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      opacity:.01;
+      background-image:
+        url('https://img.icons8.com/ios/50/stamp.png'),
+        url('https://img.icons8.com/ios/50/signature.png'),
+        url('https://img.icons8.com/ios/50/pen.png');
+      background-repeat:repeat;
+      background-position:5% 10%, 60% 30%, 30% 70%;
+      background-size:50px, 80px, 40px;
+    }
+
+    .services-section{ background:#f4f7fb; }
+    .services-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px; align-items:stretch; }
+    .service-card{
+      background:#fff;
+      padding:28px;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      border:1px solid #e7edf3;
+      display:flex;
+      flex-direction:column;
+      min-height:100%;
+    }
+    .service-icon{
+      width:58px;
+      height:58px;
+      border-radius:14px;
+      background:#f4f8fc;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      margin-bottom:18px;
+    }
+    .service-card h4{ color:var(--navy); margin:0 0 12px; font-size:1.18rem; line-height:1.3; }
+    .service-card p{ color:#556270; line-height:1.75; margin:0 0 16px; }
+    .service-link{ margin-top:auto; color:#007bff; text-decoration:none; font-weight:700; }
+
+    .step-grid, .need-grid, .security-grid, .pricing-grid{ display:grid; gap:22px; }
     .step-grid{ grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); }
-    .doc-grid{ grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); }
-    .pricing-grid{ grid-template-columns:1.2fr 1fr 1fr 1fr; }
+    .need-grid{ grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); }
+    .security-grid{ grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); }
+    .pricing-grid{ grid-template-columns:1.3fr 1fr 1fr 1fr 1fr; }
 
-    .service-card, .step-card, .doc-card, .price-card{ background:#fff; border:1px solid #e5edf5; border-radius:18px; box-shadow:var(--shadow); }
-    .service-card{ padding:28px; }
+    .step-card, .need-card, .security-card, .price-card{ background:#fff; border:1px solid #e5edf5; border-radius:18px; box-shadow:var(--shadow); }
     .step-card{ padding:26px 22px; }
-    .doc-card{ padding:24px 18px; text-align:center; }
+    .need-card{ padding:24px 18px; text-align:center; }
+    .security-card{ padding:30px 22px; text-align:center; }
     .price-card{ padding:28px 22px; text-align:center; }
-    .service-card h4, .step-card h4, .doc-card h4{ color:var(--navy); margin:0 0 10px; line-height:1.3; }
-    .service-card p, .step-card p, .doc-card p{ color:#556270; line-height:1.7; margin:0; }
-
-    .step-number{ width:40px; height:40px; border-radius:999px; background:var(--navy); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:16px; }
-    .price-big{ font-size:2.3rem; line-height:1; color:var(--green); font-weight:800; margin:10px 0 8px; }
+    .step-number{
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      background:var(--navy);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      margin-bottom:16px;
+    }
     .pricing-featured{ border:2px solid #cfe8d7; background:linear-gradient(180deg,#ffffff 0%, #f7fcf8 100%); }
+    .price-big{ font-size:2.3rem; line-height:1; color:var(--green); font-weight:800; margin:10px 0 8px; }
 
-    .booking-section{ background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%); }
-    .booking-copy{ flex:1 1 320px; max-width:420px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5; }
-    .booking-widget{ flex:1 1 480px; max-width:650px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5; }
+    .fast-flow-grid{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:18px; margin-bottom:26px; }
+    .business-box{
+      margin-top:28px;
+      background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+      border:1px solid #d9e4f0;
+      border-top:4px solid var(--green);
+      border-radius:18px;
+      padding:28px 30px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:22px;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:var(--shadow);
+    }
 
     .faq-wrap{ max-width:840px; margin:0 auto; }
     .faq-wrap details{ margin-bottom:15px; border:1px solid #dde6ef; border-radius:12px; padding:16px 18px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,0.03); }
@@ -133,6 +228,7 @@
 
     @media (max-width: 980px){
       .pricing-grid{ grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); }
+      .stat-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
     }
 
     @media (max-width: 768px){
@@ -141,17 +237,12 @@
       .section-pad{ padding:52px 18px; }
       .hero-copy h1{ font-size:2.2rem; }
       .section-title h2, .section-title h3{ font-size:1.85rem; }
+      .stat-grid{ grid-template-columns:1fr; }
+      .business-box{ padding:24px 20px; }
       .hero-section{ padding:52px 18px; }
-      #calendly-block{ padding:28px 14px !important; }
-      #calendly-block > div{ max-width:100% !important; }
-      #calendly-block .booking-copy{ display:none !important; }
-      #calendly-block .booking-widget{ flex:1 1 100% !important; max-width:100% !important; min-width:0 !important; padding:10px !important; }
-      #calendly-block .section-title{ margin:0 auto 14px !important; max-width:100% !important; }
-      #calendly-block .section-title h3{ font-size:1.5rem !important; margin-bottom:8px !important; line-height:1.2 !important; }
-      #calendly-block .section-title p{ font-size:0.92rem !important; line-height:1.45 !important; margin:0 !important; }
-      #calendly-block .pill, #calendly-block .section-title > div:first-child{ margin-bottom:10px !important; font-size:0.76rem !important; padding:6px 10px !important; }
-      #calendly-block .booking-widget > div:first-child{ margin-bottom:10px !important; padding:0 !important; }
-      #calendly-block .calendly-inline-widget{ min-width:100% !important; height:640px !important; }
+      .fast-flow-grid{ grid-template-columns:1fr !important; gap:10px !important; }
+      #calendly-block{ padding:34px 14px !important; }
+      #calendly-block .section-title h3{ font-size:1.5rem !important; }
     }
   </style>
 
@@ -163,17 +254,17 @@
       {
         "@type":"Question",
         "name":"Can Haitian Creole speakers use SafeNotarize?",
-        "acceptedAnswer":{"@type":"Answer","text":"Yes. SafeNotarize supports Haitian Creole-speaking clients for online notarization sessions, depending on the document and platform identity verification requirements."}
+        "acceptedAnswer":{"@type":"Answer","text":"Yes. SafeNotarize supports Haitian Creole-speaking clients for online notarization sessions, depending on the document and identity verification requirements."}
       },
       {
         "@type":"Question",
-        "name":"What documents can Haitian clients notarize online?",
-        "acceptedAnswer":{"@type":"Answer","text":"Common documents include affidavits, power of attorney documents, travel consent forms, DS-3053 forms, sworn statements, business forms, and other prepared documents."}
+        "name":"Can I book or pay for someone else?",
+        "acceptedAnswer":{"@type":"Answer","text":"Yes. You can start the booking flow for yourself or for another signer, such as a family member, client, or business contact."}
       },
       {
         "@type":"Question",
         "name":"How do I start my online notarization?",
-        "acceptedAnswer":{"@type":"Answer","text":"Pick a time on the booking calendar, upload your document after booking, and wait for your secure session email invite from SafeNotarize."}
+        "acceptedAnswer":{"@type":"Answer","text":"Start the secure booking flow, enter signer details, pick a time, upload your document, then join your online notary session."}
       }
     ]
   }
@@ -187,24 +278,43 @@
       document.body.style.overflow = nav.classList.contains('show') ? 'hidden' : '';
     }
 
+    function closeMobileMenu() {
+      const nav = document.querySelector('.mobile-header nav');
+      if (nav && nav.classList.contains('show')) {
+        nav.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.addEventListener('click', (e) => {
         const nav = document.querySelector('.mobile-header nav');
         const toggle = document.querySelector('.mobile-header .menu-toggle');
         if (!nav || !toggle) return;
-        if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('show')) toggleMenu();
+
+        if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('show')) {
+          closeMobileMenu();
+        }
       });
 
       document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', function(e){
           const href = this.getAttribute('href');
+
+          if (href === "#") {
+            e.preventDefault();
+            window.scrollTo({ top:0, behavior:'smooth' });
+            closeMobileMenu();
+            return;
+          }
+
           const target = document.querySelector(href);
           if (!target) return;
+
           e.preventDefault();
           const isMobile = window.innerWidth <= 768;
-          window.scrollTo({ top: target.offsetTop - (isMobile ? 18 : 78), behavior: 'smooth' });
-          const nav = document.querySelector('.mobile-header nav');
-          if (nav && nav.classList.contains('show')) toggleMenu();
+          window.scrollTo({ top: target.offsetTop - (isMobile ? 18 : 78), behavior:'smooth' });
+          closeMobileMenu();
         });
       });
     });
@@ -214,41 +324,45 @@
 <body>
   <header class="desktop-header">
     <div class="header-left">
-      <a href="/" style="display:flex; align-items:center; text-decoration:none;">
+      <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="display:flex; align-items:center; text-decoration:none;">
         <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
         <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
       </a>
     </div>
 
     <div class="header-center">
-      <a href="/">Home</a>
+      <a href="#">Home</a>
       <a href="#services">Services</a>
       <a href="#pricing-block">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="/upload.html">Upload Documents</a>
+      <a href="/book.html">Book for Someone Else</a>
       <a href="mailto:supervisor@safenotarize.com">Contact</a>
     </div>
 
     <div class="header-right">
-      <a class="btn btn-primary" href="#calendly-block" style="padding:10px 20px; border-radius:8px; box-shadow:none;">Start Online Notarization</a>
+      <a class="btn btn-primary" href="/book.html" style="padding:10px 20px; border-radius:8px; box-shadow:none;">Notarize Online Now</a>
     </div>
   </header>
 
   <header class="mobile-header">
     <div class="mobile-top">
-      <a href="/" style="display:flex; align-items:center; text-decoration:none;">
-        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
-        <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
-      </a>
+      <div class="header-left">
+        <a href="#" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); closeMobileMenu();" style="display:flex; align-items:center; text-decoration:none;">
+          <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:40px; margin-right:10px;">
+          <span style="color:white; font-weight:bold; font-size:18px;">SafeNotarize</span>
+        </a>
+      </div>
       <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
     </div>
 
     <nav class="header-center">
-      <a href="/">Home</a>
+      <a href="#">Home</a>
       <a href="#services">Services</a>
       <a href="#pricing-block">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="/upload.html">Upload Documents</a>
+      <a href="/book.html">Book for Someone Else</a>
       <a href="mailto:supervisor@safenotarize.com">Contact</a>
     </nav>
   </header>
@@ -266,30 +380,28 @@
     <div class="hero-wrap">
       <div class="hero-copy">
         <div class="pill" style="margin-bottom:18px;">Haitian Creole-friendly support</div>
-        <h1>Haitian Online Notary Support for Your Important Documents</h1>
-        <p>Need a notary who can help in English, Haitian Creole, or French? SafeNotarize makes online notarization simple for Haitian families, immigrants, students, travelers, and business clients.</p>
-        <p style="font-size:.96rem; color:var(--navy-2); font-weight:600; margin-bottom:28px;">Start your online notarization in minutes. Pick a time, upload your document after booking, and receive your secure session email invite.</p>
+        <h1>Haitian Online Notary Service in Minutes</h1>
+        <p>Need a notary who can help in English, Haitian Creole, or French? SafeNotarize helps Haitian families, immigrants, students, travelers, and business clients complete notarizations online.</p>
+        <p style="font-size:.96rem; color:var(--navy-2); font-weight:600; margin-bottom:28px;">Kòmanse rapid. Voye dokiman an. Rantre nan sesyon an sou telefòn oswa òdinatè.</p>
 
         <div class="hero-cta-col">
           <div class="hero-cta-row">
-            <a href="#calendly-block" class="btn btn-dark">
-              <img src="https://img.icons8.com/ios-filled/20/ffffff/calendar.png" alt="Calendar">
-              Start Online Notarization
-            </a>
-            <span class="small-note">Book in minutes. Upload after booking.</span>
+            <a href="/book.html" class="btn btn-dark">Notarize Online Now</a>
+            <a href="/book.html" class="btn btn-outline-green">Book for Someone Else</a>
+            <span class="small-note">Start in a few clicks.</span>
           </div>
         </div>
 
         <div class="hero-points">
           <div class="hero-point"><img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Check">English, Kreyòl &amp; French</div>
-          <div class="hero-point"><img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Check">Secure online session</div>
-          <div class="hero-point"><img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Check">Phone or computer</div>
+          <div class="hero-point"><img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Check">Upload your document</div>
+          <div class="hero-point"><img src="https://img.icons8.com/ios-filled/22/4CAF50/checkmark.png" alt="Check">Meet with a notary</div>
         </div>
       </div>
 
       <div class="hero-image-wrap">
         <div style="border-radius:18px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.10); border:15px solid white; transform:rotate(3deg);">
-          <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=640&h=360&q=80" alt="Online notary support for Haitian clients" style="width:100%; display:block;">
+          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=640&h=360&q=80" alt="Professional online notary support" style="width:100%; display:block;">
         </div>
         <div style="position:absolute; bottom:-18px; right:-18px; background:white; padding:16px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.12); transform:rotate(-4deg);">
           <div style="display:flex; align-items:center;">
@@ -298,7 +410,7 @@
             </div>
             <div>
               <div style="font-weight:bold; color:var(--navy);">Kreyòl-friendly</div>
-              <div style="font-size:.82rem; color:#666;">Simple, secure, online</div>
+              <div style="font-size:.82rem; color:#666;">Secure online notarization</div>
             </div>
           </div>
         </div>
@@ -306,62 +418,154 @@
     </div>
   </section>
 
-  <section id="services" class="section-pad" style="background:#f4f7fb;">
+  <section class="stat-strip">
     <div class="container">
-      <div class="section-title">
-        <h2>Online Notary Help for the Haitian Community</h2>
-        <p>Clear guidance for documents that need a remote notary, especially when language support matters.</p>
+      <div class="section-title" style="margin-bottom:28px;">
+        <h2 style="color:#fff; margin-bottom:10px;">Trusted Online Notary Support</h2>
       </div>
-
-      <div class="service-grid">
-        <div class="service-card">
-          <div style="font-size:30px; margin-bottom:14px;">🇭🇹</div>
-          <h4>Haitian Creole Support</h4>
-          <p>We can help explain the online notary process in simple English, Haitian Creole, or French so you know what to expect before your session.</p>
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="num">10,000+</div>
+          <div class="label">Documents Notarized</div>
         </div>
-
-        <div class="service-card">
-          <div style="font-size:30px; margin-bottom:14px;">📄</div>
-          <h4>Immigration &amp; Family Documents</h4>
-          <p>Common requests include affidavits, sworn statements, travel consent forms, DS-3053, family paperwork, and prepared legal documents.</p>
+        <div class="stat-item">
+          <div class="num">4.9/5</div>
+          <div class="label">Customer Rating</div>
         </div>
-
-        <div class="service-card">
-          <div style="font-size:30px; margin-bottom:14px;">🌎</div>
-          <h4>U.S. &amp; International Signers</h4>
-          <p>Whether you are in Florida, another U.S. state, or outside the country, you may be able to complete your notarization online if identity verification requirements are met.</p>
+        <div class="stat-item">
+          <div class="num">Fast</div>
+          <div class="label">Online Process</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">Secure</div>
+          <div class="label">Remote Sessions</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section-pad" style="background:#fff;">
+  <section id="services" class="services-section section-pad">
     <div class="container">
       <div class="section-title">
-        <h2>How It Works</h2>
-        <p>Yon pwosesis senp: chwazi lè ou, voye dokiman an, epi rantre nan sesyon an lè li lè.</p>
+        <h3>Online Notary Help for the Haitian Community</h3>
+        <p>Clear online notarization support for common legal, family, travel, immigration-related, and business documents.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">HT</div>
+          <h4>Haitian Creole Support</h4>
+          <p>We can help explain the online notary process in simple English, Haitian Creole, or French so you know what to expect.</p>
+          <a href="/book.html" class="service-link">Notarize Online Now →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">POA</div>
+          <h4>Court, Legal &amp; Family Documents</h4>
+          <p>Power of Attorney, affidavits, sworn statements, family paperwork, prepared legal documents, and other common forms.</p>
+          <div style="margin-bottom:18px; background:#f8fbff; border:1px solid #dbe8f4; border-radius:12px; padding:12px 14px; color:#32485c; line-height:1.6; font-size:14px;">
+            <strong>Includes:</strong> POA, affidavits, court documents, and more.
+          </div>
+          <a href="/book.html" class="service-link">Notarize Online Now →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">ID</div>
+          <h4>Travel, Passport &amp; Release Forms</h4>
+          <p>Travel consent, DS-3053, PS Form 1583, vehicle release forms, authorization forms, and prepared PDFs.</p>
+          <a href="/book.html" class="service-link">Notarize Online Now →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">Pay</div>
+          <h4>Book or Pay for Someone Else</h4>
+          <p>For family members, business partners, real estate professionals, or anyone scheduling a notarization for another signer.</p>
+          <div style="margin-bottom:18px; background:#f8fbff; border:1px solid #dbe8f4; border-radius:12px; padding:12px 14px; color:#32485c; line-height:1.6; font-size:14px;">
+            <strong>Collects:</strong> payer/contact info, signer details, and document receiver information.
+          </div>
+          <a href="/book.html" class="service-link">Book for Someone Else →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="white-bg-icon section-pad">
+    <div class="container">
+      <div class="section-title">
+        <h3>How Online Notarization Works</h3>
+        <p>Yon pwosesis senp: antre enfòmasyon yo, chwazi lè ou, voye dokiman an, epi rantre nan sesyon an.</p>
       </div>
 
       <div class="step-grid">
         <div class="step-card">
           <div class="step-number">1</div>
-          <h4>Book Your Time</h4>
-          <p>Choose a time that works for you using the online booking calendar.</p>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/document.png" alt="Start" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Start Online</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">Enter the signer details and start your secure session request.</p>
         </div>
+
         <div class="step-card">
           <div class="step-number">2</div>
-          <h4>Upload Your Document</h4>
-          <p>After booking, you will be sent to the secure upload form to send your document.</p>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/upload.png" alt="Upload document" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Upload Document</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">After choosing your time, upload the document so everything is ready.</p>
         </div>
+
         <div class="step-card">
           <div class="step-number">3</div>
-          <h4>Receive Your Invite</h4>
-          <p>SafeNotarize will send your secure session email invite before your appointment.</p>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/video-call.png" alt="Meet" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Meet With Notary</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">Join the secure room now or come back at your chosen time.</p>
         </div>
+
         <div class="step-card">
           <div class="step-number">4</div>
-          <h4>Join Online</h4>
-          <p>Join from your phone or computer, verify your ID, and complete the notarization.</p>
+          <img src="https://img.icons8.com/ios-filled/48/4CAF50/checked--v1.png" alt="Completed" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">Receive Your Document</h4>
+          <p style="margin:0; color:#556270; line-height:1.7;">Complete the session and receive your notarized document after release.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" id="pricing-block" style="background:#f7fbff;">
+    <div class="container">
+      <div class="section-title">
+        <h3>Simple, Transparent Pricing</h3>
+        <p>Clear pricing for most common sessions, plus straightforward add-ons when needed.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card pricing-featured">
+          <div class="pill">Most common session</div>
+          <h4 style="color:var(--navy); margin:12px 0 6px;">Basic Online Notarization</h4>
+          <div class="price-big">$25</div>
+          <p style="margin:0 0 16px; color:#556270; line-height:1.7;">Includes 1 signer and 1 stamp.</p>
+          <a href="/book.html" class="btn btn-primary">Notarize Online Now</a>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Additional Signer</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$10</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">For each extra signer added to the session.</p>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Extra Stamp</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$5</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Per additional notarial stamp required.</p>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Witness</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$15</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Witness service when available and requested in advance.</p>
+        </div>
+
+        <div class="price-card">
+          <h4 style="color:var(--navy); margin:0 0 10px;">International Signer</h4>
+          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">$35</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">For signers located outside the United States.</p>
         </div>
       </div>
     </div>
@@ -370,94 +574,107 @@
   <section class="section-pad" style="background:#e9f5ff;">
     <div class="container">
       <div class="section-title">
-        <h2>Common Documents We Can Help With</h2>
-        <p>Upload your prepared document after booking so it can be reviewed before your session.</p>
+        <h3>What You Need</h3>
+        <p>Have these ready so your online notarization can move faster.</p>
       </div>
 
-      <div class="doc-grid">
-        <div class="doc-card"><h4>Affidavits</h4><p>Sworn statements and personal declarations.</p></div>
-        <div class="doc-card"><h4>Power of Attorney</h4><p>POA documents for personal, family, or business needs.</p></div>
-        <div class="doc-card"><h4>Travel Consent</h4><p>Child travel consent, DS-3053, and related forms.</p></div>
-        <div class="doc-card"><h4>Business Forms</h4><p>Prepared business, authorization, and release forms.</p></div>
+      <div class="need-grid">
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/id-verified.png" alt="Photo ID" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">Valid government-issued photo ID</p>
+        </div>
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/pdf.png" alt="Document" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">Document to be notarized</p>
+        </div>
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/laptop.png" alt="Device" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">Phone, tablet, or computer with camera and mic</p>
+        </div>
+        <div class="need-card">
+          <img src="https://img.icons8.com/ios-filled/50/wifi.png" alt="Internet" style="margin-bottom:10px;">
+          <p style="margin:0; line-height:1.6; color:#44586c;">Reliable internet connection</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section-pad" id="pricing-block" style="background:#f7fbff;">
+  <section id="calendly-block" style="background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%); padding:56px 20px;">
+    <div class="container" style="max-width:1050px;">
+      <div class="section-title" style="margin-bottom:24px;">
+        <div class="pill" style="margin-bottom:10px;">Fast start</div>
+        <h3>Start Your Online Notarization</h3>
+        <p>One clean flow: enter signer details, pick a time, upload your document, then join your secure session.</p>
+      </div>
+
+      <div class="fast-flow-grid">
+        <div class="card" style="padding:22px 18px; text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:12px;">1</div>
+          <h4 style="color:#003366; margin:0 0 8px; font-size:1.05rem;">Enter Details</h4>
+          <p style="margin:0; color:#556270; line-height:1.5; font-size:0.92rem;">Signer, payer, witness, and delivery info.</p>
+        </div>
+
+        <div class="card" style="padding:22px 18px; text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:12px;">2</div>
+          <h4 style="color:#003366; margin:0 0 8px; font-size:1.05rem;">Pick a Time</h4>
+          <p style="margin:0; color:#556270; line-height:1.5; font-size:0.92rem;">Choose the best time.</p>
+        </div>
+
+        <div class="card" style="padding:22px 18px; text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:12px;">3</div>
+          <h4 style="color:#003366; margin:0 0 8px; font-size:1.05rem;">Upload &amp; Join</h4>
+          <p style="margin:0; color:#556270; line-height:1.5; font-size:0.92rem;">Join now, or come back at your chosen time.</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width:760px; margin:0 auto; padding:28px 22px; text-align:center; border-top:4px solid #28a745;">
+        <h4 style="color:#003366; margin:0 0 10px; font-size:1.45rem;">Ready to connect with a notary?</h4>
+        <p style="color:#556270; line-height:1.6; margin:0 auto 20px; max-width:560px;">Start the secure booking flow. You can book for yourself, or book/pay for someone else.</p>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+          <a href="/book.html" class="btn btn-primary" style="min-width:220px;">Notarize Online Now</a>
+          <a href="/book.html" class="btn btn-outline-green" style="min-width:220px;">Book for Someone Else</a>
+        </div>
+
+        <p style="margin:14px 0 0; color:#1f7a36; font-weight:700; font-size:0.9rem;">Fast • Secure • From your phone or computer</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" style="background:#f0faff;">
     <div class="container">
       <div class="section-title">
-        <h2>Simple Pricing</h2>
-        <p>Clear pricing for common online notarization sessions.</p>
+        <h3>Your Security Is Our Priority</h3>
+        <p>Encrypted, compliant, and handled by certified remote notaries.</p>
       </div>
 
-      <div class="pricing-grid">
-        <div class="price-card pricing-featured">
-          <div class="pill">Most common</div>
-          <h4 style="color:var(--navy); margin:12px 0 6px;">Basic Online Notarization</h4>
-          <div class="price-big">$25</div>
-          <p style="margin:0 0 16px; color:#556270; line-height:1.7;">Includes 1 signer and 1 stamp.</p>
-          <a href="#calendly-block" class="btn btn-primary">Start Online Notarization</a>
+      <div class="security-grid">
+        <div class="security-card">
+          <img src="https://img.icons8.com/ios-filled/100/lock-2.png" alt="Data Security" style="height:60px; margin-bottom:15px;">
+          <h4 style="color:var(--navy); margin:0 0 10px;">256-Bit Encryption</h4>
+          <p style="color:#555; line-height:1.7; margin:0;">Your documents and personal info are protected with enterprise-grade encryption at every step.</p>
         </div>
-        <div class="price-card">
-          <h4 style="color:var(--navy); margin:0 0 10px;">Additional Signer</h4>
-          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$10</p>
-          <p style="margin:0; color:#556270; line-height:1.7;">For each extra signer.</p>
+
+        <div class="security-card">
+          <img src="https://img.icons8.com/ios-filled/100/shield.png" alt="Compliance" style="height:60px; margin-bottom:15px;">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Legally Compliant</h4>
+          <p style="color:#555; line-height:1.7; margin:0;">We follow U.S. remote notarization rules and record sessions where required for legal protection.</p>
         </div>
-        <div class="price-card">
-          <h4 style="color:var(--navy); margin:0 0 10px;">Extra Stamp</h4>
-          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">+$5</p>
-          <p style="margin:0; color:#556270; line-height:1.7;">Per additional notarial stamp.</p>
-        </div>
-        <div class="price-card">
-          <h4 style="color:var(--navy); margin:0 0 10px;">International Signer</h4>
-          <p style="font-size:1.6rem; color:var(--green); font-weight:800; margin:0 0 10px;">$40</p>
-          <p style="margin:0; color:#556270; line-height:1.7;">For signers outside the United States.</p>
+
+        <div class="security-card">
+          <img src="https://img.icons8.com/ios-filled/100/approval.png" alt="Verified Notaries" style="height:60px; margin-bottom:15px;">
+          <h4 style="color:var(--navy); margin:0 0 10px;">Verified Notaries</h4>
+          <p style="color:#555; line-height:1.7; margin:0;">Certified notaries help guide your session and complete your notarization securely online.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Calendly Booking Section -->
-  <section id="calendly-block" class="booking-section" style="padding:60px 20px;">
-    <div style="max-width:1100px; margin:0 auto;">
-      <div class="section-title" style="text-align:center; max-width:700px; margin:0 auto 30px;">
-        <div class="pill" style="margin-bottom:12px;">Preferred booking method</div>
-        <h3 style="font-size:1.8rem; color:#003366; margin-bottom:10px;">Schedule Your Haitian Online Notary Session</h3>
-        <p style="color:#555; font-size:0.95rem; line-height:1.6;">Pick a time. After booking, you will be sent to the secure upload form for your document.</p>
-        <p style="color:#1f7a36; font-weight:600; font-size:0.9rem; margin-top:8px;">⚡ Book in under 2 minutes</p>
-      </div>
-
-      <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:stretch; justify-content:center;">
-        <div class="booking-copy">
-          <div class="pill" style="font-size:0.8rem; padding:5px 10px; margin-bottom:12px;">Fast &amp; Simple</div>
-          <h4 style="font-size:1.3rem; color:#003366; margin-bottom:10px;">Kòmanse rapid</h4>
-          <p style="color:#555; font-size:0.95rem; margin-bottom:16px;">Book online, upload your document, and receive your secure session email invite.</p>
-          <div style="display:grid; gap:10px; margin-bottom:20px;">
-            <div style="display:flex; gap:10px; align-items:flex-start;"><img src="https://img.icons8.com/ios-filled/18/28a745/checkmark.png" alt=""><span style="font-size:0.9rem; color:#444;">Pick your time</span></div>
-            <div style="display:flex; gap:10px; align-items:flex-start;"><img src="https://img.icons8.com/ios-filled/18/28a745/upload.png" alt=""><span style="font-size:0.9rem; color:#444;">Upload your document</span></div>
-            <div style="display:flex; gap:10px; align-items:flex-start;"><img src="https://img.icons8.com/ios-filled/18/28a745/video-call.png" alt=""><span style="font-size:0.9rem; color:#444;">Join online session</span></div>
-          </div>
-          <div style="background:#f8fafc; border:1px solid #e5edf5; border-radius:12px; padding:14px;">
-            <div style="font-weight:700; color:#003366; margin-bottom:6px; font-size:0.95rem;">Need help?</div>
-            <p style="font-size:0.85rem; color:#555; margin-bottom:10px;">Questions before booking?</p>
-            <a href="mailto:supervisor@safenotarize.com" style="display:inline-block; font-size:0.85rem; font-weight:700; color:#003366; text-decoration:none; border:1px solid #ccd6e2; padding:8px 12px; border-radius:8px;">Contact Support</a>
-          </div>
-        </div>
-
-        <div class="booking-widget">
-          <div style="margin-bottom:10px; font-weight:700; color:#003366; font-size:1rem;">Select your date &amp; time</div>
-          <div class="calendly-inline-widget" data-url="https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px; height:650px;"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-
-  <section class="section-pad" id="faq" style="background:#fff;">
+  <section class="white-bg-icon section-pad" id="faq">
     <div class="container">
       <div class="section-title">
-        <h2>Haitian Online Notary FAQ</h2>
-        <p>Quick answers before you book your session.</p>
+        <h3>Haitian Online Notary FAQ</h3>
+        <p>Quick answers before you start your online notary session.</p>
       </div>
 
       <div class="faq-wrap">
@@ -465,18 +682,48 @@
           <summary>Can I speak Haitian Creole during my session?</summary>
           <p>Yes. SafeNotarize can support Haitian Creole-speaking clients. The signer must still understand the document and complete any required identity verification.</p>
         </details>
+
+        <details>
+          <summary>Can I book or pay for someone else?</summary>
+          <p>Yes. Use the booking flow for yourself, a family member, a client, or another signer. The form collects signer, payer, witness, and final document delivery information.</p>
+        </details>
+
         <details>
           <summary>Can I notarize a document written in another language?</summary>
           <p>Many documents in other languages may be notarized online, but the signer must understand what they are signing and meet platform requirements.</p>
         </details>
+
         <details>
           <summary>What ID do I need?</summary>
           <p>You will need a valid, unexpired government-issued photo ID. Some international signers may use a passport, depending on platform requirements.</p>
         </details>
+
         <details>
-          <summary>What happens after I book?</summary>
-          <p>After booking, you will upload your document. Then SafeNotarize will send your secure session email invite before your appointment.</p>
+          <summary>Can international signers use SafeNotarize?</summary>
+          <p>Yes. International signers may be able to complete an online notarization if they meet identity verification requirements and have acceptable identification.</p>
         </details>
+
+        <details>
+          <summary>What happens after I start?</summary>
+          <p>You will enter the details, choose a time, upload your document, and receive the secure session information to join online.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" style="background:#fff;">
+    <div class="container">
+      <div class="business-box">
+        <div style="flex:1 1 520px; min-width:280px;">
+          <div class="pill" style="margin-bottom:12px;">Partner-Friendly Support</div>
+          <h3 style="color:var(--navy); margin:0 0 10px; font-size:2rem; line-height:1.2;">For Families, Businesses &amp; Repeat Clients</h3>
+          <p style="color:#556270; line-height:1.75; margin:0; max-width:760px;">Helpful for family paperwork, law firms, real estate professionals, title companies, witness-required signings, and recurring notarization needs.</p>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:flex-start;">
+          <a href="/book.html" class="btn btn-primary">Notarize Online Now</a>
+          <a href="/book.html" class="btn btn-outline">Book for Someone Else</a>
+        </div>
       </div>
     </div>
   </section>
@@ -484,18 +731,53 @@
   <section class="section-pad" style="background:#fffefc; text-align:center;">
     <div class="container">
       <div class="card" style="max-width:860px; margin:0 auto; padding:34px 28px;">
-        <h2 style="color:var(--navy); font-size:2rem; margin:0 0 12px;">Ready to notarize your document online?</h2>
-        <p style="color:#556270; line-height:1.7; margin:0 0 22px;">Start now, choose your time, upload your document, and receive your secure SafeNotarize session email invite.</p>
+        <h3 style="color:var(--navy); font-size:2rem; margin:0 0 12px;">Ready to notarize your document online?</h3>
+        <p style="color:#556270; line-height:1.7; margin:0 0 22px;">Upload your document, verify your identity, and meet with a live online notary.</p>
         <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
-          <a href="#calendly-block" class="btn btn-primary">Start Online Notarization</a>
-          <a href="mailto:supervisor@safenotarize.com" class="btn btn-outline">Need Help First?</a>
+          <a href="/book.html" class="btn btn-primary">Notarize Online Now</a>
+          <a href="/book.html" class="btn btn-outline-green">Book for Someone Else</a>
         </div>
       </div>
     </div>
   </section>
 
   <script>
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    let inactivityTimer;
+    let chatOpened = false;
+
+    function isMobileScreen() {
+      return window.innerWidth <= 768;
+    }
+
+    function openChatAfterInactivity() {
+      if (chatOpened) return;
+      chatOpened = true;
+
+      if (typeof Tawk_API !== "undefined") {
+        if (isMobileScreen()) {
+          Tawk_API.showWidget();
+        } else {
+          Tawk_API.maximize();
+        }
+      }
+    }
+
+    function resetInactivityTimer() {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(openChatAfterInactivity, 15000);
+    }
+
+    Tawk_API.onLoad = function () {
+      Tawk_API.showWidget();
+
+      resetInactivityTimer();
+
+      ["mousemove", "mousedown", "click", "scroll", "keydown", "touchstart"].forEach(function(event) {
+        document.addEventListener(event, resetInactivityTimer, { passive: true });
+      });
+    };
+
     (function(){
       var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
       s1.async=true;
@@ -509,25 +791,30 @@
   <footer class="footer">
     <div class="container" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px; align-items:flex-start;">
       <div style="flex:1; min-width:250px;">
-        <a href="/" style="text-decoration:none; color:white;">
+        <a href="/" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });" style="text-decoration:none; color:white;">
           <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" style="height:50px; margin-bottom:10px;">
           <h4 style="margin:0;">SafeNotarize</h4>
         </a>
-        <p style="line-height:1.7; margin-top:10px; color:#d6e2ef;">We make notarization secure, fast, and legally compliant — all from the comfort of your device.</p>
+        <p style="line-height:1.7; margin-top:10px; color:#d6e2ef;">
+          Fast, secure online notarization from your phone or computer.
+        </p>
       </div>
 
       <div style="flex:1; min-width:180px;">
         <h4 style="font-size:18px; margin-bottom:15px;">Quick Links</h4>
         <ul style="list-style:none; padding:0; line-height:2;">
-          <li><a href="/" style="color:#90caf9; text-decoration:none;">Home</a></li>
           <li><a href="/#services" style="color:#90caf9; text-decoration:none;">Services</a></li>
           <li><a href="/#pricing-block" style="color:#90caf9; text-decoration:none;">Pricing</a></li>
-          <li><a href="/online-notary.html" style="color:#90caf9; text-decoration:none;">Online Notary</a></li>
+          <li><a href="/#faq" style="color:#90caf9; text-decoration:none;">FAQ</a></li>
+          <li><a href="/book.html" style="color:#90caf9; text-decoration:none;">Start Now</a></li>
+          <li><a href="/upload.html" style="color:#90caf9; text-decoration:none;">Upload Documents</a></li>
+          <li><a href="/book.html" style="color:#90caf9; text-decoration:none;">Book for Someone Else</a></li>
+          <li><a href="mailto:supervisor@safenotarize.com" style="color:#90caf9; text-decoration:none;">Support</a></li>
           <li><a href="/power-of-attorney-notary.html" style="color:#90caf9; text-decoration:none;">Power of Attorney Notary</a></li>
+          <li><a href="/online-notary.html" style="color:#90caf9; text-decoration:none;">Online Notary</a></li>
+          <li><a href="/french-online-notary.html" style="color:#90caf9; text-decoration:none;">French Online Notary</a></li>
           <li><a href="/affidavit-notary.html" style="color:#90caf9; text-decoration:none;">Affidavit Notary</a></li>
           <li><a href="/haitian-online-notary.html" style="color:#90caf9; text-decoration:none;">Haitian Online Notary</a></li>
-          <li><a href="/upload.html" style="color:#90caf9; text-decoration:none;">Upload Documents</a></li>
-          <li><a href="mailto:supervisor@safenotarize.com" style="color:#90caf9; text-decoration:none;">Support</a></li>
           <li><a href="/" style="color:#90caf9; text-decoration:none;">English</a></li>
           <li><a href="/ht.html" style="color:#90caf9; text-decoration:none;">Kreyòl</a></li>
           <li><a href="/fr.html" style="color:#90caf9; text-decoration:none;">Français</a></li>
@@ -547,7 +834,9 @@
       <a href="https://www.facebook.com/profile.php?id=61577290756700" target="_blank" rel="noreferrer">
         <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="margin-bottom:10px;">
       </a>
-      <div style="margin-top:10px;"><a href="#calendly-block" class="btn btn-primary">Start Online Notarization</a></div>
+      <div style="margin-top:10px;">
+        <a href="/book.html" class="btn btn-primary">Notarize Online Now</a>
+      </div>
     </div>
 
     <div style="text-align:center; margin-top:30px; padding-top:20px; border-top:1px solid #24415f;">
