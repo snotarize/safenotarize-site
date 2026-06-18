@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Upload Documents | SafeNotarize</title>
-  <meta name="description" content="Upload your completed, ready-to-sign document securely after booking your SafeNotarize online notary appointment.">
+  <meta name="description" content="Upload your completed, ready-to-sign document securely after booking your SafeNotarize online notary session.">
   <style>
     :root{--navy:#00274d;--green:#28a745;--text:#233445;--muted:#5a6b7b;--border:#dce7f2;--bg:#f7fbff;--shadow:0 12px 30px rgba(0,39,77,0.08);}
     *{box-sizing:border-box}
@@ -57,55 +57,102 @@
       <p>Please upload a filled-out document that is ready to sign or review.</p>
     </section>
 
-<section class="form-card">
-  <iframe
-    data-tally-src="https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-    loading="lazy"
-    title="SafeNotarize Document Upload Form">
-  </iframe>
+    <section class="form-card">
+      <iframe
+        id="tally-upload-frame"
+        data-tally-src="https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+        loading="lazy"
+        title="SafeNotarize Document Upload Form">
+      </iframe>
 
-  <script>
-    // Read Calendly values from the page URL
-    const params = new URLSearchParams(window.location.search);
+      <script>
+        const THANK_YOU_PAGE_URL = "https://safenotarize.com/thank-you.html";
+        const TALLY_BASE_URL = "https://tally.so/embed/xXyJkd";
 
-    const inviteeEmail = params.get("invitee_email") || "";
-    const firstName = params.get("invitee_first_name") || "";
-    const lastName = params.get("invitee_last_name") || "";
-    const calendlyFullName = params.get("invitee_full_name") || "";
-    const fullName = calendlyFullName || `${firstName} ${lastName}`.trim();
+        function getCleanParams() {
+          const params = new URLSearchParams(window.location.search);
+          const cleanParams = new URLSearchParams();
 
-    // Add clean fields to the PAGE URL so Tally can capture them automatically
-    if (inviteeEmail || fullName || firstName || lastName) {
-      const cleanParams = new URLSearchParams(window.location.search);
+          const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
+          const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
+          const firstName = params.get("invitee_first_name") || "";
+          const lastName = params.get("invitee_last_name") || "";
+          const calendlyFullName = params.get("invitee_full_name") || "";
+          const fullName = params.get("name") || calendlyFullName || `${firstName} ${lastName}`.trim();
+          const bookingType = params.get("booking_type") || "";
+          const role = params.get("role") || "";
+          const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
+          const eventStartTime = params.get("event_start_time") || params.get("start_time") || "";
+          const eventEndTime = params.get("event_end_time") || params.get("end_time") || "";
 
-      if (inviteeEmail) {
-        cleanParams.set("invitee_email", inviteeEmail);
-        cleanParams.set("email", inviteeEmail);
-      }
+          if(orderId) cleanParams.set("order_id", orderId);
+          if(email) {
+            cleanParams.set("email", email);
+            cleanParams.set("invitee_email", email);
+          }
+          if(fullName) {
+            cleanParams.set("name", fullName);
+            cleanParams.set("invitee_full_name", fullName);
+          }
+          if(firstName) cleanParams.set("invitee_first_name", firstName);
+          if(lastName) cleanParams.set("invitee_last_name", lastName);
+          if(bookingType) cleanParams.set("booking_type", bookingType);
+          if(role) cleanParams.set("role", role);
+          if(uuid) cleanParams.set("uuid", uuid);
+          if(eventStartTime) cleanParams.set("event_start_time", eventStartTime);
+          if(eventEndTime) cleanParams.set("event_end_time", eventEndTime);
 
-      if (fullName) {
-        cleanParams.set("invitee_full_name", fullName);
-        cleanParams.set("name", fullName);
-      }
+          return cleanParams;
+        }
 
-      if (firstName) cleanParams.set("invitee_first_name", firstName);
-      if (lastName) cleanParams.set("invitee_last_name", lastName);
+        function buildTallyUrl(cleanParams) {
+          const tallyParams = new URLSearchParams(cleanParams);
+          tallyParams.set("alignLeft", "1");
+          tallyParams.set("hideTitle", "1");
+          tallyParams.set("transparentBackground", "1");
+          tallyParams.set("dynamicHeight", "1");
 
-      const newUrl = window.location.pathname + "?" + cleanParams.toString();
-      window.history.replaceState({}, "", newUrl);
-    }
+          return `${TALLY_BASE_URL}?${tallyParams.toString()}`;
+        }
 
-    // Load Tally embed
-    var d=document,w="https://tally.so/widgets/embed.js",v=function(){
-      if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
-      else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
-    };
-    if(typeof Tally !== "undefined") v();
-    else if(d.querySelector('script[src="'+w+'"]') == null){
-      var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
-    }
-  </script>
-</section>
+        function buildThankYouUrl() {
+          const thankYouUrl = new URL(THANK_YOU_PAGE_URL);
+          const cleanParams = getCleanParams();
+
+          ["order_id", "email", "booking_type", "role", "uuid", "event_start_time", "event_end_time"].forEach(function(key){
+            const value = cleanParams.get(key);
+            if(value) thankYouUrl.searchParams.set(key, value);
+          });
+
+          return thankYouUrl.toString();
+        }
+
+        function syncUrlAndTallyEmbed() {
+          const cleanParams = getCleanParams();
+
+          if(cleanParams.toString()) {
+            const newUrl = `${window.location.pathname}?${cleanParams.toString()}`;
+            window.history.replaceState({}, "", newUrl);
+          }
+
+          const iframe = document.getElementById("tally-upload-frame");
+          if(iframe) {
+            iframe.dataset.tallySrc = buildTallyUrl(cleanParams);
+          }
+        }
+
+        syncUrlAndTallyEmbed();
+
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+          if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
+          else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
+        };
+        if(typeof Tally !== "undefined") v();
+        else if(d.querySelector('script[src="'+w+'"]') == null){
+          var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
+        }
+      </script>
+    </section>
 
     <p class="help">Need help uploading? Email <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a></p>
   </main>
@@ -113,7 +160,6 @@
   <script>
     let allowLeaving = false;
 
-    // Protect against accidental browser back button
     history.pushState({ uploadPage: true }, "", window.location.href);
 
     window.addEventListener("popstate", function () {
@@ -129,15 +175,18 @@
       }
     });
 
-    // Allow Tally to redirect normally after form submission
     window.addEventListener("message", function (e) {
       const data = typeof e.data === "string" ? e.data : JSON.stringify(e.data || {});
+
       if (data.includes("Tally.FormSubmitted")) {
         allowLeaving = true;
+
+        setTimeout(function(){
+          window.location.href = buildThankYouUrl();
+        }, 700);
       }
     });
 
-    // Let normal SafeNotarize links work without warning
     document.querySelectorAll("a").forEach(function(link) {
       link.addEventListener("click", function () {
         allowLeaving = true;
