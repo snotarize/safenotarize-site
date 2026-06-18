@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18058269024"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -17,248 +16,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    * { box-sizing: border-box; }
-
-    :root {
-      --navy: #003366;
-      --navy-dark: #00274d;
-      --green: #28a745;
-      --green-dark: #1f7a36;
-      --soft-blue: #f3f8fe;
-      --soft-green: #eefbf3;
-      --border: #dce7f2;
-      --text: #40536a;
-      --shadow: 0 14px 38px rgba(0, 51, 102, 0.09);
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f7fbff 0%, #ffffff 100%);
-      color: var(--navy);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    .container {
-      background: #fff;
-      width: 100%;
-      max-width: 560px;
-      border: 1px solid #e6eef7;
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      padding: 26px 22px;
-      text-align: center;
-    }
-
-    .logo { height: 44px; margin-bottom: 12px; }
-
-    .badge {
-      display: inline-block;
-      background: var(--soft-green);
-      color: var(--green-dark);
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-size: 27px;
-      line-height: 1.18;
-      color: var(--navy-dark);
-      margin: 0 0 9px;
-      font-weight: 800;
-    }
-
-    p {
-      color: var(--text);
-      font-size: 15.5px;
-      line-height: 1.48;
-      margin: 0 0 12px;
-    }
-
-    .status-card {
-      margin: 18px 0 14px;
-      background: var(--soft-blue);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 15px;
-    }
-
-    .loader {
-      width: 44px;
-      height: 44px;
-      border: 5px solid #d7e6f5;
-      border-top: 5px solid var(--navy);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 10px auto 12px;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .progress-wrap {
-      width: 100%;
-      background: #dbeafe;
-      border-radius: 999px;
-      overflow: hidden;
-      height: 9px;
-      margin: 14px 0 7px;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 12%;
-      background: var(--green);
-      border-radius: 999px;
-      transition: width 0.8s ease;
-    }
-
-    .live-status {
-      color: var(--navy);
-      font-size: 13.5px;
-      font-weight: 800;
-      margin-top: 8px;
-    }
-
-    .dots::after { content: ""; animation: dots 1.4s infinite; }
-    @keyframes dots {
-      0% { content: ""; }
-      33% { content: "."; }
-      66% { content: ".."; }
-      100% { content: "..."; }
-    }
-
-    .join-btn {
-      display: inline-block;
-      width: 100%;
-      margin-top: 14px;
-      background: var(--green);
-      color: #fff;
-      text-decoration: none;
-      padding: 15px 18px;
-      border-radius: 10px;
-      font-size: 17px;
-      font-weight: 900;
-      box-shadow: 0 10px 24px rgba(40,167,69,.22);
-    }
-
-    .action-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .small-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      color: var(--navy);
-      background: #fff;
-      border: 1px solid #cfddeb;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 800;
-      padding: 12px;
-    }
-
-    .ready-box {
-      background: #ffffff;
-      border: 1px solid #e0eaf5;
-      border-radius: 14px;
-      padding: 13px 14px;
-      margin-top: 12px;
-      text-align: left;
-    }
-
-    .ready-box strong {
-      color: var(--navy-dark);
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .ready-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .ready-list li {
-      margin: 7px 0;
-      padding-left: 22px;
-      position: relative;
-    }
-
-    .ready-list li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: var(--green-dark);
-      font-weight: 900;
-    }
-
-    .invite-note {
-      background: #f8fbff;
-      border: 1px solid #e3edf8;
-      border-radius: 14px;
-      padding: 14px 15px;
-      margin-top: 14px;
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.45;
-      text-align: left;
-    }
-
-    .invite-note strong { color: var(--navy-dark); }
-
-    .time-note {
-      display: none;
-      background: #fbfdff;
-      border: 1px solid #e3edf8;
-      border-radius: 12px;
-      padding: 11px 13px;
-      margin-top: 10px;
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.4;
-      text-align: left;
-    }
-
-    .time-note strong { color: var(--navy-dark); }
-
-    .home-btn {
-      display: inline-block;
-      margin-top: 14px;
-      color: var(--navy);
-      text-decoration: underline;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .hidden { display: none !important; }
-
-    @media (max-width: 520px) {
-      body { padding: 10px; align-items: flex-start; }
-      .container { padding: 22px 15px; border-radius: 16px; }
-      .logo { height: 40px; }
-      h1 { font-size: 23px; }
-      p { font-size: 14.5px; }
-      .status-card { padding: 16px 13px; margin-top: 14px; }
-      .action-row { grid-template-columns: 1fr; }
-    }
+    *{box-sizing:border-box}:root{--navy:#003366;--navy-dark:#00274d;--green:#28a745;--green-dark:#1f7a36;--soft-blue:#f3f8fe;--soft-green:#eefbf3;--border:#dce7f2;--text:#40536a;--shadow:0 14px 38px rgba(0,51,102,.09)}
+    body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(to bottom,#f7fbff 0%,#ffffff 100%);color:var(--navy);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}.container{background:#fff;width:100%;max-width:560px;border:1px solid #e6eef7;border-radius:20px;box-shadow:var(--shadow);padding:26px 22px;text-align:center}.logo{height:44px;margin-bottom:12px}.badge{display:inline-block;background:var(--soft-green);color:var(--green-dark);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800;margin-bottom:12px}h1{font-size:27px;line-height:1.18;color:var(--navy-dark);margin:0 0 9px;font-weight:800}p{color:var(--text);font-size:15.5px;line-height:1.48;margin:0 0 12px}.status-card{margin:18px 0 14px;background:var(--soft-blue);border:1px solid var(--border);border-radius:16px;padding:18px 15px}.loader{width:44px;height:44px;border:5px solid #d7e6f5;border-top:5px solid var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:10px auto 12px}@keyframes spin{to{transform:rotate(360deg)}}.progress-wrap{width:100%;background:#dbeafe;border-radius:999px;overflow:hidden;height:9px;margin:14px 0 7px}.progress-bar{height:100%;width:12%;background:var(--green);border-radius:999px;transition:width .8s ease}.live-status{color:var(--navy);font-size:13.5px;font-weight:800;margin-top:8px}.dots::after{content:"";animation:dots 1.4s infinite}@keyframes dots{0%{content:""}33%{content:"."}66%{content:".."}100%{content:"..."}}
+    .join-btn{display:inline-block;width:100%;margin-top:14px;background:var(--green);color:#fff;text-decoration:none;padding:15px 18px;border-radius:10px;font-size:17px;font-weight:900;box-shadow:0 10px 24px rgba(40,167,69,.22)}.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.small-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;color:var(--navy);background:#fff;border:1px solid #cfddeb;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;padding:12px}.ready-box{background:#fff;border:1px solid #e0eaf5;border-radius:14px;padding:13px 14px;margin-top:12px;text-align:left}.ready-box strong{color:var(--navy-dark);display:block;margin-bottom:8px;font-size:14px}.ready-list{list-style:none;padding:0;margin:0;color:var(--text);font-size:14px;line-height:1.4}.ready-list li{margin:7px 0;padding-left:22px;position:relative}.ready-list li::before{content:"✓";position:absolute;left:0;top:0;color:var(--green-dark);font-weight:900}.invite-note{background:#f8fbff;border:1px solid #e3edf8;border-radius:14px;padding:14px 15px;margin-top:14px;color:var(--text);font-size:14px;line-height:1.45;text-align:left}.invite-note strong{color:var(--navy-dark)}.time-note{display:none;background:#fbfdff;border:1px solid #e3edf8;border-radius:12px;padding:11px 13px;margin-top:10px;color:var(--text);font-size:14px;line-height:1.4;text-align:left}.home-btn{display:inline-block;margin-top:14px;color:var(--navy);text-decoration:underline;font-size:14px;font-weight:700}.hidden{display:none!important}@media(max-width:520px){body{padding:10px;align-items:flex-start}.container{padding:22px 15px;border-radius:16px}.logo{height:40px}h1{font-size:23px}p{font-size:14.5px}.action-row{grid-template-columns:1fr}}
   </style>
 </head>
 
@@ -276,13 +36,9 @@
       <p id="session-message"><strong>Please wait a moment.</strong></p>
       <p id="session-submessage">If your session is ready, the Join Session button will appear below.</p>
 
-      <div class="progress-wrap" id="progress-wrap">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
+      <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
 
-      <div class="live-status">
-        <span id="live-status-text">Checking session status</span><span class="dots" id="dots"></span>
-      </div>
+      <div class="live-status"><span id="live-status-text">Checking session status</span><span class="dots" id="dots"></span></div>
 
       <div id="ready-instructions" class="ready-box hidden">
         <strong>Before you join:</strong>
@@ -318,6 +74,7 @@
     const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
     const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
     const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
+    const name = params.get("name") || params.get("invitee_full_name") || "";
     const signer = params.get("signer") || "";
     const role = params.get("role") || params.get("viewer") || "";
     const bookingType = params.get("booking_type") || "";
@@ -334,7 +91,7 @@
       "Almost ready"
     ];
 
-    function buildScheduleUrl() {
+    function buildScheduleUrl(){
       const url = new URL(calendlyEventUrl);
       url.searchParams.set("hide_event_type_details", "1");
       url.searchParams.set("hide_gdpr_banner", "1");
@@ -344,157 +101,125 @@
 
       if(orderId) url.searchParams.set("utm_content", orderId);
       if(email) url.searchParams.set("email", email);
+      if(name) url.searchParams.set("name", name);
       if(bookingType) url.searchParams.set("utm_term", bookingType);
 
       return url.toString();
     }
 
-    function updateScheduleLink(label) {
+    function updateScheduleLink(label){
       const link = document.getElementById("schedule-time-link");
       if(!link) return;
-
       link.href = buildScheduleUrl();
       link.textContent = label;
     }
 
-    function formatScheduledTime(value) {
-      if (!value) return "";
+    function formatScheduledTime(value){
+      if(!value) return "";
       const date = new Date(value);
-      if (isNaN(date.getTime())) return "";
-      return date.toLocaleString([], {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit"
-      });
+      if(isNaN(date.getTime())) return "";
+      return date.toLocaleString([], {weekday:"short", month:"short", day:"numeric", hour:"numeric", minute:"2-digit"});
     }
 
-    function showScheduledTime() {
+    function showScheduledTime(){
       const formatted = formatScheduledTime(eventStartTime);
       const card = document.getElementById("scheduled-time-card");
-
-      if (formatted && card) {
+      if(formatted && card){
         card.style.display = "block";
         card.innerHTML = `<strong>Scheduled time:</strong> ${formatted}`;
       }
     }
 
-    function updateWaitingVisuals() {
+    function updateWaitingVisuals(){
       document.getElementById("progress-bar").style.width = Math.min(92, 12 + attempts * 5) + "%";
       document.getElementById("live-status-text").innerText = waitingMessages[attempts % waitingMessages.length];
     }
 
-    function showReadyButton(link) {
+    function showReadyButton(link){
       document.getElementById("top-badge").innerText = "Session ready";
       document.getElementById("main-title").innerText = "Your Session Is Ready";
-      document.getElementById("main-text").innerText =
-        "You can join now, or choose a later time if you prefer to sign later.";
-
+      document.getElementById("main-text").innerText = "You can join now, or choose a later time if you prefer to sign later.";
       document.getElementById("session-message").innerHTML = "<strong>Ready when you are.</strong>";
-      document.getElementById("session-submessage").innerText =
-        "Join opens in a new tab. You can also use your SafeNotarize invite email.";
+      document.getElementById("session-submessage").innerText = "Join opens in a new tab. You can also use your SafeNotarize invite email.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "100%";
       document.getElementById("live-status-text").innerText = "Session link ready";
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.remove("hidden");
-
-      document.getElementById("join-button-area").innerHTML =
-        `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session Now</a>`;
-
-      document.getElementById("invite-note").innerHTML =
-        "<strong>SafeNotarize invite email:</strong> You will still receive your invite email. Use it to return to the session or join at your selected time.";
-
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session Now</a>`;
+      document.getElementById("invite-note").innerHTML = "<strong>SafeNotarize invite email:</strong> You will still receive your invite email. Use it to return to the session or join at your selected time.";
       updateScheduleLink("Choose a Later Time");
     }
 
-    function showBookerMessage() {
+    function showBookerMessage(){
       document.getElementById("top-badge").innerText = "Upload received";
       document.getElementById("main-title").innerText = "Choose a Time for the Signer";
-      document.getElementById("main-text").innerText =
-        "Choose an available time so the signer or signers can receive their invite emails.";
-
+      document.getElementById("main-text").innerText = "Choose an available time so the signer or signers can receive their invite emails.";
       document.getElementById("session-message").innerHTML = "<strong>Next step: choose a time.</strong>";
-      document.getElementById("session-submessage").innerText =
-        "Each signer will receive their own SafeNotarize invite email.";
+      document.getElementById("session-submessage").innerText = "Each signer will receive their own SafeNotarize invite email.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "100%";
       document.getElementById("live-status-text").innerText = "Ready to choose time";
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.add("hidden");
-
-      document.getElementById("join-button-area").innerHTML =
-        `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
-
-      document.getElementById("invite-note").innerHTML =
-        "<strong>SafeNotarize invite email:</strong> After a time is selected, each signer will receive their own invite email.";
-
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
+      document.getElementById("invite-note").innerHTML = "<strong>SafeNotarize invite email:</strong> After a time is selected, each signer will receive their own invite email.";
       updateScheduleLink("Choose a Time Slot");
     }
 
-    function showStillPreparing() {
+    function showStillPreparing(){
       document.getElementById("top-badge").innerText = "Upload received";
       document.getElementById("main-title").innerText = "Choose How You Want to Continue";
-      document.getElementById("main-text").innerText =
-        "You can choose a later time now. If your session link becomes ready, you can also use your invite email.";
-
+      document.getElementById("main-text").innerText = "You can choose a later time now. If your session link becomes ready, you can also use your invite email.";
       document.getElementById("session-message").innerHTML = "<strong>Your upload was received.</strong>";
-      document.getElementById("session-submessage").innerText =
-        "Choose a time slot if you want to sign later.";
+      document.getElementById("session-submessage").innerText = "Choose a time slot if you want to sign later.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "92%";
       document.getElementById("live-status-text").innerText = "Ready for next step";
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.add("hidden");
-
-      document.getElementById("join-button-area").innerHTML =
-        `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
-
-      document.getElementById("invite-note").innerHTML =
-        "<strong>SafeNotarize invite email:</strong> Each signer receives their own invite email after the session is prepared or scheduled.";
-
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
+      document.getElementById("invite-note").innerHTML = "<strong>SafeNotarize invite email:</strong> Each signer receives their own invite email after the session is prepared or scheduled.";
       updateScheduleLink("Choose a Later Time");
     }
 
-    async function checkSessionLink() {
+    async function checkSessionLink(){
       attempts++;
       updateWaitingVisuals();
 
-      if (isBookerFlow) {
+      if(isBookerFlow){
         showBookerMessage();
         return;
       }
 
       const signerToCheck = signer || "primary";
 
-      if (!orderId && !uuid && !email) {
+      if(!orderId && !uuid && !email){
         showStillPreparing();
         return;
       }
 
-      try {
+      try{
         const url = `${makeWebhookUrl}?order_id=${encodeURIComponent(orderId)}&uuid=${encodeURIComponent(uuid)}&email=${encodeURIComponent(email)}&signer=${encodeURIComponent(signerToCheck)}`;
         const response = await fetch(url);
         const data = await response.json();
 
-        if (data.ready === true && data.link) {
+        if(data.ready === true && data.link){
           showReadyButton(data.link);
           return;
         }
 
-        if (attempts >= maxAttempts) {
+        if(attempts >= maxAttempts){
           showStillPreparing();
           return;
         }
 
         setTimeout(checkSessionLink, 3000);
-      } catch (error) {
-        if (attempts >= maxAttempts) {
+      }catch(error){
+        if(attempts >= maxAttempts){
           showStillPreparing();
           return;
         }
-
         setTimeout(checkSessionLink, 3000);
       }
     }
@@ -503,11 +228,11 @@
     showScheduledTime();
 
     const testMode = params.get("test") || "";
-    if (testMode === "ready") {
+    if(testMode === "ready"){
       showReadyButton("https://safenotarize.com");
-    } else if (testMode === "booker") {
+    } else if(testMode === "booker"){
       showBookerMessage();
-    } else if (testMode === "waiting") {
+    } else if(testMode === "waiting"){
       showStillPreparing();
     } else {
       checkSessionLink();
