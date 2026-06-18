@@ -13,7 +13,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your Online Notary Session | SafeNotarize</title>
-  <meta name="description" content="Join your SafeNotarize online notary session or use your invite email at the scheduled time.">
+  <meta name="description" content="Join your SafeNotarize online notary session or choose a time for later.">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
@@ -296,13 +296,13 @@
       <div id="join-button-area"></div>
 
       <div class="action-row" id="secondary-actions">
-        <a class="small-btn" href="https://calendly.com/supervisor-23/online-notarization-safenotarize" target="_blank" rel="noopener">Reschedule / Update Time</a>
+        <a class="small-btn" id="schedule-time-link" href="https://calendly.com/supervisor-23/online-notarization-safenotarize" target="_blank" rel="noopener">Choose a Later Time</a>
         <a class="small-btn" href="mailto:supervisor@safenotarize.com">Need Help</a>
       </div>
     </div>
 
     <div class="invite-note" id="invite-note">
-      <strong>SafeNotarize invite email:</strong> Check your SafeNotarize invite email to join at your scheduled time. Each signer receives their own invite email.
+      <strong>SafeNotarize invite email:</strong> Each signer receives their own invite email.
     </div>
 
     <div class="time-note" id="scheduled-time-card"></div>
@@ -312,6 +312,7 @@
 
   <script>
     const makeWebhookUrl = "https://hook.us2.make.com/oy9elq5ctxb9fl74lcwuimwb4zp2gxb2";
+    const calendlyEventUrl = "https://calendly.com/supervisor-23/online-notarization-safenotarize";
     const params = new URLSearchParams(window.location.search);
 
     const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
@@ -319,7 +320,9 @@
     const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
     const signer = params.get("signer") || "";
     const role = params.get("role") || params.get("viewer") || "";
+    const bookingType = params.get("booking_type") || "";
     const eventStartTime = params.get("event_start_time") || params.get("start_time") || "";
+    const isBookerFlow = role === "booker" || signer === "booker" || bookingType === "other";
 
     let attempts = 0;
     const maxAttempts = 20;
@@ -330,6 +333,29 @@
       "Connecting your booking",
       "Almost ready"
     ];
+
+    function buildScheduleUrl() {
+      const url = new URL(calendlyEventUrl);
+      url.searchParams.set("hide_event_type_details", "1");
+      url.searchParams.set("hide_gdpr_banner", "1");
+      url.searchParams.set("utm_source", "safenotarize");
+      url.searchParams.set("utm_medium", "thank_you_page");
+      url.searchParams.set("utm_campaign", "online_notary");
+
+      if(orderId) url.searchParams.set("utm_content", orderId);
+      if(email) url.searchParams.set("email", email);
+      if(bookingType) url.searchParams.set("utm_term", bookingType);
+
+      return url.toString();
+    }
+
+    function updateScheduleLink(label) {
+      const link = document.getElementById("schedule-time-link");
+      if(!link) return;
+
+      link.href = buildScheduleUrl();
+      link.textContent = label;
+    }
 
     function formatScheduledTime(value) {
       if (!value) return "";
@@ -363,10 +389,11 @@
       document.getElementById("top-badge").innerText = "Session ready";
       document.getElementById("main-title").innerText = "Your Session Is Ready";
       document.getElementById("main-text").innerText =
-        "Only click Join Session when you are ready to start.";
+        "You can join now, or choose a later time if you prefer to sign later.";
 
       document.getElementById("session-message").innerHTML = "<strong>Ready when you are.</strong>";
-      document.getElementById("session-submessage").innerText = "Join opens in a new tab. You can return here or use your invite email if needed.";
+      document.getElementById("session-submessage").innerText =
+        "Join opens in a new tab. You can also use your SafeNotarize invite email.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "100%";
       document.getElementById("live-status-text").innerText = "Session link ready";
@@ -374,55 +401,67 @@
       document.getElementById("ready-instructions").classList.remove("hidden");
 
       document.getElementById("join-button-area").innerHTML =
-        `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session</a>`;
+        `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session Now</a>`;
 
       document.getElementById("invite-note").innerHTML =
-        "<strong>SafeNotarize invite email:</strong> Each signer has their own invite email. Use that email to join at the scheduled time or to return to the session.";
+        "<strong>SafeNotarize invite email:</strong> You will still receive your invite email. Use it to return to the session or join at your selected time.";
+
+      updateScheduleLink("Choose a Later Time");
     }
 
     function showBookerMessage() {
-      document.getElementById("top-badge").innerText = "Session created";
-      document.getElementById("main-title").innerText = "You’re All Set";
+      document.getElementById("top-badge").innerText = "Upload received";
+      document.getElementById("main-title").innerText = "Choose a Time for the Signer";
       document.getElementById("main-text").innerText =
-        "The session is being prepared for the signer(s).";
+        "Choose an available time so the signer or signers can receive their invite emails.";
 
-      document.getElementById("session-message").innerHTML = "<strong>No action needed right now.</strong>";
+      document.getElementById("session-message").innerHTML = "<strong>Next step: choose a time.</strong>";
       document.getElementById("session-submessage").innerText =
-        "Each signer will receive their own SafeNotarize invite email to join at the scheduled time.";
-
+        "Each signer will receive their own SafeNotarize invite email.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "100%";
-      document.getElementById("live-status-text").innerText = "Invite emails will be sent";
+      document.getElementById("live-status-text").innerText = "Ready to choose time";
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.add("hidden");
 
+      document.getElementById("join-button-area").innerHTML =
+        `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
+
       document.getElementById("invite-note").innerHTML =
-        "<strong>SafeNotarize invite email:</strong> Each signer will receive their own invite email. They should use that email to join at the scheduled time.";
+        "<strong>SafeNotarize invite email:</strong> After a time is selected, each signer will receive their own invite email.";
+
+      updateScheduleLink("Choose a Time Slot");
     }
 
     function showStillPreparing() {
-      document.getElementById("top-badge").innerText = "All set";
-      document.getElementById("main-title").innerText = "You’re All Set";
+      document.getElementById("top-badge").innerText = "Upload received";
+      document.getElementById("main-title").innerText = "Choose How You Want to Continue";
       document.getElementById("main-text").innerText =
-        "Check your SafeNotarize invite email to join at your scheduled time.";
+        "You can choose a later time now. If your session link becomes ready, you can also use your invite email.";
 
-      document.getElementById("session-message").innerHTML = "<strong>No action needed right now.</strong>";
-      document.getElementById("session-submessage").innerText = "Each signer will use their own SafeNotarize invite email.";
+      document.getElementById("session-message").innerHTML = "<strong>Your upload was received.</strong>";
+      document.getElementById("session-submessage").innerText =
+        "Choose a time slot if you want to sign later.";
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "92%";
-      document.getElementById("live-status-text").innerText = "Invite email will be used";
+      document.getElementById("live-status-text").innerText = "Ready for next step";
       document.getElementById("dots").classList.add("hidden");
-
       document.getElementById("ready-instructions").classList.add("hidden");
+
+      document.getElementById("join-button-area").innerHTML =
+        `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
+
       document.getElementById("invite-note").innerHTML =
-        "<strong>SafeNotarize invite email:</strong> Check your SafeNotarize invite email to join at your scheduled time. Each signer receives their own invite email.";
+        "<strong>SafeNotarize invite email:</strong> Each signer receives their own invite email after the session is prepared or scheduled.";
+
+      updateScheduleLink("Choose a Later Time");
     }
 
     async function checkSessionLink() {
       attempts++;
       updateWaitingVisuals();
 
-      if (role === "booker" || signer === "booker") {
+      if (isBookerFlow) {
         showBookerMessage();
         return;
       }
@@ -460,6 +499,7 @@
       }
     }
 
+    updateScheduleLink(isBookerFlow ? "Choose a Time Slot" : "Choose a Later Time");
     showScheduledTime();
 
     const testMode = params.get("test") || "";
