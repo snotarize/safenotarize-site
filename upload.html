@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Upload Documents | SafeNotarize</title>
+  <title id="page-title">Upload Documents | SafeNotarize</title>
   <meta name="description" content="Upload your completed, ready-to-sign document securely after booking your SafeNotarize online notary session.">
   <style>
     :root{--navy:#00274d;--green:#28a745;--text:#233445;--muted:#5a6b7b;--border:#dce7f2;--shadow:0 12px 30px rgba(0,39,77,0.08)}
@@ -16,19 +16,19 @@
 <body>
   <header>
     <div class="header-inner">
-      <a class="brand" href="/">
-        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo">
+      <a class="brand" id="brand-link" href="/">
+        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" id="logo-img">
         <span>SafeNotarize</span>
       </a>
-      <a class="home-link" href="/">Back to Home</a>
+      <a class="home-link" id="home-link" href="/">Back to Home</a>
     </div>
   </header>
 
   <main class="wrap">
     <section class="hero">
-      <div class="pill">Step 2: Upload your document</div>
-      <h1>Upload Your Completed Document</h1>
-      <p>Please upload a filled-out document that is ready to sign or review.</p>
+      <div class="pill" id="upload-pill">Step 2: Upload your document</div>
+      <h1 id="upload-title">Upload Your Completed Document</h1>
+      <p id="upload-text">Please upload a filled-out document that is ready to sign or review.</p>
     </section>
 
     <section class="form-card">
@@ -37,6 +37,23 @@
       <script>
         const THANK_YOU_PAGE_URL = "https://safenotarize.com/thank-you.html";
         const TALLY_BASE_URL = "https://tally.so/embed/xXyJkd";
+        const pageParams = new URLSearchParams(window.location.search);
+        const isKreyol = (pageParams.get("lang") || "").toLowerCase() === "ht";
+
+        function applyLanguage(){
+          if(!isKreyol) return;
+          document.documentElement.lang = "ht";
+          document.title = "Telechaje Dokiman | SafeNotarize";
+          document.getElementById("logo-img").alt = "Logo SafeNotarize";
+          document.getElementById("brand-link").href = "/ht.html";
+          document.getElementById("home-link").href = "/ht.html";
+          document.getElementById("home-link").textContent = "Retounen Akèy";
+          document.getElementById("upload-pill").textContent = "Etap 2: Telechaje dokiman ou";
+          document.getElementById("upload-title").textContent = "Telechaje Dokiman Ou";
+          document.getElementById("upload-text").textContent = "Tanpri telechaje dokiman an ki deja ranpli epi ki pare pou siyen oswa pou revize.";
+          document.getElementById("tally-upload-frame").title = "Fòm Telechajman Dokiman SafeNotarize";
+          document.getElementById("help-text").innerHTML = 'Ou bezwen èd pou telechaje dokiman an? Voye imèl bay <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a>';
+        }
 
         function getCleanParams(){
           const params = new URLSearchParams(window.location.search);
@@ -48,22 +65,15 @@
           const bookingType = params.get("booking_type") || "";
           const role = params.get("role") || "";
           const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
+          const lang = params.get("lang") || "";
 
-          if(orderId){
-            clean.set("order_id", orderId);
-            clean.set("utm_content", orderId);
-          }
-          if(email){
-            clean.set("email", email);
-            clean.set("invitee_email", email);
-          }
-          if(name){
-            clean.set("name", name);
-            clean.set("invitee_full_name", name);
-          }
+          if(orderId){ clean.set("order_id", orderId); clean.set("utm_content", orderId); }
+          if(email){ clean.set("email", email); clean.set("invitee_email", email); }
+          if(name){ clean.set("name", name); clean.set("invitee_full_name", name); }
           if(bookingType) clean.set("booking_type", bookingType);
           if(role) clean.set("role", role);
           if(uuid) clean.set("uuid", uuid);
+          if(lang) clean.set("lang", lang);
 
           return clean;
         }
@@ -81,7 +91,7 @@
           const url = new URL(THANK_YOU_PAGE_URL);
           const clean = getCleanParams();
 
-          ["order_id","utm_content","email","name","booking_type","role","uuid"].forEach(function(key){
+          ["order_id","utm_content","email","name","booking_type","role","uuid","lang"].forEach(function(key){
             const value = clean.get(key);
             if(value) url.searchParams.set(key, value);
           });
@@ -100,6 +110,7 @@
           if(iframe) iframe.dataset.tallySrc = buildTallyUrl(clean);
         }
 
+        applyLanguage();
         syncUrlAndTallyEmbed();
 
         var d=document,w="https://tally.so/widgets/embed.js",v=function(){
@@ -113,18 +124,24 @@
       </script>
     </section>
 
-    <p class="help">Need help uploading? Email <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a></p>
+    <p class="help" id="help-text">Need help uploading? Email <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a></p>
   </main>
 
   <script>
     let allowLeaving = false;
+    const uploadParams = new URLSearchParams(window.location.search);
+    const uploadIsKreyol = (uploadParams.get("lang") || "").toLowerCase() === "ht";
 
     history.pushState({ uploadPage: true }, "", window.location.href);
 
     window.addEventListener("popstate", function(){
       if(allowLeaving) return;
 
-      const leave = confirm("Your document upload is not complete yet. Do you want to leave this page?");
+      const message = uploadIsKreyol
+        ? "Ou poko fini telechaje dokiman an. Èske ou vle kite paj sa a?"
+        : "Your document upload is not complete yet. Do you want to leave this page?";
+
+      const leave = confirm(message);
       if(leave){
         allowLeaving = true;
         history.back();
