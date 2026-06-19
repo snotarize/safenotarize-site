@@ -24,7 +24,7 @@
 
 <body>
   <main class="container">
-    <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" class="logo">
+    <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" class="logo" id="logo-img">
 
     <div class="badge" id="top-badge">SafeNotarize session</div>
     <h1 id="main-title">Getting Your Session Ready</h1>
@@ -32,17 +32,14 @@
 
     <div class="status-card">
       <div id="loader" class="loader"></div>
-
       <p id="session-message"><strong>Please wait a moment.</strong></p>
       <p id="session-submessage">If your session is ready, the Join Session button will appear below.</p>
-
       <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-
       <div class="live-status"><span id="live-status-text">Checking session status</span><span class="dots" id="dots"></span></div>
 
       <div id="ready-instructions" class="ready-box hidden">
-        <strong>Before you join:</strong>
-        <ul class="ready-list">
+        <strong id="before-join-title">Before you join:</strong>
+        <ul class="ready-list" id="ready-list">
           <li>No account is needed.</li>
           <li>Allow camera and microphone access.</li>
           <li>Have your valid ID ready for identity verification.</li>
@@ -53,23 +50,104 @@
 
       <div class="action-row" id="secondary-actions">
         <a class="small-btn" id="schedule-time-link" href="https://calendly.com/supervisor-23/online-notarization-safenotarize" target="_blank" rel="noopener">Choose a Later Time</a>
-        <a class="small-btn" href="mailto:supervisor@safenotarize.com">Need Help</a>
+        <a class="small-btn" id="help-link" href="mailto:supervisor@safenotarize.com">Need Help</a>
       </div>
     </div>
 
-    <div class="invite-note" id="invite-note">
-      <strong>SafeNotarize invite email:</strong> Each signer receives their own invite email.
-    </div>
-
+    <div class="invite-note" id="invite-note"><strong>SafeNotarize invite email:</strong> Each signer receives their own invite email.</div>
     <div class="time-note" id="scheduled-time-card"></div>
-
-    <a href="https://safenotarize.com" class="home-btn">Back to SafeNotarize</a>
+    <a href="https://safenotarize.com" class="home-btn" id="home-btn">Back to SafeNotarize</a>
   </main>
 
   <script>
     const makeWebhookUrl = "https://hook.us2.make.com/oy9elq5ctxb9fl74lcwuimwb4zp2gxb2";
     const calendlyEventUrl = "https://calendly.com/supervisor-23/online-notarization-safenotarize";
     const params = new URLSearchParams(window.location.search);
+
+    const lang = (params.get("lang") || "").toLowerCase();
+    const isKreyol = lang === "ht" || (params.get("utm_source") || "").includes("_ht") || (params.get("utm_campaign") || "").includes("_ht") || (params.get("utm_term") || "").includes("lang_ht");
+
+    if(isKreyol){
+      document.documentElement.lang = "ht";
+      document.title = "Sesyon Notè Online Ou | SafeNotarize";
+      document.getElementById("logo-img").alt = "Logo SafeNotarize";
+    }
+
+    const copy = isKreyol ? {
+      initialBadge:"Sesyon SafeNotarize",
+      initialTitle:"N ap prepare sesyon ou",
+      initialText:"N ap verifye lyen sekirize pou sesyon ou a.",
+      wait:"<strong>Tanpri tann yon ti moman.</strong>",
+      subWait:"Si sesyon ou pare, bouton pou antre nan sesyon an ap parèt anba a.",
+      checking:"N ap verifye estati sesyon an",
+      chooseLater:"Chwazi yon lè pou pita",
+      chooseSlot:"Chwazi yon lè",
+      needHelp:"Bezwen èd",
+      inviteInitial:"<strong>Imèl envitasyon SafeNotarize:</strong> Chak siyatè ap resevwa pwòp imèl envitasyon pa yo.",
+      backHome:"Retounen sou SafeNotarize",
+      beforeJoin:"Avan ou antre:",
+      readyItems:["Ou pa bezwen kreye kont.","Bay aksè pou kamera ak mikwofòn.","Kenbe pyès idantite valab ou pare pou verifikasyon."],
+      waitingMessages:["N ap verifye estati sesyon an","N ap prepare chanm sekirize ou a","N ap konekte randevou ou a","Prèske pare"],
+      scheduledTime:"Lè randevou a:",
+      readyBadge:"Sesyon an pare",
+      readyTitle:"Sesyon ou pare",
+      readyText:"Ou ka antre kounye a, oswa ou ka chwazi yon lè pou pita si ou vle siyen pita.",
+      readyMessage:"<strong>Nou pare lè ou pare.</strong>",
+      readySub:"Lyen an ap ouvri nan yon nouvo tab. Ou ka itilize imèl envitasyon SafeNotarize la tou.",
+      readyStatus:"Lyen sesyon an pare",
+      joinNow:"Antre nan sesyon an kounye a",
+      readyInvite:"<strong>Imèl envitasyon SafeNotarize:</strong> W ap toujou resevwa imèl envitasyon ou. Ou ka itilize li pou retounen nan sesyon an oswa pou antre lè ou te chwazi a.",
+      uploadReceived:"Dokiman an resevwa",
+      bookerTitle:"Chwazi yon lè pou siyatè a",
+      bookerText:"Chwazi yon lè ki disponib pou siyatè a oswa siyatè yo ka resevwa imèl envitasyon yo.",
+      bookerMessage:"<strong>Pwochen etap: chwazi yon lè.</strong>",
+      bookerSub:"Chak siyatè ap resevwa pwòp imèl envitasyon SafeNotarize pa yo.",
+      bookerStatus:"Pare pou chwazi lè",
+      bookerInvite:"<strong>Imèl envitasyon SafeNotarize:</strong> Apre yo fin chwazi yon lè, chak siyatè ap resevwa pwòp imèl envitasyon pa yo.",
+      preparingTitle:"Chwazi kijan ou vle kontinye",
+      preparingText:"Ou ka chwazi yon lè pou pita kounye a. Si lyen sesyon ou vin pare, ou ka itilize imèl envitasyon ou tou.",
+      preparingMessage:"<strong>Nou resevwa dokiman ou.</strong>",
+      preparingSub:"Chwazi yon lè si ou vle siyen pita.",
+      preparingStatus:"Pare pou pwochen etap la",
+      preparingInvite:"<strong>Imèl envitasyon SafeNotarize:</strong> Chak siyatè ap resevwa pwòp imèl envitasyon pa yo apre sesyon an prepare oswa apre yo fin mete lè randevou a."
+    } : {
+      initialBadge:"SafeNotarize session",
+      initialTitle:"Getting Your Session Ready",
+      initialText:"We are checking for your secure session link.",
+      wait:"<strong>Please wait a moment.</strong>",
+      subWait:"If your session is ready, the Join Session button will appear below.",
+      checking:"Checking session status",
+      chooseLater:"Choose a Later Time",
+      chooseSlot:"Choose a Time Slot",
+      needHelp:"Need Help",
+      inviteInitial:"<strong>SafeNotarize invite email:</strong> Each signer receives their own invite email.",
+      backHome:"Back to SafeNotarize",
+      beforeJoin:"Before you join:",
+      readyItems:["No account is needed.","Allow camera and microphone access.","Have your valid ID ready for identity verification."],
+      waitingMessages:["Checking session status","Preparing your secure room","Connecting your booking","Almost ready"],
+      scheduledTime:"Scheduled time:",
+      readyBadge:"Session ready",
+      readyTitle:"Your Session Is Ready",
+      readyText:"You can join now, or choose a later time if you prefer to sign later.",
+      readyMessage:"<strong>Ready when you are.</strong>",
+      readySub:"Join opens in a new tab. You can also use your SafeNotarize invite email.",
+      readyStatus:"Session link ready",
+      joinNow:"Join Session Now",
+      readyInvite:"<strong>SafeNotarize invite email:</strong> You will still receive your invite email. Use it to return to the session or join at your selected time.",
+      uploadReceived:"Upload received",
+      bookerTitle:"Choose a Time for the Signer",
+      bookerText:"Choose an available time so the signer or signers can receive their invite emails.",
+      bookerMessage:"<strong>Next step: choose a time.</strong>",
+      bookerSub:"Each signer will receive their own SafeNotarize invite email.",
+      bookerStatus:"Ready to choose time",
+      bookerInvite:"<strong>SafeNotarize invite email:</strong> After a time is selected, each signer will receive their own invite email.",
+      preparingTitle:"Choose How You Want to Continue",
+      preparingText:"You can choose a later time now. If your session link becomes ready, you can also use your invite email.",
+      preparingMessage:"<strong>Your upload was received.</strong>",
+      preparingSub:"Choose a time slot if you want to sign later.",
+      preparingStatus:"Ready for next step",
+      preparingInvite:"<strong>SafeNotarize invite email:</strong> Each signer receives their own invite email after the session is prepared or scheduled."
+    };
 
     const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
     const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
@@ -84,25 +162,36 @@
     let attempts = 0;
     const maxAttempts = 20;
 
-    const waitingMessages = [
-      "Checking session status",
-      "Preparing your secure room",
-      "Connecting your booking",
-      "Almost ready"
-    ];
+    function applyInitialCopy(){
+      document.getElementById("top-badge").innerText = copy.initialBadge;
+      document.getElementById("main-title").innerText = copy.initialTitle;
+      document.getElementById("main-text").innerText = copy.initialText;
+      document.getElementById("session-message").innerHTML = copy.wait;
+      document.getElementById("session-submessage").innerText = copy.subWait;
+      document.getElementById("live-status-text").innerText = copy.checking;
+      document.getElementById("schedule-time-link").innerText = isBookerFlow ? copy.chooseSlot : copy.chooseLater;
+      document.getElementById("help-link").innerText = copy.needHelp;
+      document.getElementById("invite-note").innerHTML = copy.inviteInitial;
+      document.getElementById("home-btn").innerText = copy.backHome;
+      document.getElementById("home-btn").href = isKreyol ? "https://safenotarize.com/ht.html" : "https://safenotarize.com";
+      document.getElementById("before-join-title").innerText = copy.beforeJoin;
+      document.getElementById("ready-list").innerHTML = copy.readyItems.map(function(item){ return `<li>${item}</li>`; }).join("");
+    }
 
     function buildScheduleUrl(){
       const url = new URL(calendlyEventUrl);
       url.searchParams.set("hide_event_type_details", "1");
       url.searchParams.set("hide_gdpr_banner", "1");
-      url.searchParams.set("utm_source", "safenotarize");
+      url.searchParams.set("utm_source", isKreyol ? "safenotarize_ht" : "safenotarize");
       url.searchParams.set("utm_medium", "thank_you_page");
-      url.searchParams.set("utm_campaign", "online_notary");
+      url.searchParams.set("utm_campaign", isKreyol ? "online_notary_ht" : "online_notary");
 
       if(orderId) url.searchParams.set("utm_content", orderId);
       if(email) url.searchParams.set("email", email);
       if(name) url.searchParams.set("name", name);
-      if(bookingType) url.searchParams.set("utm_term", bookingType);
+      if(bookingType) url.searchParams.set("utm_term", isKreyol ? `${bookingType}_lang_ht` : bookingType);
+      else if(isKreyol) url.searchParams.set("utm_term", "lang_ht");
+      if(isKreyol) url.searchParams.set("lang", "ht");
 
       return url.toString();
     }
@@ -118,7 +207,7 @@
       if(!value) return "";
       const date = new Date(value);
       if(isNaN(date.getTime())) return "";
-      return date.toLocaleString([], {weekday:"short", month:"short", day:"numeric", hour:"numeric", minute:"2-digit"});
+      return date.toLocaleString(isKreyol ? "ht-HT" : [], {weekday:"short", month:"short", day:"numeric", hour:"numeric", minute:"2-digit"});
     }
 
     function showScheduledTime(){
@@ -126,61 +215,61 @@
       const card = document.getElementById("scheduled-time-card");
       if(formatted && card){
         card.style.display = "block";
-        card.innerHTML = `<strong>Scheduled time:</strong> ${formatted}`;
+        card.innerHTML = `<strong>${copy.scheduledTime}</strong> ${formatted}`;
       }
     }
 
     function updateWaitingVisuals(){
       document.getElementById("progress-bar").style.width = Math.min(92, 12 + attempts * 5) + "%";
-      document.getElementById("live-status-text").innerText = waitingMessages[attempts % waitingMessages.length];
+      document.getElementById("live-status-text").innerText = copy.waitingMessages[attempts % copy.waitingMessages.length];
     }
 
     function showReadyButton(link){
-      document.getElementById("top-badge").innerText = "Session ready";
-      document.getElementById("main-title").innerText = "Your Session Is Ready";
-      document.getElementById("main-text").innerText = "You can join now, or choose a later time if you prefer to sign later.";
-      document.getElementById("session-message").innerHTML = "<strong>Ready when you are.</strong>";
-      document.getElementById("session-submessage").innerText = "Join opens in a new tab. You can also use your SafeNotarize invite email.";
+      document.getElementById("top-badge").innerText = copy.readyBadge;
+      document.getElementById("main-title").innerText = copy.readyTitle;
+      document.getElementById("main-text").innerText = copy.readyText;
+      document.getElementById("session-message").innerHTML = copy.readyMessage;
+      document.getElementById("session-submessage").innerText = copy.readySub;
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "100%";
-      document.getElementById("live-status-text").innerText = "Session link ready";
+      document.getElementById("live-status-text").innerText = copy.readyStatus;
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.remove("hidden");
-      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${link}" target="_blank" rel="noopener">Join Session Now</a>`;
-      document.getElementById("invite-note").innerHTML = "<strong>SafeNotarize invite email:</strong> You will still receive your invite email. Use it to return to the session or join at your selected time.";
-      updateScheduleLink("Choose a Later Time");
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${link}" target="_blank" rel="noopener">${copy.joinNow}</a>`;
+      document.getElementById("invite-note").innerHTML = copy.readyInvite;
+      updateScheduleLink(copy.chooseLater);
     }
 
     function showBookerMessage(){
-      document.getElementById("top-badge").innerText = "Upload received";
-      document.getElementById("main-title").innerText = "Choose a Time for the Signer";
-      document.getElementById("main-text").innerText = "Choose an available time so the signer or signers can receive their invite emails.";
-      document.getElementById("session-message").innerHTML = "<strong>Next step: choose a time.</strong>";
-      document.getElementById("session-submessage").innerText = "Each signer will receive their own SafeNotarize invite email.";
+      document.getElementById("top-badge").innerText = copy.uploadReceived;
+      document.getElementById("main-title").innerText = copy.bookerTitle;
+      document.getElementById("main-text").innerText = copy.bookerText;
+      document.getElementById("session-message").innerHTML = copy.bookerMessage;
+      document.getElementById("session-submessage").innerText = copy.bookerSub;
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "100%";
-      document.getElementById("live-status-text").innerText = "Ready to choose time";
+      document.getElementById("live-status-text").innerText = copy.bookerStatus;
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.add("hidden");
-      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
-      document.getElementById("invite-note").innerHTML = "<strong>SafeNotarize invite email:</strong> After a time is selected, each signer will receive their own invite email.";
-      updateScheduleLink("Choose a Time Slot");
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">${copy.chooseSlot}</a>`;
+      document.getElementById("invite-note").innerHTML = copy.bookerInvite;
+      updateScheduleLink(copy.chooseSlot);
     }
 
     function showStillPreparing(){
-      document.getElementById("top-badge").innerText = "Upload received";
-      document.getElementById("main-title").innerText = "Choose How You Want to Continue";
-      document.getElementById("main-text").innerText = "You can choose a later time now. If your session link becomes ready, you can also use your invite email.";
-      document.getElementById("session-message").innerHTML = "<strong>Your upload was received.</strong>";
-      document.getElementById("session-submessage").innerText = "Choose a time slot if you want to sign later.";
+      document.getElementById("top-badge").innerText = copy.uploadReceived;
+      document.getElementById("main-title").innerText = copy.preparingTitle;
+      document.getElementById("main-text").innerText = copy.preparingText;
+      document.getElementById("session-message").innerHTML = copy.preparingMessage;
+      document.getElementById("session-submessage").innerText = copy.preparingSub;
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("progress-bar").style.width = "92%";
-      document.getElementById("live-status-text").innerText = "Ready for next step";
+      document.getElementById("live-status-text").innerText = copy.preparingStatus;
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.add("hidden");
-      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">Choose a Time Slot</a>`;
-      document.getElementById("invite-note").innerHTML = "<strong>SafeNotarize invite email:</strong> Each signer receives their own invite email after the session is prepared or scheduled.";
-      updateScheduleLink("Choose a Later Time");
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">${copy.chooseSlot}</a>`;
+      document.getElementById("invite-note").innerHTML = copy.preparingInvite;
+      updateScheduleLink(copy.chooseLater);
     }
 
     async function checkSessionLink(){
@@ -224,7 +313,8 @@
       }
     }
 
-    updateScheduleLink(isBookerFlow ? "Choose a Time Slot" : "Choose a Later Time");
+    applyInitialCopy();
+    updateScheduleLink(isBookerFlow ? copy.chooseSlot : copy.chooseLater);
     showScheduledTime();
 
     const testMode = params.get("test") || "";
