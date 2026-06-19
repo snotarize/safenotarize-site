@@ -42,17 +42,32 @@
 
         function applyLanguage(){
           if(!isKreyol) return;
+
           document.documentElement.lang = "ht";
           document.title = "Telechaje Dokiman | SafeNotarize";
-          document.getElementById("logo-img").alt = "Logo SafeNotarize";
-          document.getElementById("brand-link").href = "/ht.html";
-          document.getElementById("home-link").href = "/ht.html";
-          document.getElementById("home-link").textContent = "Retounen Akèy";
-          document.getElementById("upload-pill").textContent = "Etap 2: Telechaje dokiman ou";
-          document.getElementById("upload-title").textContent = "Telechaje Dokiman Ou";
-          document.getElementById("upload-text").textContent = "Tanpri telechaje dokiman an ki deja ranpli epi ki pare pou siyen oswa pou revize.";
-          document.getElementById("tally-upload-frame").title = "Fòm Telechajman Dokiman SafeNotarize";
-          document.getElementById("help-text").innerHTML = 'Ou bezwen èd pou telechaje dokiman an? Voye imèl bay <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a>';
+
+          const logoImg = document.getElementById("logo-img");
+          const brandLink = document.getElementById("brand-link");
+          const homeLink = document.getElementById("home-link");
+          const uploadPill = document.getElementById("upload-pill");
+          const uploadTitle = document.getElementById("upload-title");
+          const uploadText = document.getElementById("upload-text");
+          const tallyFrame = document.getElementById("tally-upload-frame");
+          const helpText = document.getElementById("help-text");
+
+          if(logoImg) logoImg.alt = "Logo SafeNotarize";
+          if(brandLink) brandLink.href = "/ht.html";
+          if(homeLink){
+            homeLink.href = "/ht.html";
+            homeLink.textContent = "Retounen Akèy";
+          }
+          if(uploadPill) uploadPill.textContent = "Etap 2: Telechaje dokiman ou";
+          if(uploadTitle) uploadTitle.textContent = "Telechaje Dokiman Ou";
+          if(uploadText) uploadText.textContent = "Tanpri telechaje dokiman an ki deja ranpli epi ki pare pou siyen oswa pou revize.";
+          if(tallyFrame) tallyFrame.title = "Fòm Telechajman Dokiman SafeNotarize";
+          if(helpText){
+            helpText.innerHTML = 'Ou bezwen èd pou telechaje dokiman an? Voye imèl bay <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a>';
+          }
         }
 
         function getCleanParams(){
@@ -67,9 +82,18 @@
           const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
           const lang = params.get("lang") || "";
 
-          if(orderId){ clean.set("order_id", orderId); clean.set("utm_content", orderId); }
-          if(email){ clean.set("email", email); clean.set("invitee_email", email); }
-          if(name){ clean.set("name", name); clean.set("invitee_full_name", name); }
+          if(orderId){
+            clean.set("order_id", orderId);
+            clean.set("utm_content", orderId);
+          }
+          if(email){
+            clean.set("email", email);
+            clean.set("invitee_email", email);
+          }
+          if(name){
+            clean.set("name", name);
+            clean.set("invitee_full_name", name);
+          }
           if(bookingType) clean.set("booking_type", bookingType);
           if(role) clean.set("role", role);
           if(uuid) clean.set("uuid", uuid);
@@ -114,12 +138,23 @@
         syncUrlAndTallyEmbed();
 
         var d=document,w="https://tally.so/widgets/embed.js",v=function(){
-          if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
-          else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
+          if(typeof Tally !== "undefined"){
+            Tally.loadEmbeds();
+          } else {
+            d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){
+              e.src = e.dataset.tallySrc;
+            });
+          }
         };
-        if(typeof Tally !== "undefined") v();
-        else if(d.querySelector('script[src="'+w+'"]') == null){
-          var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
+
+        if(typeof Tally !== "undefined"){
+          v();
+        } else if(d.querySelector('script[src="'+w+'"]') == null){
+          var s=d.createElement("script");
+          s.src=w;
+          s.onload=v;
+          s.onerror=v;
+          d.body.appendChild(s);
         }
       </script>
     </section>
@@ -132,6 +167,13 @@
     const uploadParams = new URLSearchParams(window.location.search);
     const uploadIsKreyol = (uploadParams.get("lang") || "").toLowerCase() === "ht";
 
+    if(uploadIsKreyol){
+      const helpText = document.getElementById("help-text");
+      if(helpText){
+        helpText.innerHTML = 'Ou bezwen èd pou telechaje dokiman an? Voye imèl bay <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a>';
+      }
+    }
+
     history.pushState({ uploadPage: true }, "", window.location.href);
 
     window.addEventListener("popstate", function(){
@@ -142,6 +184,7 @@
         : "Your document upload is not complete yet. Do you want to leave this page?";
 
       const leave = confirm(message);
+
       if(leave){
         allowLeaving = true;
         history.back();
@@ -152,6 +195,7 @@
 
     window.addEventListener("message", function(e){
       const data = typeof e.data === "string" ? e.data : JSON.stringify(e.data || {});
+
       if(data.includes("Tally.FormSubmitted")){
         allowLeaving = true;
         setTimeout(function(){
@@ -161,7 +205,9 @@
     });
 
     document.querySelectorAll("a").forEach(function(link){
-      link.addEventListener("click", function(){ allowLeaving = true; });
+      link.addEventListener("click", function(){
+        allowLeaving = true;
+      });
     });
   </script>
 </body>
