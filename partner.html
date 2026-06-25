@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Partner Notarization | SafeNotarize</title>
+  <title>Partner Online Notary Service | SafeNotarize</title>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17220906816"></script>
@@ -28,7 +28,7 @@
     }
   </script>
 
-  <meta name="description" content="SafeNotarize partner link: fast, secure online notarization. Book your appointment in minutes. U.S. and international signers supported." />
+  <meta name="description" content="SafeNotarize partner online notary service for real estate, legal, immigration, business, family, travel, POA, affidavits, witness-required documents, and international signers." />
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -199,6 +199,8 @@
       font-size:14px;
     }
     .toast.show{ opacity:1; transform: translateY(0); }
+    .fast-flow-grid{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); }
+    @media (max-width:768px){ .fast-flow-grid{ grid-template-columns:1fr !important; } }
   </style>
 
   <script>
@@ -282,11 +284,11 @@
       <a href="/partner.html#how-it-works">How it works</a>
       <a href="/partner.html#pricing-block">Pricing</a>
       <a href="/partner.html#faq">FAQ</a>
-      <a href="mailto:support@safenotarize.com">Contact</a>
+      <a href="mailto:supervisor@safenotarize.com">Contact</a>
     </div>
 
     <div class="header-right">
-      <a href="/partner.html#calendly-block">Book Appointment</a>
+      <a href="/book.html">Start Online Notarization</a>
     </div>
   </header>
 
@@ -311,8 +313,8 @@
       <a href="/partner.html#how-it-works">How it works</a>
       <a href="/partner.html#pricing-block">Pricing</a>
       <a href="/partner.html#faq">FAQ</a>
-      <a href="mailto:support@safenotarize.com">Contact</a>
-      <a href="/partner.html#calendly-block">Book Appointment</a>
+      <a href="mailto:supervisor@safenotarize.com">Contact</a>
+      <a href="/book.html">Start Online Notarization</a>
     </nav>
   </header>
 
@@ -331,18 +333,17 @@
     <div style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:30px; position:relative; z-index:2;">
       <div style="flex:1; min-width:300px;">
         <h1 style="font-size:2.2rem; color:#00274d; line-height:1.25; margin:0 0 14px;">
-          Welcome — You’re on a SafeNotarize Partner Link
+          Online Notary Support for Your Clients, Family, or Business
         </h1>
         <p style="font-size:1.05rem; color:#333; margin:0 0 18px; line-height:1.6;">
-          If a business, agency, translator, immigration prep service, title office, or partner sent you here,
-          you can book your notarization appointment below.
+          Use this SafeNotarize partner page to book a secure online notarization for yourself or someone else. We help with POA, affidavits, legal forms, real estate documents, travel forms, business paperwork, witnesses, and international signers.
         </p>
 
         <div style="display:flex; flex-wrap:wrap; gap:12px; margin:18px 0 10px;">
-          <a class="btn btn-navy" href="/partner.html#calendly-block"
-             onclick="return gtag_report_conversion('/partner.html#calendly-block');">
+          <a class="btn btn-navy" href="/book.html"
+             onclick="return gtag_report_conversion('/book.html');">
             <img src="https://img.icons8.com/ios-filled/20/ffffff/calendar.png" alt="Calendar" style="margin-right:2px;">
-            Book Appointment
+            Start Online Notarization
           </a>
 
           <button class="btn btn-outline" type="button" onclick="copyPartnerLink()">
@@ -350,43 +351,44 @@
             <span id="copyLabel">Copy partner link</span>
           </button>
 
-          <a class="btn btn-primary" href="mailto:support@safenotarize.com">
+          <a class="btn btn-primary" href="mailto:supervisor@safenotarize.com">
             <img src="https://img.icons8.com/ios-filled/20/ffffff/new-post.png" alt="Email" style="margin-right:2px;">
-            Email Support
+            Need Help
           </a>
         </div>
 
         <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:18px;">
           <div style="display:flex; align-items:center;">
             <img src="https://img.icons8.com/ios-filled/26/4CAF50/checkmark.png" alt="Check" style="margin-right:6px;">
-            <span style="font-size:0.92rem;">Fast turnaround</span>
+            <span style="font-size:0.92rem;">Book for yourself or someone else</span>
           </div>
           <div style="display:flex; align-items:center;">
             <img src="https://img.icons8.com/ios-filled/26/4CAF50/checkmark.png" alt="Check" style="margin-right:6px;">
-            <span style="font-size:0.92rem;">Secure and recorded sessions</span>
+            <span style="font-size:0.92rem;">Each signer gets their own SafeNotarize invite email</span>
           </div>
           <div style="display:flex; align-items:center;">
             <img src="https://img.icons8.com/ios-filled/26/4CAF50/checkmark.png" alt="Check" style="margin-right:6px;">
-            <span style="font-size:0.92rem;">U.S. and international signers</span>
+            <span style="font-size:0.92rem;">Witness and international signer support</span>
           </div>
         </div>
 
         <p class="tiny" style="margin-top:14px;">
-          Language support: English, Haitian Creole, and French.
+          Language support: English, Haitian Creole, and French. No account is needed for signers—join from the SafeNotarize invite email.
         </p>
       </div>
 
       <div style="flex:1; min-width:300px; max-width:480px;">
         <div class="card" style="border-left:6px solid #28a745;">
-          <h3 style="margin:0 0 10px; color:#00274d;">What to have ready</h3>
+          <h3 style="margin:0 0 10px; color:#00274d;">Before the session</h3>
           <ul style="margin:0; padding-left:18px; color:#334; line-height:1.7;">
-            <li>Valid, unexpired government photo ID</li>
-            <li>Your document ready to sign (PDF preferred)</li>
-            <li>Phone or computer with camera, mic, and stable internet</li>
-            <li>If witnesses are required, tell us before the appointment</li>
+            <li>Valid government photo ID or passport when applicable</li>
+            <li>Your completed document as a PDF</li>
+            <li>Phone or computer with camera, microphone, and internet</li>
+            <li>Every signer must use their own email address</li>
+            <li>Tell us in advance if witnesses are needed</li>
           </ul>
           <p class="tiny" style="margin:12px 0 0;">
-            International signers are often verified using a valid passport, subject to platform verification rules.
+            Each signer receives their own SafeNotarize invite email. If prompted to sign up or sign in, close that page and join from the invite email instead.
           </p>
         </div>
       </div>
@@ -407,27 +409,27 @@
       <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:18px;">
         <div class="card" style="flex:1; min-width:260px; max-width:340px; text-align:center;">
           <img src="https://img.icons8.com/ios-filled/50/document.png" alt="Document" style="margin-bottom:10px;">
-          <h4 style="margin:0 0 8px;">1) Prepare your document</h4>
-          <p class="tiny" style="margin:0;">Have your PDF ready. If your provider gave you a form, use that exact document.</p>
+          <h4 style="margin:0 0 8px;">1) Start the booking flow</h4>
+          <p class="tiny" style="margin:0;">Enter signer, payer, witness, and delivery details.</p>
         </div>
 
         <div class="card" style="flex:1; min-width:260px; max-width:340px; text-align:center;">
           <img src="https://img.icons8.com/ios-filled/50/verified-account.png" alt="Verify ID" style="margin-bottom:10px;">
-          <h4 style="margin:0 0 8px;">2) Verify your identity</h4>
-          <p class="tiny" style="margin:0;">Use a valid photo ID. International signers may use a passport (verification rules apply).</p>
+          <h4 style="margin:0 0 8px;">2) Pick a time and upload</h4>
+          <p class="tiny" style="margin:0;">Choose the best time, then upload the document securely.</p>
         </div>
 
         <div class="card" style="flex:1; min-width:260px; max-width:340px; text-align:center;">
           <img src="https://img.icons8.com/ios-filled/50/video-call.png" alt="Video" style="margin-bottom:10px;">
-          <h4 style="margin:0 0 8px;">3) Complete the session</h4>
-          <p class="tiny" style="margin:0;">Join the video call at your appointment time and finish your notarization.</p>
+          <h4 style="margin:0 0 8px;">3) Join from the invite email</h4>
+          <p class="tiny" style="margin:0;">Each signer joins from their own SafeNotarize invite email with camera, microphone, and ID ready.</p>
         </div>
       </div>
 
       <div style="text-align:center; margin-top:28px;">
-        <a class="btn btn-navy" href="/partner.html#calendly-block"
-           onclick="return gtag_report_conversion('/partner.html#calendly-block');">
-          Book Appointment
+        <a class="btn btn-navy" href="/book.html"
+           onclick="return gtag_report_conversion('/book.html');">
+          Start Online Notarization
         </a>
       </div>
     </div>
@@ -435,41 +437,45 @@
 
   <!-- Pricing -->
   <section class="white-bg-icon" id="pricing-block" style="padding:50px 20px; text-align:center;">
-    <h2 style="font-size:26px; color:#003366; margin-bottom:30px;">Simple, Transparent Pricing</h2>
+    <h2 style="font-size:26px; color:#003366; margin-bottom:12px;">Simple Partner Pricing</h2>
+    <p style="max-width:760px; margin:0 auto 28px; color:#556; line-height:1.6;">
+      Clear pricing for most standard online notarization sessions. Final price may change if the document requires extra signers, stamps, witnesses, or international verification.
+    </p>
 
-    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; max-width:1000px; margin:auto;">
-      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
-        <h4 style="color:#003366; margin-bottom:10px;">Basic Notarization</h4>
-        <p style="font-size:20px; font-weight:bold; color:#28a745;">$23</p>
-        <p style="font-size:14px; color:#555;">One document and one signer.</p>
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:22px; max-width:1100px; margin:auto;">
+      <div style="flex:1; min-width:220px; background:#f8f9fa; padding:28px 18px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.05); border-top:4px solid #28a745;">
+        <h4 style="color:#003366; margin-bottom:10px;">Base Online Notarization</h4>
+        <p style="font-size:24px; font-weight:bold; color:#28a745; margin:0 0 8px;">$25</p>
+        <p style="font-size:14px; color:#555; line-height:1.5;">Includes 1 signer and 1 notarial stamp.</p>
       </div>
 
-      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+      <div style="flex:1; min-width:220px; background:#f8f9fa; padding:28px 18px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
         <h4 style="color:#003366; margin-bottom:10px;">Additional Signers</h4>
-        <p style="font-size:20px; font-weight:bold; color:#28a745;">+ $6 each</p>
-        <p style="font-size:14px; color:#555;">Per extra signer added to the session.</p>
+        <p style="font-size:22px; font-weight:bold; color:#28a745; margin:0 0 8px;">+ $6 each</p>
+        <p style="font-size:14px; color:#555; line-height:1.5;">Each signer needs their own email invite.</p>
       </div>
 
-      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+      <div style="flex:1; min-width:220px; background:#f8f9fa; padding:28px 18px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
         <h4 style="color:#003366; margin-bottom:10px;">Extra Stamps</h4>
-        <p style="font-size:20px; font-weight:bold; color:#28a745;">+ $5 each</p>
-        <p style="font-size:14px; color:#555;">Per additional notarial stamp.</p>
+        <p style="font-size:22px; font-weight:bold; color:#28a745; margin:0 0 8px;">+ $5 each</p>
+        <p style="font-size:14px; color:#555; line-height:1.5;">For each additional notarial act/stamp.</p>
       </div>
 
-      <div style="flex:1; min-width:250px; background:#f8f9fa; padding:30px 20px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
-        <h4 style="color:#003366; margin-bottom:10px;">International Signers</h4>
-        <p style="font-size:20px; font-weight:bold; color:#28a745;">$37</p>
-        <p style="font-size:14px; color:#555;">For signers outside the United States.</p>
+      <div style="flex:1; min-width:220px; background:#f8f9fa; padding:28px 18px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+        <h4 style="color:#003366; margin-bottom:10px;">Witness</h4>
+        <p style="font-size:22px; font-weight:bold; color:#28a745; margin:0 0 8px;">$10 each</p>
+        <p style="font-size:14px; color:#555; line-height:1.5;">When available and requested in advance.</p>
+      </div>
+
+      <div style="flex:1; min-width:220px; background:#f8f9fa; padding:28px 18px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.05);">
+        <h4 style="color:#003366; margin-bottom:10px;">International Signer</h4>
+        <p style="font-size:22px; font-weight:bold; color:#28a745; margin:0 0 8px;">$35</p>
+        <p style="font-size:14px; color:#555; line-height:1.5;">For eligible signers outside the U.S.</p>
       </div>
     </div>
 
-    <div class="white-bg-icon" style="padding:30px 20px; margin-top:18px;">
-      <div style="max-width:900px; margin:auto;">
-        <h4 style="color:#003366; font-size:20px; margin:0 0 10px;">Need witnesses?</h4>
-        <p style="color:#555; font-size:16px; margin:0;">
-          Witness service is available for <strong>$10 per witness</strong>. Tell us ahead of time so we can confirm availability.
-        </p>
-      </div>
+    <div style="margin-top:28px;">
+      <a class="btn btn-primary" href="/book.html">Start Online Notarization</a>
     </div>
   </section>
 
@@ -480,14 +486,14 @@
       <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
         <summary style="font-weight:bold; cursor:pointer;">Do I need to upload my document somewhere?</summary>
         <p style="margin-top:10px;">
-          You can bring your document to the appointment. If your provider gave you a form, use that exact form.
+          Start the booking flow, then upload your document securely. PDF is preferred. If your provider gave you a specific form, use that exact document.
         </p>
       </details>
 
       <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
         <summary style="font-weight:bold; cursor:pointer;">Can you notarize documents for immigration packages?</summary>
         <p style="margin-top:10px;">
-          We can notarize affidavits, consent forms, authorizations, and other supporting documents. We do not provide legal advice.
+          We can notarize affidavits, consent forms, authorizations, POA, travel forms, and other supporting documents. We do not prepare documents or provide legal advice.
         </p>
       </details>
 
@@ -501,24 +507,53 @@
       <details style="margin-bottom:15px; border:1px solid #ddd; border-radius:5px; padding:15px;">
         <summary style="font-weight:bold; cursor:pointer;">Do you support Creole and French?</summary>
         <p style="margin-top:10px;">
-          Yes. We support English, Haitian Creole, and French.
+          Yes. We support English, Haitian Creole, and French for the online notary process.
         </p>
       </details>
     </div>
   </section>
 
-  <!-- Calendly -->
-  <div class="white-bg-icon" id="calendly-block" style="background:#f9f9f9; padding:90px 20px; text-align:center;">
-    <h2 style="font-size:24px; color:#003366; margin-bottom:20px;">Book Your Appointment</h2>
-    <p class="tiny" style="max-width:780px; margin:0 auto 18px;">
-      Pick a time that works for you. After booking, you will receive appointment details by email.
-    </p>
+  <!-- Booking CTA -->
+  <section id="booking-block" class="white-bg-icon" style="background:#f9f9f9; padding:70px 20px; text-align:center;">
+    <div style="max-width:1050px; margin:0 auto;">
+      <div style="max-width:760px; margin:0 auto 26px;">
+        <div class="pill" style="margin-bottom:12px;">Start here</div>
+        <h2 style="font-size:28px; color:#003366; margin:0 0 10px;">Start a SafeNotarize Session</h2>
+        <p style="color:#555; line-height:1.6; margin:0;">
+          One clean flow: enter signer details, pick a time, upload the document, then each signer receives their own SafeNotarize invite email to join.
+        </p>
+      </div>
 
-    <div class="calendly-inline-widget"
-      data-url="https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1"
-      style="min-width:320px;height:760px; margin:0 auto;"></div>
-  </div>
-  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:18px; margin-bottom:26px;" class="fast-flow-grid">
+        <div class="card" style="text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:bold; margin-bottom:12px;">1</div>
+          <h4 style="margin:0 0 8px; color:#003366;">Enter Details</h4>
+          <p class="tiny" style="margin:0;">Signer, payer, witnesses, extra stamps, and delivery information.</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:bold; margin-bottom:12px;">2</div>
+          <h4 style="margin:0 0 8px; color:#003366;">Pick a Time</h4>
+          <p class="tiny" style="margin:0;">Choose the best time for the online notarization session.</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:bold; margin-bottom:12px;">3</div>
+          <h4 style="margin:0 0 8px; color:#003366;">Upload & Join</h4>
+          <p class="tiny" style="margin:0;">Upload the document and join from the SafeNotarize invite email.</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width:760px; margin:0 auto; border-top:5px solid #28a745;">
+        <h3 style="margin:0 0 10px; color:#003366;">Ready to start?</h3>
+        <p style="color:#555; line-height:1.6; margin:0 0 18px;">
+          Use this for yourself, a client, a family member, or another signer.
+        </p>
+        <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+          <a href="/book.html" class="btn btn-primary">Notarize Online Now</a>
+          <a href="/book.html" class="btn btn-outline">Book for Someone Else</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Optional UI elements (safe even if not used) -->
   <loading-spinner id="page-loader"></loading-spinner>
@@ -566,7 +601,9 @@
           <li><a href="/#services" style="color:#90caf9; text-decoration:none;">Services</a></li>
           <li><a href="/#pricing-block" style="color:#90caf9; text-decoration:none;">Pricing</a></li>
           <li><a href="/#faq" style="color:#90caf9; text-decoration:none;">FAQ</a></li>
-          <li><a href="mailto:support@safenotarize.com" style="color:#90caf9; text-decoration:none;">Support</a></li>
+          <li><a href="/book.html" style="color:#90caf9; text-decoration:none;">Start Online Notarization</a></li>
+          <li><a href="/book.html" style="color:#90caf9; text-decoration:none;">Book for Someone Else</a></li>
+          <li><a href="mailto:supervisor@safenotarize.com" style="color:#90caf9; text-decoration:none;">Support</a></li>
         </ul>
       </div>
 
@@ -584,9 +621,9 @@
         <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="margin-bottom:10px;">
       </a>
       <div style="margin-top:10px;">
-        <a href="/partner.html#calendly-block" class="btn btn-primary" style="border-radius:5px; padding:12px 24px;"
-           onclick="return gtag_report_conversion('/partner.html#calendly-block');">
-          Book a Notary
+        <a href="/book.html" class="btn btn-primary" style="border-radius:5px; padding:12px 24px;"
+           onclick="return gtag_report_conversion('/book.html');">
+          Start Online Notarization
         </a>
       </div>
     </div>
