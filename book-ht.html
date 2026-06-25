@@ -167,7 +167,7 @@
         fields.unshift(document.getElementById("booker_email")); fields.unshift(document.getElementById("booker_name"));
       }
       for(const field of fields){ if(field && !field.checkValidity()){ field.reportValidity(); field.focus(); return false; } }
-      return true;
+      return validateUniqueSessionPeople();
     }
 
     function addAdditionalSigner(){
@@ -175,7 +175,7 @@
       if(signerCount>3){alert("Pou plis pase 3 siyatè anplis, mete enfòmasyon yo nan seksyon nòt la.");return;}
       const wrap=document.getElementById("additional-signers"), id=`additional-signer-${signerCount}`, block=document.createElement("div");
       block.className="card"; block.id=id; block.style.background="#fff";
-      block.innerHTML=`<div class="card-title"><h3>Siyatè anplis ${signerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Retire</button></div><div class="grid-2"><div class="field"><label>Non konplè</label><input name="additional_signer_${signerCount}_name" placeholder="Non konplè siyatè anplis la"></div><div class="field"><label>Adrès imèl</label><input name="additional_signer_${signerCount}_email" type="email" placeholder="signer@email.com"></div></div>`;
+      block.innerHTML=`<div class="card-title"><h3>Siyatè anplis ${signerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Retire</button></div><div class="grid-2"><div class="field"><label>Non konplè <span class="required">*</span></label><input name="additional_signer_${signerCount}_name" required placeholder="Non konplè siyatè anplis la"></div><div class="field"><label>Adrès imèl <span class="required">*</span></label><input name="additional_signer_${signerCount}_email" type="email" required placeholder="signer@email.com"></div></div><p style="margin:0;color:#637487;font-size:12.5px;line-height:1.35;">Chak siyatè dwe itilize pwòp imèl pa li pou li ka resevwa envitasyon SafeNotarize pa li.</p>`;
       wrap.appendChild(block);
     }
 
@@ -202,6 +202,162 @@
     function toggleDocumentOther(){document.getElementById("document-other").classList.toggle("hidden",document.getElementById("document_to").value!=="other");}
     function showStatus(type,message){const el=document.getElementById("status-message"); el.className=`status-msg ${type}`; el.textContent=message;}
     function clearStatus(){const el=document.getElementById("status-message"); el.className="status-msg"; el.textContent="";}
+
+    function normalizeEmail(email){
+      return (email || "").trim().toLowerCase();
+    }
+
+    function normalizePersonName(name){
+      return (name || "").trim().replace(/\s+/g," ").toLowerCase();
+    }
+
+    function getInputByName(name){
+      return document.querySelector(`[name="${name}"]`);
+    }
+
+    function showFieldError(field,message){
+      if(field){
+        field.setCustomValidity(message || "");
+        field.reportValidity();
+        field.focus();
+      }
+    }
+
+    function clearSessionPeopleValidation(){
+      const names=[
+        "primary_name","primary_email",
+        "additional_signer_1_name","additional_signer_1_email",
+        "additional_signer_2_name","additional_signer_2_email",
+        "additional_signer_3_name","additional_signer_3_email",
+        "witness_1_name","witness_1_email",
+        "witness_2_name","witness_2_email",
+        "observer_1_name","observer_1_email",
+        "observer_2_name","observer_2_email"
+      ];
+
+      names.forEach(function(name){
+        const field=getInputByName(name);
+        if(field) field.setCustomValidity("");
+      });
+    }
+
+    function addPersonToList(list,role,nameFieldName,emailFieldName,requireBoth){
+      const nameField=getInputByName(nameFieldName);
+      const emailField=getInputByName(emailFieldName);
+
+      const name=nameField ? nameField.value.trim() : "";
+      const email=emailField ? emailField.value.trim() : "";
+
+      if(!name && !email) return true;
+
+      if(requireBoth && !name){
+        showFieldError(nameField,`${role} bezwen yon non konplè.`);
+        return false;
+      }
+
+      if(requireBoth && !email){
+        showFieldError(emailField,`${role} bezwen yon lòt imèl pou moun sa a ka resevwa pwòp envitasyon SafeNotarize pa li.`);
+        return false;
+      }
+
+      if(emailField && email && !emailField.checkValidity()){
+        emailField.reportValidity();
+        emailField.focus();
+        return false;
+      }
+
+      list.push({
+        role:role,
+        name:name,
+        email:email,
+        nameKey:normalizePersonName(name),
+        emailKey:normalizeEmail(email),
+        nameField:nameField,
+        emailField:emailField
+      });
+
+      return true;
+    }
+
+    function validateUniqueSessionPeople(){
+      clearSessionPeopleValidation();
+
+      const people=[];
+
+      if(!addPersonToList(people,"Siyatè prensipal","primary_name","primary_email",true)) return false;
+
+      for(let i=1;i<=3;i++){
+        const nameField=getInputByName(`additional_signer_${i}_name`);
+        const emailField=getInputByName(`additional_signer_${i}_email`);
+
+        if(nameField || emailField){
+          if(!addPersonToList(people,`Siyatè anplis ${i}`,`additional_signer_${i}_name`,`additional_signer_${i}_email`,true)) return false;
+        }
+      }
+
+      for(let i=1;i<=2;i++){
+        const option=getInputByName(`witness_${i}_option`);
+        const clientProvided=option && option.value==="client_provided";
+
+        if(clientProvided){
+          if(!addPersonToList(people,`Temwen ${i}`,`witness_${i}_name`,`witness_${i}_email`,true)) return false;
+        }
+      }
+
+      for(let i=1;i<=2;i++){
+        const nameField=getInputByName(`observer_${i}_name`);
+        const emailField=getInputByName(`observer_${i}_email`);
+
+        if((nameField && nameField.value.trim()) || (emailField && emailField.value.trim())){
+          if(!addPersonToList(people,`Obsèvatè ${i}`,`observer_${i}_name`,`observer_${i}_email`,true)) return false;
+        }
+      }
+
+      const emails=new Map();
+      const names=new Map();
+
+      for(const person of people){
+        if(person.emailKey){
+          if(emails.has(person.emailKey)){
+            const first=emails.get(person.emailKey);
+            showFieldError(
+              person.emailField,
+              `${person.role} ap itilize menm imèl ak ${first.role}. Tanpri mete yon lòt imèl pou chak moun ka resevwa pwòp envitasyon SafeNotarize pa li pou antre nan sesyon an.`
+            );
+            return false;
+          }
+
+          emails.set(person.emailKey,person);
+        }
+
+        if(person.nameKey){
+          if(names.has(person.nameKey)){
+            const first=names.get(person.nameKey);
+            showFieldError(
+              person.nameField,
+              `${person.role} gen menm non ak ${first.role}. Tanpri mete chak moun apa pou envitasyon sesyon yo pa melanje.`
+            );
+            return false;
+          }
+
+          names.set(person.nameKey,person);
+        }
+      }
+
+      return true;
+    }
+
+    document.addEventListener("input",function(e){
+      if(e.target && e.target.matches("input")){
+        e.target.setCustomValidity("");
+      }
+    });
+
+    document.addEventListener("change",function(e){
+      if(e.target && e.target.matches("select")){
+        clearSessionPeopleValidation();
+      }
+    });
 
     function getFormPayload(){
       const form=document.getElementById("booking-form"), data=Object.fromEntries(new FormData(form).entries());
@@ -247,6 +403,7 @@
     document.getElementById("booking-form").addEventListener("submit",async function(e){
       e.preventDefault(); clearStatus();
       const form=e.currentTarget; if(!form.checkValidity()){form.reportValidity(); return;}
+      if(!validateUniqueSessionPeople()) return;
       const btn=document.getElementById("continue-btn"); btn.disabled=true; btn.textContent="Ap sove...";
       try{
         const payload=getFormPayload();
