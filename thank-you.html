@@ -28,21 +28,21 @@
 
     <div class="badge" id="top-badge">SafeNotarize session</div>
     <h1 id="main-title">Getting Your Session Ready</h1>
-    <p id="main-text">We are checking for your secure session link.</p>
+    <p id="main-text">Your SafeNotarize session is being prepared.</p>
 
     <div class="status-card">
       <div id="loader" class="loader"></div>
-      <p id="session-message"><strong>Please wait a moment.</strong></p>
-      <p id="session-submessage">If your session is ready, the Join Session button will appear below.</p>
+      <p id="session-message"><strong>Please wait while we prepare your session.</strong></p>
+      <p id="session-submessage">The Join Session button will appear when it is ready.</p>
       <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-      <div class="live-status"><span id="live-status-text">Checking session status</span><span class="dots" id="dots"></span></div>
+      <div class="live-status"><span id="live-status-text">Preparing your session</span><span class="dots" id="dots"></span></div>
 
       <div id="ready-instructions" class="ready-box hidden">
         <strong id="before-join-title">Before you join:</strong>
         <ul class="ready-list" id="ready-list">
-          <li>No account is needed.</li>
-          <li>If you are asked to log in or sign up, return to your SafeNotarize invite email and rejoin from there.</li>
-          <li>Have your valid ID ready for identity verification.</li>
+          <li>Do not sign up or sign in. Use your SafeNotarize invite email to join.</li>
+          <li>Allow camera and microphone access when asked.</li>
+          <li>Have a valid ID ready for identity verification.</li>
         </ul>
       </div>
 
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="invite-note" id="invite-note"><strong>SafeNotarize invite email:</strong> Each signer receives their own invite email.</div>
+    <div class="invite-note" id="invite-note"><strong>SafeNotarize invite email:</strong> Every signer gets their own invite email. Use that email to join the session directly.</div>
     <div class="time-note" id="scheduled-time-card"></div>
     <a href="https://safenotarize.com" class="home-btn" id="home-btn">Back to SafeNotarize</a>
   </main>
@@ -76,85 +76,85 @@
     const copy = isKreyol ? {
       initialBadge:"Sesyon SafeNotarize",
       initialTitle:"N ap prepare sesyon ou",
-      initialText:"N ap verifye lyen sekirize pou sesyon ou a.",
-      wait:"<strong>Tanpri tann yon ti moman.</strong>",
-      subWait:"Si sesyon ou pare, bouton pou antre nan sesyon an ap parèt anba a.",
-      checking:"N ap verifye estati sesyon an",
+      initialText:"N ap prepare sesyon SafeNotarize ou a.",
+      wait:"<strong>Tanpri tann pandan n ap prepare sesyon ou.</strong>",
+      subWait:"Bouton pou antre nan sesyon an ap parèt lè li pare.",
+      checking:"N ap prepare sesyon ou",
       chooseLater:"Chwazi yon lè pou pita",
       chooseSlot:"Chwazi yon lè",
       needHelp:"Bezwen èd",
-      inviteInitial:"<strong>Imèl envitasyon SafeNotarize:</strong> Chak siyatè ap resevwa pwòp imèl envitasyon pa yo.",
+      inviteInitial:"<strong>Imèl envitasyon SafeNotarize:</strong> Chak siyatè ap resevwa pwòp imèl envitasyon pa yo. Antre nan sesyon an dirèkteman depi imèl sa a.",
       backHome:"Retounen sou SafeNotarize",
       beforeJoin:"Avan ou antre:",
       readyItems:[
-        "Ou pa bezwen kreye kont.",
-        "Si yo mande w konekte oswa kreye kont, retounen nan imèl envitasyon SafeNotarize ou a epi antre ankò depi la.",
-        "Kenbe pyès idantite valab ou pare pou verifikasyon."
+        "Pa kreye kont epi pa konekte. Itilize imèl envitasyon SafeNotarize ou a pou antre.",
+        "Bay aksè kamera ak mikwo lè yo mande w.",
+        "Kenbe yon pyès idantite valab pare pou verifikasyon."
       ],
-      waitingMessages:["N ap verifye estati sesyon an","N ap prepare chanm sekirize ou a","N ap konekte randevou ou a","Prèske pare"],
+      waitingMessages:["N ap prepare sesyon ou","N ap kreye envitasyon ou","N ap verifye lyen sekirize a","Prèske pare"],
       scheduledTime:"Lè randevou a:",
       readyBadge:"Sesyon an pare",
       readyTitle:"Sesyon ou pare",
-      readyText:"Ou ka antre kounye a, oswa ou ka chwazi yon lè pou pita si ou vle siyen pita.",
+      readyText:"Sesyon ou pare. Ou ka antre isit la oswa itilize imèl envitasyon SafeNotarize ou a.",
       readyMessage:"<strong>Nou pare lè ou pare.</strong>",
-      readySub:"Lyen an ap ouvri nan yon nouvo tab. Ou ka itilize imèl envitasyon SafeNotarize la tou.",
+      readySub:"Bay aksè kamera ak mikwo. Kenbe pyès idantite valab ou pare.",
       readyStatus:"Lyen sesyon an pare",
       joinNow:"Antre nan sesyon an kounye a",
-      readyInvite:"<strong>Enpòtan:</strong> Ou pa bezwen kreye kont. Si yo mande w konekte oswa kreye kont, retounen nan imèl envitasyon SafeNotarize ou a epi antre ankò depi la.",
+      readyInvite:"<strong>Enpòtan:</strong> Pa kreye kont epi pa konekte. Si yo mande w sa, fèmen paj la epi antre depi imèl envitasyon SafeNotarize ou a.",
       uploadReceived:"Dokiman an resevwa",
       bookerTitle:"Chwazi yon lè pou siyatè a",
-      bookerText:"Chwazi yon lè ki disponib pou siyatè a oswa siyatè yo ka resevwa imèl envitasyon yo.",
+      bookerText:"Chwazi yon lè pou chak siyatè ka resevwa pwòp imèl envitasyon SafeNotarize pa yo.",
       bookerMessage:"<strong>Pwochen etap: chwazi yon lè.</strong>",
-      bookerSub:"Chak siyatè ap resevwa pwòp imèl envitasyon SafeNotarize pa yo.",
+      bookerSub:"Chak siyatè dwe antre depi pwòp imèl envitasyon pa yo.",
       bookerStatus:"Pare pou chwazi lè",
       bookerInvite:"<strong>Imèl envitasyon SafeNotarize:</strong> Apre yo fin chwazi yon lè, chak siyatè ap resevwa pwòp imèl envitasyon pa yo.",
       preparingTitle:"Chwazi kijan ou vle kontinye",
-      preparingText:"Ou ka chwazi yon lè pou pita kounye a. Si lyen sesyon ou vin pare, ou ka itilize imèl envitasyon ou tou.",
+      preparingText:"Nou resevwa dokiman ou. Ou ka chwazi yon lè, oswa itilize imèl envitasyon SafeNotarize ou lè li rive.",
       preparingMessage:"<strong>Nou resevwa dokiman ou.</strong>",
-      preparingSub:"Chwazi yon lè si ou vle siyen pita.",
+      preparingSub:"Chak siyatè ap resevwa pwòp imèl envitasyon SafeNotarize pa yo.",
       preparingStatus:"Pare pou pwochen etap la",
-      preparingInvite:"<strong>Enpòtan:</strong> Chak siyatè ap resevwa imèl envitasyon SafeNotarize pa yo. Si yo mande w konekte oswa kreye kont, retounen nan imèl sa a epi antre ankò depi la."
+      preparingInvite:"<strong>Enpòtan:</strong> Pa kreye kont epi pa konekte. Si yo mande w sa, fèmen paj la epi antre depi imèl envitasyon SafeNotarize ou a."
     } : {
       initialBadge:"SafeNotarize session",
       initialTitle:"Getting Your Session Ready",
-      initialText:"We are checking for your secure session link.",
-      wait:"<strong>Please wait a moment.</strong>",
-      subWait:"If your session is ready, the Join Session button will appear below.",
-      checking:"Checking session status",
+      initialText:"Your SafeNotarize session is being prepared.",
+      wait:"<strong>Please wait while we prepare your session.</strong>",
+      subWait:"The Join Session button will appear when it is ready.",
+      checking:"Preparing your session",
       chooseLater:"Choose a Later Time",
       chooseSlot:"Choose a Time Slot",
       needHelp:"Need Help",
-      inviteInitial:"<strong>SafeNotarize invite email:</strong> Each signer receives their own invite email.",
+      inviteInitial:"<strong>SafeNotarize invite email:</strong> Every signer gets their own invite email. Use that email to join the session directly.",
       backHome:"Back to SafeNotarize",
       beforeJoin:"Before you join:",
       readyItems:[
-        "No account is needed.",
-        "If you are asked to log in or sign up, return to your SafeNotarize invite email and rejoin from there.",
-        "Have your valid ID ready for identity verification."
+        "Do not sign up or sign in. Use your SafeNotarize invite email to join.",
+        "Allow camera and microphone access when asked.",
+        "Have a valid ID ready for identity verification."
       ],
-      waitingMessages:["Checking session status","Preparing your secure room","Connecting your booking","Almost ready"],
+      waitingMessages:["Preparing your session","Preparing your secure room","Connecting your booking","Almost ready"],
       scheduledTime:"Scheduled time:",
       readyBadge:"Session ready",
       readyTitle:"Your Session Is Ready",
-      readyText:"You can join now, or choose a later time if you prefer to sign later.",
+      readyText:"Your session is ready. Join from this page or from your SafeNotarize invite email.",
       readyMessage:"<strong>Ready when you are.</strong>",
-      readySub:"Join opens in a new tab. You can also use your SafeNotarize invite email.",
+      readySub:"Allow camera and microphone access. Have your valid ID ready.",
       readyStatus:"Session link ready",
       joinNow:"Join Session Now",
-      readyInvite:"<strong>Important:</strong> No account is needed. If you are asked to log in or sign up, return to your SafeNotarize invite email and rejoin from there.",
+      readyInvite:"<strong>Important:</strong> Do not sign up or sign in. If prompted, close that page and join from your SafeNotarize invite email.",
       uploadReceived:"Upload received",
       bookerTitle:"Choose a Time for the Signer",
-      bookerText:"Choose an available time so the signer or signers can receive their invite emails.",
+      bookerText:"Choose a time so each signer can receive their own SafeNotarize invite email.",
       bookerMessage:"<strong>Next step: choose a time.</strong>",
-      bookerSub:"Each signer will receive their own SafeNotarize invite email.",
+      bookerSub:"Each signer must join from their own invite email.",
       bookerStatus:"Ready to choose time",
-      bookerInvite:"<strong>SafeNotarize invite email:</strong> After a time is selected, each signer will receive their own invite email.",
+      bookerInvite:"<strong>SafeNotarize invite email:</strong> After a time is selected, every signer gets their own invite email.",
       preparingTitle:"Choose How You Want to Continue",
-      preparingText:"You can choose a later time now. If your session link becomes ready, you can also use your invite email.",
+      preparingText:"Your upload was received. You can choose a time, or use your SafeNotarize invite email when it arrives.",
       preparingMessage:"<strong>Your upload was received.</strong>",
-      preparingSub:"Choose a time slot if you want to sign later.",
+      preparingSub:"Every signer will receive their own SafeNotarize invite email.",
       preparingStatus:"Ready for next step",
-      preparingInvite:"<strong>Important:</strong> Each signer receives their own SafeNotarize invite email. If you are asked to log in or sign up, return to that email and rejoin from there."
+      preparingInvite:"<strong>Important:</strong> Do not sign up or sign in. If prompted, close that page and join from your SafeNotarize invite email."
     };
 
     const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
@@ -228,7 +228,7 @@
     }
 
     function updateWaitingVisuals(){
-      document.getElementById("progress-bar").style.width = Math.min(92, 12 + attempts * 5) + "%";
+      document.getElementById("progress-bar").style.width = Math.min(92, 12 + attempts * 4) + "%";
       document.getElementById("live-status-text").innerText = copy.waitingMessages[attempts % copy.waitingMessages.length];
     }
 
@@ -311,13 +311,13 @@
           return;
         }
 
-        setTimeout(checkSessionLink, 3000);
+        setTimeout(checkSessionLink, 6000);
       }catch(error){
         if(attempts >= maxAttempts){
           showStillPreparing();
           return;
         }
-        setTimeout(checkSessionLink, 3000);
+        setTimeout(checkSessionLink, 6000);
       }
     }
 
