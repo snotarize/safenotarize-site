@@ -52,6 +52,7 @@
     .btn-primary{ background:var(--green); color:#fff; padding:13px 24px; box-shadow:0 10px 24px rgba(40,167,69,.18); }
     .btn-dark{ background:var(--navy); color:#fff; padding:15px 30px; border-radius:999px; box-shadow:0 10px 24px rgba(0,39,77,.18); }
     .btn-outline{ background:#fff; color:var(--navy); border:1px solid #cfd9e6; padding:13px 22px; }
+    .btn-outline-green{ background:#fff; color:var(--green); border:2px solid var(--green); padding:11px 22px; border-radius:999px; }
     .small-note{ color:#1f7a36; font-weight:700; font-size:.9rem; }
     .card{ background:#fff; border:1px solid #e7edf3; border-radius:18px; box-shadow:var(--shadow); }
 
@@ -128,16 +129,16 @@
       .hero-copy h1{ font-size:2.2rem; }
       .section-title h2, .section-title h3{ font-size:1.85rem; }
 
-      #calendly-block { padding:28px 14px !important; }
-      #calendly-block > div { max-width:100% !important; }
-      #calendly-block .booking-copy { display:none !important; }
-      #calendly-block .booking-widget { flex:1 1 100% !important; max-width:100% !important; min-width:0 !important; padding:10px !important; }
-      #calendly-block .section-title { margin:0 auto 14px !important; max-width:100% !important; }
-      #calendly-block .section-title h3 { font-size:1.5rem !important; margin-bottom:8px !important; line-height:1.2 !important; }
-      #calendly-block .section-title p { font-size:0.92rem !important; line-height:1.45 !important; margin:0 !important; }
-      #calendly-block .section-title > div:first-child { margin-bottom:10px !important; font-size:0.76rem !important; padding:6px 10px !important; }
-      #calendly-block .booking-widget > div:first-child { margin-bottom:10px !important; padding:0 !important; }
-      #calendly-block .calendly-inline-widget { min-width:100% !important; height:640px !important; }
+      #booking-block { padding:28px 14px !important; }
+      #booking-block > div { max-width:100% !important; }
+      #booking-block .booking-copy { display:none !important; }
+      #booking-block .booking-widget { flex:1 1 100% !important; max-width:100% !important; min-width:0 !important; padding:10px !important; }
+      #booking-block .section-title { margin:0 auto 14px !important; max-width:100% !important; }
+      #booking-block .section-title h3 { font-size:1.5rem !important; margin-bottom:8px !important; line-height:1.2 !important; }
+      #booking-block .section-title p { font-size:0.92rem !important; line-height:1.45 !important; margin:0 !important; }
+      #booking-block .section-title > div:first-child { margin-bottom:10px !important; font-size:0.76rem !important; padding:6px 10px !important; }
+      #booking-block .booking-widget > div:first-child { margin-bottom:10px !important; padding:0 !important; }
+      #booking-block .booking-inline-widget { min-width:100% !important; height:640px !important; }
     }
   </style>
 
@@ -223,11 +224,12 @@
       <a href="/#pricing-block">Pricing</a>
       <a href="/#faq">FAQ</a>
       <a href="/upload.html">Upload Documents</a>
+      <a href="/book.html">Book for Someone Else</a>
       <a href="mailto:supervisor@safenotarize.com">Contact</a>
     </div>
 
     <div class="header-right">
-      <a class="btn btn-primary" href="#calendly-block" style="padding:10px 20px; border-radius:8px; box-shadow:none;">Start Online Notarization</a>
+      <a class="btn btn-primary" href="/book.html" style="padding:10px 20px; border-radius:8px; box-shadow:none;">Start Online Notarization</a>
     </div>
   </header>
 
@@ -250,6 +252,7 @@
       <a href="/#pricing-block">Pricing</a>
       <a href="/#faq">FAQ</a>
       <a href="/upload.html">Upload Documents</a>
+      <a href="/book.html">Book for Someone Else</a>
       <a href="mailto:supervisor@safenotarize.com">Contact</a>
     </nav>
   </header>
@@ -268,15 +271,15 @@
       <div class="hero-copy">
         <div class="pill" style="margin-bottom:18px;">Affidavit Notary Online</div>
         <h1>Get Your Affidavit Notarized Online</h1>
-        <p>Need an affidavit or sworn statement notarized? SafeNotarize makes the process simple. Pick a time, upload your affidavit after booking, and receive your secure session email invite before your appointment.</p>
+        <p>Need an affidavit or sworn statement notarized? SafeNotarize makes it simple: enter signer details, pick a time, upload your affidavit, and join your secure online session.</p>
         <p style="font-size:.96rem; color:var(--navy-2); font-weight:600; margin-bottom:0;">Start your affidavit notarization in minutes from your phone, tablet, or computer.</p>
 
         <div class="hero-cta-row">
-          <a href="#calendly-block" class="btn btn-dark">
+          <a href="/book.html" class="btn btn-dark">
             <img src="https://img.icons8.com/ios-filled/20/ffffff/calendar.png" alt="Calendar">
             Start Online Notarization
           </a>
-          <span class="small-note">Book first. Upload your affidavit after booking.</span>
+          <span class="small-note">Start in one clean flow.</span>
         </div>
 
         <div class="hero-points">
@@ -289,10 +292,10 @@
       <div class="hero-card">
         <h3>Fast affidavit notarization flow</h3>
         <div class="check-list">
-          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/checkmark.png" alt="Check"><span><strong>Book a time</strong><br>Choose the appointment time that works for you.</span></div>
-          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/upload.png" alt="Upload"><span><strong>Upload your affidavit</strong><br>After booking, send your affidavit securely for review.</span></div>
-          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/email.png" alt="Email"><span><strong>Receive your invite</strong><br>SafeNotarize sends your secure session email invite before the appointment.</span></div>
-          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/video-call.png" alt="Video"><span><strong>Join online</strong><br>Verify your ID and meet with the notary live online.</span></div>
+          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/checkmark.png" alt="Check"><span><strong>Enter details</strong><br>Add signer, payer, witness, and delivery info.</span></div>
+          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/upload.png" alt="Upload"><span><strong>Pick a time</strong><br>Choose the best time for your affidavit session.</span></div>
+          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/email.png" alt="Email"><span><strong>Upload your affidavit</strong><br>Send your affidavit securely after you choose a time.</span></div>
+          <div class="check-item"><img src="https://img.icons8.com/ios-filled/20/28a745/video-call.png" alt="Video"><span><strong>Join online</strong><br>Use your SafeNotarize invite email, verify your ID, and meet with the notary.</span></div>
         </div>
       </div>
     </div>
@@ -336,12 +339,12 @@
         <div class="step-card">
           <div class="step-number">1</div>
           <h4 style="margin:0 0 10px; color:var(--navy);">Book Your Session</h4>
-          <p style="margin:0; color:#556270; line-height:1.7;">Choose a time using the booking calendar below.</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Start the secure booking flow and enter the signer details.</p>
         </div>
         <div class="step-card">
           <div class="step-number">2</div>
           <h4 style="margin:0 0 10px; color:var(--navy);">Upload Your Affidavit</h4>
-          <p style="margin:0; color:#556270; line-height:1.7;">After booking, upload the affidavit or sworn statement so it can be reviewed before the session.</p>
+          <p style="margin:0; color:#556270; line-height:1.7;">Pick a time, then upload the affidavit or sworn statement securely.</p>
         </div>
         <div class="step-card">
           <div class="step-number">3</div>
@@ -394,52 +397,71 @@
         <h3 style="color:var(--navy); margin:12px 0 6px;">Basic Affidavit Notarization</h3>
         <div class="price-big">$25</div>
         <p style="margin:0 0 18px; color:#556270; line-height:1.7;">Includes 1 signer and 1 notarial stamp. Extra signers, extra stamps, witnesses, or international sessions may have additional fees.</p>
-        <a href="#calendly-block" class="btn btn-primary">Start Online Notarization</a>
+        <a href="/book.html" class="btn btn-primary">Start Online Notarization</a>
+      </div>
+    </div>
+  </section>
+  <!-- Fast Booking CTA Section -->
+  <section id="booking-block" style="background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%); padding:56px 20px;">
+    <div class="container" style="max-width:1050px;">
+
+      <div class="section-title" style="margin-bottom:24px;">
+        <div class="pill" style="margin-bottom:10px;">Fast start</div>
+        <h3>Start Your Affidavit Notarization</h3>
+        <p>One clean flow: enter signer details, pick a time, upload your affidavit, then join your secure online session.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:18px; margin-bottom:26px;" class="fast-flow-grid">
+        <div class="card" style="padding:22px 18px; text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:12px;">1</div>
+          <h4 style="color:#003366; margin:0 0 8px; font-size:1.05rem;">Enter Details</h4>
+          <p style="margin:0; color:#556270; line-height:1.5; font-size:0.92rem;">Signer, payer, witness, and delivery info.</p>
+        </div>
+
+        <div class="card" style="padding:22px 18px; text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:12px;">2</div>
+          <h4 style="color:#003366; margin:0 0 8px; font-size:1.05rem;">Pick a Time</h4>
+          <p style="margin:0; color:#556270; line-height:1.5; font-size:0.92rem;">Choose the best time for the affidavit session.</p>
+        </div>
+
+        <div class="card" style="padding:22px 18px; text-align:center;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#28a745; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:12px;">3</div>
+          <h4 style="color:#003366; margin:0 0 8px; font-size:1.05rem;">Upload &amp; Join</h4>
+          <p style="margin:0; color:#556270; line-height:1.5; font-size:0.92rem;">Upload your affidavit, then join from your SafeNotarize invite email.</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width:760px; margin:0 auto; padding:28px 22px; text-align:center; border-top:4px solid #28a745;">
+        <h4 style="color:#003366; margin:0 0 10px; font-size:1.45rem;">Ready to notarize your affidavit?</h4>
+        <p style="color:#556270; line-height:1.6; margin:0 auto 20px; max-width:560px;">Start the secure booking flow. You can book for yourself, or book/pay for someone else.</p>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+          <a href="/book.html" class="btn btn-primary" style="min-width:220px;">Notarize Online Now</a>
+          <a href="/book.html" class="btn btn-outline-green" style="min-width:220px;">Book for Someone Else</a>
+        </div>
+
+        <p style="margin:14px 0 0; color:#1f7a36; font-weight:700; font-size:0.9rem;">Fast • Secure • From your phone or computer</p>
       </div>
     </div>
   </section>
 
-  <!-- Calendly Booking Section -->
-  <section id="calendly-block" style="background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%); padding:60px 20px;">
-    <div style="max-width:1100px; margin:0 auto;">
-      <div class="section-title" style="text-align:center; max-width:700px; margin:0 auto 30px;">
-        <div style="display:inline-block; background:#e9f7ef; color:#1f7a36; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:12px;">
-          Preferred booking method
-        </div>
-
-        <h3 style="font-size:1.8rem; color:#003366; margin-bottom:10px;">Book Your Affidavit Notary Session</h3>
-        <p style="color:#555; font-size:0.95rem; line-height:1.6;">Pick a time. After booking, you will be sent to the secure upload form for your affidavit.</p>
-        <p style="color:#1f7a36; font-weight:600; font-size:0.9rem; margin-top:8px;">⚡ Book in under 2 minutes</p>
-      </div>
-
-      <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:stretch; justify-content:center;">
-        <div class="booking-copy" style="flex:1 1 320px; max-width:420px; background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
-          <div style="font-size:0.8rem; font-weight:700; color:#1f7a36; background:#e9f7ef; display:inline-block; padding:5px 10px; border-radius:999px; margin-bottom:12px;">Fast & Simple</div>
-          <h4 style="font-size:1.3rem; color:#003366; margin-bottom:10px;">Start your affidavit notarization online</h4>
-          <p style="color:#555; font-size:0.95rem; margin-bottom:16px;">Quick, secure, and works on your phone or computer.</p>
-
-          <div style="display:grid; gap:10px; margin-bottom:20px;">
-            <div style="display:flex; gap:10px; align-items:flex-start;"><img src="https://img.icons8.com/ios-filled/18/28a745/checkmark.png" alt="Check"><span style="font-size:0.9rem; color:#444;">Pick your time</span></div>
-            <div style="display:flex; gap:10px; align-items:flex-start;"><img src="https://img.icons8.com/ios-filled/18/28a745/upload.png" alt="Upload"><span style="font-size:0.9rem; color:#444;">Upload your affidavit</span></div>
-            <div style="display:flex; gap:10px; align-items:flex-start;"><img src="https://img.icons8.com/ios-filled/18/28a745/video-call.png" alt="Video"><span style="font-size:0.9rem; color:#444;">Join online session</span></div>
-          </div>
-
-          <div class="support-box">
-            <div style="font-weight:700; color:#003366; margin-bottom:6px; font-size:0.95rem;">Need help?</div>
-            <p style="font-size:0.85rem; color:#555; margin-bottom:10px;">Questions before booking?</p>
-            <a href="mailto:supervisor@safenotarize.com" style="display:inline-block; font-size:0.85rem; font-weight:700; color:#003366; text-decoration:none; border:1px solid #ccd6e2; padding:8px 12px; border-radius:8px;">Contact Support</a>
-          </div>
-        </div>
-
-        <div class="booking-widget" style="flex:1 1 480px; max-width:650px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); border:1px solid #e6edf5;">
-          <div style="margin-bottom:10px; font-weight:700; color:#003366; font-size:1rem;">Select your date & time</div>
-          <div class="calendly-inline-widget" data-url="https://calendly.com/supervisor-23/safenotarize?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px; height:650px;"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <style>
+    @media (max-width: 768px){
+      .fast-flow-grid{
+        grid-template-columns:1fr !important;
+        gap:10px !important;
+      }
+      #booking-block{
+        padding:34px 14px !important;
+      }
+      #booking-block .section-title{
+        margin-bottom:16px !important;
+      }
+      #booking-block .section-title h3{
+        font-size:1.35rem !important;
+      }
+    }
+  </style>
 
   <section class="white-bg-icon section-pad" id="faq">
     <div class="container">
@@ -455,7 +477,7 @@
         </details>
         <details>
           <summary>How do I start?</summary>
-          <p>Choose a time using the booking calendar, then upload your affidavit after booking. SafeNotarize will send your secure session email invite before your appointment.</p>
+          <p>Start the booking flow, enter signer details, pick a time, then upload your affidavit. Every signer receives their own SafeNotarize invite email.</p>
         </details>
         <details>
           <summary>Should I sign my affidavit before the session?</summary>
@@ -477,9 +499,9 @@
     <div class="container">
       <div class="card" style="max-width:860px; margin:0 auto; padding:34px 28px;">
         <h3 style="color:var(--navy); font-size:2rem; margin:0 0 12px;">Ready to get your affidavit notarized online?</h3>
-        <p style="color:#556270; line-height:1.7; margin:0 0 22px;">Book your secure online session, upload your affidavit after booking, and receive your SafeNotarize session email invite.</p>
+        <p style="color:#556270; line-height:1.7; margin:0 0 22px;">Start the secure booking flow, upload your affidavit, and join from your SafeNotarize invite email.</p>
         <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
-          <a href="#calendly-block" class="btn btn-primary">Start Online Notarization</a>
+          <a href="/book.html" class="btn btn-primary">Start Online Notarization</a>
           <a href="mailto:supervisor@safenotarize.com" class="btn btn-outline">Need Help First?</a>
         </div>
       </div>
@@ -539,7 +561,7 @@
         <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="margin-bottom:10px;">
       </a>
       <div style="margin-top:10px;">
-        <a href="#calendly-block" class="btn btn-primary">Start Online Notarization</a>
+        <a href="/book.html" class="btn btn-primary">Start Online Notarization</a>
       </div>
     </div>
 
