@@ -251,7 +251,7 @@
           return false;
         }
       }
-      return true;
+      return validateUniqueSessionPeople();
     }
 
     function addAdditionalSigner(){
@@ -263,7 +263,7 @@
       block.className = "card";
       block.id = id;
       block.style.background = "#fff";
-      block.innerHTML = `<div class="card-title"><h3>Additional signer ${signerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-2"><div class="field"><label>Full name</label><input name="additional_signer_${signerCount}_name" placeholder="Additional signer full name"></div><div class="field"><label>Email address</label><input name="additional_signer_${signerCount}_email" type="email" placeholder="signer@email.com"></div></div>`;
+      block.innerHTML = `<div class="card-title"><h3>Additional signer ${signerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-2"><div class="field"><label>Full name <span class="required">*</span></label><input name="additional_signer_${signerCount}_name" required placeholder="Additional signer full name"></div><div class="field"><label>Email address <span class="required">*</span></label><input name="additional_signer_${signerCount}_email" type="email" required placeholder="signer@email.com"></div></div><p style="margin:0;color:#637487;font-size:12.5px;line-height:1.35;">Each signer must use their own email so they can receive their personal SafeNotarize invite.</p>`;
       wrap.appendChild(block);
     }
 
@@ -298,6 +298,162 @@
     function toggleDocumentOther(){ document.getElementById("document-other").classList.toggle("hidden", document.getElementById("document_to").value !== "other"); }
     function showStatus(type, message){ const el = document.getElementById("status-message"); el.className = `status-msg ${type}`; el.textContent = message; }
     function clearStatus(){ const el = document.getElementById("status-message"); el.className = "status-msg"; el.textContent = ""; }
+
+    function normalizeEmail(email){
+      return (email || "").trim().toLowerCase();
+    }
+
+    function normalizePersonName(name){
+      return (name || "").trim().replace(/\s+/g, " ").toLowerCase();
+    }
+
+    function showFieldError(field, message){
+      if(field){
+        field.setCustomValidity(message || "");
+        field.reportValidity();
+        field.focus();
+      }
+    }
+
+    function getInputByName(name){
+      return document.querySelector(`[name="${name}"]`);
+    }
+
+    function clearSessionPeopleValidation(){
+      const names = [
+        "primary_name","primary_email",
+        "additional_signer_1_name","additional_signer_1_email",
+        "additional_signer_2_name","additional_signer_2_email",
+        "additional_signer_3_name","additional_signer_3_email",
+        "witness_1_name","witness_1_email",
+        "witness_2_name","witness_2_email",
+        "observer_1_name","observer_1_email",
+        "observer_2_name","observer_2_email"
+      ];
+
+      names.forEach(function(name){
+        const field = getInputByName(name);
+        if(field) field.setCustomValidity("");
+      });
+    }
+
+    function addPersonToList(list, role, nameFieldName, emailFieldName, requireBoth){
+      const nameField = getInputByName(nameFieldName);
+      const emailField = getInputByName(emailFieldName);
+
+      const name = nameField ? nameField.value.trim() : "";
+      const email = emailField ? emailField.value.trim() : "";
+
+      if(!name && !email) return true;
+
+      if(requireBoth && !name){
+        showFieldError(nameField, `${role} needs a full name.`);
+        return false;
+      }
+
+      if(requireBoth && !email){
+        showFieldError(emailField, `${role} needs a different email so this person can receive their own SafeNotarize invite.`);
+        return false;
+      }
+
+      if(emailField && email && !emailField.checkValidity()){
+        emailField.reportValidity();
+        emailField.focus();
+        return false;
+      }
+
+      list.push({
+        role: role,
+        name: name,
+        email: email,
+        nameKey: normalizePersonName(name),
+        emailKey: normalizeEmail(email),
+        nameField: nameField,
+        emailField: emailField
+      });
+
+      return true;
+    }
+
+    function validateUniqueSessionPeople(){
+      clearSessionPeopleValidation();
+
+      const people = [];
+
+      if(!addPersonToList(people, "Primary signer", "primary_name", "primary_email", true)) return false;
+
+      for(let i = 1; i <= 3; i++){
+        const nameField = getInputByName(`additional_signer_${i}_name`);
+        const emailField = getInputByName(`additional_signer_${i}_email`);
+
+        if(nameField || emailField){
+          if(!addPersonToList(people, `Additional signer ${i}`, `additional_signer_${i}_name`, `additional_signer_${i}_email`, true)) return false;
+        }
+      }
+
+      for(let i = 1; i <= 2; i++){
+        const option = getInputByName(`witness_${i}_option`);
+        const clientProvided = option && option.value === "client_provided";
+
+        if(clientProvided){
+          if(!addPersonToList(people, `Witness ${i}`, `witness_${i}_name`, `witness_${i}_email`, true)) return false;
+        }
+      }
+
+      for(let i = 1; i <= 2; i++){
+        const nameField = getInputByName(`observer_${i}_name`);
+        const emailField = getInputByName(`observer_${i}_email`);
+
+        if((nameField && nameField.value.trim()) || (emailField && emailField.value.trim())){
+          if(!addPersonToList(people, `Observer ${i}`, `observer_${i}_name`, `observer_${i}_email`, true)) return false;
+        }
+      }
+
+      const emails = new Map();
+      const names = new Map();
+
+      for(const person of people){
+        if(person.emailKey){
+          if(emails.has(person.emailKey)){
+            const first = emails.get(person.emailKey);
+            showFieldError(
+              person.emailField,
+              `${person.role} is using the same email as ${first.role}. Please enter a different email so everyone gets their own SafeNotarize invite to join the session.`
+            );
+            return false;
+          }
+
+          emails.set(person.emailKey, person);
+        }
+
+        if(person.nameKey){
+          if(names.has(person.nameKey)){
+            const first = names.get(person.nameKey);
+            showFieldError(
+              person.nameField,
+              `${person.role} has the same name as ${first.role}. Please enter each person separately so the session invites do not get mixed up.`
+            );
+            return false;
+          }
+
+          names.set(person.nameKey, person);
+        }
+      }
+
+      return true;
+    }
+
+    document.addEventListener("input", function(e){
+      if(e.target && e.target.matches("input")){
+        e.target.setCustomValidity("");
+      }
+    });
+
+    document.addEventListener("change", function(e){
+      if(e.target && e.target.matches("select")){
+        clearSessionPeopleValidation();
+      }
+    });
 
     function getFormPayload(){
       const form = document.getElementById("booking-form");
@@ -399,6 +555,7 @@
 
       const form = e.currentTarget;
       if(!form.checkValidity()){ form.reportValidity(); return; }
+      if(!validateUniqueSessionPeople()) return;
 
       const btn = document.getElementById("continue-btn");
       btn.disabled = true;
