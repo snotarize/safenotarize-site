@@ -16,9 +16,277 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    *{box-sizing:border-box}:root{--navy:#003366;--navy-dark:#00274d;--green:#28a745;--green-dark:#1f7a36;--soft-blue:#f3f8fe;--soft-green:#eefbf3;--border:#dce7f2;--text:#40536a;--shadow:0 14px 38px rgba(0,51,102,.09)}
-    body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(to bottom,#f7fbff 0%,#ffffff 100%);color:var(--navy);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}.container{background:#fff;width:100%;max-width:560px;border:1px solid #e6eef7;border-radius:20px;box-shadow:var(--shadow);padding:26px 22px;text-align:center}.logo{height:44px;margin-bottom:12px}.badge{display:inline-block;background:var(--soft-green);color:var(--green-dark);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800;margin-bottom:12px}h1{font-size:27px;line-height:1.18;color:var(--navy-dark);margin:0 0 9px;font-weight:800}p{color:var(--text);font-size:15.5px;line-height:1.48;margin:0 0 12px}.status-card{margin:18px 0 14px;background:var(--soft-blue);border:1px solid var(--border);border-radius:16px;padding:18px 15px}.loader{width:44px;height:44px;border:5px solid #d7e6f5;border-top:5px solid var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:10px auto 12px}@keyframes spin{to{transform:rotate(360deg)}}.progress-wrap{width:100%;background:#dbeafe;border-radius:999px;overflow:hidden;height:9px;margin:14px 0 7px}.progress-bar{height:100%;width:12%;background:var(--green);border-radius:999px;transition:width .8s ease}.live-status{color:var(--navy);font-size:13.5px;font-weight:800;margin-top:8px}.dots::after{content:"";animation:dots 1.4s infinite}@keyframes dots{0%{content:""}33%{content:"."}66%{content:".."}100%{content:"..."}}
-    .join-btn{display:inline-block;width:100%;margin-top:14px;background:var(--green);color:#fff;text-decoration:none;padding:15px 18px;border-radius:10px;font-size:17px;font-weight:900;box-shadow:0 10px 24px rgba(40,167,69,.22)}.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.small-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;color:var(--navy);background:#fff;border:1px solid #cfddeb;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;padding:12px}.ready-box{background:#fff;border:1px solid #e0eaf5;border-radius:14px;padding:13px 14px;margin-top:12px;text-align:left}.ready-box strong{color:var(--navy-dark);display:block;margin-bottom:8px;font-size:14px}.ready-list{list-style:none;padding:0;margin:0;color:var(--text);font-size:14px;line-height:1.4}.ready-list li{margin:7px 0;padding-left:22px;position:relative}.ready-list li::before{content:"✓";position:absolute;left:0;top:0;color:var(--green-dark);font-weight:900}.invite-note{background:#f8fbff;border:1px solid #e3edf8;border-radius:14px;padding:14px 15px;margin-top:14px;color:var(--text);font-size:14px;line-height:1.45;text-align:left}.invite-note strong{color:var(--navy-dark)}.time-note{display:none;background:#fbfdff;border:1px solid #e3edf8;border-radius:12px;padding:11px 13px;margin-top:10px;color:var(--text);font-size:14px;line-height:1.4;text-align:left}.home-btn{display:inline-block;margin-top:14px;color:var(--navy);text-decoration:underline;font-size:14px;font-weight:700}.hidden{display:none!important}@media(max-width:520px){body{padding:10px;align-items:flex-start}.container{padding:22px 15px;border-radius:16px}.logo{height:40px}h1{font-size:23px}p{font-size:14.5px}.action-row{grid-template-columns:1fr}}
+    *{box-sizing:border-box}
+
+    :root{
+      --navy:#003366;
+      --navy-dark:#00274d;
+      --green:#28a745;
+      --green-dark:#1f7a36;
+      --soft-blue:#f3f8fe;
+      --soft-green:#eefbf3;
+      --border:#dce7f2;
+      --text:#40536a;
+      --shadow:0 14px 38px rgba(0,51,102,.09);
+    }
+
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:linear-gradient(to bottom,#f7fbff 0%,#ffffff 100%);
+      color:var(--navy);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .container{
+      background:#fff;
+      width:100%;
+      max-width:560px;
+      border:1px solid #e6eef7;
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:26px 22px;
+      text-align:center;
+    }
+
+    .logo{
+      height:44px;
+      margin-bottom:12px;
+    }
+
+    .badge{
+      display:inline-block;
+      background:var(--soft-green);
+      color:var(--green-dark);
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+
+    h1{
+      font-size:27px;
+      line-height:1.18;
+      color:var(--navy-dark);
+      margin:0 0 9px;
+      font-weight:800;
+    }
+
+    p{
+      color:var(--text);
+      font-size:15.5px;
+      line-height:1.48;
+      margin:0 0 12px;
+    }
+
+    .status-card{
+      margin:18px 0 14px;
+      background:var(--soft-blue);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px 15px;
+    }
+
+    .loader{
+      width:44px;
+      height:44px;
+      border:5px solid #d7e6f5;
+      border-top:5px solid var(--navy);
+      border-radius:50%;
+      animation:spin .75s linear infinite;
+      margin:10px auto 12px;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    .progress-wrap{
+      width:100%;
+      background:#dbeafe;
+      border-radius:999px;
+      overflow:hidden;
+      height:9px;
+      margin:14px 0 7px;
+    }
+
+    .progress-bar{
+      height:100%;
+      width:12%;
+      background:var(--green);
+      border-radius:999px;
+      transition:width .8s ease;
+    }
+
+    .live-status{
+      color:var(--navy);
+      font-size:13.5px;
+      font-weight:800;
+      margin-top:8px;
+    }
+
+    .dots::after{
+      content:"";
+      animation:dots 1.4s infinite;
+    }
+
+    @keyframes dots{
+      0%{content:""}
+      33%{content:"."}
+      66%{content:".."}
+      100%{content:"..."}
+    }
+
+    .join-btn{
+      display:inline-block;
+      width:100%;
+      margin-top:14px;
+      background:var(--green);
+      color:#fff;
+      text-decoration:none;
+      padding:15px 18px;
+      border-radius:10px;
+      font-size:17px;
+      font-weight:900;
+      box-shadow:0 10px 24px rgba(40,167,69,.22);
+    }
+
+    .action-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .small-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:46px;
+      color:var(--navy);
+      background:#fff;
+      border:1px solid #cfddeb;
+      border-radius:10px;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:800;
+      padding:12px;
+    }
+
+    .ready-box{
+      background:#fff;
+      border:1px solid #e0eaf5;
+      border-radius:14px;
+      padding:13px 14px;
+      margin-top:12px;
+      text-align:left;
+    }
+
+    .ready-box strong{
+      color:var(--navy-dark);
+      display:block;
+      margin-bottom:8px;
+      font-size:14px;
+    }
+
+    .ready-list{
+      list-style:none;
+      padding:0;
+      margin:0;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    .ready-list li{
+      margin:7px 0;
+      padding-left:22px;
+      position:relative;
+    }
+
+    .ready-list li::before{
+      content:"✓";
+      position:absolute;
+      left:0;
+      top:0;
+      color:var(--green-dark);
+      font-weight:900;
+    }
+
+    .invite-note{
+      background:#f8fbff;
+      border:1px solid #e3edf8;
+      border-radius:14px;
+      padding:14px 15px;
+      margin-top:14px;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.45;
+      text-align:left;
+    }
+
+    .invite-note strong{
+      color:var(--navy-dark);
+    }
+
+    .time-note{
+      display:none;
+      background:#fbfdff;
+      border:1px solid #e3edf8;
+      border-radius:12px;
+      padding:11px 13px;
+      margin-top:10px;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.4;
+      text-align:left;
+    }
+
+    .home-btn{
+      display:inline-block;
+      margin-top:14px;
+      color:var(--navy);
+      text-decoration:underline;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .hidden{
+      display:none!important;
+    }
+
+    @media(max-width:520px){
+      body{
+        padding:10px;
+        align-items:flex-start;
+      }
+
+      .container{
+        padding:22px 15px;
+        border-radius:16px;
+      }
+
+      .logo{
+        height:40px;
+      }
+
+      h1{
+        font-size:23px;
+      }
+
+      p{
+        font-size:14.5px;
+      }
+
+      .action-row{
+        grid-template-columns:1fr;
+      }
+    }
   </style>
 </head>
 
@@ -27,15 +295,21 @@
     <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" class="logo" id="logo-img">
 
     <div class="badge" id="top-badge">SafeNotarize session</div>
-    <h1 id="main-title">Getting Your Session Ready</h1>
-    <p id="main-text">Your SafeNotarize session is being prepared.</p>
+    <h1 id="main-title">Connecting You to Your Notary Session</h1>
+    <p id="main-text">Please stay on this page. Your session link will appear here as soon as it is available.</p>
 
     <div class="status-card">
       <div id="loader" class="loader"></div>
-      <p id="session-message"><strong>Please wait while we prepare your session.</strong></p>
-      <p id="session-submessage">The Join Session button will appear when it is ready.</p>
-      <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-      <div class="live-status"><span id="live-status-text">Preparing your session</span><span class="dots" id="dots"></span></div>
+      <p id="session-message"><strong>Connecting you to your notary session.</strong></p>
+      <p id="session-submessage">This usually takes a moment. The Join Session button will appear here automatically.</p>
+
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="live-status">
+        <span id="live-status-text">Starting secure connection</span><span class="dots" id="dots"></span>
+      </div>
 
       <div id="ready-instructions" class="ready-box hidden">
         <strong id="before-join-title">Before you join:</strong>
@@ -54,8 +328,12 @@
       </div>
     </div>
 
-    <div class="invite-note" id="invite-note"><strong>SafeNotarize invite email:</strong> Every signer gets their own invite email. Use that email to join the session directly.</div>
+    <div class="invite-note" id="invite-note">
+      <strong>SafeNotarize invite email:</strong> Every signer gets their own invite email. Use that email to join the session directly.
+    </div>
+
     <div class="time-note" id="scheduled-time-card"></div>
+
     <a href="https://safenotarize.com" class="home-btn" id="home-btn">Back to SafeNotarize</a>
   </main>
 
@@ -75,11 +353,11 @@
 
     const copy = isKreyol ? {
       initialBadge:"Sesyon SafeNotarize",
-      initialTitle:"N ap prepare sesyon ou",
-      initialText:"N ap prepare sesyon SafeNotarize ou a.",
-      wait:"<strong>Tanpri tann pandan n ap prepare sesyon ou.</strong>",
-      subWait:"Bouton pou antre nan sesyon an ap parèt lè li pare.",
-      checking:"N ap prepare sesyon ou",
+      initialTitle:"N ap konekte w ak sesyon notè ou",
+      initialText:"Tanpri rete sou paj sa a. Lyen sesyon ou ap parèt isit la lè li disponib.",
+      wait:"<strong>N ap konekte w ak sesyon notè ou.</strong>",
+      subWait:"Sa ka pran yon ti moman. Bouton pou antre nan sesyon an ap parèt otomatikman.",
+      checking:"Koneksyon sekirize ap kòmanse",
       chooseLater:"Chwazi yon lè pou pita",
       chooseSlot:"Chwazi yon lè",
       needHelp:"Bezwen èd",
@@ -91,7 +369,13 @@
         "Bay aksè kamera ak mikwo lè yo mande w.",
         "Kenbe yon pyès idantite valab pare pou verifikasyon."
       ],
-      waitingMessages:["N ap prepare sesyon ou","N ap kreye envitasyon ou","N ap verifye lyen sekirize a","Prèske pare"],
+      waitingMessages:[
+        "Koneksyon sekirize ap kòmanse",
+        "N ap chèche sesyon ou",
+        "N ap ouvri sal notè sekirize ou",
+        "N ap verifye lyen envitasyon ou",
+        "Prèske rive"
+      ],
       scheduledTime:"Lè randevou a:",
       readyBadge:"Sesyon an pare",
       readyTitle:"Sesyon ou pare",
@@ -110,17 +394,17 @@
       bookerInvite:"<strong>Imèl envitasyon SafeNotarize:</strong> Apre yo fin chwazi yon lè, chak siyatè ap resevwa pwòp imèl envitasyon pa yo.",
       preparingTitle:"Chwazi kijan ou vle kontinye",
       preparingText:"Nou resevwa dokiman ou. Ou ka chwazi yon lè, oswa itilize imèl envitasyon SafeNotarize ou lè li rive.",
-      preparingMessage:"<strong>Nou resevwa dokiman ou.</strong>",
+      preparingMessage:"<strong>Dokiman ou resevwa.</strong>",
       preparingSub:"Chak siyatè ap resevwa pwòp imèl envitasyon SafeNotarize pa yo.",
       preparingStatus:"Pare pou pwochen etap la",
       preparingInvite:"<strong>Enpòtan:</strong> Pa kreye kont epi pa konekte. Si yo mande w sa, fèmen paj la epi antre depi imèl envitasyon SafeNotarize ou a."
     } : {
       initialBadge:"SafeNotarize session",
-      initialTitle:"Getting Your Session Ready",
-      initialText:"Your SafeNotarize session is being prepared.",
-      wait:"<strong>Please wait while we prepare your session.</strong>",
-      subWait:"The Join Session button will appear when it is ready.",
-      checking:"Preparing your session",
+      initialTitle:"Connecting You to Your Notary Session",
+      initialText:"Please stay on this page. Your session link will appear here as soon as it is available.",
+      wait:"<strong>Connecting you to your notary session.</strong>",
+      subWait:"This usually takes a moment. The Join Session button will appear here automatically.",
+      checking:"Starting secure connection",
       chooseLater:"Choose a Later Time",
       chooseSlot:"Choose a Time Slot",
       needHelp:"Need Help",
@@ -132,7 +416,13 @@
         "Allow camera and microphone access when asked.",
         "Have a valid ID ready for identity verification."
       ],
-      waitingMessages:["Preparing your session","Preparing your secure room","Connecting your booking","Almost ready"],
+      waitingMessages:[
+        "Starting secure connection",
+        "Finding your session",
+        "Opening your secure notary room",
+        "Checking your invite link",
+        "Almost there"
+      ],
       scheduledTime:"Scheduled time:",
       readyBadge:"Session ready",
       readyTitle:"Your Session Is Ready",
@@ -228,7 +518,24 @@
     }
 
     function updateWaitingVisuals(){
-      document.getElementById("progress-bar").style.width = Math.min(92, 12 + attempts * 4) + "%";
+      let percent;
+
+      // Fast start so the wait feels active right away.
+      if(attempts <= 3){
+        percent = 18 + attempts * 14; // 32%, 46%, 60%
+      }
+
+      // Slow down around 60% to 70% while the real session link is still loading.
+      else if(attempts <= 8){
+        percent = 60 + (attempts - 3) * 2; // 62% to 70%
+      }
+
+      // Keep moving slowly so it does not look stuck.
+      else {
+        percent = Math.min(92, 70 + (attempts - 8) * 1.6);
+      }
+
+      document.getElementById("progress-bar").style.width = percent + "%";
       document.getElementById("live-status-text").innerText = copy.waitingMessages[attempts % copy.waitingMessages.length];
     }
 
@@ -317,6 +624,7 @@
           showStillPreparing();
           return;
         }
+
         setTimeout(checkSessionLink, 6000);
       }
     }
@@ -326,6 +634,7 @@
     showScheduledTime();
 
     const testMode = params.get("test") || "";
+
     if(testMode === "ready"){
       showReadyButton("https://safenotarize.com");
     } else if(testMode === "booker"){
