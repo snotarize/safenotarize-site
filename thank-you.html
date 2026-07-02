@@ -649,7 +649,7 @@
       const newSessionBtn = document.getElementById("new-session-btn");
       if(newSessionBtn){
         newSessionBtn.innerText = copy.newSession;
-        newSessionBtn.href = isKreyol ? "https://safenotarize.com/ht.html" : "https://safenotarize.com/book.html";
+        newSessionBtn.href = "https://safenotarize.com/book.html";
       }
       document.getElementById("invite-note").innerHTML = copy.inviteInitial;
       document.getElementById("install-title").innerText = copy.installTitle;
@@ -823,6 +823,11 @@
 
     function saveCurrentSessionForApp(){
       try{
+        // Do not save test/demo URLs as the app return page.
+        // On iPhone, Add to Home Screen can reopen the exact URL that was saved.
+        // We only want to save real customer/session URLs.
+        if(params.get("test")) return;
+
         if(orderId || uuid || email || window.location.search){
           localStorage.setItem("sn_last_session_url", window.location.href);
           localStorage.setItem("sn_last_session_saved_at", String(Date.now()));
@@ -833,8 +838,23 @@
     function restoreSessionWhenOpenedAsApp(){
       try{
         const openedFromApp = params.get("from_app") === "1" || window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-        const hasSessionParams = orderId || uuid || email || params.get("test");
         const savedUrl = localStorage.getItem("sn_last_session_url");
+
+        // If the iPhone home-screen icon was saved while testing, remove the test mode
+        // so the page can check Make/Airtable again instead of staying stuck on a demo screen.
+        if(openedFromApp && params.get("test")){
+          const cleanUrl = new URL(window.location.href);
+          cleanUrl.searchParams.delete("test");
+          cleanUrl.searchParams.set("from_app", "1");
+          if(savedUrl && savedUrl !== window.location.href){
+            window.location.replace(savedUrl);
+          }else{
+            window.location.replace(cleanUrl.toString());
+          }
+          return;
+        }
+
+        const hasSessionParams = orderId || uuid || email;
         if(openedFromApp && !hasSessionParams && savedUrl && savedUrl !== window.location.href){
           window.location.replace(savedUrl);
         }

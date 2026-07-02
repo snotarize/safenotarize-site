@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safenotarize-session-v1';
+const CACHE_NAME = 'safenotarize-session-v5';
 const APP_SHELL = [
   '/thank-you.html',
   '/manifest.webmanifest',
