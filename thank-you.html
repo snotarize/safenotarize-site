@@ -13,6 +13,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your Online Notary Session | SafeNotarize</title>
   <meta name="description" content="Join your SafeNotarize online notary session or choose a time for later.">
+  <meta name="theme-color" content="#003366">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SafeNotarize">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/safenotarize-icon-192.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
@@ -260,6 +266,129 @@
       display:none!important;
     }
 
+    .save-card{
+      margin:14px 0 0;
+      background:#ffffff;
+      border:1px solid #d9e7f5;
+      border-radius:14px;
+      padding:13px 14px;
+      text-align:left;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .save-icon{
+      flex:0 0 38px;
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      background:var(--navy);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .save-card strong{
+      display:block;
+      color:var(--navy-dark);
+      margin-bottom:4px;
+      font-size:14.5px;
+    }
+
+    .save-card p{
+      margin:0 0 10px;
+      font-size:13.5px;
+      line-height:1.35;
+    }
+
+    .install-btn{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      background:var(--navy);
+      color:#fff;
+      border-radius:9px;
+      padding:10px 12px;
+      font-size:13.5px;
+      font-weight:900;
+    }
+
+    .install-hint{
+      display:none;
+      margin-top:10px;
+      padding:10px 11px;
+      background:#f8fbff;
+      border:1px solid #e3edf8;
+      border-radius:10px;
+      color:var(--text);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .install-hint.show{display:block}
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,39,77,.42);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+
+    .leave-modal{
+      width:100%;
+      max-width:430px;
+      background:#fff;
+      border-radius:18px;
+      box-shadow:0 20px 55px rgba(0,39,77,.22);
+      border:1px solid #e4edf7;
+      padding:20px;
+      text-align:left;
+    }
+
+    .leave-modal h2{
+      margin:0 0 8px;
+      color:var(--navy-dark);
+      font-size:21px;
+      line-height:1.2;
+    }
+
+    .leave-modal p{
+      margin:0 0 13px;
+      font-size:14.5px;
+    }
+
+    .modal-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .modal-btn{
+      border:1px solid #cfddeb;
+      border-radius:10px;
+      min-height:44px;
+      font-weight:900;
+      cursor:pointer;
+      background:#fff;
+      color:var(--navy);
+    }
+
+    .modal-btn.primary{
+      background:var(--green);
+      border-color:var(--green);
+      color:#fff;
+    }
+
+
     @media(max-width:520px){
       body{
         padding:10px;
@@ -284,6 +413,14 @@
       }
 
       .action-row{
+        grid-template-columns:1fr;
+      }
+
+      .save-card{
+        padding:12px;
+      }
+
+      .modal-actions{
         grid-template-columns:1fr;
       }
     }
@@ -323,8 +460,8 @@
       <div id="join-button-area"></div>
 
       <div class="action-row" id="secondary-actions">
-        <a class="small-btn" id="schedule-time-link" href="https://calendly.com/supervisor-23/online-notarization-safenotarize" target="_blank" rel="noopener">Choose a Later Time</a>
-        <a class="small-btn" id="help-link" href="mailto:supervisor@safenotarize.com">Need Help</a>
+        <a class="small-btn safe-action" id="schedule-time-link" href="https://calendly.com/supervisor-23/online-notarization-safenotarize" target="_blank" rel="noopener">Choose a Later Time</a>
+        <a class="small-btn safe-action" id="help-link" href="mailto:supervisor@safenotarize.com">Need Help</a>
       </div>
     </div>
 
@@ -332,9 +469,30 @@
       <strong>SafeNotarize invite email:</strong> Every signer gets their own invite email. Use that email to join the session directly.
     </div>
 
+    <div class="save-card" id="install-card">
+      <div class="save-icon" aria-hidden="true">↧</div>
+      <div>
+        <strong id="install-title">Save SafeNotarize</strong>
+        <p id="install-text">Add this page to your Home Screen so you can return to your session and final document anytime.</p>
+        <button type="button" class="install-btn" id="install-btn">📲 Add to Home Screen</button>
+        <div class="install-hint" id="install-hint"></div>
+      </div>
+    </div>
+
     <div class="time-note" id="scheduled-time-card"></div>
 
-    <a href="https://safenotarize.com" class="home-btn" id="home-btn">Back to SafeNotarize</a>
+    <a href="https://safenotarize.com/book.html" class="home-btn safe-action" id="new-session-btn">Create a New Notary Session</a>
+
+    <div class="modal-backdrop hidden" id="leave-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="leave-modal-title">
+      <div class="leave-modal">
+        <h2 id="leave-modal-title">Before you leave</h2>
+        <p id="leave-modal-text">Save this page to your Home Screen or keep it open so you can return to your session and final document anytime.</p>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn primary" id="stay-page-btn">Stay on Page</button>
+          <button type="button" class="modal-btn" id="leave-anyway-btn">Leave Anyway</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script>
@@ -354,7 +512,7 @@
     const copy = isKreyol ? {
       initialBadge:"Sesyon SafeNotarize",
       initialTitle:"N ap konekte w ak sesyon notè ou",
-      initialText:"Tanpri rete sou paj sa a. Lyen sesyon ou ap parèt isit la lè li disponib.",
+      initialText:"Bouton sesyon ou ap parèt isit la. Ou ka ajoute paj sa a sou ekran telefòn ou pou antre nan sesyon ou nenpòt lè epi jwenn dokiman final ou. Yo voye yon imèl envitasyon SafeNotarize ba ou tou.",
       wait:"<strong>N ap konekte w ak sesyon notè ou.</strong>",
       subWait:"Sa ka pran yon ti moman. Bouton pou antre nan sesyon an ap parèt otomatikman.",
       checking:"Koneksyon sekirize ap kòmanse",
@@ -362,7 +520,7 @@
       chooseSlot:"Chwazi yon lè",
       needHelp:"Bezwen èd",
       inviteInitial:"<strong>Imèl envitasyon SafeNotarize:</strong> Chak siyatè ap resevwa pwòp imèl envitasyon pa yo. Antre nan sesyon an dirèkteman depi imèl sa a.",
-      backHome:"Retounen sou SafeNotarize",
+      newSession:"Kreye yon nouvo sesyon notè",
       beforeJoin:"Avan ou antre:",
       readyItems:[
         "Pa kreye kont epi pa konekte. Itilize imèl envitasyon SafeNotarize ou a pou antre.",
@@ -379,7 +537,7 @@
       scheduledTime:"Lè randevou a:",
       readyBadge:"Sesyon an pare",
       readyTitle:"Sesyon ou pare",
-      readyText:"Sesyon ou pare. Ou ka antre isit la oswa itilize imèl envitasyon SafeNotarize ou a.",
+      readyText:"Sesyon ou pare. Ou ka sove paj sa a sou ekran telefòn ou pou antre nenpòt lè epi jwenn dokiman final ou. Yo voye yon imèl envitasyon SafeNotarize ba ou tou.",
       readyMessage:"<strong>Nou pare lè ou pare.</strong>",
       readySub:"Bay aksè kamera ak mikwo. Kenbe pyès idantite valab ou pare.",
       readyStatus:"Lyen sesyon an pare",
@@ -393,15 +551,24 @@
       bookerStatus:"Pare pou chwazi lè",
       bookerInvite:"<strong>Imèl envitasyon SafeNotarize:</strong> Apre yo fin chwazi yon lè, chak siyatè ap resevwa pwòp imèl envitasyon pa yo.",
       preparingTitle:"Chwazi kijan ou vle kontinye",
-      preparingText:"Nou resevwa dokiman ou. Ou ka chwazi yon lè, oswa itilize imèl envitasyon SafeNotarize ou lè li rive.",
+      preparingText:"Bouton sesyon ou ap parèt isit la lè li pare. Ou ka ajoute paj sa a sou ekran telefòn ou pou retounen nenpòt lè. Yo voye yon imèl envitasyon SafeNotarize ba ou tou.",
       preparingMessage:"<strong>Dokiman ou resevwa.</strong>",
       preparingSub:"Chak siyatè ap resevwa pwòp imèl envitasyon SafeNotarize pa yo.",
       preparingStatus:"Pare pou pwochen etap la",
-      preparingInvite:"<strong>Enpòtan:</strong> Pa kreye kont epi pa konekte. Si yo mande w sa, fèmen paj la epi antre depi imèl envitasyon SafeNotarize ou a."
+      preparingInvite:"<strong>Enpòtan:</strong> Pa kreye kont epi pa konekte. Si yo mande w sa, fèmen paj la epi antre depi imèl envitasyon SafeNotarize ou a.",
+      installTitle:"Sove SafeNotarize",
+      installText:"Ajoute paj sa a sou ekran telefòn ou pou w ka retounen nan sesyon an epi jwenn dokiman final ou nenpòt lè.",
+      installButton:"📲 Ajoute sou ekran an",
+      iosInstall:"Sou iPhone: peze bouton Share la, chwazi Add to Home Screen, epi peze Add.",
+      installed:"SafeNotarize deja sove sou ekran ou.",
+      leaveTitle:"Avan ou kite",
+      leaveText:"Sove paj sa a sou ekran telefòn ou oswa kite l ouvè pou w ka retounen nan sesyon ou epi jwenn dokiman final ou nenpòt lè.",
+      stay:"Rete sou paj la",
+      leaveAnyway:"Kite kanmenm"
     } : {
       initialBadge:"SafeNotarize session",
       initialTitle:"Connecting You to Your Notary Session",
-      initialText:"Please stay on this page. Your session link will appear here as soon as it is available.",
+      initialText:"Your session button will appear here. You can add this page to your screen so you can join your session anytime and get your final document. A SafeNotarize invite email has been sent to you as well.",
       wait:"<strong>Connecting you to your notary session.</strong>",
       subWait:"This usually takes a moment. The Join Session button will appear here automatically.",
       checking:"Starting secure connection",
@@ -409,7 +576,7 @@
       chooseSlot:"Choose a Time Slot",
       needHelp:"Need Help",
       inviteInitial:"<strong>SafeNotarize invite email:</strong> Every signer gets their own invite email. Use that email to join the session directly.",
-      backHome:"Back to SafeNotarize",
+      newSession:"Create a New Notary Session",
       beforeJoin:"Before you join:",
       readyItems:[
         "Do not sign up or sign in. Use your SafeNotarize invite email to join.",
@@ -426,7 +593,7 @@
       scheduledTime:"Scheduled time:",
       readyBadge:"Session ready",
       readyTitle:"Your Session Is Ready",
-      readyText:"Your session is ready. Join from this page or from your SafeNotarize invite email.",
+      readyText:"Your session is ready. You can also save it to your screen to join anytime and get your final document. A SafeNotarize invite email has been sent to you as well.",
       readyMessage:"<strong>Ready when you are.</strong>",
       readySub:"Allow camera and microphone access. Have your valid ID ready.",
       readyStatus:"Session link ready",
@@ -440,11 +607,20 @@
       bookerStatus:"Ready to choose time",
       bookerInvite:"<strong>SafeNotarize invite email:</strong> After a time is selected, every signer gets their own invite email.",
       preparingTitle:"Choose How You Want to Continue",
-      preparingText:"Your upload was received. You can choose a time, or use your SafeNotarize invite email when it arrives.",
+      preparingText:"Your session button will appear here when it is ready. You can add this page to your screen and come back anytime. A SafeNotarize invite email has been sent to you as well.",
       preparingMessage:"<strong>Your upload was received.</strong>",
       preparingSub:"Every signer will receive their own SafeNotarize invite email.",
       preparingStatus:"Ready for next step",
-      preparingInvite:"<strong>Important:</strong> Do not sign up or sign in. If prompted, close that page and join from your SafeNotarize invite email."
+      preparingInvite:"<strong>Important:</strong> Do not sign up or sign in. If prompted, close that page and join from your SafeNotarize invite email.",
+      installTitle:"Save SafeNotarize",
+      installText:"Add this page to your Home Screen so you can return to your session and final document anytime.",
+      installButton:"📲 Add to Home Screen",
+      iosInstall:"On iPhone: tap Share, choose Add to Home Screen, then tap Add.",
+      installed:"SafeNotarize is already saved on your screen.",
+      leaveTitle:"Before you leave",
+      leaveText:"Save this page to your Home Screen or keep it open so you can return to your session and final document anytime.",
+      stay:"Stay on Page",
+      leaveAnyway:"Leave Anyway"
     };
 
     const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
@@ -469,9 +645,19 @@
       document.getElementById("live-status-text").innerText = copy.checking;
       document.getElementById("schedule-time-link").innerText = isBookerFlow ? copy.chooseSlot : copy.chooseLater;
       document.getElementById("help-link").innerText = copy.needHelp;
+      const newSessionBtn = document.getElementById("new-session-btn");
+      if(newSessionBtn){
+        newSessionBtn.innerText = copy.newSession;
+        newSessionBtn.href = isKreyol ? "https://safenotarize.com/ht.html" : "https://safenotarize.com/book.html";
+      }
       document.getElementById("invite-note").innerHTML = copy.inviteInitial;
-      document.getElementById("home-btn").innerText = copy.backHome;
-      document.getElementById("home-btn").href = isKreyol ? "https://safenotarize.com/ht.html" : "https://safenotarize.com";
+      document.getElementById("install-title").innerText = copy.installTitle;
+      document.getElementById("install-text").innerText = copy.installText;
+      document.getElementById("install-btn").innerText = copy.installButton;
+      document.getElementById("leave-modal-title").innerText = copy.leaveTitle;
+      document.getElementById("leave-modal-text").innerText = copy.leaveText;
+      document.getElementById("stay-page-btn").innerText = copy.stay;
+      document.getElementById("leave-anyway-btn").innerText = copy.leaveAnyway;
       document.getElementById("before-join-title").innerText = copy.beforeJoin;
       document.getElementById("ready-list").innerHTML = copy.readyItems.map(function(item){ return `<li>${item}</li>`; }).join("");
     }
@@ -550,7 +736,7 @@
       document.getElementById("live-status-text").innerText = copy.readyStatus;
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.remove("hidden");
-      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${link}" target="_blank" rel="noopener">${copy.joinNow}</a>`;
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn safe-action" href="${link}" target="_blank" rel="noopener">${copy.joinNow}</a>`;
       document.getElementById("invite-note").innerHTML = copy.readyInvite;
       updateScheduleLink(copy.chooseLater);
     }
@@ -566,7 +752,7 @@
       document.getElementById("live-status-text").innerText = copy.bookerStatus;
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.add("hidden");
-      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">${copy.chooseSlot}</a>`;
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn safe-action" href="${buildScheduleUrl()}" target="_blank" rel="noopener">${copy.chooseSlot}</a>`;
       document.getElementById("invite-note").innerHTML = copy.bookerInvite;
       updateScheduleLink(copy.chooseSlot);
     }
@@ -582,7 +768,7 @@
       document.getElementById("live-status-text").innerText = copy.preparingStatus;
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.add("hidden");
-      document.getElementById("join-button-area").innerHTML = `<a class="join-btn" href="${buildScheduleUrl()}" target="_blank" rel="noopener">${copy.chooseSlot}</a>`;
+      document.getElementById("join-button-area").innerHTML = `<a class="join-btn safe-action" href="${buildScheduleUrl()}" target="_blank" rel="noopener">${copy.chooseSlot}</a>`;
       document.getElementById("invite-note").innerHTML = copy.preparingInvite;
       updateScheduleLink(copy.chooseLater);
     }
@@ -629,7 +815,145 @@
       }
     }
 
+
+
+    let allowLeave = false;
+    let deferredInstallPrompt = null;
+
+    function saveCurrentSessionForApp(){
+      try{
+        if(orderId || uuid || email || window.location.search){
+          localStorage.setItem("sn_last_session_url", window.location.href);
+          localStorage.setItem("sn_last_session_saved_at", String(Date.now()));
+        }
+      }catch(e){}
+    }
+
+    function restoreSessionWhenOpenedAsApp(){
+      try{
+        const openedFromApp = params.get("from_app") === "1" || window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+        const hasSessionParams = orderId || uuid || email || params.get("test");
+        const savedUrl = localStorage.getItem("sn_last_session_url");
+        if(openedFromApp && !hasSessionParams && savedUrl && savedUrl !== window.location.href){
+          window.location.replace(savedUrl);
+        }
+      }catch(e){}
+    }
+
+    function isIos(){
+      return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function isStandalone(){
+      return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    }
+
+    function setupInstallCard(){
+      const installCard = document.getElementById("install-card");
+      const installBtn = document.getElementById("install-btn");
+      const installHint = document.getElementById("install-hint");
+      if(!installCard || !installBtn || !installHint) return;
+
+      if(isStandalone() || localStorage.getItem("sn_app_installed") === "1"){
+        installHint.textContent = copy.installed;
+        installHint.classList.add("show");
+        installBtn.classList.add("hidden");
+        return;
+      }
+
+      if(isIos()){
+        installHint.textContent = copy.iosInstall;
+        installBtn.addEventListener("click", function(){
+          allowLeave = true;
+          installHint.classList.add("show");
+        });
+      }else{
+        installBtn.addEventListener("click", async function(){
+          allowLeave = true;
+          if(deferredInstallPrompt){
+            deferredInstallPrompt.prompt();
+            const choice = await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            if(choice && choice.outcome === "accepted"){
+              localStorage.setItem("sn_app_installed", "1");
+              installHint.textContent = copy.installed;
+              installHint.classList.add("show");
+              installBtn.classList.add("hidden");
+            }
+          }else{
+            installHint.textContent = "Open your browser menu and choose Add to Home Screen.";
+            installHint.classList.add("show");
+          }
+          setTimeout(function(){ allowLeave = false; }, 1200);
+        });
+      }
+    }
+
+    function setupLeaveProtection(){
+      const modal = document.getElementById("leave-modal-backdrop");
+      const stayBtn = document.getElementById("stay-page-btn");
+      const leaveBtn = document.getElementById("leave-anyway-btn");
+
+      document.addEventListener("click", function(event){
+        const action = event.target.closest(".safe-action, #install-btn");
+        if(action) allowLeave = true;
+      });
+
+      window.addEventListener("beforeunload", function(event){
+        if(allowLeave) return;
+        event.preventDefault();
+        event.returnValue = "";
+      });
+
+      history.pushState({snGuard:true}, "", window.location.href);
+      window.addEventListener("popstate", function(){
+        if(allowLeave){
+          history.back();
+          return;
+        }
+        modal.classList.remove("hidden");
+        history.pushState({snGuard:true}, "", window.location.href);
+      });
+
+      stayBtn.addEventListener("click", function(){
+        modal.classList.add("hidden");
+      });
+
+      leaveBtn.addEventListener("click", function(){
+        allowLeave = true;
+        modal.classList.add("hidden");
+        history.back();
+      });
+    }
+
+    window.addEventListener("beforeinstallprompt", function(event){
+      event.preventDefault();
+      deferredInstallPrompt = event;
+    });
+
+    window.addEventListener("appinstalled", function(){
+      localStorage.setItem("sn_app_installed", "1");
+      const installBtn = document.getElementById("install-btn");
+      const installHint = document.getElementById("install-hint");
+      if(installBtn) installBtn.classList.add("hidden");
+      if(installHint){
+        installHint.textContent = copy.installed;
+        installHint.classList.add("show");
+      }
+    });
+
+    if("serviceWorker" in navigator){
+      window.addEventListener("load", function(){
+        navigator.serviceWorker.register("/sw.js").catch(function(){});
+      });
+    }
+
+    restoreSessionWhenOpenedAsApp();
+    saveCurrentSessionForApp();
+
     applyInitialCopy();
+    setupInstallCard();
+    setupLeaveProtection();
     updateScheduleLink(isBookerFlow ? copy.chooseSlot : copy.chooseLater);
     showScheduledTime();
 
