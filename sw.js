@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safenotarize-session-v5';
+const CACHE_NAME = 'safenotarize-session-v6';
 const APP_SHELL = [
   '/thank-you.html',
   '/manifest.webmanifest',
@@ -29,7 +29,7 @@ self.addEventListener('fetch', event => {
 
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request).catch(() => caches.match('/thank-you.html'))
+      fetch(request, {cache:'no-store'}).then(response => { const copy = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put('/thank-you.html', copy)); return response; }).catch(() => caches.match('/thank-you.html'))
     );
     return;
   }

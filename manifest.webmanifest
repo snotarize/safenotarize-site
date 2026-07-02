@@ -2,7 +2,7 @@
   "name": "SafeNotarize",
   "short_name": "SafeNotarize",
   "description": "Return to your SafeNotarize online notary session and final document anytime.",
-  "start_url": "/thank-you.html?from_app=1",
+  "start_url": "/thank-you.html?from_app=1&live=1",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",

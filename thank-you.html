@@ -14,10 +14,20 @@
   <title>Your Online Notary Session | SafeNotarize</title>
   <meta name="description" content="Join your SafeNotarize online notary session or choose a time for later.">
   <meta name="theme-color" content="#003366">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="SafeNotarize">
-  <link rel="manifest" href="/manifest.webmanifest">
+  <script>
+    // iPhone Home Screen shortcuts must keep the exact session URL.
+    // Loading the manifest on iOS can make Apple reopen the generic app start page instead.
+    (function(){
+      var ua = navigator.userAgent || "";
+      var isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      if(!isIOS){
+        var link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = "/manifest.webmanifest?v=6";
+        document.head.appendChild(link);
+      }
+    })();
+  </script>
   <link rel="apple-touch-icon" href="/safenotarize-icon-192.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
@@ -557,10 +567,10 @@
       preparingSub:"Chak siyatè ap resevwa pwòp imèl pa yo.",
       preparingStatus:"Pare pou pwochen etap la",
       preparingInvite:"<strong>Enpòtan:</strong> Pa kreye kont. Si yo mande w sa, fèmen paj la epi sèvi ak imèl SafeNotarize ou.",
-      installTitle:"Sove SafeNotarize",
+      installTitle:"Sove SafeNotarize App",
       installText:"Ajoute paj sa a sou ekran telefòn ou pou retounen nan sesyon an ak dokiman final ou.",
-      installButton:"📲 Ajoute sou ekran an",
-      iosInstall:"Sou iPhone: peze bouton Share la, chwazi Add to Home Screen, epi peze Add.",
+      installButton:"📲 Sove SafeNotarize App",
+      iosInstall:"🍎 Sou iPhone: peze Share, chèche Add to Home Screen, mete Open as Web App OFF, epi peze Add.",
       installed:"SafeNotarize deja sove sou ekran ou.",
       leaveTitle:"Avan ou kite",
       leaveText:"Sove paj sa a oswa kite l ouvè pou retounen nenpòt lè.",
@@ -613,10 +623,10 @@
       preparingSub:"Each signer gets their own invite email.",
       preparingStatus:"Ready for next step",
       preparingInvite:"<strong>Important:</strong> Do not sign up. If asked, close that page and use your SafeNotarize invite email.",
-      installTitle:"Save SafeNotarize",
+      installTitle:"Save SafeNotarize App",
       installText:"Add this page to your Home Screen to return to your session and final document.",
-      installButton:"📲 Add to Home Screen",
-      iosInstall:"On iPhone: tap Share, choose Add to Home Screen, then tap Add.",
+      installButton:"📲 Save SafeNotarize App",
+      iosInstall:"🍎 On iPhone: tap Share, look for Add to Home Screen, turn OFF “Open as Web App”, then tap Add.",
       installed:"SafeNotarize is already saved on your screen.",
       leaveTitle:"Before you leave",
       leaveText:"Save this page or keep it open so you can return anytime.",
@@ -965,7 +975,7 @@
 
     if("serviceWorker" in navigator){
       window.addEventListener("load", function(){
-        navigator.serviceWorker.register("/sw.js").catch(function(){});
+        navigator.serviceWorker.register("/sw.js?v=6").catch(function(){});
       });
     }
 
