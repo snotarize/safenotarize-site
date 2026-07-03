@@ -32,6 +32,7 @@
     .mini-actions{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 0}.mini-btn{border:1px solid #cbd8e6;background:#fff;color:var(--navy);border-radius:999px;padding:10px 13px;font-weight:800;cursor:pointer;font-size:14px}.remove-btn{border:none;background:transparent;color:#777;font-weight:800;cursor:pointer;font-size:13px}.hidden{display:none!important}
     .step-actions{display:flex;gap:10px;align-items:center;margin-top:12px}.step-actions .continue{margin-top:0}.back-btn{border:1px solid #cbd8e6;background:#fff;color:var(--navy);border-radius:12px;padding:14px 15px;font-size:15px;font-weight:900;cursor:pointer;min-width:96px}.continue{width:100%;border:none;background:var(--green);color:#fff;border-radius:12px;padding:15px 18px;font-size:16px;font-weight:900;cursor:pointer;margin-top:14px;box-shadow:0 10px 24px rgba(40,167,69,.20)}.continue:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
     .status-msg{display:none;margin:14px 0 0;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.4}.status-msg.error{display:block;background:#fff1f1;color:#8a0f18;border:1px solid #ffd0d4}.status-msg.success{display:block;background:#effbf2;color:#16652d;border:1px solid #ccefd5}
+    .estimate-card{background:linear-gradient(180deg,#fbfffc 0%,#f7fbff 100%);border-color:#cfe9d6}.estimate-lines{border:1px solid #e3edf6;border-radius:14px;background:#fff;overflow:hidden;margin-top:8px}.estimate-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #edf3f9;font-size:14px;line-height:1.35}.estimate-row:last-child{border-bottom:none}.estimate-row span{color:#31475f}.estimate-row small{display:block;color:var(--muted);font-size:12px;margin-top:2px}.estimate-row strong{color:var(--navy);white-space:nowrap}.estimate-total{margin-top:10px;border:1px solid #cfe9d6;border-radius:14px;background:var(--greenSoft);font-size:16px;font-weight:900}.estimate-total strong{font-size:20px;color:var(--greenDark)}.estimate-note{margin:10px 0 0;color:var(--muted);font-size:12.5px;line-height:1.35}.estimate-stamp-field{margin:10px 0 0}.estimate-stamp-field label{margin-bottom:6px}
     @media(max-width:620px){.topbar{padding:10px 12px}.top-actions a:not(:last-child){display:none}.page{padding:16px 10px 50px}h1{font-size:25px}.hero p{font-size:13px}.choice-row{grid-template-columns:1fr;gap:9px}.panel-pad{padding:14px}.grid-2,.grid-3{grid-template-columns:1fr;gap:0}.section-head{display:block}.step-actions{flex-direction:column-reverse}.back-btn{width:100%}.card{padding:14px}}
   </style>
 </head>
@@ -89,6 +90,24 @@
               <div class="card-title"><h3>Lòt moun</h3><span class="badge">Opsyonèl</span></div>
               <div id="additional-signers"></div><div id="witnesses"></div><div id="observers"></div>
               <div class="mini-actions"><button type="button" class="mini-btn" onclick="addAdditionalSigner()">+ Ajoute siyatè</button><button type="button" class="mini-btn" onclick="addWitness()">+ Ajoute temwen</button><button type="button" class="mini-btn" onclick="addObserver()">+ Ajoute obsèvatè</button></div>
+            </div>
+
+            <div class="card estimate-card" id="estimate-card">
+              <div class="card-title"><h3>Estimasyon kounye a</h3><span class="badge">Mizajou otomatik</span></div>
+              <div id="estimate-lines" class="estimate-lines" aria-live="polite"></div>
+              <div class="field estimate-stamp-field">
+                <label for="estimate_extra_stamps">Èske w bezwen so anplis?</label>
+                <select id="estimate_extra_stamps" aria-label="So anplis pou estimasyon sèlman">
+                  <option value="0">Pa gen so anplis</option>
+                  <option value="1">1 so anplis</option>
+                  <option value="2">2 so anplis</option>
+                  <option value="3">3 so anplis</option>
+                  <option value="4">4 so anplis</option>
+                  <option value="5">5 so anplis</option>
+                </select>
+              </div>
+              <div class="estimate-row estimate-total"><span>Total estimasyon</span><strong id="estimate-total">$25</strong></div>
+              <p class="estimate-note">Sesyon nòmal ak sesyon entènasyonal gen 1 siyatè ak 2 so notè ladan yo. Sa a se sèlman yon estimasyon; fakti final la ka chanje si dokiman an bezwen plis so oswa lòt bagay espesyal.</p>
             </div>
 
             <button type="button" class="continue" onclick="goToStep(2, true)">Kontinye</button>
@@ -177,6 +196,7 @@
       block.className="card"; block.id=id; block.style.background="#fff";
       block.innerHTML=`<div class="card-title"><h3>Siyatè anplis ${signerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Retire</button></div><div class="grid-2"><div class="field"><label>Non konplè <span class="required">*</span></label><input name="additional_signer_${signerCount}_name" required placeholder="Non konplè siyatè anplis la"></div><div class="field"><label>Adrès imèl <span class="required">*</span></label><input name="additional_signer_${signerCount}_email" type="email" required placeholder="signer@email.com"></div></div><p style="margin:0;color:#637487;font-size:12.5px;line-height:1.35;">Chak siyatè dwe itilize pwòp imèl pa li pou li ka resevwa envitasyon SafeNotarize pa li.</p>`;
       wrap.appendChild(block);
+      updateEstimate();
     }
 
     function addWitness(){
@@ -186,6 +206,7 @@
       block.className="card"; block.id=id; block.style.background="#fff";
       block.innerHTML=`<div class="card-title"><h3>Temwen ${witnessCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Retire</button></div><div class="grid-3"><div class="field"><label>Opsyon temwen</label><select name="witness_${witnessCount}_option"><option value="safenotarize_provided">SafeNotarize bay temwen an</option><option value="client_provided">Kliyan an bay temwen an</option></select></div><div class="field"><label>Non temwen</label><input name="witness_${witnessCount}_name" placeholder="Si kliyan an bay temwen an"></div><div class="field"><label>Imèl temwen</label><input name="witness_${witnessCount}_email" type="email" placeholder="Si kliyan an bay temwen an"></div></div>`;
       wrap.appendChild(block);
+      updateEstimate();
     }
 
     function addObserver(){
@@ -195,9 +216,10 @@
       block.className="card"; block.id=id; block.style.background="#fff";
       block.innerHTML=`<div class="card-title"><h3>Obsèvatè ${observerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Retire</button></div><div class="grid-2"><div class="field"><label>Non konplè obsèvatè a</label><input name="observer_${observerCount}_name" placeholder="Non konplè obsèvatè a"></div><div class="field"><label>Imèl obsèvatè a</label><input name="observer_${observerCount}_email" type="email" placeholder="observer@email.com"></div></div><div class="grid-2"><div class="field"><label>Telefòn obsèvatè a</label><input name="observer_${observerCount}_phone" type="tel" placeholder="Opsyonèl"></div><div class="field"><label>Wòl kontak la</label><select name="observer_${observerCount}_role"><option value="Moderator">Moderateur</option><option value="Viewer">Moun k ap gade</option><option value="Agent">Ajan</option></select></div></div>`;
       wrap.appendChild(block);
+      updateEstimate();
     }
 
-    function removeBlock(id){const item=document.getElementById(id); if(item) item.remove();}
+    function removeBlock(id){const item=document.getElementById(id); if(item) item.remove(); updateEstimate();}
     function toggleInvoiceOther(){document.getElementById("invoice-other").classList.toggle("hidden",document.getElementById("invoice_to").value!=="other");}
     function toggleDocumentOther(){document.getElementById("document-other").classList.toggle("hidden",document.getElementById("document_to").value!=="other");}
     function showStatus(type,message){const el=document.getElementById("status-message"); el.className=`status-msg ${type}`; el.textContent=message;}
@@ -347,6 +369,94 @@
       return true;
     }
 
+
+    const ESTIMATE_PRICES = {
+      basicSession: 25,
+      internationalSession: 35,
+      additionalSigner: 10,
+      extraStamp: 5,
+      safenotarizeWitness: 15
+    };
+
+    function money(value){
+      return "$" + value;
+    }
+
+    function countEstimateItems(selector){
+      return document.querySelectorAll(selector).length;
+    }
+
+    function getEstimateExtraStamps(){
+      const field = document.getElementById("estimate_extra_stamps");
+      return field ? (parseInt(field.value, 10) || 0) : 0;
+    }
+
+    function getSafeNotarizeWitnessCount(){
+      return Array.from(document.querySelectorAll('#witnesses select[name^="witness_"][name$="_option"]')).filter(function(select){
+        return select.value === "safenotarize_provided";
+      }).length;
+    }
+
+    function getClientWitnessCount(){
+      return Array.from(document.querySelectorAll('#witnesses select[name^="witness_"][name$="_option"]')).filter(function(select){
+        return select.value === "client_provided";
+      }).length;
+    }
+
+    function estimateLine(label, detail, amount){
+      const detailHtml = detail ? `<small>${detail}</small>` : "";
+      return `<div class="estimate-row"><span>${label}${detailHtml}</span><strong>${money(amount)}</strong></div>`;
+    }
+
+    function updateEstimate(){
+      const lines = [];
+      const locationValue = document.getElementById("international_signer_passport").value || "no";
+      const isInternational = locationValue === "yes";
+      const unsureInternational = locationValue === "not_sure";
+      const basePrice = isInternational ? ESTIMATE_PRICES.internationalSession : ESTIMATE_PRICES.basicSession;
+      let total = basePrice;
+
+      lines.push(estimateLine(
+        isInternational ? "Sesyon entènasyonal" : "Sesyon nòmal",
+        (unsureInternational ? "Estimasyon an montre kòm sesyon nòmal. Si verifikasyon entènasyonal nesesè, baz sesyon an ka vin $35. " : "") + "Gen 1 siyatè ak 2 so notè ladan li.",
+        basePrice
+      ));
+
+      const additionalSigners = countEstimateItems('#additional-signers [id^="additional-signer-"]');
+      if(additionalSigners > 0){
+        const amount = additionalSigners * ESTIMATE_PRICES.additionalSigner;
+        total += amount;
+        lines.push(estimateLine(`Siyatè anplis × ${additionalSigners}`, "$10 chak.", amount));
+      }
+
+      const safeWitnesses = getSafeNotarizeWitnessCount();
+      if(safeWitnesses > 0){
+        const amount = safeWitnesses * ESTIMATE_PRICES.safenotarizeWitness;
+        total += amount;
+        lines.push(estimateLine(`Temwen SafeNotarize bay × ${safeWitnesses}`, "$15 chak.", amount));
+      }
+
+      const clientWitnesses = getClientWitnessCount();
+      if(clientWitnesses > 0){
+        lines.push(estimateLine(`Temwen kliyan an bay × ${clientWitnesses}`, "Pa gen frè temwen SafeNotarize.", 0));
+      }
+
+      const extraStamps = getEstimateExtraStamps();
+      if(extraStamps > 0){
+        const amount = extraStamps * ESTIMATE_PRICES.extraStamp;
+        total += amount;
+        lines.push(estimateLine(`So anplis × ${extraStamps}`, "$5 chak.", amount));
+      }
+
+      const observers = countEstimateItems('#observers [id^="observer-"]');
+      if(observers > 0){
+        lines.push(estimateLine(`Obsèvatè × ${observers}`, "Pa gen frè anplis.", 0));
+      }
+
+      document.getElementById("estimate-lines").innerHTML = lines.join("");
+      document.getElementById("estimate-total").textContent = money(total);
+    }
+
     document.addEventListener("input",function(e){
       if(e.target && e.target.matches("input")){
         e.target.setCustomValidity("");
@@ -356,6 +466,7 @@
     document.addEventListener("change",function(e){
       if(e.target && e.target.matches("select")){
         clearSessionPeopleValidation();
+        updateEstimate();
       }
     });
 
@@ -426,6 +537,7 @@
 
     setBookingType("self");
     updateProgress(1);
+    updateEstimate();
   </script>
 </body>
 </html>
