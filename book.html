@@ -34,6 +34,7 @@
     .mini-actions{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 0}.mini-btn{border:1px solid #cbd8e6;background:#fff;color:var(--navy);border-radius:999px;padding:10px 13px;font-weight:800;cursor:pointer;font-size:14px}.remove-btn{border:none;background:transparent;color:#777;font-weight:800;cursor:pointer;font-size:13px}.hidden{display:none!important}
     .step-actions{display:flex;gap:10px;align-items:center;margin-top:12px}.step-actions .continue{margin-top:0}.back-btn{border:1px solid #cbd8e6;background:#fff;color:var(--navy);border-radius:12px;padding:14px 15px;font-size:15px;font-weight:900;cursor:pointer;min-width:96px}.continue{width:100%;border:none;background:var(--green);color:#fff;border-radius:12px;padding:15px 18px;font-size:16px;font-weight:900;cursor:pointer;margin-top:14px;box-shadow:0 10px 24px rgba(40,167,69,.20)}.continue:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
     .status-msg{display:none;margin:14px 0 0;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.4}.status-msg.error{display:block;background:#fff1f1;color:#8a0f18;border:1px solid #ffd0d4}.status-msg.success{display:block;background:#effbf2;color:#16652d;border:1px solid #ccefd5}
+    .estimate-card{background:linear-gradient(180deg,#fbfffc 0%,#f7fbff 100%);border-color:#cfe9d6}.estimate-lines{border:1px solid #e3edf6;border-radius:14px;background:#fff;overflow:hidden;margin-top:8px}.estimate-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #edf3f9;font-size:14px;line-height:1.35}.estimate-row:last-child{border-bottom:none}.estimate-row span{color:#31475f}.estimate-row small{display:block;color:var(--muted);font-size:12px;margin-top:2px}.estimate-row strong{color:var(--navy);white-space:nowrap}.estimate-total{margin-top:10px;border:1px solid #cfe9d6;border-radius:14px;background:var(--greenSoft);font-size:16px;font-weight:900}.estimate-total strong{font-size:20px;color:var(--greenDark)}.estimate-note{margin:10px 0 0;color:var(--muted);font-size:12.5px;line-height:1.35}.estimate-stamp-field{margin:10px 0 0}.estimate-stamp-field label{margin-bottom:6px}
     @media(max-width:620px){.topbar{padding:10px 12px}.top-actions a:not(:last-child){display:none}.page{padding:16px 10px 50px}h1{font-size:25px}.hero p{font-size:13px}.choice-row{grid-template-columns:1fr;gap:9px}.panel-pad{padding:14px}.grid-2,.grid-3{grid-template-columns:1fr;gap:0}.section-head{display:block}.step-actions{flex-direction:column-reverse}.back-btn{width:100%}.card{padding:14px}}
   </style>
 </head>
@@ -126,6 +127,24 @@
                 <button type="button" class="mini-btn" onclick="addWitness()">+ Add witness</button>
                 <button type="button" class="mini-btn" onclick="addObserver()">+ Add observer</button>
               </div>
+            </div>
+
+            <div class="card estimate-card" id="estimate-card">
+              <div class="card-title"><h3>Current estimate</h3><span class="badge">Updates live</span></div>
+              <div id="estimate-lines" class="estimate-lines" aria-live="polite"></div>
+              <div class="field estimate-stamp-field">
+                <label for="estimate_extra_stamps">Extra stamps needed?</label>
+                <select id="estimate_extra_stamps" aria-label="Extra stamps for estimate only">
+                  <option value="0">No extra stamps</option>
+                  <option value="1">1 extra stamp</option>
+                  <option value="2">2 extra stamps</option>
+                  <option value="3">3 extra stamps</option>
+                  <option value="4">4 extra stamps</option>
+                  <option value="5">5 extra stamps</option>
+                </select>
+              </div>
+              <div class="estimate-row estimate-total"><span>Estimated total</span><strong id="estimate-total">$25</strong></div>
+              <p class="estimate-note">Basic and international sessions include 1 signer and 2 stamps. This is only an estimate; your final invoice may change if the document needs more stamps or special handling.</p>
             </div>
 
             <button type="button" class="continue" onclick="goToStep(2, true)">Continue</button>
@@ -265,6 +284,7 @@
       block.style.background = "#fff";
       block.innerHTML = `<div class="card-title"><h3>Additional signer ${signerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-2"><div class="field"><label>Full name <span class="required">*</span></label><input name="additional_signer_${signerCount}_name" required placeholder="Additional signer full name"></div><div class="field"><label>Email address <span class="required">*</span></label><input name="additional_signer_${signerCount}_email" type="email" required placeholder="signer@email.com"></div></div><p style="margin:0;color:#637487;font-size:12.5px;line-height:1.35;">Each signer must use their own email so they can receive their personal SafeNotarize invite.</p>`;
       wrap.appendChild(block);
+      updateEstimate();
     }
 
     function addWitness(){
@@ -278,6 +298,7 @@
       block.style.background = "#fff";
       block.innerHTML = `<div class="card-title"><h3>Witness ${witnessCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-3"><div class="field"><label>Witness option</label><select name="witness_${witnessCount}_option"><option value="safenotarize_provided">SafeNotarize provides witness</option><option value="client_provided">Client provides witness</option></select></div><div class="field"><label>Witness name</label><input name="witness_${witnessCount}_name" placeholder="If client provided"></div><div class="field"><label>Witness email</label><input name="witness_${witnessCount}_email" type="email" placeholder="If client provided"></div></div>`;
       wrap.appendChild(block);
+      updateEstimate();
     }
 
     function addObserver(){
@@ -291,9 +312,10 @@
       block.style.background = "#fff";
       block.innerHTML = `<div class="card-title"><h3>Observer ${observerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-2"><div class="field"><label>Observer full name</label><input name="observer_${observerCount}_name" placeholder="Observer full name"></div><div class="field"><label>Observer email</label><input name="observer_${observerCount}_email" type="email" placeholder="observer@email.com"></div></div><div class="grid-2"><div class="field"><label>Observer phone</label><input name="observer_${observerCount}_phone" type="tel" placeholder="Optional"></div><div class="field"><label>Contact role</label><select name="observer_${observerCount}_role"><option value="Moderator">Moderator</option><option value="Viewer">Viewer</option><option value="Agent">Agent</option></select></div></div>`;
       wrap.appendChild(block);
+      updateEstimate();
     }
 
-    function removeBlock(id){ const item = document.getElementById(id); if(item) item.remove(); }
+    function removeBlock(id){ const item = document.getElementById(id); if(item) item.remove(); updateEstimate(); }
     function toggleInvoiceOther(){ document.getElementById("invoice-other").classList.toggle("hidden", document.getElementById("invoice_to").value !== "other"); }
     function toggleDocumentOther(){ document.getElementById("document-other").classList.toggle("hidden", document.getElementById("document_to").value !== "other"); }
     function showStatus(type, message){ const el = document.getElementById("status-message"); el.className = `status-msg ${type}`; el.textContent = message; }
@@ -443,6 +465,94 @@
       return true;
     }
 
+
+    const ESTIMATE_PRICES = {
+      basicSession: 25,
+      internationalSession: 35,
+      additionalSigner: 10,
+      extraStamp: 5,
+      safenotarizeWitness: 15
+    };
+
+    function money(value){
+      return "$" + value;
+    }
+
+    function countEstimateItems(selector){
+      return document.querySelectorAll(selector).length;
+    }
+
+    function getEstimateExtraStamps(){
+      const field = document.getElementById("estimate_extra_stamps");
+      return field ? (parseInt(field.value, 10) || 0) : 0;
+    }
+
+    function getSafeNotarizeWitnessCount(){
+      return Array.from(document.querySelectorAll('#witnesses select[name^="witness_"][name$="_option"]')).filter(function(select){
+        return select.value === "safenotarize_provided";
+      }).length;
+    }
+
+    function getClientWitnessCount(){
+      return Array.from(document.querySelectorAll('#witnesses select[name^="witness_"][name$="_option"]')).filter(function(select){
+        return select.value === "client_provided";
+      }).length;
+    }
+
+    function estimateLine(label, detail, amount){
+      const detailHtml = detail ? `<small>${detail}</small>` : "";
+      return `<div class="estimate-row"><span>${label}${detailHtml}</span><strong>${money(amount)}</strong></div>`;
+    }
+
+    function updateEstimate(){
+      const lines = [];
+      const locationValue = document.getElementById("international_signer_passport").value || "no";
+      const isInternational = locationValue === "yes";
+      const unsureInternational = locationValue === "not_sure";
+      const basePrice = isInternational ? ESTIMATE_PRICES.internationalSession : ESTIMATE_PRICES.basicSession;
+      let total = basePrice;
+
+      lines.push(estimateLine(
+        isInternational ? "International session" : "Basic session",
+        (unsureInternational ? "Estimate shown as basic. If international verification is needed, base session may be $35. " : "") + "Includes 1 signer and 2 stamps.",
+        basePrice
+      ));
+
+      const additionalSigners = countEstimateItems('#additional-signers [id^="additional-signer-"]');
+      if(additionalSigners > 0){
+        const amount = additionalSigners * ESTIMATE_PRICES.additionalSigner;
+        total += amount;
+        lines.push(estimateLine(`Additional signer × ${additionalSigners}`, "$10 each.", amount));
+      }
+
+      const safeWitnesses = getSafeNotarizeWitnessCount();
+      if(safeWitnesses > 0){
+        const amount = safeWitnesses * ESTIMATE_PRICES.safenotarizeWitness;
+        total += amount;
+        lines.push(estimateLine(`SafeNotarize-provided witness × ${safeWitnesses}`, "$15 each.", amount));
+      }
+
+      const clientWitnesses = getClientWitnessCount();
+      if(clientWitnesses > 0){
+        lines.push(estimateLine(`Client-provided witness × ${clientWitnesses}`, "No SafeNotarize witness fee.", 0));
+      }
+
+      const extraStamps = getEstimateExtraStamps();
+      if(extraStamps > 0){
+        const amount = extraStamps * ESTIMATE_PRICES.extraStamp;
+        total += amount;
+        lines.push(estimateLine(`Extra stamp × ${extraStamps}`, "$5 each.", amount));
+      }
+
+      const observers = countEstimateItems('#observers [id^="observer-"]');
+      if(observers > 0){
+        lines.push(estimateLine(`Observer × ${observers}`, "No extra fee.", 0));
+      }
+
+      document.getElementById("estimate-lines").innerHTML = lines.join("");
+      document.getElementById("estimate-total").textContent = money(total);
+    }
+
     document.addEventListener("input", function(e){
       if(e.target && e.target.matches("input")){
         e.target.setCustomValidity("");
@@ -452,6 +562,7 @@
     document.addEventListener("change", function(e){
       if(e.target && e.target.matches("select")){
         clearSessionPeopleValidation();
+        updateEstimate();
       }
     });
 
@@ -586,6 +697,7 @@
 
     setBookingType("self");
     updateProgress(1);
+    updateEstimate();
   </script>
 </body>
 </html>
