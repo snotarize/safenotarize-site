@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ht">
 <head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18058269024"></script>
@@ -45,76 +44,75 @@
   <main class="page">
     <section class="hero"><span class="pill">Notarizasyon Online</span><h1>Kòmanse Sesyon Ou</h1><p>Pri a kòmanse a $25 pou 1 siyatè ak 1 so notè.</p></section>
 
-<div class="layout">
-  <form id="booking-form" class="panel" autocomplete="on">
-    <div class="panel-pad">
-      <div class="section-head"><div><h2>Enfòmasyon pou randevou a</h2><p>Ranpli pati sa a avan, apre sa w ap telechaje dokiman ou.</p></div><span class="badge" id="step-badge">Etap 1 sou 2</span></div>
+    <div class="layout">
+      <form id="booking-form" class="panel" autocomplete="on">
+        <div class="panel-pad">
+          <div class="section-head"><div><h2>Enfòmasyon pou randevou a</h2><p>Ranpli pati sa a avan, apre sa w ap telechaje dokiman ou.</p></div><span class="badge" id="step-badge">Etap 1 sou 2</span></div>
 
-      <div class="progress-wrap"><div class="progress-top"><span id="progress-label">Enfòmasyon siyatè</span><span id="progress-count">1/2</span></div><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div></div>
+          <div class="progress-wrap"><div class="progress-top"><span id="progress-label">Enfòmasyon siyatè</span><span id="progress-count">1/2</span></div><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div></div>
 
-      <section class="step-card active" id="step-1">
-        <div class="choice-row" role="group" aria-label="Kalite randevou">
-          <button type="button" class="choice active" id="choice-self" onclick="setBookingType('self')"><strong>Se mwen k ap siyen</strong><span>Mwen menm m ap antre nan sesyon an.</span></button>
-          <button type="button" class="choice" id="choice-other" onclick="setBookingType('other')"><strong>M ap pran randevou pou yon lòt moun</strong><span>Kliyan, fanmi, oswa yon lòt siyatè.</span></button>
+          <section class="step-card active" id="step-1">
+            <div class="choice-row" role="group" aria-label="Kalite randevou">
+              <button type="button" class="choice active" id="choice-self" onclick="setBookingType('self')"><strong>Se mwen k ap siyen</strong><span>Mwen menm m ap antre nan sesyon an.</span></button>
+              <button type="button" class="choice" id="choice-other" onclick="setBookingType('other')"><strong>M ap pran randevou pou yon lòt moun</strong><span>Kliyan, fanmi, oswa yon lòt siyatè.</span></button>
+            </div>
+
+            <input type="hidden" id="booking_type" name="booking_type" value="self">
+
+            <div class="card hidden" id="booker-card">
+              <div class="card-title"><h3>Moun k ap pran randevou a</h3><span class="badge">Obligatwa</span></div>
+              <div class="grid-2">
+                <div class="field"><label for="booker_name">Non ou <span class="required">*</span></label><input id="booker_name" name="booker_name" placeholder="Moun k ap pran randevou oswa peye"></div>
+                <div class="field"><label for="booker_email">Imèl ou <span class="required">*</span></label><input id="booker_email" name="booker_email" type="email" placeholder="payer@email.com"></div>
+              </div>
+              <div class="field"><label for="booker_phone">Telefòn ou</label><input id="booker_phone" name="booker_phone" type="tel" placeholder="Opsyonèl"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><h3>Siyatè prensipal</h3><span class="badge">Obligatwa</span></div>
+              <div class="grid-2">
+                <div class="field"><label for="primary_name">Non konplè <span class="required">*</span></label><input id="primary_name" name="primary_name" required placeholder="Non konplè siyatè prensipal la"></div>
+                <div class="field"><label for="primary_email">Adrès imèl <span class="required">*</span></label><input id="primary_email" name="primary_email" type="email" required placeholder="signer@email.com"></div>
+              </div>
+              <div class="field"><label for="primary_phone">Nimewo telefòn</label><input id="primary_phone" name="primary_phone" type="tel" placeholder="Opsyonèl"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><h3>Kote siyatè a ye</h3></div>
+              <div class="field">
+                <label for="international_signer_passport">Èske gen yon siyatè ki deyò Etazini oswa ki pa ka verifye ak SSN?</label>
+                <select id="international_signer_passport" name="international_signer_passport"><option value="no">Non</option><option value="yes">Wi</option><option value="not_sure">Mwen pa sèten</option></select>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><h3>Lòt moun</h3><span class="badge">Opsyonèl</span></div>
+              <div id="additional-signers"></div><div id="witnesses"></div><div id="observers"></div>
+              <div class="mini-actions"><button type="button" class="mini-btn" onclick="addAdditionalSigner()">+ Ajoute siyatè</button><button type="button" class="mini-btn" onclick="addWitness()">+ Ajoute temwen</button><button type="button" class="mini-btn" onclick="addObserver()">+ Ajoute obsèvatè</button></div>
+            </div>
+
+            <button type="button" class="continue" onclick="goToStep(2, true)">Kontinye</button>
+          </section>
+
+          <section class="step-card" id="step-2">
+            <div class="card">
+              <div class="card-title"><h3>Peman ak livrezon dokiman</h3><span class="badge">Obligatwa</span></div>
+              <div class="grid-2">
+                <div class="field"><label for="invoice_to">Ki moun ki dwe resevwa fakti a? <span class="required">*</span></label><select id="invoice_to" name="invoice_to" required onchange="toggleInvoiceOther()"><option value="primary_signer">Siyatè prensipal</option><option value="booker">Moun k ap pran randevou / moun k ap peye</option><option value="other">Yon lòt moun</option></select></div>
+                <div class="field"><label for="document_to">Ki moun ki dwe resevwa dokiman ki fini an? <span class="required">*</span></label><select id="document_to" name="document_to" required onchange="toggleDocumentOther()"><option value="primary_signer">Siyatè prensipal</option><option value="booker">Moun k ap pran randevou / moun k ap peye</option><option value="both">Tou de</option><option value="other">Yon lòt moun</option></select></div>
+              </div>
+
+              <div id="invoice-other" class="hidden"><div class="grid-2"><div class="field"><label for="invoice_name">Non moun k ap resevwa fakti a</label><input id="invoice_name" name="invoice_name" placeholder="Non"></div><div class="field"><label for="invoice_email">Imèl moun k ap resevwa fakti a</label><input id="invoice_email" name="invoice_email" type="email" placeholder="email@example.com"></div></div></div>
+              <div id="document-other" class="hidden"><div class="grid-2"><div class="field"><label for="document_name">Non moun k ap resevwa dokiman an</label><input id="document_name" name="document_name" placeholder="Non"></div><div class="field"><label for="document_email">Imèl moun k ap resevwa dokiman an</label><input id="document_email" name="document_email" type="email" placeholder="email@example.com"></div></div></div>
+              <div class="field"><label for="notes">Nòt oswa enstriksyon espesyal</label><textarea id="notes" name="notes" placeholder="Opsyonèl"></textarea></div>
+            </div>
+
+            <div id="status-message" class="status-msg"></div>
+            <div class="step-actions"><button type="button" class="back-btn" onclick="goToStep(1, false)">Retounen</button><button type="submit" id="continue-btn" class="continue">Kontinye pou telechaje dokiman an</button></div>
+          </section>
         </div>
-
-        <input type="hidden" id="booking_type" name="booking_type" value="self">
-
-        <div class="card hidden" id="booker-card">
-          <div class="card-title"><h3>Moun k ap pran randevou a</h3><span class="badge">Obligatwa</span></div>
-          <div class="grid-2">
-            <div class="field"><label for="booker_name">Non ou <span class="required">*</span></label><input id="booker_name" name="booker_name" placeholder="Moun k ap pran randevou oswa peye"></div>
-            <div class="field"><label for="booker_email">Imèl ou <span class="required">*</span></label><input id="booker_email" name="booker_email" type="email" placeholder="payer@email.com"></div>
-          </div>
-          <div class="field"><label for="booker_phone">Telefòn ou</label><input id="booker_phone" name="booker_phone" type="tel" placeholder="Opsyonèl"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><h3>Siyatè prensipal</h3><span class="badge">Obligatwa</span></div>
-          <div class="grid-2">
-            <div class="field"><label for="primary_name">Non konplè <span class="required">*</span></label><input id="primary_name" name="primary_name" required placeholder="Non konplè siyatè prensipal la"></div>
-            <div class="field"><label for="primary_email">Adrès imèl <span class="required">*</span></label><input id="primary_email" name="primary_email" type="email" required placeholder="signer@email.com"></div>
-          </div>
-          <div class="field"><label for="primary_phone">Nimewo telefòn</label><input id="primary_phone" name="primary_phone" type="tel" placeholder="Opsyonèl"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><h3>Kote siyatè a ye</h3></div>
-          <div class="field">
-            <label for="international_signer_passport">Èske gen yon siyatè ki deyò Etazini oswa ki pa ka verifye ak SSN?</label>
-            <select id="international_signer_passport" name="international_signer_passport"><option value="no">Non</option><option value="yes">Wi</option><option value="not_sure">Mwen pa sèten</option></select>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><h3>Lòt moun</h3><span class="badge">Opsyonèl</span></div>
-          <div id="additional-signers"></div><div id="witnesses"></div><div id="observers"></div>
-          <div class="mini-actions"><button type="button" class="mini-btn" onclick="addAdditionalSigner()">+ Ajoute siyatè</button><button type="button" class="mini-btn" onclick="addWitness()">+ Ajoute temwen</button><button type="button" class="mini-btn" onclick="addObserver()">+ Ajoute obsèvatè</button></div>
-        </div>
-
-        <button type="button" class="continue" onclick="goToStep(2, true)">Kontinye</button>
-      </section>
-
-      <section class="step-card" id="step-2">
-        <div class="card">
-          <div class="card-title"><h3>Peman ak livrezon dokiman</h3><span class="badge">Obligatwa</span></div>
-          <div class="grid-2">
-            <div class="field"><label for="invoice_to">Ki moun ki dwe resevwa fakti a? <span class="required">*</span></label><select id="invoice_to" name="invoice_to" required onchange="toggleInvoiceOther()"><option value="primary_signer">Siyatè prensipal</option><option value="booker">Moun k ap pran randevou / moun k ap peye</option><option value="other">Yon lòt moun</option></select></div>
-            <div class="field"><label for="document_to">Ki moun ki dwe resevwa dokiman ki fini an? <span class="required">*</span></label><select id="document_to" name="document_to" required onchange="toggleDocumentOther()"><option value="primary_signer">Siyatè prensipal</option><option value="booker">Moun k ap pran randevou / moun k ap peye</option><option value="both">Tou de</option><option value="other">Yon lòt moun</option></select></div>
-          </div>
-
-          <div id="invoice-other" class="hidden"><div class="grid-2"><div class="field"><label for="invoice_name">Non moun k ap resevwa fakti a</label><input id="invoice_name" name="invoice_name" placeholder="Non"></div><div class="field"><label for="invoice_email">Imèl moun k ap resevwa fakti a</label><input id="invoice_email" name="invoice_email" type="email" placeholder="email@example.com"></div></div></div>
-          <div id="document-other" class="hidden"><div class="grid-2"><div class="field"><label for="document_name">Non moun k ap resevwa dokiman an</label><input id="document_name" name="document_name" placeholder="Non"></div><div class="field"><label for="document_email">Imèl moun k ap resevwa dokiman an</label><input id="document_email" name="document_email" type="email" placeholder="email@example.com"></div></div></div>
-          <div class="field"><label for="notes">Nòt oswa enstriksyon espesyal</label><textarea id="notes" name="notes" placeholder="Opsyonèl"></textarea></div>
-        </div>
-
-        <div id="status-message" class="status-msg"></div>
-        <div class="step-actions"><button type="button" class="back-btn" onclick="goToStep(1, false)">Retounen</button><button type="submit" id="continue-btn" class="continue">Kontinye pou telechaje dokiman an</button></div>
-      </section>
+      </form>
     </div>
-  </form>
-</div>
-
   </main>
 
   <script>
@@ -429,6 +427,5 @@
     setBookingType("self");
     updateProgress(1);
   </script>
-
 </body>
 </html>
