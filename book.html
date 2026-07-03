@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18058269024"></script>
@@ -37,7 +36,6 @@
     .status-msg{display:none;margin:14px 0 0;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.4}.status-msg.error{display:block;background:#fff1f1;color:#8a0f18;border:1px solid #ffd0d4}.status-msg.success{display:block;background:#effbf2;color:#16652d;border:1px solid #ccefd5}
     @media(max-width:620px){.topbar{padding:10px 12px}.top-actions a:not(:last-child){display:none}.page{padding:16px 10px 50px}h1{font-size:25px}.hero p{font-size:13px}.choice-row{grid-template-columns:1fr;gap:9px}.panel-pad{padding:14px}.grid-2,.grid-3{grid-template-columns:1fr;gap:0}.section-head{display:block}.step-actions{flex-direction:column-reverse}.back-btn{width:100%}.card{padding:14px}}
   </style>
-
 </head>
 
 <body>
@@ -59,126 +57,125 @@
       <p>Starts at $25 for 1 signer and 1 stamp.</p>
     </section>
 
-<div class="layout">
-  <form id="booking-form" class="panel" autocomplete="on">
-    <div class="panel-pad">
-      <div class="section-head">
-        <div>
-          <h2>Booking details</h2>
-          <p>Complete this first, then upload your document.</p>
-        </div>
-        <span class="badge" id="step-badge">Step 1 of 2</span>
-      </div>
-
-      <div class="progress-wrap">
-        <div class="progress-top">
-          <span id="progress-label">Signer info</span>
-          <span id="progress-count">1/2</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-      </div>
-
-      <section class="step-card active" id="step-1">
-        <div class="choice-row" role="group" aria-label="Booking type">
-          <button type="button" class="choice active" id="choice-self" onclick="setBookingType('self')">
-            <strong>I am signing</strong><span>I will join the session.</span>
-          </button>
-          <button type="button" class="choice" id="choice-other" onclick="setBookingType('other')">
-            <strong>Booking for someone else</strong><span>Client, family, or signer.</span>
-          </button>
-        </div>
-
-        <input type="hidden" id="booking_type" name="booking_type" value="self">
-
-        <div class="card hidden" id="booker-card">
-          <div class="card-title"><h3>Booking contact</h3><span class="badge">Required</span></div>
-          <div class="grid-2">
-            <div class="field"><label for="booker_name">Your name <span class="required">*</span></label><input id="booker_name" name="booker_name" placeholder="Person booking or paying"></div>
-            <div class="field"><label for="booker_email">Your email <span class="required">*</span></label><input id="booker_email" name="booker_email" type="email" placeholder="payer@email.com"></div>
-          </div>
-          <div class="field"><label for="booker_phone">Your phone</label><input id="booker_phone" name="booker_phone" type="tel" placeholder="Optional"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><h3>Primary signer</h3><span class="badge">Required</span></div>
-          <div class="grid-2">
-            <div class="field"><label for="primary_name">Full name <span class="required">*</span></label><input id="primary_name" name="primary_name" required placeholder="Primary signer full name"></div>
-            <div class="field"><label for="primary_email">Email address <span class="required">*</span></label><input id="primary_email" name="primary_email" type="email" required placeholder="signer@email.com"></div>
-          </div>
-          <div class="field"><label for="primary_phone">Phone number</label><input id="primary_phone" name="primary_phone" type="tel" placeholder="Optional"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><h3>Signer location</h3></div>
-          <div class="field">
-            <label for="international_signer_passport">Is any signer outside the U.S. or unable to verify with an SSN?</label>
-            <select id="international_signer_passport" name="international_signer_passport">
-              <option value="no">No</option><option value="yes">Yes</option><option value="not_sure">Not sure</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><h3>Extra people</h3><span class="badge">Optional</span></div>
-          <div id="additional-signers"></div>
-          <div id="witnesses"></div>
-          <div id="observers"></div>
-          <div class="mini-actions">
-            <button type="button" class="mini-btn" onclick="addAdditionalSigner()">+ Add signer</button>
-            <button type="button" class="mini-btn" onclick="addWitness()">+ Add witness</button>
-            <button type="button" class="mini-btn" onclick="addObserver()">+ Add observer</button>
-          </div>
-        </div>
-
-        <button type="button" class="continue" onclick="goToStep(2, true)">Continue</button>
-      </section>
-
-      <section class="step-card" id="step-2">
-        <div class="card">
-          <div class="card-title"><h3>Payment & delivery</h3><span class="badge">Required</span></div>
-          <div class="grid-2">
-            <div class="field">
-              <label for="invoice_to">Who should receive the invoice? <span class="required">*</span></label>
-              <select id="invoice_to" name="invoice_to" required onchange="toggleInvoiceOther()">
-                <option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="other">Someone else</option>
-              </select>
+    <div class="layout">
+      <form id="booking-form" class="panel" autocomplete="on">
+        <div class="panel-pad">
+          <div class="section-head">
+            <div>
+              <h2>Booking details</h2>
+              <p>Complete this first, then upload your document.</p>
             </div>
-            <div class="field">
-              <label for="document_to">Who should receive the completed document? <span class="required">*</span></label>
-              <select id="document_to" name="document_to" required onchange="toggleDocumentOther()">
-                <option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="both">Both</option><option value="other">Someone else</option>
-              </select>
-            </div>
+            <span class="badge" id="step-badge">Step 1 of 2</span>
           </div>
 
-          <div id="invoice-other" class="hidden">
-            <div class="grid-2">
-              <div class="field"><label for="invoice_name">Invoice recipient name</label><input id="invoice_name" name="invoice_name" placeholder="Name"></div>
-              <div class="field"><label for="invoice_email">Invoice recipient email</label><input id="invoice_email" name="invoice_email" type="email" placeholder="email@example.com"></div>
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span id="progress-label">Signer info</span>
+              <span id="progress-count">1/2</span>
             </div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
           </div>
 
-          <div id="document-other" class="hidden">
-            <div class="grid-2">
-              <div class="field"><label for="document_name">Document recipient name</label><input id="document_name" name="document_name" placeholder="Name"></div>
-              <div class="field"><label for="document_email">Document recipient email</label><input id="document_email" name="document_email" type="email" placeholder="email@example.com"></div>
+          <section class="step-card active" id="step-1">
+            <div class="choice-row" role="group" aria-label="Booking type">
+              <button type="button" class="choice active" id="choice-self" onclick="setBookingType('self')">
+                <strong>I am signing</strong><span>I will join the session.</span>
+              </button>
+              <button type="button" class="choice" id="choice-other" onclick="setBookingType('other')">
+                <strong>Booking for someone else</strong><span>Client, family, or signer.</span>
+              </button>
             </div>
-          </div>
 
-          <div class="field"><label for="notes">Notes or special instructions</label><textarea id="notes" name="notes" placeholder="Optional"></textarea></div>
+            <input type="hidden" id="booking_type" name="booking_type" value="self">
+
+            <div class="card hidden" id="booker-card">
+              <div class="card-title"><h3>Booking contact</h3><span class="badge">Required</span></div>
+              <div class="grid-2">
+                <div class="field"><label for="booker_name">Your name <span class="required">*</span></label><input id="booker_name" name="booker_name" placeholder="Person booking or paying"></div>
+                <div class="field"><label for="booker_email">Your email <span class="required">*</span></label><input id="booker_email" name="booker_email" type="email" placeholder="payer@email.com"></div>
+              </div>
+              <div class="field"><label for="booker_phone">Your phone</label><input id="booker_phone" name="booker_phone" type="tel" placeholder="Optional"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><h3>Primary signer</h3><span class="badge">Required</span></div>
+              <div class="grid-2">
+                <div class="field"><label for="primary_name">Full name <span class="required">*</span></label><input id="primary_name" name="primary_name" required placeholder="Primary signer full name"></div>
+                <div class="field"><label for="primary_email">Email address <span class="required">*</span></label><input id="primary_email" name="primary_email" type="email" required placeholder="signer@email.com"></div>
+              </div>
+              <div class="field"><label for="primary_phone">Phone number</label><input id="primary_phone" name="primary_phone" type="tel" placeholder="Optional"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><h3>Signer location</h3></div>
+              <div class="field">
+                <label for="international_signer_passport">Is any signer outside the U.S. or unable to verify with an SSN?</label>
+                <select id="international_signer_passport" name="international_signer_passport">
+                  <option value="no">No</option><option value="yes">Yes</option><option value="not_sure">Not sure</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><h3>Extra people</h3><span class="badge">Optional</span></div>
+              <div id="additional-signers"></div>
+              <div id="witnesses"></div>
+              <div id="observers"></div>
+              <div class="mini-actions">
+                <button type="button" class="mini-btn" onclick="addAdditionalSigner()">+ Add signer</button>
+                <button type="button" class="mini-btn" onclick="addWitness()">+ Add witness</button>
+                <button type="button" class="mini-btn" onclick="addObserver()">+ Add observer</button>
+              </div>
+            </div>
+
+            <button type="button" class="continue" onclick="goToStep(2, true)">Continue</button>
+          </section>
+
+          <section class="step-card" id="step-2">
+            <div class="card">
+              <div class="card-title"><h3>Payment & delivery</h3><span class="badge">Required</span></div>
+              <div class="grid-2">
+                <div class="field">
+                  <label for="invoice_to">Who should receive the invoice? <span class="required">*</span></label>
+                  <select id="invoice_to" name="invoice_to" required onchange="toggleInvoiceOther()">
+                    <option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="other">Someone else</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="document_to">Who should receive the completed document? <span class="required">*</span></label>
+                  <select id="document_to" name="document_to" required onchange="toggleDocumentOther()">
+                    <option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="both">Both</option><option value="other">Someone else</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="invoice-other" class="hidden">
+                <div class="grid-2">
+                  <div class="field"><label for="invoice_name">Invoice recipient name</label><input id="invoice_name" name="invoice_name" placeholder="Name"></div>
+                  <div class="field"><label for="invoice_email">Invoice recipient email</label><input id="invoice_email" name="invoice_email" type="email" placeholder="email@example.com"></div>
+                </div>
+              </div>
+
+              <div id="document-other" class="hidden">
+                <div class="grid-2">
+                  <div class="field"><label for="document_name">Document recipient name</label><input id="document_name" name="document_name" placeholder="Name"></div>
+                  <div class="field"><label for="document_email">Document recipient email</label><input id="document_email" name="document_email" type="email" placeholder="email@example.com"></div>
+                </div>
+              </div>
+
+              <div class="field"><label for="notes">Notes or special instructions</label><textarea id="notes" name="notes" placeholder="Optional"></textarea></div>
+            </div>
+
+            <div id="status-message" class="status-msg"></div>
+
+            <div class="step-actions">
+              <button type="button" class="back-btn" onclick="goToStep(1, false)">Back</button>
+              <button type="submit" id="continue-btn" class="continue">Continue to upload document</button>
+            </div>
+          </section>
         </div>
-
-        <div id="status-message" class="status-msg"></div>
-
-        <div class="step-actions">
-          <button type="button" class="back-btn" onclick="goToStep(1, false)">Back</button>
-          <button type="submit" id="continue-btn" class="continue">Continue to upload document</button>
-        </div>
-      </section>
+      </form>
     </div>
-  </form>
-</div>
-
   </main>
 
   <script>
@@ -590,6 +587,5 @@
     setBookingType("self");
     updateProgress(1);
   </script>
-
 </body>
 </html>
