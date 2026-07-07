@@ -472,6 +472,11 @@
 
     function getFormPayload(){
       const form=document.getElementById("booking-form"), data=Object.fromEntries(new FormData(form).entries());
+      const selectedInternationalSignerPassport=data.international_signer_passport||"no";
+      const airtableInternationalSignerPassport=selectedInternationalSignerPassport==="not_sure"?"no":selectedInternationalSignerPassport;
+      const locationNote=selectedInternationalSignerPassport==="not_sure"?"Repons sou kote siyatè/SSN: Mwen pa sèten. Tanpri konfime avan ou kreye sesyon an.":"";
+      data.international_signer_passport_raw=selectedInternationalSignerPassport;
+      data.international_signer_passport=airtableInternationalSignerPassport;
       const primaryName=data.primary_name||"", primaryEmail=data.primary_email||"", primaryPhone=data.primary_phone||"";
       const bookerName=data.booking_type==="self"?primaryName:(data.booker_name||""), bookerEmail=data.booking_type==="self"?primaryEmail:(data.booker_email||""), bookerPhone=data.booking_type==="self"?primaryPhone:(data.booker_phone||"");
       let invoiceName="", invoiceEmail="";
@@ -485,11 +490,11 @@
       else if(data.document_to==="other"){documentName=data.document_name||""; documentEmail=data.document_email||"";}
 
       return {
-        source:"safenotarize_book_page",submitted_at:new Date().toISOString(),booking_type:data.booking_type,international_signer_passport:data.international_signer_passport||"no",
+        source:"safenotarize_book_page",submitted_at:new Date().toISOString(),booking_type:data.booking_type,international_signer_passport:airtableInternationalSignerPassport,international_signer_passport_answer:selectedInternationalSignerPassport,
         booker_name:bookerName,booker_name_bluenotary:toBlueNotaryName(bookerName),booker_email:bookerEmail,booker_phone:bookerPhone,
         primary_signer_name:primaryName,primary_signer_name_bluenotary:toBlueNotaryName(primaryName),primary_signer_email:primaryEmail,primary_signer_phone:primaryPhone,
         invoice_to:data.invoice_to||"",invoice_name:invoiceName,invoice_name_bluenotary:toBlueNotaryName(invoiceName),invoice_email:invoiceEmail,
-        document_to:data.document_to||"",document_name:documentName,document_name_bluenotary:toBlueNotaryName(documentName),document_email:documentEmail,notes:data.notes||"",
+        document_to:data.document_to||"",document_name:documentName,document_name_bluenotary:toBlueNotaryName(documentName),document_email:documentEmail,notes:[data.notes||"",locationNote].filter(Boolean).join("\n"),
         additional_signer_1_name:data.additional_signer_1_name||"",additional_signer_1_name_bluenotary:toBlueNotaryName(data.additional_signer_1_name||""),additional_signer_1_email:data.additional_signer_1_email||"",
         additional_signer_2_name:data.additional_signer_2_name||"",additional_signer_2_name_bluenotary:toBlueNotaryName(data.additional_signer_2_name||""),additional_signer_2_email:data.additional_signer_2_email||"",
         additional_signer_3_name:data.additional_signer_3_name||"",additional_signer_3_name_bluenotary:toBlueNotaryName(data.additional_signer_3_name||""),additional_signer_3_email:data.additional_signer_3_email||"",
