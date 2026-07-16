@@ -115,9 +115,31 @@ a,button{touch-action:manipulation}
   .card p{font-size:12px}
   .small-note{font-size:10px}
 }
-.choices,.card{width:100%}
-  .card a{font-size:16px;padding:15px 14px}
-}
+
+    .card{position:relative}
+    .recommended{
+      border:2px solid var(--green);
+      background:linear-gradient(180deg,#ffffff 0%,#f5fff7 100%);
+      box-shadow:0 14px 34px rgba(40,167,69,.16);
+    }
+    .choice-badge{
+      display:none;
+      position:absolute;
+      top:14px;
+      right:14px;
+      background:var(--green);
+      color:#fff;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:11px;
+      font-weight:900;
+      line-height:1;
+    }
+    .recommended .choice-badge{display:inline-block}
+    @media(max-width:700px){
+      .choice-badge{top:10px;right:10px;font-size:10px;padding:4px 8px}
+      .recommended{border-width:2px}
+    }
 
 </style>
 </head>
@@ -135,12 +157,13 @@ a,button{touch-action:manipulation}
     <p id="subtitle">Choose the option that matches your situation. Your current booking and upload process stays the same.</p>
   </section>
   <section class="choices">
-    <article class="card">
+    <article class="card" id="have-document-card">
+      <span class="choice-badge" id="have-badge">Recommended</span>
       <div class="icon">📄</div>
       <h2 id="have-title">I already have my document</h2>
       <p id="have-text">Continue when your document is completed and ready to upload for review and signing.</p>
       <ul id="have-list"><li>Use your own PDF or document</li><li>Enter the signer information</li><li>Upload it through the secure existing flow</li></ul>
-      <a class="btn primary" id="have-btn" href="https://safenotarize.com/book.html?document_source=own">Continue With My Document</a>
+      <a class="btn primary" id="have-btn" href="https://safenotarize.com/book.html?document_source=own">Upload My Completed Document</a>
     </article>
     <article class="card">
       <div class="icon">📝</div>
@@ -165,7 +188,7 @@ a,button{touch-action:manipulation}
     document.getElementById('have-title').textContent='Mwen deja gen dokiman mwen';
     document.getElementById('have-text').textContent='Kontinye si dokiman ou deja ranpli epi li pare pou telechaje, revize, ak siyen.';
     document.getElementById('have-list').innerHTML='<li>Itilize pwòp PDF oswa dokiman ou</li><li>Antre enfòmasyon siyatè yo</li><li>Telechaje li nan pwosesis sekirize ki deja la</li>';
-    document.getElementById('have-btn').textContent='Kontinye Ak Dokiman Mwen';
+    document.getElementById('have-btn').textContent='Mwen Gen Dokiman Mwen Pare';
     document.getElementById('have-btn').href='https://safenotarize.com/book-ht.html?document_source=own&lang=ht';
     document.getElementById('need-title').textContent='Mwen bezwen yon dokiman';
     document.getElementById('need-text').textContent='Chwazi yon modèl jeneral, ranpli li, sove li kòm PDF, epi kontinye ak notarizasyon online.';
@@ -173,6 +196,12 @@ a,button{touch-action:manipulation}
     document.getElementById('need-btn').textContent='Gade Bibliyotèk Dokiman';
     document.getElementById('need-btn').href='documents/library.html?lang=ht';
     document.getElementById('disclaimer').textContent='Modèl sa yo la pou itilizasyon jeneral sèlman; yo pa konsèy legal. Verifye dokiman an satisfè kondisyon òganizasyon k ap resevwa li a anvan ou itilize li.';
+    document.getElementById('have-badge').textContent='Rekòmande';
+  }
+
+  if((params.get('choice') || '').toLowerCase() === 'upload'){
+    const haveCard = document.getElementById('have-document-card');
+    if(haveCard) haveCard.classList.add('recommended');
   }
 </script>
 </body>
