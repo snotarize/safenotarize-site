@@ -8,11 +8,9 @@
 .signature-field{min-width:0}
 .line{border-top:1px solid #111;width:100%;margin-top:34px}
 .field-label{font-size:12px;margin-top:5px}
-.notary-placeholder{margin-top:42px;border:1.5px solid #444;padding:18px 20px;page-break-inside:avoid;background:#fafafa}
-.notary-placeholder h2{font-family:"Times New Roman",serif;text-align:center;font-size:16px;letter-spacing:.5px;color:#111;margin:0 0 10px}
-.notary-placeholder p{font-size:12.5px;line-height:1.45;margin:5px 0}
-.notary-placeholder .do-not-complete{text-align:center;font-weight:bold;margin-top:12px}
-@media(max-width:600px){.signature-grid{grid-template-columns:1fr;gap:6px}.notary-placeholder{padding:14px}}.legal{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.45}.warning{background:#fff7e8;border:1px solid #f2d79b;border-radius:12px;padding:12px;font-size:13px;line-height:1.45;margin-bottom:15px}.next-box{display:none;margin-top:14px;background:#eefbf3;border:1px solid #bfe7ca;border-radius:14px;padding:16px;text-align:center}.next-box.show{display:block}.next-box strong{display:block;color:#17652c;font-size:18px;margin-bottom:6px}.next-box p{margin:0 0 12px;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14px}.download-status{min-height:20px;margin-top:9px;font-size:13px;font-weight:800;color:var(--navy)}@media(max-width:800px){.layout{grid-template-columns:1fr}.paper{padding:28px 22px}.actions{grid-template-columns:1fr}.brand span{display:none}}@media print{header,.top,.editor,.actions,.legal{display:none!important}body,main,.layout,.panel{background:#fff!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;display:block!important}.preview{padding:0!important}.paper{border:0;box-shadow:none;min-height:auto;padding:.6in!important}}
+.notary-placeholder{margin-top:34px;border:1.5px solid #444;min-height:210px;padding:16px 18px;page-break-inside:avoid;background:#fff}
+.notary-placeholder h2{font-family:"Times New Roman",serif;text-align:center;font-size:16px;letter-spacing:.5px;color:#111;margin:0}
+@media(max-width:600px){.signature-grid{grid-template-columns:1fr 110px;gap:14px}.notary-placeholder{min-height:180px;padding:13px}.field-label{font-size:11px}}.legal{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.45}.warning{background:#fff7e8;border:1px solid #f2d79b;border-radius:12px;padding:12px;font-size:13px;line-height:1.45;margin-bottom:15px}.next-box{display:none;margin-top:14px;background:#eefbf3;border:1px solid #bfe7ca;border-radius:14px;padding:16px;text-align:center}.next-box.show{display:block}.next-box strong{display:block;color:#17652c;font-size:18px;margin-bottom:6px}.next-box p{margin:0 0 12px;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14px}.download-status{min-height:20px;margin-top:9px;font-size:13px;font-weight:800;color:var(--navy)}@media(max-width:800px){.layout{grid-template-columns:1fr}.paper{padding:28px 22px}.actions{grid-template-columns:1fr}.brand span{display:none}}@media print{header,.top,.editor,.actions,.legal{display:none!important}body,main,.layout,.panel{background:#fff!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;display:block!important}.preview{padding:0!important}.paper{border:0;box-shadow:none;min-height:auto;padding:.6in!important}}
 
 /* Mobile usability improvements */
 a,button{touch-action:manipulation}
@@ -64,52 +62,67 @@ if(type==='information-release')html+=`<p>I, <strong>${esc(v('authorizer'))}</st
 if(type==='vehicle-release')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('recipient'))}</strong> to receive and take possession of my vehicle from <strong>${esc(v('holder'))}</strong>.</p><p>Vehicle: ${esc(v('vehicle'))}<br>VIN or license plate: ${esc(v('vin'))}</p><p>${esc(v('items')).replace(/\n/g,'<br>')}</p>`;
 if(type==='vehicle-use')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('driver'))}</strong> to use the following vehicle: ${esc(v('vehicle'))}, VIN or plate ${esc(v('vin'))}.</p><p>${esc(v('use')).replace(/\n/g,'<br>')}</p>`;
 html+=ht
-? `<div class="sig">
-    <div class="signature-grid">
-      <div class="signature-field"><div class="line"></div><div class="field-label">Siyati moun ki bay deklarasyon oswa otorizasyon an</div></div>
-      <div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div>
-    </div>
-  </div>
-  <div class="notary-placeholder">
-    <h2>SEKSYON NOTÈ — POU NOTÈ A RANPLI</h2>
-    <p>Sètifika notaryal ki apwopriye a, tankou yon rekonesans oswa yon sèman, ap chwazi epi ranpli pandan sesyon notarizasyon online SafeNotarize la.</p>
-    <p>Fòm egzak sètifika a depann de kalite zak notaryal la ak lwa ki aplikab yo.</p>
-    <p class="do-not-complete">Pa ekri, pa siyen, epi pa ranpli seksyon sa a anvan sesyon notè a.</p>
-  </div>`
-: `<div class="sig">
-    <div class="signature-grid">
-      <div class="signature-field"><div class="line"></div><div class="field-label">Signature of person making the statement or granting authorization</div></div>
-      <div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div>
-    </div>
-  </div>
-  <div class="notary-placeholder">
-    <h2>NOTARY SECTION — FOR NOTARY USE</h2>
-    <p>The appropriate notarial certificate, such as an acknowledgment or jurat, will be selected and completed during the SafeNotarize online notarization session.</p>
-    <p>The exact certificate wording depends on the notarial act and applicable law.</p>
-    <p class="do-not-complete">Do not write, sign, or complete this section before the notary session.</p>
-  </div>`;
+? `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Siyati</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div></div></div><div class="notary-placeholder"><h2>SEKSYON NOTÈ</h2></div>`
+: `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
 document.getElementById('paper').innerHTML=html}
-document.getElementById('update').onclick=build;c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',build));
+document.getElementById('update').onclick=function(){
+  build();
+  const btn=this, old=btn.textContent;
+  btn.textContent=ht?'Apèsi a mete ajou ✓':'Preview Updated ✓';
+  setTimeout(()=>btn.textContent=old,1200);
+  if(window.innerWidth<=800) document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'start'});
+};
+c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',build));
 const book=ht?'https://safenotarize.com/book-ht.html?lang=ht':'https://safenotarize.com/book.html?x=1';
 document.getElementById('continue').href=book+`&document_source=library&document_type=${encodeURIComponent(type)}`;
 function safeFilename(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'safenotarize-document'}
+function raw(id){return (document.getElementById(id)?.value||'').trim()||'____________________________'}
+function documentParagraphs(){
+  const p=[];
+  if(type==='affidavit')p.push(`I, ${raw('name')}, residing at ${raw('address')}, declare under oath that the following statements are true to the best of my personal knowledge:`,raw('facts'),`Dated: ${raw('date')}`);
+  if(type==='child-travel-consent')p.push(`I, ${raw('parent')}, am the parent or legal guardian of ${raw('child')}, born ${raw('dob')}. I authorize the child to travel with ${raw('traveler')} to ${raw('destination')} during ${raw('dates')}.`,raw('details'));
+  if(type==='proof-of-residency')p.push(`I, ${raw('declarant')}, state that ${raw('resident')} resides at ${raw('address')} and has lived at this address since ${raw('since')}.`,raw('details'));
+  if(type==='letter-of-authorization')p.push(`I, ${raw('grantor')}, authorize ${raw('agent')} to perform the following action on my behalf:`,raw('action'),`This authorization begins ${raw('start')} and expires ${raw('end')}.`);
+  if(type==='financial-support')p.push(`I, ${raw('supporter')}, confirm that I provide financial support to ${raw('recipient')}, who is my ${raw('relationship')}.`,raw('support'),`Support period: ${raw('period')}`);
+  if(type==='general-consent')p.push(`I, ${raw('giver')}, voluntarily give my consent to ${raw('recipient')} for the following activity or action:`,raw('activity'),`Conditions or limitations: ${raw('conditions')}`,`Effective date: ${raw('date')}`);
+  if(type==='information-release')p.push(`I, ${raw('authorizer')}, authorize ${raw('holder')} to release the following records or information to ${raw('recipient')}:`,raw('records'),`Purpose: ${raw('purpose')}`,`This authorization expires: ${raw('expiration')}`);
+  if(type==='vehicle-release')p.push(`I, ${raw('owner')}, authorize ${raw('recipient')} to receive and take possession of my vehicle from ${raw('holder')}.`,`Vehicle: ${raw('vehicle')}`,`VIN or license plate: ${raw('vin')}`,raw('items'));
+  if(type==='vehicle-use')p.push(`I, ${raw('owner')}, authorize ${raw('driver')} to use the following vehicle: ${raw('vehicle')}.`,`VIN or plate number: ${raw('vin')}`,raw('use'));
+  return p.filter(x=>x && x!=='____________________________');
+}
 async function downloadPdf(){
   build();
   const btn=document.getElementById('download'),status=document.getElementById('download-status');
   btn.disabled=true;btn.textContent=ht?'PDF la ap prepare...':'Preparing PDF...';status.textContent=ht?'Tanpri pa fèmen paj la.':'Please keep this page open.';
   try{
-    if(!window.jspdf||!window.html2canvas)throw new Error('PDF tools did not load. Please refresh and try again.');
+    if(!window.jspdf)throw new Error('PDF tools did not load. Please refresh and try again.');
     const {jsPDF}=window.jspdf;
     const doc=new jsPDF({unit:'pt',format:'letter',orientation:'portrait'});
-    await new Promise((resolve,reject)=>{
-      try{
-        doc.html(document.getElementById('paper'),{
-          callback:function(pdf){pdf.save(safeFilename(ht?c.ht:c.en)+'.pdf');resolve();},
-          x:36,y:36,width:540,windowWidth:760,autoPaging:'text',
-          html2canvas:{scale:1.5,useCORS:true,backgroundColor:'#ffffff',logging:false}
-        });
-      }catch(err){reject(err)}
-    });
+    const pageW=612,pageH=792,margin=62,maxW=pageW-margin*2;
+    let y=70;
+    const ensure=(needed)=>{if(y+needed>pageH-55){doc.addPage();y=60;}};
+    doc.setFont('times','bold');doc.setFontSize(20);
+    const title=(ht?c.ht:c.en).toUpperCase();
+    const titleLines=doc.splitTextToSize(title,maxW);
+    doc.text(titleLines,pageW/2,y,{align:'center'});y+=titleLines.length*24+24;
+    doc.setFont('times','normal');doc.setFontSize(12.5);
+    for(const paragraph of documentParagraphs()){
+      const lines=doc.splitTextToSize(paragraph,maxW);
+      ensure(lines.length*18+18);
+      doc.text(lines,margin,y,{lineHeightFactor:1.4});
+      y+=lines.length*17.5+16;
+    }
+    ensure(285);
+    y+=26;
+    doc.setDrawColor(30);doc.setLineWidth(.8);
+    doc.line(margin,y,390,y);doc.line(430,y,pageW-margin,y);
+    doc.setFontSize(10);doc.text(ht?'Siyati':'Signature',margin,y+14);doc.text(ht?'Dat':'Date',430,y+14);
+    y+=58;
+    const boxH=185;
+    doc.rect(margin,y,maxW,boxH);
+    doc.setFont('times','bold');doc.setFontSize(14);
+    doc.text(ht?'SEKSYON NOTÈ':'NOTARY SECTION',pageW/2,y+25,{align:'center'});
+    doc.save(safeFilename(ht?c.ht:c.en)+'.pdf');
     status.textContent=ht?'PDF la kòmanse telechaje. Kontinye anba a.':'Your PDF download has started. Continue below.';
     document.getElementById('next-box').classList.add('show');
     document.getElementById('next-box').scrollIntoView({behavior:'smooth',block:'center'});
