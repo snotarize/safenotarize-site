@@ -73,7 +73,7 @@ document.getElementById('update').onclick=function(){
   if(window.innerWidth<=800) document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'start'});
 };
 c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',build));
-const book=ht?'https://safenotarize.com/book-ht.html?lang=ht':'https://safenotarize.com/book.html?x=1';
+const book=ht?'https://safenotarize.com/book-ht.html?lang=ht&document_ready=1':'https://safenotarize.com/book.html?x=1&document_ready=1';
 document.getElementById('continue').href=book+`&document_source=library&document_type=${encodeURIComponent(type)}`;
 function safeFilename(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'safenotarize-document'}
 function raw(id){return (document.getElementById(id)?.value||'').trim()||'____________________________'}
