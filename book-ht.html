@@ -34,6 +34,42 @@
     .status-msg{display:none;margin:14px 0 0;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.4}.status-msg.error{display:block;background:#fff1f1;color:#8a0f18;border:1px solid #ffd0d4}.status-msg.success{display:block;background:#effbf2;color:#16652d;border:1px solid #ccefd5}
     .estimate-card{background:linear-gradient(180deg,#fbfffc 0%,#f7fbff 100%);border-color:#cfe9d6}.estimate-lines{border:1px solid #e3edf6;border-radius:14px;background:#fff;overflow:hidden;margin-top:8px}.estimate-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #edf3f9;font-size:14px;line-height:1.35}.estimate-row:last-child{border-bottom:none}.estimate-row span{color:#31475f}.estimate-row small{display:block;color:var(--muted);font-size:12px;margin-top:2px}.estimate-row strong{color:var(--navy);white-space:nowrap}.estimate-total{margin-top:10px;border:1px solid #cfe9d6;border-radius:14px;background:var(--greenSoft);font-size:16px;font-weight:900}.estimate-total strong{font-size:20px;color:var(--greenDark)}.estimate-note{margin:10px 0 0;color:var(--muted);font-size:12.5px;line-height:1.35}.estimate-stamp-field{margin:10px 0 0}.estimate-stamp-field label{margin-bottom:6px}
     @media(max-width:620px){.topbar{padding:10px 12px}.top-actions a:not(:last-child){display:none}.page{padding:16px 10px 50px}h1{font-size:25px}.hero p{font-size:13px}.choice-row{grid-template-columns:1fr;gap:9px}.panel-pad{padding:14px}.grid-2,.grid-3{grid-template-columns:1fr;gap:0}.section-head{display:block}.step-actions{flex-direction:column-reverse}.back-btn{width:100%}.card{padding:14px}}
+  
+    /* Document-ready gate: navigation only, never submitted with the intake */
+    .document-gate{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px 20px;
+      text-align:center;
+      margin-bottom:12px;
+    }
+    .document-gate h2{margin:0 0 5px;color:var(--navy);font-size:18px;line-height:1.25}
+    .document-gate p{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.4}
+    .document-gate-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:430px;margin:0 auto}
+    .document-gate-btn{
+      min-height:46px;
+      border:1px solid #cbd8e6;
+      border-radius:11px;
+      background:#fff;
+      color:var(--navy);
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    .document-gate-btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(0,39,77,.08)}
+    .document-gate-btn.yes{background:var(--green);border-color:var(--green);color:#fff}
+    .intake-hidden{display:none}
+    @media(max-width:620px){
+      .document-gate{padding:15px 13px;margin-bottom:10px}
+      .document-gate h2{font-size:17px}
+      .document-gate p{font-size:12.5px;margin-bottom:10px}
+      .document-gate-actions{gap:8px}
+      .document-gate-btn{min-height:44px;font-size:14px}
+    }
+
   </style>
 </head>
 <body>
@@ -46,7 +82,15 @@
     <section class="hero"><span class="pill">Notarizasyon Online</span><h1>Kòmanse Sesyon Ou</h1><p>Pri a kòmanse a $25 pou 1 siyatè ak 1 so notè.</p></section>
 
     <div class="layout">
-      <form id="booking-form" class="panel" autocomplete="on">
+      <section class="document-gate" id="document-gate" aria-labelledby="document-gate-title">
+        <h2 id="document-gate-title">Èske ou deja gen dokiman ou bezwen notarye a?</h2>
+        <p>Chwazi yon opsyon pou kontinye.</p>
+        <div class="document-gate-actions">
+          <button type="button" class="document-gate-btn yes" onclick="continueWithDocument()">Wi</button>
+          <button type="button" class="document-gate-btn" onclick="goToDocumentLibrary()">Non</button>
+        </div>
+      </section>
+      <form id="booking-form" class="panel intake-hidden" autocomplete="on">
         <div class="panel-pad">
           <div class="section-head"><div><h2>Enfòmasyon pou randevou a</h2><p>Ranpli pati sa a avan, apre sa w ap telechaje dokiman ou.</p></div><span class="badge" id="step-badge">Etap 1 sou 2</span></div>
 
@@ -135,6 +179,20 @@
   </main>
 
   <script>
+    function continueWithDocument(){
+      const gate = document.getElementById("document-gate");
+      const form = document.getElementById("booking-form");
+      if(gate) gate.style.display = "none";
+      if(form){
+        form.classList.remove("intake-hidden");
+        setTimeout(function(){ form.scrollIntoView({behavior:"smooth", block:"start"}); }, 50);
+      }
+    }
+
+    function goToDocumentLibrary(){
+      window.location.href = "/documents/library.html?lang=ht";
+    }
+
     const MAKE_BOOKING_WEBHOOK_URL = "https://hook.us2.make.com/08p65bg26odedngihppgxe1y5wog8638";
     const UPLOAD_PAGE_URL = "https://safenotarize.com/upload.html";
 
