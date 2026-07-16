@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Your Document Ready | SafeNotarize</title>
+  <meta name="description" content="Choose whether you already have a completed document or need a general document template before starting your SafeNotarize online notarization." />
+  <style>
+    :root{--navy:#00274d;--green:#28a745;--green-dark:#1f7a36;--text:#40536a;--muted:#66788b;--border:#dce7f2;--shadow:0 14px 38px rgba(0,51,102,.09)}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff 0%,#eef6ff 100%);min-height:100vh;color:var(--text)}
+    header{background:var(--navy);padding:14px 20px}.header-inner{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900}.brand img{height:42px}.home{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:9px 14px;font-weight:800;font-size:14px}
+    main{max-width:900px;margin:auto;padding:42px 18px 70px}.hero{text-align:center;max-width:720px;margin:auto}.pill{display:inline-block;background:#e9f7ef;color:var(--green-dark);font-weight:900;font-size:13px;padding:7px 12px;border-radius:999px;margin-bottom:12px}h1{margin:0 0 10px;color:var(--navy);font-size:36px;line-height:1.15}.hero p{margin:0;color:var(--muted);font-size:16px;line-height:1.55}
+    .choices{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}.card{background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;min-height:300px}.icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:#eef5ff;color:var(--navy);font-size:25px;margin-bottom:18px}.card h2{margin:0 0 8px;color:var(--navy);font-size:23px}.card p{margin:0 0 16px;line-height:1.5;color:var(--muted)}.card ul{margin:0 0 20px;padding-left:20px;line-height:1.65;font-size:14px}.btn{display:block;text-align:center;margin-top:auto;border-radius:12px;padding:14px 16px;text-decoration:none;font-weight:900}.primary{background:var(--green);color:#fff;box-shadow:0 10px 24px rgba(40,167,69,.2)}.secondary{background:var(--navy);color:#fff}.small-note{text-align:center;margin-top:22px;color:var(--muted);font-size:13px;line-height:1.45}
+    @media(max-width:700px){.header-inner{gap:10px}.brand span{display:none}.brand img{height:38px}.home{font-size:13px;padding:8px 11px}main{padding:30px 13px 50px}h1{font-size:29px}.hero p{font-size:15px}.choices{grid-template-columns:1fr;gap:14px}.card{min-height:0;padding:20px}}
+  
+/* Mobile usability improvements */
+a,button{touch-action:manipulation}
+.card{min-width:0}
+.card a{min-height:48px;display:flex;align-items:center;justify-content:center}
+@media(max-width:700px){
+  body{overflow-x:hidden}
+  .choices,.card{width:100%}
+  .card a{font-size:16px;padding:15px 14px}
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="brand" id="brand-link" href="https://safenotarize.com"><img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo"><span>SafeNotarize</span></a>
+    <a class="home" id="home-link" href="https://safenotarize.com">Back to Home</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <span class="pill" id="pill">Prepare your document first</span>
+    <h1 id="title">Do You Already Have Your Document?</h1>
+    <p id="subtitle">Choose the option that matches your situation. Your current booking and upload process stays the same.</p>
+  </section>
+  <section class="choices">
+    <article class="card">
+      <div class="icon">📄</div>
+      <h2 id="have-title">I already have my document</h2>
+      <p id="have-text">Continue when your document is completed and ready to upload for review and signing.</p>
+      <ul id="have-list"><li>Use your own PDF or document</li><li>Enter the signer information</li><li>Upload it through the secure existing flow</li></ul>
+      <a class="btn primary" id="have-btn" href="https://safenotarize.com/book.html?document_source=own">Continue With My Document</a>
+    </article>
+    <article class="card">
+      <div class="icon">📝</div>
+      <h2 id="need-title">I need a document</h2>
+      <p id="need-text">Browse general templates, complete one, save it as a PDF, and then continue to online notarization.</p>
+      <ul id="need-list"><li>Choose a general document template</li><li>Complete the information online</li><li>Review and save before starting</li></ul>
+      <a class="btn secondary" id="need-btn" href="documents/library.html">Browse Document Library</a>
+    </article>
+  </section>
+  <p class="small-note" id="disclaimer">Templates are provided for general convenience and are not legal advice. Confirm that your document meets the receiving organization’s requirements before using it.</p>
+</main>
+<script>
+  const params = new URLSearchParams(location.search);
+  const isHt = (params.get('lang') || '').toLowerCase() === 'ht' || (params.get('utm_source') || '').includes('_ht');
+  if(isHt){
+    document.documentElement.lang='ht'; document.title='Prepare Dokiman Ou | SafeNotarize';
+    document.getElementById('brand-link').href='https://safenotarize.com/ht.html';
+    document.getElementById('home-link').href='https://safenotarize.com/ht.html'; document.getElementById('home-link').textContent='Retounen Akèy';
+    document.getElementById('pill').textContent='Prepare dokiman ou an premye';
+    document.getElementById('title').textContent='Èske Ou Deja Gen Dokiman Ou?';
+    document.getElementById('subtitle').textContent='Chwazi opsyon ki mache ak sitiyasyon ou. Pwosesis randevou ak telechajman ou deja genyen an ap rete menm jan an.';
+    document.getElementById('have-title').textContent='Mwen deja gen dokiman mwen';
+    document.getElementById('have-text').textContent='Kontinye si dokiman ou deja ranpli epi li pare pou telechaje, revize, ak siyen.';
+    document.getElementById('have-list').innerHTML='<li>Itilize pwòp PDF oswa dokiman ou</li><li>Antre enfòmasyon siyatè yo</li><li>Telechaje li nan pwosesis sekirize ki deja la</li>';
+    document.getElementById('have-btn').textContent='Kontinye Ak Dokiman Mwen';
+    document.getElementById('have-btn').href='https://safenotarize.com/book-ht.html?document_source=own&lang=ht';
+    document.getElementById('need-title').textContent='Mwen bezwen yon dokiman';
+    document.getElementById('need-text').textContent='Chwazi yon modèl jeneral, ranpli li, sove li kòm PDF, epi kontinye ak notarizasyon online.';
+    document.getElementById('need-list').innerHTML='<li>Chwazi yon modèl dokiman jeneral</li><li>Ranpli enfòmasyon yo online</li><li>Revize epi sove li anvan ou kòmanse</li>';
+    document.getElementById('need-btn').textContent='Gade Bibliyotèk Dokiman';
+    document.getElementById('need-btn').href='documents/library.html?lang=ht';
+    document.getElementById('disclaimer').textContent='Modèl sa yo la pou itilizasyon jeneral sèlman; yo pa konsèy legal. Verifye dokiman an satisfè kondisyon òganizasyon k ap resevwa li a anvan ou itilize li.';
+  }
+</script>
+</body>
+</html>
