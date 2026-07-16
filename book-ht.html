@@ -179,6 +179,28 @@
   </main>
 
   <script>
+    function customerAlreadyChoseDocumentPath(){
+      const params = new URLSearchParams(window.location.search);
+      const source = (params.get("document_source") || "").toLowerCase();
+      const ready = (params.get("document_ready") || "").toLowerCase();
+
+      return ready === "1" ||
+             ready === "yes" ||
+             source === "own" ||
+             source === "library" ||
+             source === "generated" ||
+             source === "template";
+    }
+
+    function initializeDocumentGate(){
+      if(customerAlreadyChoseDocumentPath()){
+        const gate = document.getElementById("document-gate");
+        const form = document.getElementById("booking-form");
+        if(gate) gate.style.display = "none";
+        if(form) form.classList.remove("intake-hidden");
+      }
+    }
+
     function continueWithDocument(){
       const gate = document.getElementById("document-gate");
       const form = document.getElementById("booking-form");
@@ -598,6 +620,7 @@
       }
     });
 
+    initializeDocumentGate();
     setBookingType("self");
     updateProgress(1);
     updateEstimate();
