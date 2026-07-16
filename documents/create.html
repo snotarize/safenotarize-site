@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Create Document | SafeNotarize</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--navy:#00274d;--green:#28a745;--text:#30445b;--muted:#65778a;--border:#dce7f2;--danger:#ad1d28}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f8fc;color:var(--text)}header{background:var(--navy);padding:14px 20px}.head{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between}.brand{color:#fff;text-decoration:none;font-weight:900;display:flex;align-items:center;gap:10px}.brand img{height:40px}.back{color:#fff;text-decoration:none;font-weight:800}main{max-width:1100px;margin:auto;padding:30px 16px 70px}.top{text-align:center;max-width:760px;margin:auto}.top h1{color:var(--navy);margin:0 0 8px}.top p{margin:0;color:var(--muted);line-height:1.5}.layout{display:grid;grid-template-columns:.95fr 1.05fr;gap:18px;margin-top:24px}.panel{background:#fff;border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 10px 28px rgba(0,39,77,.07)}h2{color:var(--navy);font-size:19px;margin:0 0 14px}.field{margin-bottom:13px}label{display:block;font-size:13px;font-weight:900;margin-bottom:6px}input,textarea{width:100%;border:1px solid #cbd8e6;border-radius:10px;padding:11px;font-size:15px}textarea{min-height:86px;resize:vertical}.btn{border:0;border-radius:11px;padding:13px 15px;font-weight:900;cursor:pointer;font-size:15px}.update{width:100%;background:var(--navy);color:#fff}.print{background:var(--green);color:#fff}.continue{display:inline-block;background:var(--green);color:#fff;text-decoration:none;text-align:center}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.paper{background:#fff;color:#111;min-height:620px;padding:42px 42px;border:1px solid #ccc;box-shadow:0 5px 18px rgba(0,0,0,.08);font-family:"Times New Roman",serif;line-height:1.55}.paper h1{text-align:center;font-size:22px;text-transform:uppercase;margin:0 0 28px}.paper p{margin:0 0 14px}.sig{margin-top:48px;page-break-inside:avoid}
+.signature-grid{display:grid;grid-template-columns:1fr 180px;gap:28px;align-items:end;margin-top:38px}
+.signature-field{min-width:0}
+.line{border-top:1px solid #111;width:100%;margin-top:34px}
+.field-label{font-size:12px;margin-top:5px}
+.notary-placeholder{margin-top:42px;border:1.5px solid #444;padding:18px 20px;page-break-inside:avoid;background:#fafafa}
+.notary-placeholder h2{font-family:"Times New Roman",serif;text-align:center;font-size:16px;letter-spacing:.5px;color:#111;margin:0 0 10px}
+.notary-placeholder p{font-size:12.5px;line-height:1.45;margin:5px 0}
+.notary-placeholder .do-not-complete{text-align:center;font-weight:bold;margin-top:12px}
+@media(max-width:600px){.signature-grid{grid-template-columns:1fr;gap:6px}.notary-placeholder{padding:14px}}.legal{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.45}.warning{background:#fff7e8;border:1px solid #f2d79b;border-radius:12px;padding:12px;font-size:13px;line-height:1.45;margin-bottom:15px}.next-box{display:none;margin-top:14px;background:#eefbf3;border:1px solid #bfe7ca;border-radius:14px;padding:16px;text-align:center}.next-box.show{display:block}.next-box strong{display:block;color:#17652c;font-size:18px;margin-bottom:6px}.next-box p{margin:0 0 12px;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14px}.download-status{min-height:20px;margin-top:9px;font-size:13px;font-weight:800;color:var(--navy)}@media(max-width:800px){.layout{grid-template-columns:1fr}.paper{padding:28px 22px}.actions{grid-template-columns:1fr}.brand span{display:none}}@media print{header,.top,.editor,.actions,.legal{display:none!important}body,main,.layout,.panel{background:#fff!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;display:block!important}.preview{padding:0!important}.paper{border:0;box-shadow:none;min-height:auto;padding:.6in!important}}
+
+/* Mobile usability improvements */
+a,button{touch-action:manipulation}
+input,textarea,select{font-size:16px}
+.btn{min-height:48px}
+.layout,.panel,.paper{min-width:0}
+@media(max-width:800px){
+  body{overflow-x:hidden}
+  main{padding:22px 12px 55px}
+  .panel{padding:15px}
+  .paper{font-size:15px;overflow-wrap:anywhere}
+  .paper h1{font-size:20px}
+  .line{width:100%;max-width:280px}
+  .print,.continue,.update{width:100%;font-size:16px;padding:15px}
+  .top h1{font-size:27px}
+}
+
+</style></head>
+<body><header><div class="head"><a class="brand" id="brand" href="https://safenotarize.com"><img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize"><span>SafeNotarize</span></a><a class="back" id="back" href="library.html">Document Library</a></div></header>
+<main><section class="top"><h1 id="page-title">Create Your Document</h1><p id="page-sub">Complete the fields, review the preview, then download it directly as a PDF. Do not sign until your notary session unless instructed otherwise.</p></section><div class="layout"><section class="panel editor"><div class="warning" id="warning"><strong>General template only.</strong> Confirm this document meets the receiving organization’s requirements. SafeNotarize does not provide legal advice.</div><h2 id="form-title">Document information</h2><form id="form"></form><button class="btn update" id="update" type="button">Update Preview</button><p class="legal" id="privacy">Your entries stay in this browser page and are not sent to SafeNotarize by this template.</p></section><section class="panel preview"><div class="paper" id="paper"></div><div class="actions"><button class="btn print" id="download" type="button">Download PDF & Continue</button></div><div class="download-status" id="download-status" aria-live="polite"></div><div class="next-box" id="next-box"><strong id="next-title">Your document is downloaded</strong><p id="next-text">Continue now to provide the signer information and upload the PDF for notarization.</p><a class="btn continue" id="continue">Continue to Online Notarization</a></div></section></div></main>
+<script>
+const q=new URLSearchParams(location.search),type=q.get('type')||'affidavit',ht=(q.get('lang')||'').toLowerCase()==='ht';
+const configs={
+'affidavit':{en:'General Affidavit',ht:'Afidavi Jeneral',fields:[['name','Affiant full name','Non konplè moun k ap fè deklarasyon an'],['address','Address','Adrès'],['facts','Statement of facts','Deklarasyon enfòmasyon yo','textarea'],['date','Date','Dat']]},
+'general-consent':{en:'General Consent Letter',ht:'Lèt Konsantman Jeneral',fields:[['giver','Person giving consent','Moun k ap bay konsantman an'],['recipient','Person or organization receiving consent','Moun oswa òganizasyon k ap resevwa konsantman an'],['activity','Activity or action being authorized','Aktivite oswa aksyon yo otorize a','textarea'],['conditions','Conditions or limitations','Kondisyon oswa limit','textarea'],['date','Effective date','Dat li kòmanse']]},
+'information-release':{en:'Release of Information Authorization',ht:'Otorizasyon Pou Bay Enfòmasyon',fields:[['authorizer','Person authorizing release','Moun k ap bay otorizasyon an'],['holder','Person or organization holding the information','Moun oswa òganizasyon ki gen enfòmasyon an'],['recipient','Authorized recipient','Moun oswa òganizasyon ki dwe resevwa li'],['records','Records or information to release','Dosye oswa enfòmasyon pou bay','textarea'],['purpose','Purpose of release','Rezon pou bay enfòmasyon an'],['expiration','Expiration date, if any','Dat li fini, si genyen']]},
+'child-travel-consent':{en:'Child Travel Consent',ht:'Konsantman Vwayaj Pou Timoun',fields:[['parent','Parent/guardian giving consent','Paran oswa responsab k ap bay konsantman'],['child','Child full name','Non konplè timoun nan'],['dob','Child date of birth','Dat nesans timoun nan'],['traveler','Person traveling with child','Moun k ap vwayaje ak timoun nan'],['destination','Destination','Destinasyon'],['dates','Travel dates','Dat vwayaj la'],['details','Additional authorization or details','Lòt otorizasyon oswa detay','textarea']]},
+'proof-of-residency':{en:'Proof of Residency Letter',ht:'Lèt Prèv Adrès',fields:[['declarant','Person making statement','Moun k ap fè deklarasyon an'],['resident','Resident full name','Non konplè moun k ap viv la'],['address','Residence address','Adrès kote moun nan ap viv'],['since','Living there since','Depi kilè li ap viv la'],['details','Additional facts','Lòt enfòmasyon','textarea']]},
+'letter-of-authorization':{en:'Letter of Authorization',ht:'Lèt Otorizasyon',fields:[['grantor','Person giving authorization','Moun k ap bay otorizasyon an'],['agent','Authorized person','Moun ki resevwa otorizasyon an'],['action','Authorized action','Aksyon moun nan gen dwa fè','textarea'],['start','Effective date','Dat li kòmanse'],['end','Expiration date, if any','Dat li fini, si genyen']]},
+'financial-support':{en:'Financial Support Letter',ht:'Lèt Sipò Finansye',fields:[['supporter','Support provider full name','Non konplè moun k ap bay sipò a'],['recipient','Person receiving support','Moun k ap resevwa sipò a'],['relationship','Relationship','Relasyon'],['support','Description of financial support','Eksplikasyon sipò finansye a','textarea'],['period','Support period','Peryòd sipò a']]},
+'vehicle-release':{en:'Vehicle Release Authorization',ht:'Otorizasyon Pou Lage Machin',fields:[['owner','Vehicle owner full name','Non konplè pwopriyetè machin nan'],['recipient','Person authorized to receive vehicle','Moun ki gen otorizasyon pou pran machin nan'],['holder','Tow yard, repair shop, impound lot, dealer, or holder','Pakin remokaj, garaj, depo, konsesyonè, oswa moun ki kenbe machin nan'],['vehicle','Vehicle year, make, and model','Ane, mak, ak modèl machin nan'],['vin','VIN or license plate','VIN oswa nimewo plak'],['items','Authority to receive keys, property, or documents','Otorizasyon pou resevwa kle, byen, oswa dokiman','textarea']]},
+'vehicle-use':{en:'Vehicle Use Authorization',ht:'Otorizasyon Pou Itilize Machin',fields:[['owner','Vehicle owner full name','Non konplè pwopriyetè machin nan'],['driver','Authorized driver','Chofè ki gen otorizasyon an'],['vehicle','Vehicle year, make, model','Ane, mak, ak modèl machin nan'],['vin','VIN or plate number','VIN oswa nimewo plak'],['use','Authorized use and dates','Itilizasyon ak dat otorizasyon an','textarea']]}
+};
+const c=configs[type]||configs.affidavit;
+if(ht){document.documentElement.lang='ht';document.getElementById('brand').href='https://safenotarize.com/ht.html';document.getElementById('back').href='library.html?lang=ht';document.getElementById('back').textContent='Bibliyotèk Dokiman';document.getElementById('page-title').textContent='Kreye Dokiman Ou';document.getElementById('page-sub').textContent='Ranpli chan yo, revize dokiman an, epi telechaje li dirèkteman kòm PDF. Pa siyen li anvan sesyon notè a sof si yo mande w fè sa.';document.getElementById('warning').innerHTML='<strong>Modèl jeneral sèlman.</strong> Konfime dokiman sa a satisfè kondisyon òganizasyon k ap resevwa li a. SafeNotarize pa bay konsèy legal.';document.getElementById('form-title').textContent='Enfòmasyon dokiman an';document.getElementById('update').textContent='Mete Apèsi A Ajou';document.getElementById('privacy').textContent='Enfòmasyon ou antre yo rete nan paj navigatè sa a epi modèl la pa voye yo bay SafeNotarize.';document.getElementById('download').textContent='Telechaje PDF epi Kontinye';document.getElementById('continue').textContent='Kontinye ak Notarizasyon Online';document.getElementById('next-title').textContent='Dokiman ou telechaje';document.getElementById('next-text').textContent='Kontinye kounye a pou bay enfòmasyon siyatè a epi telechaje PDF la pou notarizasyon.'}
+document.title=(ht?c.ht:c.en)+' | SafeNotarize';
+const form=document.getElementById('form');c.fields.forEach(f=>{const div=document.createElement('div');div.className='field';div.innerHTML=`<label for="${f[0]}">${ht?f[2]:f[1]}</label>${f[3]==='textarea'?`<textarea id="${f[0]}"></textarea>`:`<input id="${f[0]}">`}`;form.appendChild(div)});
+function v(id){return (document.getElementById(id)?.value||'').trim()||'____________________________'}
+function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function build(){let html=`<h1>${esc(ht?c.ht:c.en)}</h1>`;
+if(type==='affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, residing at ${esc(v('address'))}, declare under oath that the following statements are true to the best of my personal knowledge:</p><p>${esc(v('facts')).replace(/\n/g,'<br>')}</p><p>Dated: ${esc(v('date'))}</p>`;
+if(type==='child-travel-consent')html+=`<p>I, <strong>${esc(v('parent'))}</strong>, am the parent or legal guardian of <strong>${esc(v('child'))}</strong>, born ${esc(v('dob'))}. I authorize the child to travel with <strong>${esc(v('traveler'))}</strong> to ${esc(v('destination'))} during ${esc(v('dates'))}.</p><p>${esc(v('details')).replace(/\n/g,'<br>')}</p>`;
+if(type==='proof-of-residency')html+=`<p>I, <strong>${esc(v('declarant'))}</strong>, state that <strong>${esc(v('resident'))}</strong> resides at ${esc(v('address'))} and has lived at this address since ${esc(v('since'))}.</p><p>${esc(v('details')).replace(/\n/g,'<br>')}</p>`;
+if(type==='letter-of-authorization')html+=`<p>I, <strong>${esc(v('grantor'))}</strong>, authorize <strong>${esc(v('agent'))}</strong> to perform the following action on my behalf:</p><p>${esc(v('action')).replace(/\n/g,'<br>')}</p><p>This authorization begins ${esc(v('start'))} and expires ${esc(v('end'))}.</p>`;
+if(type==='financial-support')html+=`<p>I, <strong>${esc(v('supporter'))}</strong>, confirm that I provide financial support to <strong>${esc(v('recipient'))}</strong>, who is my ${esc(v('relationship'))}.</p><p>${esc(v('support')).replace(/\n/g,'<br>')}</p><p>Support period: ${esc(v('period'))}</p>`;
+
+if(type==='general-consent')html+=`<p>I, <strong>${esc(v('giver'))}</strong>, voluntarily give my consent to <strong>${esc(v('recipient'))}</strong> for the following activity or action:</p><p>${esc(v('activity')).replace(/\n/g,'<br>')}</p><p>Conditions or limitations: ${esc(v('conditions')).replace(/\n/g,'<br>')}</p><p>Effective date: ${esc(v('date'))}</p>`;
+if(type==='information-release')html+=`<p>I, <strong>${esc(v('authorizer'))}</strong>, authorize <strong>${esc(v('holder'))}</strong> to release the following records or information to <strong>${esc(v('recipient'))}</strong>:</p><p>${esc(v('records')).replace(/\n/g,'<br>')}</p><p>Purpose: ${esc(v('purpose'))}</p><p>This authorization expires: ${esc(v('expiration'))}</p>`;
+if(type==='vehicle-release')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('recipient'))}</strong> to receive and take possession of my vehicle from <strong>${esc(v('holder'))}</strong>.</p><p>Vehicle: ${esc(v('vehicle'))}<br>VIN or license plate: ${esc(v('vin'))}</p><p>${esc(v('items')).replace(/\n/g,'<br>')}</p>`;
+if(type==='vehicle-use')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('driver'))}</strong> to use the following vehicle: ${esc(v('vehicle'))}, VIN or plate ${esc(v('vin'))}.</p><p>${esc(v('use')).replace(/\n/g,'<br>')}</p>`;
+html+=ht
+? `<div class="sig">
+    <div class="signature-grid">
+      <div class="signature-field"><div class="line"></div><div class="field-label">Siyati moun ki bay deklarasyon oswa otorizasyon an</div></div>
+      <div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div>
+    </div>
+  </div>
+  <div class="notary-placeholder">
+    <h2>SEKSYON NOTÈ — POU NOTÈ A RANPLI</h2>
+    <p>Sètifika notaryal ki apwopriye a, tankou yon rekonesans oswa yon sèman, ap chwazi epi ranpli pandan sesyon notarizasyon online SafeNotarize la.</p>
+    <p>Fòm egzak sètifika a depann de kalite zak notaryal la ak lwa ki aplikab yo.</p>
+    <p class="do-not-complete">Pa ekri, pa siyen, epi pa ranpli seksyon sa a anvan sesyon notè a.</p>
+  </div>`
+: `<div class="sig">
+    <div class="signature-grid">
+      <div class="signature-field"><div class="line"></div><div class="field-label">Signature of person making the statement or granting authorization</div></div>
+      <div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div>
+    </div>
+  </div>
+  <div class="notary-placeholder">
+    <h2>NOTARY SECTION — FOR NOTARY USE</h2>
+    <p>The appropriate notarial certificate, such as an acknowledgment or jurat, will be selected and completed during the SafeNotarize online notarization session.</p>
+    <p>The exact certificate wording depends on the notarial act and applicable law.</p>
+    <p class="do-not-complete">Do not write, sign, or complete this section before the notary session.</p>
+  </div>`;
+document.getElementById('paper').innerHTML=html}
+document.getElementById('update').onclick=build;c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',build));
+const book=ht?'https://safenotarize.com/book-ht.html?lang=ht':'https://safenotarize.com/book.html?x=1';
+document.getElementById('continue').href=book+`&document_source=library&document_type=${encodeURIComponent(type)}`;
+function safeFilename(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'safenotarize-document'}
+async function downloadPdf(){
+  build();
+  const btn=document.getElementById('download'),status=document.getElementById('download-status');
+  btn.disabled=true;btn.textContent=ht?'PDF la ap prepare...':'Preparing PDF...';status.textContent=ht?'Tanpri pa fèmen paj la.':'Please keep this page open.';
+  try{
+    if(!window.jspdf||!window.html2canvas)throw new Error('PDF tools did not load. Please refresh and try again.');
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({unit:'pt',format:'letter',orientation:'portrait'});
+    await new Promise((resolve,reject)=>{
+      try{
+        doc.html(document.getElementById('paper'),{
+          callback:function(pdf){pdf.save(safeFilename(ht?c.ht:c.en)+'.pdf');resolve();},
+          x:36,y:36,width:540,windowWidth:760,autoPaging:'text',
+          html2canvas:{scale:1.5,useCORS:true,backgroundColor:'#ffffff',logging:false}
+        });
+      }catch(err){reject(err)}
+    });
+    status.textContent=ht?'PDF la kòmanse telechaje. Kontinye anba a.':'Your PDF download has started. Continue below.';
+    document.getElementById('next-box').classList.add('show');
+    document.getElementById('next-box').scrollIntoView({behavior:'smooth',block:'center'});
+  }catch(err){
+    console.error(err);status.textContent=ht?'Nou pa t kapab kreye PDF la. Rafrechi paj la epi eseye ankò.':'We could not create the PDF. Refresh the page and try again.';
+  }finally{
+    btn.disabled=false;btn.textContent=ht?'Telechaje PDF Ankò':'Download PDF Again';
+  }
+}
+document.getElementById('download').addEventListener('click',downloadPdf);
+build();
+</script></body></html>
