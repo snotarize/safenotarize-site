@@ -1,0 +1,20 @@
+SafeNotarize Mobile, Flow, Footer, and Price Fix
+Generated: July 17, 2026
+
+Only the requested changes were made:
+- Mobile workflow cards now stack vertically and remain readable on phones.
+- Every workflow block now follows this exact order:
+  1. Prepare the document or use a template.
+  2. Enter signer and session information.
+  3. Upload the final PDF.
+  4. Join now or select a time for later.
+- Facebook was removed from every footer.
+- Basic price language now says $25 includes 1 signer and 2 stamps.
+- No intake, upload, Make, Airtable, webhook, payment, or session logic was changed.
+
+Pages processed: 45
+
+Final audit:
+Wrong time-before-upload wording: 0
+Old 1-signer/1-stamp pricing: 0
+Facebook links in footers: 0
