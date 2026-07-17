@@ -1,59 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Time Selected | SafeNotarize</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Session Time Confirmed | SafeNotarize</title>
+  <meta name="description" content="Your SafeNotarize session time has been confirmed. Check your email for your secure session invitation.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#06294d">
   <style>
-    :root{--navy:#00274d;--green:#28a745;--text:#40536a;--border:#dce7f2;--shadow:0 14px 38px rgba(0,51,102,.09)}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff 0%,#ffffff 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;color:var(--text)}
-    .card{width:100%;max-width:560px;background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:28px 22px;text-align:center}
-    .logo{height:46px;margin-bottom:14px}.badge{display:inline-block;background:#e9f7ef;color:#1f7a36;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800;margin-bottom:12px}
-    h1{color:var(--navy);margin:0 0 10px;font-size:28px;line-height:1.2}p{margin:0 0 12px;line-height:1.55;font-size:15.5px}
-    .note{margin-top:16px;background:#f8fbff;border:1px solid #e3edf8;border-radius:14px;padding:14px;text-align:left}
-    .btn{display:inline-block;margin-top:18px;background:var(--green);color:#fff;text-decoration:none;padding:13px 18px;border-radius:10px;font-weight:900}
-  </style>
+:root{
+  --navy:#06294d;
+  --navy-2:#0b3b69;
+  --green:#1f9d55;
+  --green-dark:#177840;
+  --text:#263c51;
+  --muted:#607489;
+  --border:#dce6ef;
+  --page:#f5f8fb;
+  --soft:#f1f7fc;
+  --soft-green:#edf8f1;
+  --shadow:0 18px 48px rgba(6,41,77,.11);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at top right,rgba(31,157,85,.08),transparent 34%),
+    linear-gradient(180deg,#f5f9fd 0%,#ffffff 100%);
+  -webkit-font-smoothing:antialiased;
+}
+.card{
+  width:100%;
+  max-width:620px;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+}
+.top{
+  background:var(--navy);
+  padding:18px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.logo{height:43px;width:auto;display:block}
+.content{padding:31px 26px 27px;text-align:center}
+.success{
+  width:58px;
+  height:58px;
+  margin:0 auto 15px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:var(--green);
+  box-shadow:0 10px 24px rgba(31,157,85,.22);
+  font-size:29px;
+  font-weight:900;
+}
+.badge{
+  display:inline-block;
+  margin-bottom:11px;
+  padding:7px 12px;
+  border:1px solid #d5eadc;
+  border-radius:999px;
+  color:var(--green-dark);
+  background:var(--soft-green);
+  font-size:12px;
+  font-weight:850;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+h1{
+  margin:0 0 10px;
+  color:var(--navy);
+  font-size:32px;
+  line-height:1.16;
+  letter-spacing:-.025em;
+}
+.subtitle{
+  max-width:480px;
+  margin:0 auto;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:16px;
+}
+.steps{
+  margin-top:23px;
+  text-align:left;
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+}
+.step{
+  position:relative;
+  padding:15px 15px 15px 49px;
+  border-bottom:1px solid #eaf0f5;
+  line-height:1.52;
+  font-size:14px;
+  color:#455c71;
+}
+.step:last-child{border-bottom:0}
+.step::before{
+  content:attr(data-number);
+  position:absolute;
+  left:15px;
+  top:15px;
+  width:23px;
+  height:23px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:var(--navy);
+  font-size:12px;
+  font-weight:900;
+}
+.step strong{color:var(--navy)}
+.reminder{
+  margin-top:16px;
+  padding:14px 15px;
+  text-align:left;
+  border:1px solid #dce9f4;
+  border-left:4px solid var(--green);
+  border-radius:13px;
+  background:var(--soft);
+  color:#4c6276;
+  line-height:1.55;
+  font-size:13px;
+}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:21px;
+}
+.btn{
+  min-height:49px;
+  padding:13px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:11px;
+  text-decoration:none;
+  text-align:center;
+  font-weight:850;
+  font-size:14px;
+}
+.primary{background:var(--green);color:#fff}
+.primary:hover{background:var(--green-dark)}
+.secondary{background:#fff;color:var(--navy);border:1px solid #cbd9e6}
+.footer-note{
+  margin:17px 0 0;
+  color:#748698;
+  font-size:12px;
+  line-height:1.5;
+}
+@media(max-width:560px){
+  body{padding:10px;align-items:flex-start}
+  .card{border-radius:17px;margin-top:10px}
+  .top{padding:13px 16px}.logo{height:36px}
+  .content{padding:23px 14px 20px}
+  .success{width:51px;height:51px;font-size:25px;margin-bottom:13px}
+  h1{font-size:27px}
+  .subtitle{font-size:14.5px}
+  .steps{margin-top:18px}
+  .step{padding:13px 12px 13px 44px;font-size:13.5px}
+  .step::before{left:12px;top:13px}
+  .actions{grid-template-columns:1fr}
+  .btn{font-size:15px}
+}
+</style>
 </head>
-
 <body>
   <main class="card">
-    <img class="logo" id="logo-img" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo">
-
-    <div class="badge" id="badge">Time selected</div>
-    <h1 id="title">You’re All Set</h1>
-    <p id="subtitle">Your time has been selected successfully.</p>
-
-    <div class="note" id="note">
-      <p><strong>SafeNotarize invite email:</strong> Each signer will receive their own secure session link by email to join at the scheduled time.</p>
-      <p>Please check the inbox and spam folder if the invite does not appear right away.</p>
+    <div class="top">
+      <a href="https://safenotarize.com" aria-label="SafeNotarize home">
+        <img class="logo" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize">
+      </a>
     </div>
 
-    <a class="btn" id="home-btn" href="https://safenotarize.com">Back to SafeNotarize</a>
+    <section class="content">
+      <div class="success" aria-hidden="true">✓</div>
+      <div class="badge">Session time confirmed</div>
+      <h1>You’re All Set</h1>
+      <p class="subtitle">Your requested session time was selected successfully. The next step is to watch for your SafeNotarize invitation email.</p>
+
+      <div class="steps">
+        <div class="step" data-number="1">
+          <strong>Check your email.</strong> Each signer receives a separate secure link for the session.
+        </div>
+        <div class="step" data-number="2">
+          <strong>Keep the invitation.</strong> Use the link in that email to join at the scheduled time.
+        </div>
+        <div class="step" data-number="3">
+          <strong>Be ready with identification.</strong> Each signer should have an accepted, unexpired photo ID available.
+        </div>
+      </div>
+
+      <div class="reminder">
+        <strong>Can’t find the invitation?</strong> Check Spam, Junk, Promotions, or All Mail. Delivery may take a few minutes.
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" href="https://safenotarize.com">Back to SafeNotarize</a>
+        <a class="btn secondary" href="mailto:supervisor@safenotarize.com">Contact Support</a>
+      </div>
+
+      <p class="footer-note">Do not share your secure session link with anyone who is not participating in the notarization.</p>
+    </section>
   </main>
-
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const isKreyol =
-      (params.get("lang") || "").toLowerCase() === "ht" ||
-      (params.get("utm_source") || "").includes("_ht") ||
-      (params.get("utm_campaign") || "").includes("_ht") ||
-      (params.get("utm_term") || "").includes("lang_ht");
-
-    if(isKreyol){
-      document.documentElement.lang = "ht";
-      document.title = "Lè Randevou Chwazi | SafeNotarize";
-      document.getElementById("logo-img").alt = "Logo SafeNotarize";
-      document.getElementById("badge").textContent = "Lè randevou a chwazi";
-      document.getElementById("title").textContent = "Ou fini";
-      document.getElementById("subtitle").textContent = "Lè randevou ou a chwazi avèk siksè.";
-      document.getElementById("note").innerHTML = `
-        <p><strong>Imèl envitasyon SafeNotarize:</strong> Chak siyatè ap resevwa pwòp lyen sekirize pa yo pa imèl pou yo antre nan sesyon an lè randevou a rive.</p>
-        <p>Tanpri verifye bwat resepsyon ou ak spam/junk folder la si envitasyon an pa parèt touswit.</p>
-      `;
-      document.getElementById("home-btn").textContent = "Retounen sou SafeNotarize";
-      document.getElementById("home-btn").href = "https://safenotarize.com/ht.html";
-    }
-  </script>
 </body>
 </html>
