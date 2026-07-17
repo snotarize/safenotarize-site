@@ -1,20 +1,19 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18058269024"></script>
-  <script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=AW-18058269024"></script>
+<script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'AW-18058269024');
   </script>
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Start Online Notarization | SafeNotarize</title>
-  <meta name="description" content="Start your SafeNotarize online notarization. Enter signer details, upload your document, and continue your session.">
-
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Start Online Notarization | SafeNotarize</title>
+<meta content="Start your SafeNotarize online notarization. Enter signer details, upload your document, and continue your session." name="description"/>
+<style>
     :root{--navy:#00274d;--green:#28a745;--greenDark:#1f7a36;--greenSoft:#e9f7ef;--text:#25364a;--muted:#637487;--border:#dce7f2;--danger:#c1121f;--shadow:0 14px 36px rgba(0,39,77,.09);--radius:18px}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff 0%,#eef6ff 100%);color:var(--text)}
     .topbar{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;box-shadow:0 8px 22px rgba(0,0,0,.08)}
@@ -73,175 +72,156 @@
     }
 
   </style>
-</head>
-
+<link href="https://safenotarize.com/book.html" rel="canonical"/><meta content="index,follow" name="robots"/><meta content="SafeNotarize" property="og:site_name"/><meta content="summary" name="twitter:card"/><meta content="#00274d" name="theme-color"/></head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="https://safenotarize.com">
-      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo">
-      <span>SafeNotarize</span>
-    </a>
-    <div class="top-actions">
-      <a href="https://safenotarize.com">Home</a>
-      <a href="mailto:supervisor@safenotarize.com">Need help?</a>
-    </div>
-  </header>
-
-  <main class="page">
-    <section class="hero">
-      <span class="pill">Online Notarization</span>
-      <h1>Start Your Session</h1>
-      <p>Starts at $25 for 1 signer and 2 stamps.</p>
-    </section>
-
-    <div class="layout">
-      <section class="document-gate" id="document-gate" aria-labelledby="document-gate-title">
-        <h2 id="document-gate-title">Do you already have the document you need notarized?</h2>
-        <p>Choose one option to continue.</p>
-        <div class="document-gate-actions">
-          <button type="button" class="document-gate-btn yes" onclick="continueWithDocument()">Yes</button>
-          <button type="button" class="document-gate-btn" onclick="goToDocumentLibrary()">No</button>
-        </div>
-      </section>
-      <form id="booking-form" class="panel intake-hidden" autocomplete="on">
-        <div class="panel-pad">
-          <div class="section-head">
-            <div>
-              <h2>Booking details</h2>
-              <p>Complete this first, then upload your document.</p>
-            </div>
-            <span class="badge" id="step-badge">Step 1 of 2</span>
-          </div>
-
-          <div class="progress-wrap">
-            <div class="progress-top">
-              <span id="progress-label">Signer info</span>
-              <span id="progress-count">1/2</span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-          </div>
-
-          <section class="step-card active" id="step-1">
-            <div class="choice-row" role="group" aria-label="Booking type">
-              <button type="button" class="choice active" id="choice-self" onclick="setBookingType('self')">
-                <strong>I am signing</strong><span>I will join the session.</span>
-              </button>
-              <button type="button" class="choice" id="choice-other" onclick="setBookingType('other')">
-                <strong>Booking for someone else</strong><span>Client, family, or signer.</span>
-              </button>
-            </div>
-
-            <input type="hidden" id="booking_type" name="booking_type" value="self">
-
-            <div class="card hidden" id="booker-card">
-              <div class="card-title"><h3>Booking contact</h3><span class="badge">Required</span></div>
-              <div class="grid-2">
-                <div class="field"><label for="booker_name">Your name <span class="required">*</span></label><input id="booker_name" name="booker_name" placeholder="Person booking or paying"></div>
-                <div class="field"><label for="booker_email">Your email <span class="required">*</span></label><input id="booker_email" name="booker_email" type="email" placeholder="payer@email.com"></div>
-              </div>
-              <div class="field"><label for="booker_phone">Your phone</label><input id="booker_phone" name="booker_phone" type="tel" placeholder="Optional"></div>
-            </div>
-
-            <div class="card">
-              <div class="card-title"><h3>Primary signer</h3><span class="badge">Required</span></div>
-              <div class="grid-2">
-                <div class="field"><label for="primary_name">Full name <span class="required">*</span></label><input id="primary_name" name="primary_name" required placeholder="Primary signer full name"></div>
-                <div class="field"><label for="primary_email">Email address <span class="required">*</span></label><input id="primary_email" name="primary_email" type="email" required placeholder="signer@email.com"></div>
-              </div>
-              <div class="field"><label for="primary_phone">Phone number</label><input id="primary_phone" name="primary_phone" type="tel" placeholder="Optional"></div>
-            </div>
-
-            <div class="card">
-              <div class="card-title"><h3>Signer location</h3></div>
-              <div class="field">
-                <label for="international_signer_passport">Is any signer outside the U.S. or unable to verify with an SSN?</label>
-                <select id="international_signer_passport" name="international_signer_passport">
-                  <option value="no">No</option><option value="yes">Yes</option><option value="not_sure">Not sure</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-title"><h3>Extra people</h3><span class="badge">Optional</span></div>
-              <div id="additional-signers"></div>
-              <div id="witnesses"></div>
-              <div id="observers"></div>
-              <div class="mini-actions">
-                <button type="button" class="mini-btn" onclick="addAdditionalSigner()">+ Add signer</button>
-                <button type="button" class="mini-btn" onclick="addWitness()">+ Add witness</button>
-                <button type="button" class="mini-btn" onclick="addObserver()">+ Add observer</button>
-              </div>
-            </div>
-
-            <div class="card estimate-card" id="estimate-card">
-              <div class="card-title"><h3>Current estimate</h3><span class="badge">Updates live</span></div>
-              <div id="estimate-lines" class="estimate-lines" aria-live="polite"></div>
-              <div class="field estimate-stamp-field">
-                <label for="estimate_extra_stamps">Extra stamps needed?</label>
-                <select id="estimate_extra_stamps" aria-label="Extra stamps for estimate only">
-                  <option value="0">No extra stamps</option>
-                  <option value="1">1 extra stamp</option>
-                  <option value="2">2 extra stamps</option>
-                  <option value="3">3 extra stamps</option>
-                  <option value="4">4 extra stamps</option>
-                  <option value="5">5 extra stamps</option>
-                </select>
-              </div>
-              <div class="estimate-row estimate-total"><span>Estimated total</span><strong id="estimate-total">$25</strong></div>
-              <p class="estimate-note">Basic and international sessions include 1 signer and 2 stamps. This is only an estimate; your final invoice may change if the document needs more stamps or special handling.</p>
-            </div>
-
-            <button type="button" class="continue" onclick="goToStep(2, true)">Continue</button>
-          </section>
-
-          <section class="step-card" id="step-2">
-            <div class="card">
-              <div class="card-title"><h3>Payment & delivery</h3><span class="badge">Required</span></div>
-              <div class="grid-2">
-                <div class="field">
-                  <label for="invoice_to">Who should receive the invoice? <span class="required">*</span></label>
-                  <select id="invoice_to" name="invoice_to" required onchange="toggleInvoiceOther()">
-                    <option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="other">Someone else</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="document_to">Who should receive the completed document? <span class="required">*</span></label>
-                  <select id="document_to" name="document_to" required onchange="toggleDocumentOther()">
-                    <option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="both">Both</option><option value="other">Someone else</option>
-                  </select>
-                </div>
-              </div>
-
-              <div id="invoice-other" class="hidden">
-                <div class="grid-2">
-                  <div class="field"><label for="invoice_name">Invoice recipient name</label><input id="invoice_name" name="invoice_name" placeholder="Name"></div>
-                  <div class="field"><label for="invoice_email">Invoice recipient email</label><input id="invoice_email" name="invoice_email" type="email" placeholder="email@example.com"></div>
-                </div>
-              </div>
-
-              <div id="document-other" class="hidden">
-                <div class="grid-2">
-                  <div class="field"><label for="document_name">Document recipient name</label><input id="document_name" name="document_name" placeholder="Name"></div>
-                  <div class="field"><label for="document_email">Document recipient email</label><input id="document_email" name="document_email" type="email" placeholder="email@example.com"></div>
-                </div>
-              </div>
-
-              <div class="field"><label for="notes">Notes or special instructions</label><textarea id="notes" name="notes" placeholder="Optional"></textarea></div>
-            </div>
-
-            <div id="status-message" class="status-msg"></div>
-
-            <div class="step-actions">
-              <button type="button" class="back-btn" onclick="goToStep(1, false)">Back</button>
-              <button type="submit" id="continue-btn" class="continue">Continue to upload document</button>
-            </div>
-          </section>
-        </div>
-      </form>
-    </div>
-  </main>
-
-  <script>
+<header class="topbar">
+<a class="brand" href="https://safenotarize.com">
+<img alt="SafeNotarize Logo" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/>
+<span>SafeNotarize</span>
+</a>
+<div class="top-actions">
+<a href="https://safenotarize.com">Home</a>
+<a href="mailto:supervisor@safenotarize.com">Need help?</a>
+</div>
+</header>
+<main class="page">
+<section class="hero">
+<span class="pill">Online Notarization</span>
+<h1>Start Your Session</h1>
+<p>Starts at $25 for 1 signer and 2 stamps.</p>
+</section>
+<div class="layout">
+<section aria-labelledby="document-gate-title" class="document-gate" id="document-gate">
+<h2 id="document-gate-title">Do you already have the document you need notarized?</h2>
+<p>Choose one option to continue.</p>
+<div class="document-gate-actions">
+<button class="document-gate-btn yes" onclick="continueWithDocument()" type="button">Yes</button>
+<button class="document-gate-btn" onclick="goToDocumentLibrary()" type="button">No</button>
+</div>
+</section>
+<form autocomplete="on" class="panel intake-hidden" id="booking-form">
+<div class="panel-pad">
+<div class="section-head">
+<div>
+<h2>Booking details</h2>
+<p>Complete this first, then upload your document.</p>
+</div>
+<span class="badge" id="step-badge">Step 1 of 2</span>
+</div>
+<div class="progress-wrap">
+<div class="progress-top">
+<span id="progress-label">Signer info</span>
+<span id="progress-count">1/2</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+<section class="step-card active" id="step-1">
+<div aria-label="Booking type" class="choice-row" role="group">
+<button class="choice active" id="choice-self" onclick="setBookingType('self')" type="button">
+<strong>I am signing</strong><span>I will join the session.</span>
+</button>
+<button class="choice" id="choice-other" onclick="setBookingType('other')" type="button">
+<strong>Booking for someone else</strong><span>Client, family, or signer.</span>
+</button>
+</div>
+<input id="booking_type" name="booking_type" type="hidden" value="self"/>
+<div class="card hidden" id="booker-card">
+<div class="card-title"><h3>Booking contact</h3><span class="badge">Required</span></div>
+<div class="grid-2">
+<div class="field"><label for="booker_name">Your name <span class="required">*</span></label><input id="booker_name" name="booker_name" placeholder="Person booking or paying"/></div>
+<div class="field"><label for="booker_email">Your email <span class="required">*</span></label><input id="booker_email" name="booker_email" placeholder="payer@email.com" type="email"/></div>
+</div>
+<div class="field"><label for="booker_phone">Your phone</label><input id="booker_phone" name="booker_phone" placeholder="Optional" type="tel"/></div>
+</div>
+<div class="card">
+<div class="card-title"><h3>Primary signer</h3><span class="badge">Required</span></div>
+<div class="grid-2">
+<div class="field"><label for="primary_name">Full name <span class="required">*</span></label><input id="primary_name" name="primary_name" placeholder="Primary signer full name" required=""/></div>
+<div class="field"><label for="primary_email">Email address <span class="required">*</span></label><input id="primary_email" name="primary_email" placeholder="signer@email.com" required="" type="email"/></div>
+</div>
+<div class="field"><label for="primary_phone">Phone number</label><input id="primary_phone" name="primary_phone" placeholder="Optional" type="tel"/></div>
+</div>
+<div class="card">
+<div class="card-title"><h3>Signer location</h3></div>
+<div class="field">
+<label for="international_signer_passport">Is any signer outside the U.S. or unable to verify with an SSN?</label>
+<select id="international_signer_passport" name="international_signer_passport">
+<option value="no">No</option><option value="yes">Yes</option><option value="not_sure">Not sure</option>
+</select>
+</div>
+</div>
+<div class="card">
+<div class="card-title"><h3>Extra people</h3><span class="badge">Optional</span></div>
+<div id="additional-signers"></div>
+<div id="witnesses"></div>
+<div id="observers"></div>
+<div class="mini-actions">
+<button class="mini-btn" onclick="addAdditionalSigner()" type="button">+ Add signer</button>
+<button class="mini-btn" onclick="addWitness()" type="button">+ Add witness</button>
+<button class="mini-btn" onclick="addObserver()" type="button">+ Add observer</button>
+</div>
+</div>
+<div class="card estimate-card" id="estimate-card">
+<div class="card-title"><h3>Current estimate</h3><span class="badge">Updates live</span></div>
+<div aria-live="polite" class="estimate-lines" id="estimate-lines"></div>
+<div class="field estimate-stamp-field">
+<label for="estimate_extra_stamps">Extra stamps needed?</label>
+<select aria-label="Extra stamps for estimate only" id="estimate_extra_stamps">
+<option value="0">No extra stamps</option>
+<option value="1">1 extra stamp</option>
+<option value="2">2 extra stamps</option>
+<option value="3">3 extra stamps</option>
+<option value="4">4 extra stamps</option>
+<option value="5">5 extra stamps</option>
+</select>
+</div>
+<div class="estimate-row estimate-total"><span>Estimated total</span><strong id="estimate-total">$25</strong></div>
+<p class="estimate-note">Basic and international sessions include 1 signer and 2 stamps. This is only an estimate; your final invoice may change if the document needs more stamps or special handling.</p>
+</div>
+<button class="continue" onclick="goToStep(2, true)" type="button">Continue</button>
+</section>
+<section class="step-card" id="step-2">
+<div class="card">
+<div class="card-title"><h3>Payment &amp; delivery</h3><span class="badge">Required</span></div>
+<div class="grid-2">
+<div class="field">
+<label for="invoice_to">Who should receive the invoice? <span class="required">*</span></label>
+<select id="invoice_to" name="invoice_to" onchange="toggleInvoiceOther()" required="">
+<option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="other">Someone else</option>
+</select>
+</div>
+<div class="field">
+<label for="document_to">Who should receive the completed document? <span class="required">*</span></label>
+<select id="document_to" name="document_to" onchange="toggleDocumentOther()" required="">
+<option value="primary_signer">Primary signer</option><option value="booker">Person booking/payer</option><option value="both">Both</option><option value="other">Someone else</option>
+</select>
+</div>
+</div>
+<div class="hidden" id="invoice-other">
+<div class="grid-2">
+<div class="field"><label for="invoice_name">Invoice recipient name</label><input id="invoice_name" name="invoice_name" placeholder="Name"/></div>
+<div class="field"><label for="invoice_email">Invoice recipient email</label><input id="invoice_email" name="invoice_email" placeholder="email@example.com" type="email"/></div>
+</div>
+</div>
+<div class="hidden" id="document-other">
+<div class="grid-2">
+<div class="field"><label for="document_name">Document recipient name</label><input id="document_name" name="document_name" placeholder="Name"/></div>
+<div class="field"><label for="document_email">Document recipient email</label><input id="document_email" name="document_email" placeholder="email@example.com" type="email"/></div>
+</div>
+</div>
+<div class="field"><label for="notes">Notes or special instructions</label><textarea id="notes" name="notes" placeholder="Optional"></textarea></div>
+</div>
+<div class="status-msg" id="status-message"></div>
+<div class="step-actions">
+<button class="back-btn" onclick="goToStep(1, false)" type="button">Back</button>
+<button class="continue" id="continue-btn" type="submit">Continue to upload document</button>
+</div>
+</section>
+</div>
+</form>
+</div>
+</main>
+<script>
     function customerAlreadyChoseDocumentPath(){
       const params = new URLSearchParams(window.location.search);
       const source = (params.get("document_source") || "").toLowerCase();

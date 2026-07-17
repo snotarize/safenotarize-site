@@ -1,197 +1,164 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Legal | SafeNotarize</title>
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-      color: #222;
-      line-height: 1.6;
-    }
-    header {
-      background-color: #00274d;
-      color: white;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 30px;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
-    header img {
-      height: 40px;
-      margin-right: 10px;
-    }
-    header span {
-      font-weight: bold;
-      font-size: 18px;
-      color: white;
-    }
-    .nav-container {
-      display: flex;
-      align-items: center;
-    }
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      transition: max-height 0.3s ease-in-out;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      margin: 4px 0;
-    }
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        background-color: #00274d;
-        padding: 10px 0;
-      }
-      nav.show {
-        display: flex;
-      }
-      .hamburger {
-        display: flex;
-      }
-    }
-    main {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-    }
-    h1, h2 {
-      color: #00274d;
-    }
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    section {
-      margin-bottom: 40px;
-    }
-    footer {
-      background-color: #00274d;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-    }
-    footer a {
-      color: #ffffff;
-      text-decoration: underline;
-      margin: 0 5px;
-    }
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Privacy Policy and Terms of Service | SafeNotarize</title>
+<meta content="Read the SafeNotarize Privacy Policy, Terms of Service, document-template terms, refund information, and important limitations for online notarization services." name="description"/>
+<link href="https://safenotarize.com/legal.html" rel="canonical"/>
+<meta content="Privacy Policy and Terms of Service | SafeNotarize" property="og:title"/>
+<meta content="Privacy, service terms, document-template terms, payment information, and important SafeNotarize policies." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://safenotarize.com/legal.html" property="og:url"/>
+<meta content="SafeNotarize" property="og:site_name"/>
+<meta content="index,follow" name="robots"/>
+<meta content="#00274d" name="theme-color"/>
+<style>
+    :root{--navy:#00274d;--navy2:#0b3b67;--green:#28a745;--ink:#26394d;--muted:#5d7185;--line:#dce7f2;--soft:#f5f9fd;--shadow:0 12px 30px rgba(0,39,77,.08)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff;line-height:1.7}
+    .header{position:sticky;top:0;z-index:999;background:var(--navy);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;color:#fff;text-decoration:none;font-weight:800}.brand img{height:39px;margin-right:9px}
+    .nav{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:700}
+    .nav .cta{background:var(--green);padding:9px 15px;border-radius:8px}
+    .menu{display:none;border:0;background:transparent;color:#fff;font-size:27px;cursor:pointer}
+    .hero{background:linear-gradient(180deg,#f5f9fd,#fff);padding:58px 20px 40px;text-align:center;border-bottom:1px solid var(--line)}
+    .hero h1{margin:0 0 10px;color:var(--navy);font-size:40px;line-height:1.15}.hero p{max-width:760px;margin:0 auto;color:var(--muted)}
+    .updated{display:inline-block;margin-bottom:14px;padding:7px 12px;border-radius:999px;background:#eaf7ee;color:#1f7a36;font-size:13px;font-weight:800}
+    .layout{max-width:1100px;margin:34px auto 60px;padding:0 20px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;align-items:start}
+    .toc{position:sticky;top:82px;background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:18px}
+    .toc strong{display:block;color:var(--navy);margin-bottom:8px}.toc a{display:block;color:#405c75;text-decoration:none;padding:6px 0;font-size:14px}
+    .content{min-width:0}section{scroll-margin-top:90px;margin-bottom:24px;padding:28px;background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
+    h2{color:var(--navy);margin:0 0 13px;font-size:26px}h3{color:var(--navy2);margin:22px 0 8px}p,li{color:#40566b}ul{padding-left:21px}
+    .notice{background:#fff9e9;border-color:#efdfad;box-shadow:none}a{color:#086bb5}.back{display:inline-flex;margin-top:8px;font-weight:800;text-decoration:none}
+    footer{background:var(--navy);color:#fff;text-align:center;padding:30px 20px;font-size:13px}footer a{color:#fff}
+    @media(max-width:780px){.menu{display:block}.nav{display:none;position:absolute;left:12px;right:12px;top:65px;background:var(--navy2);border-radius:12px;padding:15px;flex-direction:column;align-items:stretch}.nav.show{display:flex}.layout{grid-template-columns:1fr;margin-top:22px}.toc{position:static}.hero{padding:44px 18px 30px}.hero h1{font-size:31px}section{padding:21px 17px}}
   </style>
-</head>
+<script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"SafeNotarize Privacy Policy and Terms of Service",
+    "url":"https://safenotarize.com/legal.html",
+    "description":"SafeNotarize privacy, service, document-template, payment, and online notarization terms.",
+    "isPartOf":{"@type":"WebSite","name":"SafeNotarize","url":"https://safenotarize.com/"}
+  }
+  </script>
+<meta content="summary" name="twitter:card"/></head>
 <body>
-  <header>
-    <div style="display: flex; align-items: center;">
-      <a href="https://safenotarize.com" style="display: flex; align-items: center; text-decoration: none;">
-        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" />
-        <span>SafeNotarize</span>
-      </a>
-    </div>
-    <div class="nav-container">
-      <div class="hamburger" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <nav id="mobileMenu">
-        <a href="/">Home</a>
-        <a href="/#services">Services</a>
-        <a href="/#pricing-block">Pricing</a>
-        <a href="/#faq">FAQ</a>
-        <a href="mailto:support@safenotarize.com">Contact</a>
-
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <h1>Legal Information</h1>
-
-    <section id="privacy">
-      <h2>Privacy Policy</h2>
-      <p>
-        SafeNotarize is committed to protecting your personal information. We only collect essential information required to perform our notarial services. Your data is never shared with third parties without your consent unless required by law.
-      </p>
-      <p>
-        We implement security measures to protect your data and maintain confidentiality. By using our website, you agree to this Privacy Policy.
-      </p>
-      <p>
-        If you have any questions about your privacy, contact us at <a href="mailto:support@safenotarize.com">support@safenotarize.com</a>.
-      </p>
-    </section>
-
-    <section id="terms">
-      <h2>Terms of Service</h2>
-      <p>
-        By using SafeNotarize, you agree to our terms. Our services are provided by certified notaries in compliance with applicable laws. You are responsible for providing valid identification and accurate documentation during your session.
-      </p>
-      <p>
-        Completed notarizations are considered final. We are not liable for delays or errors caused by inaccurate information provided by clients.
-      </p>
-      <p>
-        These terms may be updated from time to time. Continued use of our services indicates acceptance of any modifications.
-      </p>
-    </section>
-
-    <p>
-      &larr; <a href="/">Return to SafeNotarize.com</a>
-    </p>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 SafeNotarize. All rights reserved.<br>
-    <a href="/legal.html#privacy">Privacy Policy</a> |
-    <a href="/legal.html#terms">Terms</a></p>
-  </footer>
-
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('mobileMenu');
-      menu.classList.toggle('show');
+<header class="header">
+<a class="brand" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a>
+<button aria-expanded="false" aria-label="Open navigation" class="menu" onclick="toggleMenu(this)" type="button">☰</button>
+<nav class="nav" id="site-nav">
+<a href="/">Home</a>
+<a href="/documents/library.html">Document Library</a>
+<a href="/#pricing-block">Pricing</a>
+<a href="/#faq">FAQ</a>
+<a href="mailto:supervisor@safenotarize.com">Contact</a>
+<a class="cta" href="/start.html">Start Online Notarization</a>
+</nav>
+</header>
+<div class="hero">
+<span class="updated">Last updated: July 17, 2026</span>
+<h1>Privacy Policy and Terms of Service</h1>
+<p>These policies explain how SafeNotarize handles information, provides online notarization services and document resources, and sets expectations for customers and signers.</p>
+</div>
+<main class="layout">
+<aside aria-label="Legal page contents" class="toc">
+<strong>On this page</strong>
+<a href="#privacy">Privacy Policy</a>
+<a href="#information">Information We Process</a>
+<a href="#sharing">Service Providers and Sharing</a>
+<a href="#retention">Security and Retention</a>
+<a href="#terms">Terms of Service</a>
+<a href="#documents">Templates and Forms</a>
+<a href="#sessions">Session Requirements</a>
+<a href="#payments">Payments and Refunds</a>
+<a href="#limitations">Important Limitations</a>
+<a href="#contact">Contact</a>
+</aside>
+<div class="content">
+<section id="privacy">
+<h2>Privacy Policy</h2>
+<p>SafeNotarize, operated by Geritla Plus LLC, processes information needed to provide online notarization, scheduling, document intake, customer support, payment, and related website services.</p>
+<p>By using the website or submitting information, you acknowledge the practices described on this page. Do not submit information for another person unless you are authorized to do so.</p>
+</section>
+<section id="information">
+<h2>Information We Process</h2>
+<p>Depending on how you use SafeNotarize, information may include:</p>
+<ul>
+<li>Names, email addresses, telephone numbers, appointment details, and signer information.</li>
+<li>Documents and files you choose to upload, including information contained inside those files.</li>
+<li>Identification and identity-verification information required for an online notarization.</li>
+<li>Payment, transaction, technical, browser, device, referral, and website-usage information.</li>
+<li>Messages, support requests, and other information you voluntarily provide.</li>
+</ul>
+<p>SafeNotarize uses this information to process requests, create and support sessions, communicate with participants, prevent misuse, meet legal or recordkeeping obligations, improve the website, and enforce these terms.</p>
+</section>
+<section id="sharing">
+<h2>Service Providers and Information Sharing</h2>
+<p>SafeNotarize may use third-party providers for scheduling, forms, file handling, payments, communications, analytics, automation, identity verification, and online notarization technology. Information may be sent to those providers when necessary to complete the service.</p>
+<p>Information may also be disclosed when required by law, to protect rights or safety, to investigate fraud or misuse, or in connection with a business transfer. SafeNotarize does not promise that information will never be shared; sharing is limited to legitimate service, operational, and legal purposes.</p>
+</section>
+<section id="retention">
+<h2>Security, Recordkeeping, and Retention</h2>
+<p>Reasonable administrative and technical safeguards are used, but no website, email, file transfer, or online storage system can be guaranteed completely secure. Customers should use secure devices and avoid sending unnecessary sensitive information.</p>
+<p>Information may be retained for as long as reasonably needed to provide services, maintain required notarial records, resolve disputes, prevent fraud, enforce agreements, and satisfy legal, tax, accounting, or regulatory obligations.</p>
+</section>
+<section id="terms">
+<h2>Terms of Service</h2>
+<p>By using SafeNotarize, you agree to provide accurate information, use the service lawfully, and follow identity-verification and session instructions. You may not submit fraudulent, altered, illegal, misleading, or unauthorized documents or information.</p>
+<p>Online notarization availability depends on document eligibility, signer location, identity verification, technology, applicable law, and the requirements of the organization receiving the document.</p>
+</section>
+<section id="documents">
+<h2>Document Templates, Generators, and Official Forms</h2>
+<p>SafeNotarize may offer fillable templates, document generators, educational pages, and links to official forms. These resources are provided for convenience and general information only.</p>
+<ul>
+<li>SafeNotarize does not provide legal advice or choose the correct document for you.</li>
+<li>A generated document is not guaranteed to meet the requirements of a court, agency, recipient, state, country, or specific transaction.</li>
+<li>Official government forms remain subject to the issuing agency’s instructions and current version requirements.</li>
+<li>You are responsible for reviewing the completed PDF and confirming that names, dates, facts, signature areas, and recipient requirements are correct before continuing.</li>
+</ul>
+</section>
+<section id="sessions">
+<h2>Online Notarization Session Requirements</h2>
+<p>Each signer must generally have their own email address, an accepted and unexpired photo ID, a supported device with camera and microphone, reliable internet access, and the final document in an acceptable format.</p>
+<p>Do not sign a document in advance when the notarial act or document instructions require signing in the notary’s presence. Additional signers, stamps, international participation, or witnesses may affect eligibility and price.</p>
+</section>
+<section id="payments">
+<h2>Payments, Cancellations, and Refunds</h2>
+<p>Prices shown during the SafeNotarize flow may vary based on session type, number of signers, stamps, witnesses, international participation, and other requested services. Customers are responsible for reviewing the amount before payment.</p>
+<p>Fees for work already performed, identity-verification attempts, completed sessions, used notarial acts, or customer-caused delays may be nonrefundable. Any refund or rescheduling decision may depend on the circumstances, service status, and applicable law.</p>
+</section>
+<section class="notice" id="limitations">
+<h2>Important Limitations</h2>
+<p>SafeNotarize and its notaries do not act as your attorney, do not represent you in a legal matter, and do not guarantee that a recipient will accept a document. Notarization verifies or certifies matters allowed by law; it does not prove that a document is legally effective, accurate, enforceable, or suitable for your purpose.</p>
+<p>To the extent allowed by law, SafeNotarize is not responsible for rejection caused by an incorrect document, missing language, recipient-specific requirements, inaccurate customer information, unsupported identification, connectivity problems, unavailable signers or witnesses, or circumstances outside reasonable control.</p>
+</section>
+<section id="contact">
+<h2>Contact and Policy Updates</h2>
+<p>Questions about privacy or these terms may be sent to <a href="mailto:supervisor@safenotarize.com">supervisor@safenotarize.com</a>.</p>
+<p>These policies may be updated when services, technology, or legal requirements change. The revised date at the top identifies the current version.</p>
+<a class="back" href="/">← Return to SafeNotarize</a>
+</section>
+</div>
+</main>
+<footer>
+    © 2026 SafeNotarize · Geritla Plus LLC<br/>
+<a href="/legal.html#privacy">Privacy Policy</a> ·
+    <a href="/legal.html#terms">Terms of Service</a> ·
+    <a href="/documents/library.html">Document Library</a>
+</footer>
+<script>
+    function toggleMenu(button){
+      const nav=document.getElementById('site-nav');
+      const open=nav.classList.toggle('show');
+      button.setAttribute('aria-expanded',String(open));
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const navLinks = document.querySelectorAll('#mobileMenu a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          const menu = document.getElementById('mobileMenu');
-          if (menu.classList.contains('show')) {
-            menu.classList.remove('show');
-          }
-        });
-      });
-    });
+    document.querySelectorAll('#site-nav a').forEach(link=>link.addEventListener('click',()=>{
+      document.getElementById('site-nav').classList.remove('show');
+      document.querySelector('.menu').setAttribute('aria-expanded','false');
+    }));
   </script>
 </body>
 </html>
