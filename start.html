@@ -272,7 +272,14 @@ h1{font-size:21px}
 </main>
 <script>
   const params = new URLSearchParams(location.search);
-  const isHt = (params.get('lang') || '').toLowerCase() === 'ht' || (params.get('utm_source') || '').includes('_ht');
+  const referrerPath = (()=>{try{return new URL(document.referrer).pathname.toLowerCase()}catch(e){return ''}})();
+  const savedLang = (sessionStorage.getItem('sn_language') || '').toLowerCase();
+  const isHt = (params.get('lang') || '').toLowerCase() === 'ht'
+    || (params.get('utm_source') || '').includes('_ht')
+    || savedLang === 'ht'
+    || /\/ht(?:\.html|\/)/.test(referrerPath)
+    || /haitian-online-notary\.html$/.test(referrerPath);
+  if(isHt) sessionStorage.setItem('sn_language','ht');
   if(isHt){
     document.documentElement.lang='ht'; document.title='Prepare Dokiman Ou | SafeNotarize';
     document.getElementById('brand-link').href='https://safenotarize.com/ht.html';
@@ -284,7 +291,7 @@ h1{font-size:21px}
     document.getElementById('have-text').textContent='Kontinye si dokiman ou deja ranpli epi li pare pou telechaje, revize, ak siyen.';
     document.getElementById('have-list').innerHTML='<li>Itilize pwòp PDF oswa dokiman ou</li><li>Antre enfòmasyon siyatè yo</li><li>Telechaje li nan pwosesis sekirize ki deja la</li>';
     document.getElementById('have-btn').textContent='Mwen Gen Dokiman Mwen Pare';
-    document.getElementById('have-btn').href='https://safenotarize.com/book-ht.html?document_source=own&lang=ht';
+    document.getElementById('have-btn').href='https://safenotarize.com/book-ht.html?document_source=own&document_ready=1&lang=ht';
     document.getElementById('need-title').textContent='Mwen bezwen yon dokiman';
     document.getElementById('need-text').textContent='Chwazi yon modèl jeneral, ranpli li, sove li kòm PDF, epi kontinye ak notarizasyon online.';
     document.getElementById('need-list').innerHTML='<li>Chwazi yon modèl dokiman jeneral</li><li>Ranpli enfòmasyon yo online</li><li>Revize epi sove li anvan ou kòmanse</li>';
@@ -292,6 +299,10 @@ h1{font-size:21px}
     document.getElementById('need-btn').href='documents/library.html?lang=ht';
     document.getElementById('disclaimer').textContent='Modèl sa yo la pou itilizasyon jeneral sèlman; yo pa konsèy legal. Verifye dokiman an satisfè kondisyon òganizasyon k ap resevwa li a anvan ou itilize li.';
     document.getElementById('have-badge').textContent='Rekòmande';
+    document.querySelectorAll('a[href="/start.html"]').forEach(a=>a.href='/start.html?lang=ht');
+    document.querySelectorAll('a[href="/documents/library.html"]').forEach(a=>a.href='/documents/library.html?lang=ht');
+    const footerBrand=document.querySelector('.sn-footer-logo'); if(footerBrand) footerBrand.href='/ht.html';
+    const footerTag=document.querySelector('.sn-footer-brand p'); if(footerTag) footerTag.textContent='Notarizasyon online an sekirite sou telefòn, tablèt, oswa òdinatè.';
   }
 
   if((params.get('choice') || '').toLowerCase() === 'upload'){
@@ -299,5 +310,5 @@ h1{font-size:21px}
     if(haveCard) haveCard.classList.add('recommended');
   }
 </script>
-<footer class="sn-pro-footer"><div class="sn-footer-grid"><div class="sn-footer-brand"><a class="sn-footer-logo" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><p>Secure online notarization from your phone, tablet, or computer.</p><a class="sn-footer-cta" href="/start.html">Start</a></div><div class="sn-footer-col"><h4>Services</h4><ul><li><a href="/online-notary.html">Online Notary</a></li><li><a href="/affidavit-notary.html">Affidavit Notary</a></li><li><a href="/power-of-attorney-notary.html">Power of Attorney Notary</a></li><li><a href="/partner.html">Partner &amp; Referral</a></li></ul></div><div class="sn-footer-col"><h4>Document Resources</h4><ul><li><a href="/documents/library.html">Document Library</a></li><li><a href="/documents/child-travel-consent.html">Child Travel Consent</a></li><li><a href="/documents/proof-of-residency-letter.html">Proof of Residency</a></li><li><a href="/documents/letter-of-authorization.html">Authorization Letters</a></li><li><a href="/documents/official/ds-3053.html">Official Form Guides</a></li></ul></div><div class="sn-footer-col"><h4>Languages</h4><ul><li><a href="/">English</a></li><li><a href="/ht.html">Kreyòl</a></li><li><a href="/fr.html">Français</a></li></ul></div><div class="sn-footer-col"><h4>Company &amp; Support</h4><ul><li><a href="/#services">Services</a></li><li><a href="/#pricing-block">Pricing</a></li><li><a href="/#faq">FAQ</a></li><li><a href="/legal.html">Privacy &amp; Terms</a></li><li><a href="mailto:supervisor@safenotarize.com">Contact Support</a></li></ul></div></div><div class="sn-footer-bottom"><p>© 2026 SafeNotarize · Geritla Plus LLC</p><a href="https://www.facebook.com/profile.php?id=61577290756700" rel="noreferrer" target="_blank">Facebook</a></div></footer><script>function snToggleMenu(b){const p=document.getElementById('sn-mobile-panel');if(!p)return;const o=p.classList.toggle('show');b.setAttribute('aria-expanded',String(o));document.body.style.overflow=o?'hidden':''}document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('#sn-mobile-panel a').forEach(a=>a.addEventListener('click',()=>{const p=document.getElementById('sn-mobile-panel');if(p)p.classList.remove('show');document.body.style.overflow=''})));</script></body>
+<footer class="sn-pro-footer"><div class="sn-footer-grid"><div class="sn-footer-brand"><a class="sn-footer-logo" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><p>Secure online notarization from your phone, tablet, or computer.</p><a class="sn-footer-cta" href="/start.html">Start</a></div><div class="sn-footer-col"><h4>Services</h4><ul><li><a href="/online-notary.html">Online Notary</a></li><li><a href="/affidavit-notary.html">Affidavit Notary</a></li><li><a href="/power-of-attorney-notary.html">Power of Attorney Notary</a></li><li><a href="/partner.html">Partner &amp; Referral</a></li></ul></div><div class="sn-footer-col"><h4>Document Resources</h4><ul><li><a href="/documents/library.html">Document Library</a></li><li><a href="/documents/child-travel-consent.html">Child Travel Consent</a></li><li><a href="/documents/proof-of-residency-letter.html">Proof of Residency</a></li><li><a href="/documents/letter-of-authorization.html">Authorization Letters</a></li><li><a href="/documents/official/ds-3053.html">Official Form Guides</a></li></ul></div><div class="sn-footer-col"><h4>Languages</h4><ul><li><a href="/">English</a></li><li><a href="/ht.html">Kreyòl</a></li><li><a href="/fr.html">Français</a></li></ul></div><div class="sn-footer-col"><h4>Company &amp; Support</h4><ul><li><a href="/#services">Services</a></li><li><a href="/#pricing-block">Pricing</a></li><li><a href="/#faq">FAQ</a></li><li><a href="/legal.html">Privacy &amp; Terms</a></li><li><a href="mailto:supervisor@safenotarize.com">Contact Support</a></li></ul></div></div><div class="sn-footer-bottom" style="justify-content:center;text-align:center"><p>© 2026 SafeNotarize · Geritla Plus LLC</p></div></footer><script>function snToggleMenu(b){const p=document.getElementById('sn-mobile-panel');if(!p)return;const o=p.classList.toggle('show');b.setAttribute('aria-expanded',String(o));document.body.style.overflow=o?'hidden':''}document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('#sn-mobile-panel a').forEach(a=>a.addEventListener('click',()=>{const p=document.getElementById('sn-mobile-panel');if(p)p.classList.remove('show');document.body.style.overflow=''})));</script></body>
 </html>
