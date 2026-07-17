@@ -48,7 +48,53 @@ input,textarea,select{font-size:16px}
 .sn-pro-footer{background:var(--sn-navy);color:#fff;padding:48px 20px 20px}.sn-footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:30px}.sn-footer-logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;font-size:19px}.sn-footer-logo img{height:44px}.sn-footer-brand p{color:#c9d8e7;line-height:1.65;max-width:300px}.sn-footer-cta{display:inline-flex;background:var(--sn-green);color:#fff;text-decoration:none;padding:11px 16px;border-radius:9px;font-weight:800}.sn-footer-col h4{margin:0 0 14px}.sn-footer-col ul{list-style:none;padding:0}.sn-footer-col li{margin-bottom:9px}.sn-footer-col a{color:#c3d8eb;text-decoration:none;font-size:14px}.sn-footer-bottom{max-width:1200px;margin:34px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between}.sn-footer-bottom p{margin:0;color:#c9d8e7;font-size:13px}.sn-footer-bottom a{color:#fff;font-size:13px}
 @media(max-width:900px){.sn-desktop-nav{display:none}.sn-menu-btn{display:block}.sn-footer-grid{grid-template-columns:repeat(2,1fr)}.sn-footer-brand{grid-column:1/-1}}
 @media(max-width:620px){.sn-header-inner{padding:10px 14px}.sn-brand img{height:36px}.sn-pro-footer{padding:38px 20px 18px}.sn-footer-grid{grid-template-columns:1fr;gap:25px}.sn-footer-brand{grid-column:auto}.sn-footer-col{border-top:1px solid rgba(255,255,255,.12);padding-top:18px}.sn-footer-bottom{display:block;text-align:center}}
-</style></head>
+</style>
+<style id="sn-targeted-mobile-flow-fix">
+@media (max-width: 700px){
+  .sn-mobile-flow-grid,
+  .sn-flow-grid,
+  .step-grid,
+  .fast-flow-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .sn-mobile-flow-card,
+  .sn-flow-card,
+  .step-card{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:0!important;
+    padding:18px 16px!important;
+    text-align:left!important;
+    overflow:visible!important;
+  }
+  .sn-mobile-flow-card h3,
+  .sn-mobile-flow-card h4,
+  .sn-flow-card h3,
+  .sn-flow-card h4,
+  .step-card h3,
+  .step-card h4{
+    white-space:normal!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    font-size:1rem!important;
+    line-height:1.35!important;
+  }
+  .sn-mobile-flow-card p,
+  .sn-flow-card p,
+  .step-card p{
+    white-space:normal!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    font-size:.92rem!important;
+    line-height:1.55!important;
+  }
+  .sn-flow-section{padding-left:14px!important;padding-right:14px!important}
+}
+</style>
+</head>
 <body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-start-btn" href="/start.html">Start</a></nav><button aria-expanded="false" aria-label="Open menu" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-mobile-start" href="/start.html">Start</a></div></header>
 <main><section class="top"><h1 id="page-title">Create Your Document</h1><p id="page-sub">Complete the fields, review the preview, then download it directly as a PDF. Do not sign until your notary session unless instructed otherwise.</p></section><div class="layout"><section class="panel editor"><div class="warning" id="warning"><strong>General template only.</strong> Confirm this document meets the receiving organization’s requirements. SafeNotarize does not provide legal advice.</div><h2 id="form-title">Document information</h2><form id="form"></form><button class="btn update" id="update" type="button">Update Preview</button><p class="legal" id="privacy">Your entries stay in this browser page and are not sent to SafeNotarize by this template.</p></section><section class="panel preview"><div class="paper" id="paper"></div><div class="actions"><button class="btn print" id="download" type="button">Download PDF &amp; Continue</button></div><div aria-live="polite" class="download-status" id="download-status"></div><div class="next-box" id="next-box"><strong id="next-title">Your document is downloaded</strong><p id="next-text">Continue to provide signer and session information, upload the PDF when prompted, then join now or select a later time.</p><a class="btn continue" id="continue">Continue to Online Notarization</a></div></section></div></main>
 <script>
