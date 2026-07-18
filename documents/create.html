@@ -48,12 +48,23 @@ input,textarea,select{font-size:16px}
 .sn-pro-footer{background:var(--sn-navy);color:#fff;padding:48px 20px 20px}.sn-footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:30px}.sn-footer-logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;font-size:19px}.sn-footer-logo img{height:44px}.sn-footer-brand p{color:#c9d8e7;line-height:1.65;max-width:300px}.sn-footer-cta{display:inline-flex;background:var(--sn-green);color:#fff;text-decoration:none;padding:11px 16px;border-radius:9px;font-weight:800}.sn-footer-col h4{margin:0 0 14px}.sn-footer-col ul{list-style:none;padding:0}.sn-footer-col li{margin-bottom:9px}.sn-footer-col a{color:#c3d8eb;text-decoration:none;font-size:14px}.sn-footer-bottom{max-width:1200px;margin:34px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between}.sn-footer-bottom p{margin:0;color:#c9d8e7;font-size:13px}.sn-footer-bottom a{color:#fff;font-size:13px}
 @media(max-width:900px){.sn-desktop-nav{display:none}.sn-menu-btn{display:block}.sn-footer-grid{grid-template-columns:repeat(2,1fr)}.sn-footer-brand{grid-column:1/-1}}
 @media(max-width:620px){.sn-header-inner{padding:10px 14px}.sn-brand img{height:36px}.sn-pro-footer{padding:38px 20px 18px}.sn-footer-grid{grid-template-columns:1fr;gap:25px}.sn-footer-brand{grid-column:auto}.sn-footer-col{border-top:1px solid rgba(255,255,255,.12);padding-top:18px}.sn-footer-bottom{display:block;text-align:center}}
-</style></head>
+</style>
+<style id="custom-document-mobile-fix">
+body[data-type="custom-document"] textarea{min-height:320px}
+@media(max-width:760px){
+ main{padding:20px 10px 48px}.top h1{font-size:28px}.layout{grid-template-columns:1fr!important;gap:14px}
+ .panel{padding:16px!important}.paper{padding:34px 24px!important;min-height:560px;font-size:15px;overflow-wrap:anywhere}
+ .actions{grid-template-columns:1fr!important}.btn{width:100%}input,textarea{font-size:16px}
+ body[data-type="custom-document"] textarea{min-height:240px}
+}
+</style>
+</head>
 <body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-start-btn" href="/start.html">Start</a></nav><button aria-expanded="false" aria-label="Open menu" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-mobile-start" href="/start.html">Start</a></div></header>
 <main><section class="top"><h1 id="page-title">Create Your Document</h1><p id="page-sub">Complete the fields, review the preview, then download it directly as a PDF. Do not sign until your notary session unless instructed otherwise.</p></section><div class="layout"><section class="panel editor"><div class="warning" id="warning"><strong>General template only.</strong> Confirm this document meets the receiving organization’s requirements. SafeNotarize does not provide legal advice.</div><h2 id="form-title">Document information</h2><form id="form"></form><button class="btn update" id="update" type="button">Update Preview</button><p class="legal" id="privacy">Your entries stay in this browser page and are not sent to SafeNotarize by this template.</p></section><section class="panel preview"><div class="paper" id="paper"></div><div class="actions"><button class="btn print" id="download" type="button">Download PDF &amp; Continue</button></div><div aria-live="polite" class="download-status" id="download-status"></div><div class="next-box" id="next-box"><strong id="next-title">Your document is downloaded</strong><p id="next-text">Continue to provide signer and session information, upload the PDF when prompted, then join now or select a later time.</p><a class="btn continue" id="continue">Continue to Online Notarization</a></div></section></div></main>
 <script>
 const q=new URLSearchParams(location.search),type=q.get('type')||'affidavit',ht=(q.get('lang')||'').toLowerCase()==='ht';
 const configs={
+'custom-document':{en:'Custom Document',ht:'Dokiman Pèsonalize',fields:[['title','Document title','Tit dokiman an'],['body','Document text','Tèks dokiman an','textarea']]},
 'affidavit':{en:'General Affidavit',ht:'Afidavi Jeneral',fields:[['name','Affiant full name','Non konplè moun k ap fè deklarasyon an'],['address','Address','Adrès'],['facts','Statement of facts','Deklarasyon enfòmasyon yo','textarea'],['date','Date','Dat']]},
 'general-consent':{en:'General Consent Letter',ht:'Lèt Konsantman Jeneral',fields:[['giver','Person giving consent','Moun k ap bay konsantman an'],['recipient','Person or organization receiving consent','Moun oswa òganizasyon k ap resevwa konsantman an'],['activity','Activity or action being authorized','Aktivite oswa aksyon yo otorize a','textarea'],['conditions','Conditions or limitations','Kondisyon oswa limit','textarea'],['date','Effective date','Dat li kòmanse']]},
 'information-release':{en:'Release of Information Authorization',ht:'Otorizasyon Pou Bay Enfòmasyon',fields:[['authorizer','Person authorizing release','Moun k ap bay otorizasyon an'],['holder','Person or organization holding the information','Moun oswa òganizasyon ki gen enfòmasyon an'],['recipient','Authorized recipient','Moun oswa òganizasyon ki dwe resevwa li'],['records','Records or information to release','Dosye oswa enfòmasyon pou bay','textarea'],['purpose','Purpose of release','Rezon pou bay enfòmasyon an'],['expiration','Expiration date, if any','Dat li fini, si genyen']]},
@@ -68,7 +79,7 @@ const configs={
 'medical-consent':{en:'Medical Consent Authorization',ht:'Otorizasyon Konsantman Medikal',fields:[['giver','Parent, guardian, or patient','Paran, responsab, oswa pasyan'],['patient','Patient full name','Non konplè pasyan an'],['provider','Authorized caregiver or provider','Moun oswa pwofesyonèl ki resevwa otorizasyon an'],['care','Medical care being authorized','Swen medikal yo otorize a','textarea'],['dates','Effective dates','Dat otorizasyon an']]},
 'travel-authorization':{en:'Travel Authorization Letter',ht:'Lèt Otorizasyon Vwayaj',fields:[['giver','Person giving authorization','Moun k ap bay otorizasyon an'],['traveler','Authorized traveler','Moun ki gen otorizasyon pou vwayaje'],['destination','Destination','Destinasyon'],['dates','Travel dates','Dat vwayaj la'],['purpose','Purpose and travel details','Rezon ak detay vwayaj la','textarea']]}
 };
-const c=configs[type]||configs.affidavit;
+document.body.dataset.type=type;const c=configs[type]||configs.affidavit;
 if(ht){sessionStorage.setItem('sn_language','ht');document.documentElement.lang='ht';document.getElementById('brand').href='https://safenotarize.com/ht.html';document.getElementById('back').href='library.html?lang=ht';document.getElementById('back').textContent='Bibliyotèk Dokiman';document.getElementById('page-title').textContent='Kreye Dokiman Ou';document.getElementById('page-sub').textContent='Ranpli chan yo, revize dokiman an, epi telechaje li dirèkteman kòm PDF. Pa siyen li anvan sesyon notè a sof si yo mande w fè sa.';document.getElementById('warning').innerHTML='<strong>Modèl jeneral sèlman.</strong> Konfime dokiman sa a satisfè kondisyon òganizasyon k ap resevwa li a. SafeNotarize pa bay konsèy legal.';document.getElementById('form-title').textContent='Enfòmasyon dokiman an';document.getElementById('update').textContent='Mete Apèsi A Ajou';document.getElementById('privacy').textContent='Enfòmasyon ou antre yo rete nan paj navigatè sa a epi modèl la pa voye yo bay SafeNotarize.';document.getElementById('download').textContent='Telechaje PDF epi Kontinye';document.getElementById('continue').textContent='Kontinye ak Notarizasyon Online';document.getElementById('next-title').textContent='Dokiman ou telechaje';document.getElementById('next-text').textContent='Kontinye pou bay enfòmasyon siyatè ak sesyon an, voye PDF la lè sistèm nan mande sa, epi antre kounye a oswa chwazi yon lè pou pita.'}
 document.title=(ht?c.ht:c.en)+' | SafeNotarize';
 const form=document.getElementById('form');c.fields.forEach(f=>{const div=document.createElement('div');div.className='field';div.innerHTML=`<label for="${f[0]}">${ht?f[2]:f[1]}</label>${f[3]==='textarea'?`<textarea id="${f[0]}"></textarea>`:`<input id="${f[0]}">`}`;form.appendChild(div)});
@@ -83,8 +94,9 @@ function fmt(s){
     .filter(Boolean)
     .join('</p><p>');
 }
-function build(){let html=`<h1>${esc(ht?c.ht:c.en)}</h1>`;
-if(type==='affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, residing at ${esc(v('address'))}, declare under oath that the following statements are true to the best of my personal knowledge:</p><p>${fmt(v('facts'))}</p><p>Dated: ${esc(v('date'))}</p>`;
+function build(){let html=`<h1>${type==='custom-document'?esc(v('title')||(ht?'Dokiman Pèsonalize':'Custom Document')):esc(ht?c.ht:c.en)}</h1>`;
+if(type==='custom-document')html+=`<p>${fmt(v('body'))}</p>`;
+else if(type==='affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, residing at ${esc(v('address'))}, declare under oath that the following statements are true to the best of my personal knowledge:</p><p>${fmt(v('facts'))}</p><p>Dated: ${esc(v('date'))}</p>`;
 if(type==='child-travel-consent')html+=`<p>I, <strong>${esc(v('parent'))}</strong>, am the parent or legal guardian of <strong>${esc(v('child'))}</strong>, born ${esc(v('dob'))}. I authorize the child to travel with <strong>${esc(v('traveler'))}</strong> to ${esc(v('destination'))} during ${esc(v('dates'))}.</p><p>${fmt(v('details'))}</p>`;
 if(type==='proof-of-residency')html+=`<p>I, <strong>${esc(v('declarant'))}</strong>, state that <strong>${esc(v('resident'))}</strong> resides at ${esc(v('address'))} and has lived at this address since ${esc(v('since'))}.</p><p>${fmt(v('details'))}</p>`;
 if(type==='letter-of-authorization')html+=`<p>I, <strong>${esc(v('grantor'))}</strong>, authorize <strong>${esc(v('agent'))}</strong> to perform the following action on my behalf:</p><p>${fmt(v('action'))}</p><p>This authorization begins ${esc(v('start'))} and expires ${esc(v('end'))}.</p>`;
@@ -125,6 +137,7 @@ function splitUserParagraphs(value){
 }
 function documentParagraphs(){
   const p=[];
+  if(type==='custom-document')p.push(...splitUserParagraphs(raw('body')));
   if(type==='affidavit')p.push(`I, ${raw('name')}, residing at ${raw('address')}, declare under oath that the following statements are true to the best of my personal knowledge:`,...splitUserParagraphs(raw('facts')),`Dated: ${raw('date')}`);
   if(type==='child-travel-consent')p.push(`I, ${raw('parent')}, am the parent or legal guardian of ${raw('child')}, born ${raw('dob')}. I authorize the child to travel with ${raw('traveler')} to ${raw('destination')} during ${raw('dates')}.`,...splitUserParagraphs(raw('details')));
   if(type==='proof-of-residency')p.push(`I, ${raw('declarant')}, state that ${raw('resident')} resides at ${raw('address')} and has lived at this address since ${raw('since')}.`,...splitUserParagraphs(raw('details')));
@@ -156,7 +169,7 @@ async function downloadPdf(){
     const roomLines=()=>Math.max(0,Math.floor((bottomY-y)/lineH));
 
     doc.setFont('times','bold');doc.setFontSize(20);
-    const title=(ht?c.ht:c.en).toUpperCase();
+    const title=(type==='custom-document'?(raw('title')||(ht?'Dokiman Pèsonalize':'Custom Document')):(ht?c.ht:c.en)).toUpperCase();
     const titleLines=doc.splitTextToSize(title,maxW);
     doc.text(titleLines,pageW/2,y,{align:'center',lineHeightFactor:1.15});
     y+=titleLines.length*24+22;
