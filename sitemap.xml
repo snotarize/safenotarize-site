@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://safenotarize.com/</loc></url>
   <url><loc>https://safenotarize.com/affidavit-notary.html</loc></url>
+  <url><loc>https://safenotarize.com/delete-data.html</loc></url>
   <url><loc>https://safenotarize.com/documents/child-travel-consent.html</loc></url>
-  <url><loc>https://safenotarize.com/documents/create.html</loc></url>
   <url><loc>https://safenotarize.com/documents/financial-support-letter.html</loc></url>
   <url><loc>https://safenotarize.com/documents/general-affidavit.html</loc></url>
   <url><loc>https://safenotarize.com/documents/general-consent-letter.html</loc></url>
@@ -22,7 +23,6 @@
   <url><loc>https://safenotarize.com/documents/ht/vehicle-use-authorization.html</loc></url>
   <url><loc>https://safenotarize.com/documents/identity-affidavit.html</loc></url>
   <url><loc>https://safenotarize.com/documents/letter-of-authorization.html</loc></url>
-  <url><loc>https://safenotarize.com/documents/library.html</loc></url>
   <url><loc>https://safenotarize.com/documents/medical-consent.html</loc></url>
   <url><loc>https://safenotarize.com/documents/name-affidavit.html</loc></url>
   <url><loc>https://safenotarize.com/documents/official/ds-3053.html</loc></url>
@@ -35,10 +35,11 @@
   <url><loc>https://safenotarize.com/french-online-notary.html</loc></url>
   <url><loc>https://safenotarize.com/haitian-online-notary.html</loc></url>
   <url><loc>https://safenotarize.com/ht.html</loc></url>
-  <url><loc>https://safenotarize.com/</loc></url>
   <url><loc>https://safenotarize.com/legal.html</loc></url>
   <url><loc>https://safenotarize.com/online-notary.html</loc></url>
   <url><loc>https://safenotarize.com/partner.html</loc></url>
   <url><loc>https://safenotarize.com/power-of-attorney-notary.html</loc></url>
-  <url><loc>https://safenotarize.com/start.html</loc></url>
+  <url><loc>https://safenotarize.com/privacy.html</loc></url>
+  <url><loc>https://safenotarize.com/terms-of-service.html</loc></url>
+  <url><loc>https://safenotarize.com/terms.html</loc></url>
 </urlset>
