@@ -396,9 +396,7 @@ function applyLibrarySearch(){
   if(!query){
     searchMeta.textContent='';
   }else{
-    searchMeta.textContent=ht
-      ? `${shown} dokiman jwenn`
-      : `${shown} matching document${shown===1?'':'s'} found`;
+    searchMeta.textContent=`${shown} matching document${shown===1?'':'s'} found`;
   }
 }
 
