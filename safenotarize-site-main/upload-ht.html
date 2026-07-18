@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Telechaje Dokiman | SafeNotarize</title>
+  <meta name="description" content="Telechaje dokiman ou an sekirite apre ou fin pran randevou pou sesyon notè online SafeNotarize ou.">
+  <style>
+    :root{--navy:#00274d;--green:#28a745;--text:#233445;--muted:#5a6b7b;--border:#dce7f2;--shadow:0 12px 30px rgba(0,39,77,0.08)}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:linear-gradient(180deg,#f7fbff 0%,#eef6ff 100%)}
+    header{background:var(--navy);padding:16px 20px}.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px;color:white;text-decoration:none;font-weight:800;font-size:18px}.brand img{height:42px}.home-link{color:#fff;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.35);padding:9px 14px;border-radius:999px}
+    .wrap{max-width:1050px;margin:0 auto;padding:38px 18px 60px}.hero{text-align:center;max-width:760px;margin:0 auto 22px}.pill{display:inline-block;background:#e9f7ef;color:#1f7a36;padding:7px 13px;border-radius:999px;font-size:.85rem;font-weight:800;margin-bottom:12px}h1{color:var(--navy);font-size:2.05rem;line-height:1.2;margin:0 0 10px}p{color:var(--muted);line-height:1.55;margin:0 0 10px}.form-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow)}iframe{width:100%;min-height:820px;border:0;border-radius:12px}.help{text-align:center;margin-top:18px;font-size:.95rem}.help a{color:var(--navy);font-weight:800}
+    @media(max-width:700px){header{padding:14px 16px}.brand{font-size:16px}.brand img{height:36px}.home-link{font-size:.9rem;padding:8px 12px}.wrap{padding:28px 14px 48px}h1{font-size:1.6rem}p{font-size:.95rem;line-height:1.45}.form-card{padding:10px;border-radius:16px}iframe{min-height:900px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="brand" href="/ht.html">
+        <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="Logo SafeNotarize">
+        <span>SafeNotarize</span>
+      </a>
+      <a class="home-link" href="/ht.html">Retounen Akèy</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="pill">Etap 2: Telechaje dokiman ou</div>
+      <h1>Telechaje Dokiman Ou</h1>
+      <p>Tanpri telechaje dokiman an ki deja ranpli epi ki pare pou siyen oswa pou revize.</p>
+    </section>
+
+    <section class="form-card">
+      <iframe id="tally-upload-frame" data-tally-src="https://tally.so/embed/xXyJkd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" title="Fòm Telechajman Dokiman SafeNotarize"></iframe>
+
+      <script>
+        const THANK_YOU_PAGE_URL = "https://safenotarize.com/thank-you-ht.html";
+        const TALLY_BASE_URL = "https://tally.so/embed/xXyJkd";
+
+        function getCleanParams(){
+          const params = new URLSearchParams(window.location.search);
+          const clean = new URLSearchParams();
+
+          const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
+          const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
+          const name = params.get("name") || params.get("invitee_full_name") || "";
+          const bookingType = params.get("booking_type") || "";
+          const role = params.get("role") || "";
+          const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
+
+          if(orderId){
+            clean.set("order_id", orderId);
+            clean.set("utm_content", orderId);
+          }
+          if(email){
+            clean.set("email", email);
+            clean.set("invitee_email", email);
+          }
+          if(name){
+            clean.set("name", name);
+            clean.set("invitee_full_name", name);
+          }
+          if(bookingType) clean.set("booking_type", bookingType);
+          if(role) clean.set("role", role);
+          if(uuid) clean.set("uuid", uuid);
+
+          return clean;
+        }
+
+        function buildTallyUrl(cleanParams){
+          const tallyParams = new URLSearchParams(cleanParams);
+          tallyParams.set("alignLeft", "1");
+          tallyParams.set("hideTitle", "1");
+          tallyParams.set("transparentBackground", "1");
+          tallyParams.set("dynamicHeight", "1");
+          return `${TALLY_BASE_URL}?${tallyParams.toString()}`;
+        }
+
+        function buildThankYouUrl(){
+          const url = new URL(THANK_YOU_PAGE_URL);
+          const clean = getCleanParams();
+
+          ["order_id","utm_content","email","name","booking_type","role","uuid"].forEach(function(key){
+            const value = clean.get(key);
+            if(value) url.searchParams.set(key, value);
+          });
+
+          return url.toString();
+        }
+
+        function syncUrlAndTallyEmbed(){
+          const clean = getCleanParams();
+
+          if(clean.toString()){
+            window.history.replaceState({}, "", `${window.location.pathname}?${clean.toString()}`);
+          }
+
+          const iframe = document.getElementById("tally-upload-frame");
+          if(iframe) iframe.dataset.tallySrc = buildTallyUrl(clean);
+        }
+
+        syncUrlAndTallyEmbed();
+
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+          if(typeof Tally !== "undefined"){Tally.loadEmbeds();}
+          else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc;});}
+        };
+        if(typeof Tally !== "undefined") v();
+        else if(d.querySelector('script[src="'+w+'"]') == null){
+          var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);
+        }
+      </script>
+    </section>
+
+    <p class="help">Ou bezwen èd pou telechaje dokiman an? Voye imèl bay <a href="mailto:docs@safenotarize.com">docs@safenotarize.com</a></p>
+  </main>
+
+  <script>
+    let allowLeaving = false;
+
+    history.pushState({ uploadPage: true }, "", window.location.href);
+
+    window.addEventListener("popstate", function(){
+      if(allowLeaving) return;
+
+      const leave = confirm("Ou poko fini telechaje dokiman an. Èske ou vle kite paj sa a?");
+      if(leave){
+        allowLeaving = true;
+        history.back();
+      } else {
+        history.pushState({ uploadPage: true }, "", window.location.href);
+      }
+    });
+
+    window.addEventListener("message", function(e){
+      const data = typeof e.data === "string" ? e.data : JSON.stringify(e.data || {});
+      if(data.includes("Tally.FormSubmitted")){
+        allowLeaving = true;
+        setTimeout(function(){
+          window.location.href = buildThankYouUrl();
+        }, 700);
+      }
+    });
+
+    document.querySelectorAll("a").forEach(function(link){
+      link.addEventListener("click", function(){ allowLeaving = true; });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Payment | SafeNotarize</title>
+  <meta name="description" content="Complete your secure SafeNotarize payment." />
+  <style>
+    :root{--navy:#00274d;--green:#28a745;--greenDark:#1f7a36;--text:#25364a;--muted:#637487;--border:#dce7f2;--danger:#c1121f;--shadow:0 14px 36px rgba(0,39,77,.10);--radius:18px}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff 0%,#eef6ff 100%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.card{width:100%;max-width:560px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;text-align:center}.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}.brand img{height:48px}.brand span{font-weight:900;color:var(--navy);font-size:22px}h1{margin:0 0 10px;color:var(--navy);font-size:28px;line-height:1.15}p{margin:0 auto 16px;color:var(--muted);line-height:1.5}.spinner{width:44px;height:44px;border:4px solid #dce7f2;border-top-color:var(--green);border-radius:50%;margin:18px auto;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.btn{display:inline-block;width:100%;max-width:320px;border:none;background:var(--green);color:#fff;text-decoration:none;border-radius:12px;padding:14px 18px;font-size:16px;font-weight:900;box-shadow:0 10px 24px rgba(40,167,69,.20);cursor:pointer}.btn:hover{background:var(--greenDark)}.notice{margin-top:14px;font-size:12.5px;color:var(--muted)}.error{display:none;margin-top:16px;padding:12px 14px;border-radius:12px;background:#fff1f1;color:#8a0f18;border:1px solid #ffd0d4;text-align:left}.small{font-size:13px}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">
+      <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize" />
+      <span>SafeNotarize</span>
+    </div>
+    <h1>Secure Payment</h1>
+    <p id="main-text">Please wait while we open your secure payment page.</p>
+    <div class="spinner" id="spinner"></div>
+    <a href="#" class="btn" id="open-link" style="display:none">Open secure payment</a>
+    <div class="error" id="error-box"></div>
+    <p class="notice">Payments are processed securely. SafeNotarize will never ask for your card details inside the notary chat.</p>
+  </main>
+
+  <script>
+    // STEP 1: Replace this with your Make redirect webhook URL.
+    // Example: https://hook.us2.make.com/xxxxxxxxxxxxxxxxxxxx
+    const PAYMENT_LOOKUP_WEBHOOK_URL = "https://hook.us2.make.com/es2tes5tj7n0y3rja5nnuybfph5wppk2";
+
+    function showError(message){
+      document.getElementById("spinner").style.display = "none";
+      document.getElementById("main-text").textContent = "We could not open the payment page automatically.";
+      const box = document.getElementById("error-box");
+      box.style.display = "block";
+      box.textContent = message;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const id = (params.get("id") || "").trim();
+
+    if(!id){
+      showError("Missing payment reference. Please ask SafeNotarize to send a new payment link.");
+    } else if(PAYMENT_LOOKUP_WEBHOOK_URL.includes("PASTE_YOUR_MAKE")){
+      showError("Payment page is not connected yet. SafeNotarize needs to finish the payment redirect setup.");
+    } else {
+      const redirectUrl = PAYMENT_LOOKUP_WEBHOOK_URL + (PAYMENT_LOOKUP_WEBHOOK_URL.includes("?") ? "&" : "?") + "id=" + encodeURIComponent(id);
+      const link = document.getElementById("open-link");
+      link.href = redirectUrl;
+      link.style.display = "inline-block";
+      setTimeout(function(){ window.location.replace(redirectUrl); }, 700);
+    }
+  </script>
+</body>
+</html>
