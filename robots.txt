@@ -1,4 +1,14 @@
 User-agent: *
 Allow: /
 
+Disallow: /book/
+Disallow: /upload.html
+Disallow: /upload-ht.html
+Disallow: /pay.html
+Disallow: /scheduled.html
+Disallow: /schedule-ht.html
+Disallow: /thank-you.html
+Disallow: /thank-you-ht.html
+Disallow: /delete-data.html
+
 Sitemap: https://safenotarize.com/sitemap.xml
