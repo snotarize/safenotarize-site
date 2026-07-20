@@ -69,64 +69,74 @@ const configs={
 'medical-consent':{en:'Medical Consent Authorization',ht:'Otorizasyon Konsantman Medikal',fields:[['giver','Parent, guardian, or patient','Paran, responsab, oswa pasyan'],['patient','Patient full name','Non konplè pasyan an'],['provider','Authorized caregiver or provider','Moun oswa pwofesyonèl ki resevwa otorizasyon an'],['care','Medical care being authorized','Swen medikal yo otorize a','textarea'],['dates','Effective dates','Dat otorizasyon an']]},
 'travel-authorization':{en:'Travel Authorization Letter',ht:'Lèt Otorizasyon Vwayaj',fields:[['giver','Person giving authorization','Moun k ap bay otorizasyon an'],['traveler','Authorized traveler','Moun ki gen otorizasyon pou vwayaje'],['destination','Destination','Destinasyon'],['dates','Travel dates','Dat vwayaj la'],['purpose','Purpose and travel details','Rezon ak detay vwayaj la','textarea']]}
 };
+const requiredFields={
+'custom':['custom-title','custom-body'],
+'affidavit':['name','address','facts','date'],
+'general-consent':['giver','recipient','activity','date'],
+'information-release':['authorizer','holder','recipient','records','purpose'],
+'child-travel-consent':['parent','child','dob','traveler','destination','dates'],
+'proof-of-residency':['declarant','resident','address','since'],
+'letter-of-authorization':['grantor','agent','action','start'],
+'financial-support':['supporter','recipient','relationship','support','period'],
+'vehicle-release':['owner','recipient','holder','vehicle','vin'],
+'vehicle-use':['owner','driver','vehicle','vin','use'],
+'identity-affidavit':['name','dob','address','id','statement'],
+'name-affidavit':['name','other','reason','dob'],
+'medical-consent':['giver','patient','provider','care','dates'],
+'travel-authorization':['giver','traveler','destination','dates','purpose']
+};
 const c=configs[type]||configs.affidavit;
 document.title=(ht?c.ht:c.en)+' | SafeNotarize';
-const form=document.getElementById('form');c.fields.forEach(f=>{const div=document.createElement('div');div.className='field';div.innerHTML=`<label for="${f[0]}">${ht?f[2]:f[1]}</label>${f[3]==='textarea'?`<textarea id="${f[0]}"></textarea>`:`<input id="${f[0]}">`}`;form.appendChild(div)});
-function v(id){return (document.getElementById(id)?.value||'').trim()||'____________________________'}
+const form=document.getElementById('form'),requiredSet=new Set(requiredFields[type]||requiredFields.affidavit);c.fields.forEach(f=>{const div=document.createElement('div');div.className='field';const required=requiredSet.has(f[0])?' required aria-required="true"':'';div.innerHTML=`<label for="${f[0]}">${ht?f[2]:f[1]}</label>${f[3]==='textarea'?`<textarea id="${f[0]}"${required}></textarea>`:`<input id="${f[0]}"${required}>`}`;form.appendChild(div)});
+function value(id){return (document.getElementById(id)?.value||'').trim()}
+function has(id){return value(id)!==''}
+function optionalParagraphs(id){return has(id)?splitUserParagraphs(value(id)):[]}
+function validateForm(showFeedback=true){requiredSet.forEach(id=>{const el=document.getElementById(id);if(el)el.setCustomValidity(value(id)?'':(ht?'Chan sa a obligatwa.':'This field is required.'))});const valid=form.checkValidity();if(!valid&&showFeedback)form.reportValidity();return valid}
+function showPreviewPrompt(){const title=type==='custom'?((value('custom-title'))||('Create Your Own Document')):c.en;document.getElementById('paper').innerHTML=`<h1>${esc(title)}</h1><p>Complete all required fields to preview the document.</p>`}
 function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function fmt(s){
   const clean=(s||'').replace(/\r\n/g,'\n').trim();
-  if(!clean)return '____________________________';
+  if(!clean)return '';
   return esc(clean)
     .split(/\n\s*\n+/)
     .map(block=>block.replace(/\n+/g,' ').replace(/\s+/g,' ').trim())
     .filter(Boolean)
     .join('</p><p>');
 }
-function build(){let html=`<h1>${esc(type==='custom'?v('custom-title'):(ht?c.ht:c.en))}</h1>`;
-if(type==='custom'){
-html+=`<p>${fmt(v('custom-body'))}</p>`;
-}
-if(type==='affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, residing at ${esc(v('address'))}, declare under oath that the following statements are true to the best of my personal knowledge:</p><p>${fmt(v('facts'))}</p><p>Dated: ${esc(v('date'))}</p>`;
-if(type==='child-travel-consent')html+=`<p>I, <strong>${esc(v('parent'))}</strong>, am the parent or legal guardian of <strong>${esc(v('child'))}</strong>, born ${esc(v('dob'))}. I authorize the child to travel with <strong>${esc(v('traveler'))}</strong> to ${esc(v('destination'))} during ${esc(v('dates'))}.</p><p>${fmt(v('details'))}</p>`;
-if(type==='proof-of-residency')html+=`<p>I, <strong>${esc(v('declarant'))}</strong>, state that <strong>${esc(v('resident'))}</strong> resides at ${esc(v('address'))} and has lived at this address since ${esc(v('since'))}.</p><p>${fmt(v('details'))}</p>`;
-if(type==='letter-of-authorization')html+=`<p>I, <strong>${esc(v('grantor'))}</strong>, authorize <strong>${esc(v('agent'))}</strong> to perform the following action on my behalf:</p><p>${fmt(v('action'))}</p><p>This authorization begins ${esc(v('start'))} and expires ${esc(v('end'))}.</p>`;
-if(type==='financial-support')html+=`<p>I, <strong>${esc(v('supporter'))}</strong>, confirm that I provide financial support to <strong>${esc(v('recipient'))}</strong>, who is my ${esc(v('relationship'))}.</p><p>${fmt(v('support'))}</p><p>Support period: ${esc(v('period'))}</p>`;
-
-if(type==='general-consent')html+=`<p>I, <strong>${esc(v('giver'))}</strong>, voluntarily give my consent to <strong>${esc(v('recipient'))}</strong> for the following activity or action:</p><p>${fmt(v('activity'))}</p><p>Conditions or limitations: ${fmt(v('conditions'))}</p><p>Effective date: ${esc(v('date'))}</p>`;
-if(type==='information-release')html+=`<p>I, <strong>${esc(v('authorizer'))}</strong>, authorize <strong>${esc(v('holder'))}</strong> to release the following records or information to <strong>${esc(v('recipient'))}</strong>:</p><p>${fmt(v('records'))}</p><p>Purpose: ${esc(v('purpose'))}</p><p>This authorization expires: ${esc(v('expiration'))}</p>`;
-if(type==='vehicle-release')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('recipient'))}</strong> to receive and take possession of my vehicle from <strong>${esc(v('holder'))}</strong>.</p><p>Vehicle: ${esc(v('vehicle'))}<br>VIN or license plate: ${esc(v('vin'))}</p><p>${fmt(v('items'))}</p>`;
-if(type==='vehicle-use')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('driver'))}</strong> to use the following vehicle: ${esc(v('vehicle'))}, VIN or plate ${esc(v('vin'))}.</p><p>${fmt(v('use'))}</p>`;
-
-if(type==='identity-affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, born ${esc(v('dob'))} and residing at ${esc(v('address'))}, declare that the following identification information and facts are true:</p><p>Identification: ${esc(v('id'))}</p><p>${fmt(v('statement'))}</p>`;
-if(type==='name-affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, declare that I am also known as <strong>${esc(v('other'))}</strong>, and that both names identify the same person.</p><p>${fmt(v('reason'))}</p><p>Date of birth: ${esc(v('dob'))}</p>`;
-if(type==='medical-consent')html+=`<p>I, <strong>${esc(v('giver'))}</strong>, authorize <strong>${esc(v('provider'))}</strong> to obtain, arrange, or consent to the following care for <strong>${esc(v('patient'))}</strong>:</p><p>${fmt(v('care'))}</p><p>Effective dates: ${esc(v('dates'))}</p>`;
-if(type==='travel-authorization')html+=`<p>I, <strong>${esc(v('giver'))}</strong>, authorize <strong>${esc(v('traveler'))}</strong> to travel to ${esc(v('destination'))} during ${esc(v('dates'))}.</p><p>${fmt(v('purpose'))}</p>`;
-if(type==='custom'){
-html+=ht
-? `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Siyati</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div></div><div class="printed-name-field"><div class="line"></div><div class="field-label">Non an lèt detache</div></div></div><div class="notary-placeholder"><h2>SEKSYON NOTÈ</h2></div>`
-: `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div><div class="printed-name-field"><div class="line"></div><div class="field-label">Printed Name</div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
-}else{
-html+=ht
-? `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Siyati</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div></div></div><div class="notary-placeholder"><h2>SEKSYON NOTÈ</h2></div>`
-: `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
-}
-document.getElementById('paper').innerHTML=html}
+function build(){let html=`<h1>${esc(type==='custom'?value('custom-title'):(ht?c.ht:c.en))}</h1>`;
+if(type==='custom')html+=`<p>${fmt(value('custom-body'))}</p>`;
+if(type==='affidavit')html+=`<p>I, <strong>${esc(value('name'))}</strong>, residing at ${esc(value('address'))}, declare under oath or affirmation that the following statements are true to the best of my personal knowledge:</p><p>${fmt(value('facts'))}</p><p>Dated: ${esc(value('date'))}</p>`;
+if(type==='child-travel-consent'){html+=`<p>I, <strong>${esc(value('parent'))}</strong>, am the parent or legal guardian of <strong>${esc(value('child'))}</strong>, born ${esc(value('dob'))}. I authorize the child to travel with <strong>${esc(value('traveler'))}</strong> to ${esc(value('destination'))} during ${esc(value('dates'))}.</p>`;if(has('details'))html+=`<p>${fmt(value('details'))}</p>`;}
+if(type==='proof-of-residency'){html+=`<p>I, <strong>${esc(value('declarant'))}</strong>, state that <strong>${esc(value('resident'))}</strong> resides at ${esc(value('address'))} and has lived at this address since ${esc(value('since'))}.</p>`;if(has('details'))html+=`<p>${fmt(value('details'))}</p>`;}
+if(type==='letter-of-authorization'){html+=`<p>I, <strong>${esc(value('grantor'))}</strong>, authorize <strong>${esc(value('agent'))}</strong> to perform the following action on my behalf:</p><p>${fmt(value('action'))}</p><p>This authorization begins ${esc(value('start'))}${has('end')?` and expires ${esc(value('end'))}`:''}.</p>`;}
+if(type==='financial-support')html+=`<p>I, <strong>${esc(value('supporter'))}</strong>, confirm that I provide financial support to <strong>${esc(value('recipient'))}</strong>, who is my ${esc(value('relationship'))}.</p><p>${fmt(value('support'))}</p><p>Support period: ${esc(value('period'))}</p>`;
+if(type==='general-consent'){html+=`<p>I, <strong>${esc(value('giver'))}</strong>, voluntarily give my consent to <strong>${esc(value('recipient'))}</strong> for the following activity or action:</p><p>${fmt(value('activity'))}</p>`;if(has('conditions'))html+=`<p>Conditions or limitations: ${fmt(value('conditions'))}</p>`;html+=`<p>Effective date: ${esc(value('date'))}</p>`;}
+if(type==='information-release'){html+=`<p>I, <strong>${esc(value('authorizer'))}</strong>, authorize <strong>${esc(value('holder'))}</strong> to release the following records or information to <strong>${esc(value('recipient'))}</strong>:</p><p>${fmt(value('records'))}</p><p>Purpose: ${esc(value('purpose'))}</p>`;if(has('expiration'))html+=`<p>This authorization expires: ${esc(value('expiration'))}</p>`;}
+if(type==='vehicle-release'){html+=`<p>I, <strong>${esc(value('owner'))}</strong>, authorize <strong>${esc(value('recipient'))}</strong> to receive and take possession of my vehicle from <strong>${esc(value('holder'))}</strong>.</p><p>Vehicle: ${esc(value('vehicle'))}<br>VIN or license plate: ${esc(value('vin'))}</p>`;if(has('items'))html+=`<p>${fmt(value('items'))}</p>`;}
+if(type==='vehicle-use')html+=`<p>I, <strong>${esc(value('owner'))}</strong>, authorize <strong>${esc(value('driver'))}</strong> to use the following vehicle: ${esc(value('vehicle'))}, VIN or plate ${esc(value('vin'))}.</p><p>${fmt(value('use'))}</p>`;
+if(type==='identity-affidavit')html+=`<p>I, <strong>${esc(value('name'))}</strong>, born ${esc(value('dob'))} and residing at ${esc(value('address'))}, declare that the following identification information and facts are true:</p><p>Identification: ${esc(value('id'))}</p><p>${fmt(value('statement'))}</p>`;
+if(type==='name-affidavit')html+=`<p>I, <strong>${esc(value('name'))}</strong>, declare that I am also known as <strong>${esc(value('other'))}</strong>, and that both names identify the same person.</p><p>${fmt(value('reason'))}</p><p>Date of birth: ${esc(value('dob'))}</p>`;
+if(type==='medical-consent')html+=`<p>I, <strong>${esc(value('giver'))}</strong>, authorize <strong>${esc(value('provider'))}</strong> to obtain, arrange, or consent to the following care for <strong>${esc(value('patient'))}</strong>:</p><p>${fmt(value('care'))}</p><p>Effective dates: ${esc(value('dates'))}</p>`;
+if(type==='travel-authorization')html+=`<p>I, <strong>${esc(value('giver'))}</strong>, authorize <strong>${esc(value('traveler'))}</strong> to travel to ${esc(value('destination'))} during ${esc(value('dates'))}.</p><p>${fmt(value('purpose'))}</p>`;
+if(type==='custom')html+=`<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div><div class="printed-name-field"><div class="line"></div><div class="field-label">Printed Name</div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
+else html+=`<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
+document.getElementById('paper').innerHTML=html;return true}
 document.getElementById('update').onclick=function(){
+  if(!validateForm())return;
   build();
   const btn=this, old=btn.textContent;
   btn.textContent=ht?'Apèsi a mete ajou ✓':'Preview Updated ✓';
   setTimeout(()=>btn.textContent=old,1200);
   if(window.innerWidth<=800) document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'start'});
 };
-c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',build));
+c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',()=>{if(validateForm(false))build();else showPreviewPrompt()}));
 const book='https://safenotarize.com/book.html?document_ready=1';
 document.getElementById('continue').href=book+`&document_source=library&document_type=${encodeURIComponent(type)}`;
 function safeFilename(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'safenotarize-document'}
-function raw(id){return (document.getElementById(id)?.value||'').trim()||'____________________________'}
+function raw(id){return value(id)}
 function splitUserParagraphs(value){
   const clean=(value||'').replace(/\r\n/g,'\n').trim();
-  if(!clean || clean==='____________________________')return [];
+  if(!clean)return [];
   return clean
     .split(/\n\s*\n+/)
     .map(block=>block.replace(/\n+/g,' ').replace(/\s+/g,' ').trim())
@@ -134,25 +144,27 @@ function splitUserParagraphs(value){
 }
 function documentParagraphs(){
   const p=[];
-  if(type==='custom')p.push(...splitUserParagraphs(raw('custom-body')));
-  if(type==='affidavit')p.push(`I, ${raw('name')}, residing at ${raw('address')}, declare under oath that the following statements are true to the best of my personal knowledge:`,...splitUserParagraphs(raw('facts')),`Dated: ${raw('date')}`);
-  if(type==='child-travel-consent')p.push(`I, ${raw('parent')}, am the parent or legal guardian of ${raw('child')}, born ${raw('dob')}. I authorize the child to travel with ${raw('traveler')} to ${raw('destination')} during ${raw('dates')}.`,...splitUserParagraphs(raw('details')));
-  if(type==='proof-of-residency')p.push(`I, ${raw('declarant')}, state that ${raw('resident')} resides at ${raw('address')} and has lived at this address since ${raw('since')}.`,...splitUserParagraphs(raw('details')));
-  if(type==='letter-of-authorization')p.push(`I, ${raw('grantor')}, authorize ${raw('agent')} to perform the following action on my behalf:`,...splitUserParagraphs(raw('action')),`This authorization begins ${raw('start')} and expires ${raw('end')}.`);
-  if(type==='financial-support')p.push(`I, ${raw('supporter')}, confirm that I provide financial support to ${raw('recipient')}, who is my ${raw('relationship')}.`,...splitUserParagraphs(raw('support')),`Support period: ${raw('period')}`);
-  if(type==='general-consent')p.push(`I, ${raw('giver')}, voluntarily give my consent to ${raw('recipient')} for the following activity or action:`,...splitUserParagraphs(raw('activity')),`Conditions or limitations:`,...splitUserParagraphs(raw('conditions')),`Effective date: ${raw('date')}`);
-  if(type==='information-release')p.push(`I, ${raw('authorizer')}, authorize ${raw('holder')} to release the following records or information to ${raw('recipient')}:`,...splitUserParagraphs(raw('records')),`Purpose: ${raw('purpose')}`,`This authorization expires: ${raw('expiration')}`);
-  if(type==='vehicle-release')p.push(`I, ${raw('owner')}, authorize ${raw('recipient')} to receive and take possession of my vehicle from ${raw('holder')}.`,`Vehicle: ${raw('vehicle')}`,`VIN or license plate: ${raw('vin')}`,...splitUserParagraphs(raw('items')));
-  if(type==='vehicle-use')p.push(`I, ${raw('owner')}, authorize ${raw('driver')} to use the following vehicle: ${raw('vehicle')}.`,`VIN or plate number: ${raw('vin')}`,...splitUserParagraphs(raw('use')));
-  if(type==='identity-affidavit')p.push(`I, ${raw('name')}, born ${raw('dob')} and residing at ${raw('address')}, declare that the following identification information and facts are true:`,`Identification: ${raw('id')}`,...splitUserParagraphs(raw('statement')));
-  if(type==='name-affidavit')p.push(`I, ${raw('name')}, declare that I am also known as ${raw('other')}, and that both names identify the same person.`,...splitUserParagraphs(raw('reason')),`Date of birth: ${raw('dob')}`);
-  if(type==='medical-consent')p.push(`I, ${raw('giver')}, authorize ${raw('provider')} to obtain, arrange, or consent to the following care for ${raw('patient')}:`,...splitUserParagraphs(raw('care')),`Effective dates: ${raw('dates')}`);
-  if(type==='travel-authorization')p.push(`I, ${raw('giver')}, authorize ${raw('traveler')} to travel to ${raw('destination')} during ${raw('dates')}.`,...splitUserParagraphs(raw('purpose')));
+  if(type==='custom')p.push(...splitUserParagraphs(value('custom-body')));
+  if(type==='affidavit')p.push(`I, ${value('name')}, residing at ${value('address')}, declare under oath or affirmation that the following statements are true to the best of my personal knowledge:`,...splitUserParagraphs(value('facts')),`Dated: ${value('date')}`);
+  if(type==='child-travel-consent')p.push(`I, ${value('parent')}, am the parent or legal guardian of ${value('child')}, born ${value('dob')}. I authorize the child to travel with ${value('traveler')} to ${value('destination')} during ${value('dates')}.`,...optionalParagraphs('details'));
+  if(type==='proof-of-residency')p.push(`I, ${value('declarant')}, state that ${value('resident')} resides at ${value('address')} and has lived at this address since ${value('since')}.`,...optionalParagraphs('details'));
+  if(type==='letter-of-authorization')p.push(`I, ${value('grantor')}, authorize ${value('agent')} to perform the following action on my behalf:`,...splitUserParagraphs(value('action')),`This authorization begins ${value('start')}${has('end')?` and expires ${value('end')}`:''}.`);
+  if(type==='financial-support')p.push(`I, ${value('supporter')}, confirm that I provide financial support to ${value('recipient')}, who is my ${value('relationship')}.`,...splitUserParagraphs(value('support')),`Support period: ${value('period')}`);
+  if(type==='general-consent'){p.push(`I, ${value('giver')}, voluntarily give my consent to ${value('recipient')} for the following activity or action:`,...splitUserParagraphs(value('activity')));if(has('conditions'))p.push(`Conditions or limitations:`,...optionalParagraphs('conditions'));p.push(`Effective date: ${value('date')}`);}
+  if(type==='information-release'){p.push(`I, ${value('authorizer')}, authorize ${value('holder')} to release the following records or information to ${value('recipient')}:`,...splitUserParagraphs(value('records')),`Purpose: ${value('purpose')}`);if(has('expiration'))p.push(`This authorization expires: ${value('expiration')}`);}
+  if(type==='vehicle-release')p.push(`I, ${value('owner')}, authorize ${value('recipient')} to receive and take possession of my vehicle from ${value('holder')}.`,`Vehicle: ${value('vehicle')}`,`VIN or license plate: ${value('vin')}`,...optionalParagraphs('items'));
+  if(type==='vehicle-use')p.push(`I, ${value('owner')}, authorize ${value('driver')} to use the following vehicle: ${value('vehicle')}.`,`VIN or plate number: ${value('vin')}`,...splitUserParagraphs(value('use')));
+  if(type==='identity-affidavit')p.push(`I, ${value('name')}, born ${value('dob')} and residing at ${value('address')}, declare that the following identification information and facts are true:`,`Identification: ${value('id')}`,...splitUserParagraphs(value('statement')));
+  if(type==='name-affidavit')p.push(`I, ${value('name')}, declare that I am also known as ${value('other')}, and that both names identify the same person.`,...splitUserParagraphs(value('reason')),`Date of birth: ${value('dob')}`);
+  if(type==='medical-consent')p.push(`I, ${value('giver')}, authorize ${value('provider')} to obtain, arrange, or consent to the following care for ${value('patient')}:`,...splitUserParagraphs(value('care')),`Effective dates: ${value('dates')}`);
+  if(type==='travel-authorization')p.push(`I, ${value('giver')}, authorize ${value('traveler')} to travel to ${value('destination')} during ${value('dates')}.`,...splitUserParagraphs(value('purpose')));
   return p.filter(Boolean);
 }
 async function downloadPdf(){
+  const status=document.getElementById('download-status');
+  if(!validateForm()){status.textContent=ht?'Ranpli tout chan obligatwa yo anvan ou telechaje PDF la.':'Complete all required fields before downloading the PDF.';return}
   build();
-  const btn=document.getElementById('download'),status=document.getElementById('download-status');
+  const btn=document.getElementById('download');
   btn.disabled=true;btn.textContent=ht?'PDF la ap prepare...':'Preparing PDF...';status.textContent=ht?'Tanpri pa fèmen paj la.':'Please keep this page open.';
   try{
     if(!window.jspdf)throw new Error('PDF tools did not load. Please refresh and try again.');
@@ -245,5 +257,5 @@ async function downloadPdf(){
   }
 }
 document.getElementById('download').addEventListener('click',downloadPdf);
-build();
+showPreviewPrompt();
 </script><footer class="sn-pro-footer"><div class="sn-footer-grid"><div class="sn-footer-brand"><a class="sn-footer-logo" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><p>Secure online notarization from your phone, tablet, or computer.</p><a class="sn-footer-cta" href="/start.html">Start</a></div><div class="sn-footer-col"><h4>Services</h4><ul><li><a href="/online-notary.html">Online Notary</a></li><li><a href="/affidavit-notary.html">Affidavit Notary</a></li><li><a href="/power-of-attorney-notary.html">Power of Attorney Notary</a></li><li><a href="/partner.html">Partner &amp; Referral</a></li></ul></div><div class="sn-footer-col"><h4>Document Resources</h4><ul><li><a href="/documents/library.html">Document Library</a></li><li><a href="/documents/child-travel-consent.html">Child Travel Consent</a></li><li><a href="/documents/proof-of-residency-letter.html">Proof of Residency</a></li><li><a href="/documents/letter-of-authorization.html">Authorization Letters</a></li><li><a href="/documents/official/ds-3053.html">Official Form Guides</a></li></ul></div><div class="sn-footer-col"><h4>Languages</h4><ul><li><a href="/">English</a></li><li><a href="/ht.html">Kreyòl</a></li><li><a href="/fr.html">Français</a></li></ul></div><div class="sn-footer-col"><h4>Company &amp; Support</h4><ul><li><a href="/#services">Services</a></li><li><a href="/#pricing-block">Pricing</a></li><li><a href="/#faq">FAQ</a></li><li><a href="/legal.html">Privacy &amp; Terms</a></li><li><a href="mailto:supervisor@safenotarize.com">Contact Support</a></li></ul></div></div><div class="sn-footer-bottom" style="justify-content:center;text-align:center"><p>© 2026 SafeNotarize · Geritla Plus LLC</p></div></footer><script>function snToggleMenu(b){const p=document.getElementById('sn-mobile-panel');if(!p)return;const o=p.classList.toggle('show');b.setAttribute('aria-expanded',String(o));document.body.style.overflow=o?'hidden':''}document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('#sn-mobile-panel a').forEach(a=>a.addEventListener('click',()=>{const p=document.getElementById('sn-mobile-panel');if(p)p.classList.remove('show');document.body.style.overflow=''})));</script></body></html>

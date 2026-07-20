@@ -49,7 +49,7 @@ input,textarea,select{font-size:16px}
 @media(max-width:900px){.sn-desktop-nav{display:none}.sn-menu-btn{display:block}.sn-footer-grid{grid-template-columns:repeat(2,1fr)}.sn-footer-brand{grid-column:1/-1}}
 @media(max-width:620px){.sn-header-inner{padding:10px 14px}.sn-brand img{height:36px}.sn-pro-footer{padding:38px 20px 18px}.sn-footer-grid{grid-template-columns:1fr;gap:25px}.sn-footer-brand{grid-column:auto}.sn-footer-col{border-top:1px solid rgba(255,255,255,.12);padding-top:18px}.sn-footer-bottom{display:block;text-align:center}}
 </style></head>
-<body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/ht.html"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/ht.html">Akèy</a><a href="/online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/#pricing-block">Pri</a><a href="/#faq">Kesyon</a><a class="sn-start-btn" href="/start-ht.html">Kòmanse</a></nav><button aria-expanded="false" aria-label="Open menu" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/ht.html">Akèy</a><a href="/online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/#pricing-block">Pri</a><a href="/#faq">Kesyon</a><a class="sn-mobile-start" href="/start-ht.html">Kòmanse</a></div></header>
+<body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/ht.html"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/ht.html">Akèy</a><a href="/haitian-online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/ht.html#pricing-block">Pri</a><a href="/ht.html#faq">Kesyon</a><a class="sn-start-btn" href="/start-ht.html">Kòmanse</a></nav><button aria-expanded="false" aria-label="Open menu" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/ht.html">Akèy</a><a href="/haitian-online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/ht.html#pricing-block">Pri</a><a href="/ht.html#faq">Kesyon</a><a class="sn-mobile-start" href="/start-ht.html">Kòmanse</a></div></header>
 <main><section class="top"><h1 id="page-title">Kreye Dokiman Ou</h1><p id="page-sub">Ranpli chan yo, revize dokiman an, epi telechaje li dirèkteman kòm PDF. Pa siyen li anvan sesyon notè a sof si yo mande w fè sa.</p></section><div class="layout"><section class="panel editor"><div class="warning" id="warning"><strong>Modèl jeneral sèlman.</strong> Konfime dokiman sa a satisfè kondisyon òganizasyon k ap resevwa li a. SafeNotarize pa bay konsèy legal.</div><h2 id="form-title">Enfòmasyon dokiman an</h2><form id="form"></form><button class="btn update" id="update" type="button">Mete Apèsi A Ajou</button><p class="legal" id="privacy">Enfòmasyon ou antre yo rete nan paj navigatè sa a epi modèl la pa voye yo bay SafeNotarize.</p></section><section class="panel preview"><div class="paper" id="paper"></div><div class="actions"><button class="btn print" id="download" type="button">Telechaje PDF epi Kontinye</button></div><div aria-live="polite" class="download-status" id="download-status"></div><div class="next-box" id="next-box"><strong id="next-title">Dokiman ou telechaje</strong><p id="next-text">Kontinye pou bay enfòmasyon siyatè ak sesyon an, voye PDF la lè sistèm nan mande sa, epi antre kounye a oswa chwazi yon lè pou pita.</p><a class="btn continue" id="continue">Kontinye ak Notarizasyon Online</a></div></section></div></main>
 <script>
 const q=new URLSearchParams(location.search),type=q.get('type')||'affidavit';const ht=true;
@@ -69,64 +69,74 @@ const configs={
 'medical-consent':{en:'Medical Consent Authorization',ht:'Otorizasyon Konsantman Medikal',fields:[['giver','Parent, guardian, or patient','Paran, responsab, oswa pasyan'],['patient','Patient full name','Non konplè pasyan an'],['provider','Authorized caregiver or provider','Moun oswa pwofesyonèl ki resevwa otorizasyon an'],['care','Medical care being authorized','Swen medikal yo otorize a','textarea'],['dates','Effective dates','Dat otorizasyon an']]},
 'travel-authorization':{en:'Travel Authorization Letter',ht:'Lèt Otorizasyon Vwayaj',fields:[['giver','Person giving authorization','Moun k ap bay otorizasyon an'],['traveler','Authorized traveler','Moun ki gen otorizasyon pou vwayaje'],['destination','Destination','Destinasyon'],['dates','Travel dates','Dat vwayaj la'],['purpose','Purpose and travel details','Rezon ak detay vwayaj la','textarea']]}
 };
+const requiredFields={
+'custom':['custom-title','custom-body'],
+'affidavit':['name','address','facts','date'],
+'general-consent':['giver','recipient','activity','date'],
+'information-release':['authorizer','holder','recipient','records','purpose'],
+'child-travel-consent':['parent','child','dob','traveler','destination','dates'],
+'proof-of-residency':['declarant','resident','address','since'],
+'letter-of-authorization':['grantor','agent','action','start'],
+'financial-support':['supporter','recipient','relationship','support','period'],
+'vehicle-release':['owner','recipient','holder','vehicle','vin'],
+'vehicle-use':['owner','driver','vehicle','vin','use'],
+'identity-affidavit':['name','dob','address','id','statement'],
+'name-affidavit':['name','other','reason','dob'],
+'medical-consent':['giver','patient','provider','care','dates'],
+'travel-authorization':['giver','traveler','destination','dates','purpose']
+};
 const c=configs[type]||configs.affidavit;
 document.title=(ht?c.ht:c.en)+' | SafeNotarize';
-const form=document.getElementById('form');c.fields.forEach(f=>{const div=document.createElement('div');div.className='field';div.innerHTML=`<label for="${f[0]}">${ht?f[2]:f[1]}</label>${f[3]==='textarea'?`<textarea id="${f[0]}"></textarea>`:`<input id="${f[0]}">`}`;form.appendChild(div)});
-function v(id){return (document.getElementById(id)?.value||'').trim()||'____________________________'}
+const form=document.getElementById('form'),requiredSet=new Set(requiredFields[type]||requiredFields.affidavit);c.fields.forEach(f=>{const div=document.createElement('div');div.className='field';const required=requiredSet.has(f[0])?' required aria-required="true"':'';div.innerHTML=`<label for="${f[0]}">${ht?f[2]:f[1]}</label>${f[3]==='textarea'?`<textarea id="${f[0]}"${required}></textarea>`:`<input id="${f[0]}"${required}>`}`;form.appendChild(div)});
+function value(id){return (document.getElementById(id)?.value||'').trim()}
+function has(id){return value(id)!==''}
+function optionalParagraphs(id){return has(id)?splitUserParagraphs(value(id)):[]}
+function validateForm(showFeedback=true){requiredSet.forEach(id=>{const el=document.getElementById(id);if(el)el.setCustomValidity(value(id)?'':(ht?'Chan sa a obligatwa.':'This field is required.'))});const valid=form.checkValidity();if(!valid&&showFeedback)form.reportValidity();return valid}
+function showPreviewPrompt(){const title=type==='custom'?((value('custom-title'))||('Kreye Pwòp Dokiman Ou')):c.ht;document.getElementById('paper').innerHTML=`<h1>${esc(title)}</h1><p>Ranpli tout chan obligatwa yo pou wè apèsi dokiman an.</p>`}
 function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function fmt(s){
   const clean=(s||'').replace(/\r\n/g,'\n').trim();
-  if(!clean)return '____________________________';
+  if(!clean)return '';
   return esc(clean)
     .split(/\n\s*\n+/)
     .map(block=>block.replace(/\n+/g,' ').replace(/\s+/g,' ').trim())
     .filter(Boolean)
     .join('</p><p>');
 }
-function build(){let html=`<h1>${esc(type==='custom'?v('custom-title'):(ht?c.ht:c.en))}</h1>`;
-if(type==='custom'){
-html+=`<p>${fmt(v('custom-body'))}</p>`;
-}
-if(type==='affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, residing at ${esc(v('address'))}, declare under oath that the following statements are true to the best of my personal knowledge:</p><p>${fmt(v('facts'))}</p><p>Dated: ${esc(v('date'))}</p>`;
-if(type==='child-travel-consent')html+=`<p>I, <strong>${esc(v('parent'))}</strong>, am the parent or legal guardian of <strong>${esc(v('child'))}</strong>, born ${esc(v('dob'))}. I authorize the child to travel with <strong>${esc(v('traveler'))}</strong> to ${esc(v('destination'))} during ${esc(v('dates'))}.</p><p>${fmt(v('details'))}</p>`;
-if(type==='proof-of-residency')html+=`<p>I, <strong>${esc(v('declarant'))}</strong>, state that <strong>${esc(v('resident'))}</strong> resides at ${esc(v('address'))} and has lived at this address since ${esc(v('since'))}.</p><p>${fmt(v('details'))}</p>`;
-if(type==='letter-of-authorization')html+=`<p>I, <strong>${esc(v('grantor'))}</strong>, authorize <strong>${esc(v('agent'))}</strong> to perform the following action on my behalf:</p><p>${fmt(v('action'))}</p><p>This authorization begins ${esc(v('start'))} and expires ${esc(v('end'))}.</p>`;
-if(type==='financial-support')html+=`<p>I, <strong>${esc(v('supporter'))}</strong>, confirm that I provide financial support to <strong>${esc(v('recipient'))}</strong>, who is my ${esc(v('relationship'))}.</p><p>${fmt(v('support'))}</p><p>Support period: ${esc(v('period'))}</p>`;
-
-if(type==='general-consent')html+=`<p>I, <strong>${esc(v('giver'))}</strong>, voluntarily give my consent to <strong>${esc(v('recipient'))}</strong> for the following activity or action:</p><p>${fmt(v('activity'))}</p><p>Conditions or limitations: ${fmt(v('conditions'))}</p><p>Effective date: ${esc(v('date'))}</p>`;
-if(type==='information-release')html+=`<p>I, <strong>${esc(v('authorizer'))}</strong>, authorize <strong>${esc(v('holder'))}</strong> to release the following records or information to <strong>${esc(v('recipient'))}</strong>:</p><p>${fmt(v('records'))}</p><p>Purpose: ${esc(v('purpose'))}</p><p>This authorization expires: ${esc(v('expiration'))}</p>`;
-if(type==='vehicle-release')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('recipient'))}</strong> to receive and take possession of my vehicle from <strong>${esc(v('holder'))}</strong>.</p><p>Vehicle: ${esc(v('vehicle'))}<br>VIN or license plate: ${esc(v('vin'))}</p><p>${fmt(v('items'))}</p>`;
-if(type==='vehicle-use')html+=`<p>I, <strong>${esc(v('owner'))}</strong>, authorize <strong>${esc(v('driver'))}</strong> to use the following vehicle: ${esc(v('vehicle'))}, VIN or plate ${esc(v('vin'))}.</p><p>${fmt(v('use'))}</p>`;
-
-if(type==='identity-affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, born ${esc(v('dob'))} and residing at ${esc(v('address'))}, declare that the following identification information and facts are true:</p><p>Identification: ${esc(v('id'))}</p><p>${fmt(v('statement'))}</p>`;
-if(type==='name-affidavit')html+=`<p>I, <strong>${esc(v('name'))}</strong>, declare that I am also known as <strong>${esc(v('other'))}</strong>, and that both names identify the same person.</p><p>${fmt(v('reason'))}</p><p>Date of birth: ${esc(v('dob'))}</p>`;
-if(type==='medical-consent')html+=`<p>I, <strong>${esc(v('giver'))}</strong>, authorize <strong>${esc(v('provider'))}</strong> to obtain, arrange, or consent to the following care for <strong>${esc(v('patient'))}</strong>:</p><p>${fmt(v('care'))}</p><p>Effective dates: ${esc(v('dates'))}</p>`;
-if(type==='travel-authorization')html+=`<p>I, <strong>${esc(v('giver'))}</strong>, authorize <strong>${esc(v('traveler'))}</strong> to travel to ${esc(v('destination'))} during ${esc(v('dates'))}.</p><p>${fmt(v('purpose'))}</p>`;
-if(type==='custom'){
-html+=ht
-? `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Siyati</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div></div><div class="printed-name-field"><div class="line"></div><div class="field-label">Non an lèt detache</div></div></div><div class="notary-placeholder"><h2>SEKSYON NOTÈ</h2></div>`
-: `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div><div class="printed-name-field"><div class="line"></div><div class="field-label">Printed Name</div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
-}else{
-html+=ht
-? `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Siyati</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div></div></div><div class="notary-placeholder"><h2>SEKSYON NOTÈ</h2></div>`
-: `<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
-}
-document.getElementById('paper').innerHTML=html}
+function build(){let html=`<h1>${esc(type==='custom'?value('custom-title'):c.ht)}</h1>`;
+if(type==='custom')html+=`<p>${fmt(value('custom-body'))}</p>`;
+if(type==='affidavit')html+=`<p>Mwen menm, <strong>${esc(value('name'))}</strong>, ki rete nan ${esc(value('address'))}, deklare anba sèman oswa afimasyon ke deklarasyon ki anba yo vre selon sa mwen konnen pèsonèlman:</p><p>${fmt(value('facts'))}</p><p>Dat: ${esc(value('date'))}</p>`;
+if(type==='child-travel-consent'){html+=`<p>Mwen menm, <strong>${esc(value('parent'))}</strong>, se paran oswa responsab legal <strong>${esc(value('child'))}</strong>, ki fèt ${esc(value('dob'))}. Mwen bay timoun nan otorizasyon pou vwayaje ak <strong>${esc(value('traveler'))}</strong> pou ale ${esc(value('destination'))} pandan ${esc(value('dates'))}.</p>`;if(has('details'))html+=`<p>${fmt(value('details'))}</p>`;}
+if(type==='proof-of-residency'){html+=`<p>Mwen menm, <strong>${esc(value('declarant'))}</strong>, deklare ke <strong>${esc(value('resident'))}</strong> rete nan ${esc(value('address'))} epi li ap viv nan adrès sa a depi ${esc(value('since'))}.</p>`;if(has('details'))html+=`<p>${fmt(value('details'))}</p>`;}
+if(type==='letter-of-authorization')html+=`<p>Mwen menm, <strong>${esc(value('grantor'))}</strong>, bay <strong>${esc(value('agent'))}</strong> otorizasyon pou fè aksyon sa a nan non mwen:</p><p>${fmt(value('action'))}</p><p>Otorizasyon sa a kòmanse ${esc(value('start'))}${has('end')?` epi li fini ${esc(value('end'))}`:''}.</p>`;
+if(type==='financial-support')html+=`<p>Mwen menm, <strong>${esc(value('supporter'))}</strong>, konfime mwen bay <strong>${esc(value('recipient'))}</strong>, ki se ${esc(value('relationship'))} mwen, sipò finansye.</p><p>${fmt(value('support'))}</p><p>Peryòd sipò a: ${esc(value('period'))}</p>`;
+if(type==='general-consent'){html+=`<p>Mwen menm, <strong>${esc(value('giver'))}</strong>, bay <strong>${esc(value('recipient'))}</strong> konsantman mwen volontèman pou aktivite oswa aksyon sa a:</p><p>${fmt(value('activity'))}</p>`;if(has('conditions'))html+=`<p>Kondisyon oswa limit: ${fmt(value('conditions'))}</p>`;html+=`<p>Dat li kòmanse: ${esc(value('date'))}</p>`;}
+if(type==='information-release'){html+=`<p>Mwen menm, <strong>${esc(value('authorizer'))}</strong>, bay <strong>${esc(value('holder'))}</strong> otorizasyon pou remèt dosye oswa enfòmasyon sa yo bay <strong>${esc(value('recipient'))}</strong>:</p><p>${fmt(value('records'))}</p><p>Rezon: ${esc(value('purpose'))}</p>`;if(has('expiration'))html+=`<p>Otorizasyon sa a fini: ${esc(value('expiration'))}</p>`;}
+if(type==='vehicle-release'){html+=`<p>Mwen menm, <strong>${esc(value('owner'))}</strong>, bay <strong>${esc(value('recipient'))}</strong> otorizasyon pou resevwa epi pran posesyon machin mwen an nan men <strong>${esc(value('holder'))}</strong>.</p><p>Machin: ${esc(value('vehicle'))}<br>VIN oswa nimewo plak: ${esc(value('vin'))}</p>`;if(has('items'))html+=`<p>${fmt(value('items'))}</p>`;}
+if(type==='vehicle-use')html+=`<p>Mwen menm, <strong>${esc(value('owner'))}</strong>, bay <strong>${esc(value('driver'))}</strong> otorizasyon pou itilize machin sa a: ${esc(value('vehicle'))}. VIN oswa nimewo plak: ${esc(value('vin'))}.</p><p>${fmt(value('use'))}</p>`;
+if(type==='identity-affidavit')html+=`<p>Mwen menm, <strong>${esc(value('name'))}</strong>, ki fèt ${esc(value('dob'))} epi ki rete nan ${esc(value('address'))}, deklare enfòmasyon idantifikasyon ak reyalite ki anba yo vre:</p><p>Pyès idantite: ${esc(value('id'))}</p><p>${fmt(value('statement'))}</p>`;
+if(type==='name-affidavit')html+=`<p>Mwen menm, <strong>${esc(value('name'))}</strong>, deklare yo konnen mwen tou kòm <strong>${esc(value('other'))}</strong>, epi toude non yo idantifye menm moun nan.</p><p>${fmt(value('reason'))}</p><p>Dat nesans: ${esc(value('dob'))}</p>`;
+if(type==='medical-consent')html+=`<p>Mwen menm, <strong>${esc(value('giver'))}</strong>, bay <strong>${esc(value('provider'))}</strong> otorizasyon pou jwenn, òganize, oswa bay konsantman pou swen sa yo pou <strong>${esc(value('patient'))}</strong>:</p><p>${fmt(value('care'))}</p><p>Dat otorizasyon an: ${esc(value('dates'))}</p>`;
+if(type==='travel-authorization')html+=`<p>Mwen menm, <strong>${esc(value('giver'))}</strong>, bay <strong>${esc(value('traveler'))}</strong> otorizasyon pou vwayaje pou ale ${esc(value('destination'))} pandan ${esc(value('dates'))}.</p><p>${fmt(value('purpose'))}</p>`;
+if(type==='custom')html+=`<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Siyati</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div></div><div class="printed-name-field"><div class="line"></div><div class="field-label">Non an lèt detache</div></div></div><div class="notary-placeholder"><h2>SEKSYON NOTÈ</h2></div>`;
+else html+=`<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Siyati</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Dat</div></div></div></div><div class="notary-placeholder"><h2>SEKSYON NOTÈ</h2></div>`;
+document.getElementById('paper').innerHTML=html;return true}
 document.getElementById('update').onclick=function(){
+  if(!validateForm())return;
   build();
   const btn=this, old=btn.textContent;
   btn.textContent=ht?'Apèsi a mete ajou ✓':'Preview Updated ✓';
   setTimeout(()=>btn.textContent=old,1200);
   if(window.innerWidth<=800) document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'start'});
 };
-c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',build));
+c.fields.forEach(f=>document.getElementById(f[0]).addEventListener('input',()=>{if(validateForm(false))build();else showPreviewPrompt()}));
 const book='https://safenotarize.com/book-ht.html?document_ready=1';
 document.getElementById('continue').href=book+`&document_source=library&document_type=${encodeURIComponent(type)}`;
 function safeFilename(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'safenotarize-document'}
-function raw(id){return (document.getElementById(id)?.value||'').trim()||'____________________________'}
+function raw(id){return value(id)}
 function splitUserParagraphs(value){
   const clean=(value||'').replace(/\r\n/g,'\n').trim();
-  if(!clean || clean==='____________________________')return [];
+  if(!clean)return [];
   return clean
     .split(/\n\s*\n+/)
     .map(block=>block.replace(/\n+/g,' ').replace(/\s+/g,' ').trim())
@@ -134,25 +144,27 @@ function splitUserParagraphs(value){
 }
 function documentParagraphs(){
   const p=[];
-  if(type==='custom')p.push(...splitUserParagraphs(raw('custom-body')));
-  if(type==='affidavit')p.push(`I, ${raw('name')}, residing at ${raw('address')}, declare under oath that the following statements are true to the best of my personal knowledge:`,...splitUserParagraphs(raw('facts')),`Dated: ${raw('date')}`);
-  if(type==='child-travel-consent')p.push(`I, ${raw('parent')}, am the parent or legal guardian of ${raw('child')}, born ${raw('dob')}. I authorize the child to travel with ${raw('traveler')} to ${raw('destination')} during ${raw('dates')}.`,...splitUserParagraphs(raw('details')));
-  if(type==='proof-of-residency')p.push(`I, ${raw('declarant')}, state that ${raw('resident')} resides at ${raw('address')} and has lived at this address since ${raw('since')}.`,...splitUserParagraphs(raw('details')));
-  if(type==='letter-of-authorization')p.push(`I, ${raw('grantor')}, authorize ${raw('agent')} to perform the following action on my behalf:`,...splitUserParagraphs(raw('action')),`This authorization begins ${raw('start')} and expires ${raw('end')}.`);
-  if(type==='financial-support')p.push(`I, ${raw('supporter')}, confirm that I provide financial support to ${raw('recipient')}, who is my ${raw('relationship')}.`,...splitUserParagraphs(raw('support')),`Support period: ${raw('period')}`);
-  if(type==='general-consent')p.push(`I, ${raw('giver')}, voluntarily give my consent to ${raw('recipient')} for the following activity or action:`,...splitUserParagraphs(raw('activity')),`Conditions or limitations:`,...splitUserParagraphs(raw('conditions')),`Effective date: ${raw('date')}`);
-  if(type==='information-release')p.push(`I, ${raw('authorizer')}, authorize ${raw('holder')} to release the following records or information to ${raw('recipient')}:`,...splitUserParagraphs(raw('records')),`Purpose: ${raw('purpose')}`,`This authorization expires: ${raw('expiration')}`);
-  if(type==='vehicle-release')p.push(`I, ${raw('owner')}, authorize ${raw('recipient')} to receive and take possession of my vehicle from ${raw('holder')}.`,`Vehicle: ${raw('vehicle')}`,`VIN or license plate: ${raw('vin')}`,...splitUserParagraphs(raw('items')));
-  if(type==='vehicle-use')p.push(`I, ${raw('owner')}, authorize ${raw('driver')} to use the following vehicle: ${raw('vehicle')}.`,`VIN or plate number: ${raw('vin')}`,...splitUserParagraphs(raw('use')));
-  if(type==='identity-affidavit')p.push(`I, ${raw('name')}, born ${raw('dob')} and residing at ${raw('address')}, declare that the following identification information and facts are true:`,`Identification: ${raw('id')}`,...splitUserParagraphs(raw('statement')));
-  if(type==='name-affidavit')p.push(`I, ${raw('name')}, declare that I am also known as ${raw('other')}, and that both names identify the same person.`,...splitUserParagraphs(raw('reason')),`Date of birth: ${raw('dob')}`);
-  if(type==='medical-consent')p.push(`I, ${raw('giver')}, authorize ${raw('provider')} to obtain, arrange, or consent to the following care for ${raw('patient')}:`,...splitUserParagraphs(raw('care')),`Effective dates: ${raw('dates')}`);
-  if(type==='travel-authorization')p.push(`I, ${raw('giver')}, authorize ${raw('traveler')} to travel to ${raw('destination')} during ${raw('dates')}.`,...splitUserParagraphs(raw('purpose')));
+  if(type==='custom')p.push(...splitUserParagraphs(value('custom-body')));
+  if(type==='affidavit')p.push(`Mwen menm, ${value('name')}, ki rete nan ${value('address')}, deklare anba sèman oswa afimasyon ke deklarasyon ki anba yo vre selon sa mwen konnen pèsonèlman:`,...splitUserParagraphs(value('facts')),`Dat: ${value('date')}`);
+  if(type==='child-travel-consent')p.push(`Mwen menm, ${value('parent')}, se paran oswa responsab legal ${value('child')}, ki fèt ${value('dob')}. Mwen bay timoun nan otorizasyon pou vwayaje ak ${value('traveler')} pou ale ${value('destination')} pandan ${value('dates')}.`,...optionalParagraphs('details'));
+  if(type==='proof-of-residency')p.push(`Mwen menm, ${value('declarant')}, deklare ke ${value('resident')} rete nan ${value('address')} epi li ap viv nan adrès sa a depi ${value('since')}.`,...optionalParagraphs('details'));
+  if(type==='letter-of-authorization')p.push(`Mwen menm, ${value('grantor')}, bay ${value('agent')} otorizasyon pou fè aksyon sa a nan non mwen:`,...splitUserParagraphs(value('action')),`Otorizasyon sa a kòmanse ${value('start')}${has('end')?` epi li fini ${value('end')}`:''}.`);
+  if(type==='financial-support')p.push(`Mwen menm, ${value('supporter')}, konfime mwen bay ${value('recipient')}, ki se ${value('relationship')} mwen, sipò finansye.`,...splitUserParagraphs(value('support')),`Peryòd sipò a: ${value('period')}`);
+  if(type==='general-consent'){p.push(`Mwen menm, ${value('giver')}, bay ${value('recipient')} konsantman mwen volontèman pou aktivite oswa aksyon sa a:`,...splitUserParagraphs(value('activity')));if(has('conditions'))p.push(`Kondisyon oswa limit:`,...optionalParagraphs('conditions'));p.push(`Dat li kòmanse: ${value('date')}`);}
+  if(type==='information-release'){p.push(`Mwen menm, ${value('authorizer')}, bay ${value('holder')} otorizasyon pou remèt dosye oswa enfòmasyon sa yo bay ${value('recipient')}:`,...splitUserParagraphs(value('records')),`Rezon: ${value('purpose')}`);if(has('expiration'))p.push(`Otorizasyon sa a fini: ${value('expiration')}`);}
+  if(type==='vehicle-release')p.push(`Mwen menm, ${value('owner')}, bay ${value('recipient')} otorizasyon pou resevwa epi pran posesyon machin mwen an nan men ${value('holder')}.`,`Machin: ${value('vehicle')}`,`VIN oswa nimewo plak: ${value('vin')}`,...optionalParagraphs('items'));
+  if(type==='vehicle-use')p.push(`Mwen menm, ${value('owner')}, bay ${value('driver')} otorizasyon pou itilize machin sa a: ${value('vehicle')}.`,`VIN oswa nimewo plak: ${value('vin')}`,...splitUserParagraphs(value('use')));
+  if(type==='identity-affidavit')p.push(`Mwen menm, ${value('name')}, ki fèt ${value('dob')} epi ki rete nan ${value('address')}, deklare enfòmasyon idantifikasyon ak reyalite ki anba yo vre:`,`Pyès idantite: ${value('id')}`,...splitUserParagraphs(value('statement')));
+  if(type==='name-affidavit')p.push(`Mwen menm, ${value('name')}, deklare yo konnen mwen tou kòm ${value('other')}, epi toude non yo idantifye menm moun nan.`,...splitUserParagraphs(value('reason')),`Dat nesans: ${value('dob')}`);
+  if(type==='medical-consent')p.push(`Mwen menm, ${value('giver')}, bay ${value('provider')} otorizasyon pou jwenn, òganize, oswa bay konsantman pou swen sa yo pou ${value('patient')}:`,...splitUserParagraphs(value('care')),`Dat otorizasyon an: ${value('dates')}`);
+  if(type==='travel-authorization')p.push(`Mwen menm, ${value('giver')}, bay ${value('traveler')} otorizasyon pou vwayaje pou ale ${value('destination')} pandan ${value('dates')}.`,...splitUserParagraphs(value('purpose')));
   return p.filter(Boolean);
 }
 async function downloadPdf(){
+  const status=document.getElementById('download-status');
+  if(!validateForm()){status.textContent=ht?'Ranpli tout chan obligatwa yo anvan ou telechaje PDF la.':'Complete all required fields before downloading the PDF.';return}
   build();
-  const btn=document.getElementById('download'),status=document.getElementById('download-status');
+  const btn=document.getElementById('download');
   btn.disabled=true;btn.textContent=ht?'PDF la ap prepare...':'Preparing PDF...';status.textContent=ht?'Tanpri pa fèmen paj la.':'Please keep this page open.';
   try{
     if(!window.jspdf)throw new Error('PDF tools did not load. Please refresh and try again.');
@@ -245,5 +257,5 @@ async function downloadPdf(){
   }
 }
 document.getElementById('download').addEventListener('click',downloadPdf);
-build();
-</script><footer class="sn-pro-footer"><div class="sn-footer-grid"><div class="sn-footer-brand"><a class="sn-footer-logo" href="/ht.html"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><p>Notarizasyon online an sekirite sou telefòn, tablèt, oswa òdinatè.</p><a class="sn-footer-cta" href="/start-ht.html">Kòmanse</a></div><div class="sn-footer-col"><h4>Sèvis</h4><ul><li><a href="/online-notary.html">Notè Online</a></li><li><a href="/affidavit-notary.html">Notarye Affidavit</a></li><li><a href="/power-of-attorney-notary.html">Notarye Power of Attorney</a></li><li><a href="/partner.html">Patnè ak Referans</a></li></ul></div><div class="sn-footer-col"><h4>Resous Dokiman</h4><ul><li><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a></li><li><a href="/documents/ht/child-travel-consent.html">Otorizasyon Vwayaj Timoun</a></li><li><a href="/documents/ht/proof-of-residency-letter.html">Prèv Adrès</a></li><li><a href="/documents/ht/letter-of-authorization.html">Lèt Otorizasyon</a></li><li><a href="/documents/ht/official/ds-3053.html">Gid Fòm Ofisyèl</a></li></ul></div><div class="sn-footer-col"><h4>Lang</h4><ul><li><a href="/">English</a></li><li><a href="/ht.html">Kreyòl</a></li><li><a href="/fr.html">Français</a></li></ul></div><div class="sn-footer-col"><h4>Konpayi ak Sipò</h4><ul><li><a href="/#services">Sèvis</a></li><li><a href="/#pricing-block">Pri</a></li><li><a href="/#faq">Kesyon</a></li><li><a href="/legal.html">Konfidansyalite ak Règleman</a></li><li><a href="mailto:supervisor@safenotarize.com">Kontakte Sipò</a></li></ul></div></div><div class="sn-footer-bottom" style="justify-content:center;text-align:center"><p>© 2026 SafeNotarize · Geritla Plus LLC</p></div></footer><script>function snToggleMenu(b){const p=document.getElementById('sn-mobile-panel');if(!p)return;const o=p.classList.toggle('show');b.setAttribute('aria-expanded',String(o));document.body.style.overflow=o?'hidden':''}document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('#sn-mobile-panel a').forEach(a=>a.addEventListener('click',()=>{const p=document.getElementById('sn-mobile-panel');if(p)p.classList.remove('show');document.body.style.overflow=''})));</script></body></html>
+showPreviewPrompt();
+</script><footer class="sn-pro-footer"><div class="sn-footer-grid"><div class="sn-footer-brand"><a class="sn-footer-logo" href="/ht.html"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><p>Notarizasyon online an sekirite sou telefòn, tablèt, oswa òdinatè.</p><a class="sn-footer-cta" href="/start-ht.html">Kòmanse</a></div><div class="sn-footer-col"><h4>Sèvis</h4><ul><li><a href="/haitian-online-notary.html">Notè Online</a></li><li><a href="/affidavit-notary.html">Notarye Affidavit</a></li><li><a href="/power-of-attorney-notary.html">Notarye Power of Attorney</a></li><li><a href="/partner.html">Patnè ak Referans</a></li></ul></div><div class="sn-footer-col"><h4>Resous Dokiman</h4><ul><li><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a></li><li><a href="/documents/ht/child-travel-consent.html">Otorizasyon Vwayaj Timoun</a></li><li><a href="/documents/ht/proof-of-residency-letter.html">Prèv Adrès</a></li><li><a href="/documents/ht/letter-of-authorization.html">Lèt Otorizasyon</a></li><li><a href="/documents/ht/official/ds-3053.html">Gid Fòm Ofisyèl</a></li></ul></div><div class="sn-footer-col"><h4>Lang</h4><ul><li><a href="/">English</a></li><li><a href="/ht.html">Kreyòl</a></li><li><a href="/fr.html">Français</a></li></ul></div><div class="sn-footer-col"><h4>Konpayi ak Sipò</h4><ul><li><a href="/#services">Sèvis</a></li><li><a href="/ht.html#pricing-block">Pri</a></li><li><a href="/ht.html#faq">Kesyon</a></li><li><a href="/legal.html">Konfidansyalite ak Règleman</a></li><li><a href="mailto:supervisor@safenotarize.com">Kontakte Sipò</a></li></ul></div></div><div class="sn-footer-bottom" style="justify-content:center;text-align:center"><p>© 2026 SafeNotarize · Geritla Plus LLC</p></div></footer><script>function snToggleMenu(b){const p=document.getElementById('sn-mobile-panel');if(!p)return;const o=p.classList.toggle('show');b.setAttribute('aria-expanded',String(o));document.body.style.overflow=o?'hidden':''}document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('#sn-mobile-panel a').forEach(a=>a.addEventListener('click',()=>{const p=document.getElementById('sn-mobile-panel');if(p)p.classList.remove('show');document.body.style.overflow=''})));</script></body></html>
