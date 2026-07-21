@@ -831,24 +831,112 @@
     let allowLeave = false;
     let deferredInstallPrompt = null;
 
+    const SESSION_STORAGE_TTL_MS = 24 * 60 * 60 * 1000;
+    const SAVED_SESSION_PATH = "/thank-you.html";
+
+    function clearSavedSession(){
+      localStorage.removeItem("sn_last_session_url");
+      localStorage.removeItem("sn_last_session_saved_at");
+    }
+
+    function buildMinimalSessionUrl(values){
+      const saved = new URL(SAVED_SESSION_PATH, window.location.origin);
+      const approved = [
+        ["order_id", values.orderId],
+        ["uuid", values.uuid],
+        ["signer", values.signer],
+        ["booking_type", values.bookingType],
+        ["role", values.role],
+        ["lang", values.lang]
+      ];
+
+      approved.forEach(function(entry){
+        const key = entry[0];
+        const value = entry[1];
+        if(value) saved.searchParams.set(key, value);
+      });
+
+      return saved.pathname + saved.search;
+    }
+
+    function getValidatedSavedSessionUrl(){
+      const savedValue = localStorage.getItem("sn_last_session_url");
+      const savedAtValue = localStorage.getItem("sn_last_session_saved_at");
+      if(!savedValue){
+        if(savedAtValue) clearSavedSession();
+        return "";
+      }
+
+      const savedAt = Number(savedAtValue);
+      const age = Date.now() - savedAt;
+      if(!savedAtValue || !Number.isFinite(savedAt) || savedAt <= 0 || age < 0 || age > SESSION_STORAGE_TTL_MS){
+        clearSavedSession();
+        return "";
+      }
+
+      let saved;
+      try{
+        saved = new URL(savedValue, window.location.origin);
+      }catch(error){
+        clearSavedSession();
+        return "";
+      }
+
+      if(saved.origin !== window.location.origin || saved.pathname !== SAVED_SESSION_PATH){
+        clearSavedSession();
+        return "";
+      }
+
+      const savedOrderId = saved.searchParams.get("order_id") || "";
+      const savedUuid = saved.searchParams.get("uuid") || "";
+      if(!savedOrderId && !savedUuid){
+        clearSavedSession();
+        return "";
+      }
+
+      // Rebuild even valid legacy values so old aliases, tracking values, names,
+      // and email addresses are never restored from localStorage.
+      const minimalUrl = buildMinimalSessionUrl({
+        orderId: savedOrderId,
+        uuid: savedUuid,
+        signer: saved.searchParams.get("signer") || "",
+        bookingType: saved.searchParams.get("booking_type") || "",
+        role: saved.searchParams.get("role") || "",
+        lang: saved.searchParams.get("lang") || ""
+      });
+
+      if(savedValue !== minimalUrl){
+        localStorage.setItem("sn_last_session_url", minimalUrl);
+      }
+      return minimalUrl;
+    }
+
     function saveCurrentSessionForApp(){
       try{
-        // Do not save test/demo URLs as the app return page.
-        // On iPhone, Add to Home Screen can reopen the exact URL that was saved.
-        // We only want to save real customer/session URLs.
-        if(params.get("test")) return;
+        // Test/demo pages and URLs without a legitimate workflow identifier
+        // must never become the installed-app return destination.
+        if(params.get("test") || (!orderId && !uuid)) return;
 
-        if(orderId || uuid || email || window.location.search){
-          localStorage.setItem("sn_last_session_url", window.location.href);
-          localStorage.setItem("sn_last_session_saved_at", String(Date.now()));
-        }
+        const savedLang = params.get("lang") || (isKreyol ? "ht" : "");
+        const minimalUrl = buildMinimalSessionUrl({
+          orderId: orderId,
+          uuid: uuid,
+          signer: signer,
+          bookingType: bookingType,
+          role: role,
+          lang: savedLang
+        });
+
+        localStorage.setItem("sn_last_session_url", minimalUrl);
+        localStorage.setItem("sn_last_session_saved_at", String(Date.now()));
       }catch(e){}
     }
 
     function restoreSessionWhenOpenedAsApp(){
       try{
         const openedFromApp = params.get("from_app") === "1" || window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-        const savedUrl = localStorage.getItem("sn_last_session_url");
+        const savedUrl = getValidatedSavedSessionUrl();
+        const currentUrl = window.location.pathname + window.location.search;
 
         // If the iPhone home-screen icon was saved while testing, remove the test mode
         // so the page can check Make/Airtable again instead of staying stuck on a demo screen.
@@ -856,7 +944,7 @@
           const cleanUrl = new URL(window.location.href);
           cleanUrl.searchParams.delete("test");
           cleanUrl.searchParams.set("from_app", "1");
-          if(savedUrl && savedUrl !== window.location.href){
+          if(savedUrl && savedUrl !== currentUrl){
             window.location.replace(savedUrl);
           }else{
             window.location.replace(cleanUrl.toString());
@@ -865,7 +953,7 @@
         }
 
         const hasSessionParams = orderId || uuid || email;
-        if(openedFromApp && !hasSessionParams && savedUrl && savedUrl !== window.location.href){
+        if(openedFromApp && !hasSessionParams && savedUrl && savedUrl !== currentUrl){
           window.location.replace(savedUrl);
         }
       }catch(e){}
@@ -975,7 +1063,7 @@
 
     if("serviceWorker" in navigator){
       window.addEventListener("load", function(){
-        navigator.serviceWorker.register("/sw.js?v=6").catch(function(){});
+        navigator.serviceWorker.register("/sw.js?v=7").catch(function(){});
       });
     }
 
