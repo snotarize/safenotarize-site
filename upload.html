@@ -76,7 +76,7 @@
 
           const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
           const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
-          const name = params.get("name") || params.get("invitee_full_name") || "";
+          const signer = params.get("signer") || "";
           const bookingType = params.get("booking_type") || "";
           const role = params.get("role") || "";
           const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
@@ -90,10 +90,7 @@
             clean.set("email", email);
             clean.set("invitee_email", email);
           }
-          if(name){
-            clean.set("name", name);
-            clean.set("invitee_full_name", name);
-          }
+          if(signer) clean.set("signer", signer);
           if(bookingType) clean.set("booking_type", bookingType);
           if(role) clean.set("role", role);
           if(uuid) clean.set("uuid", uuid);
@@ -115,7 +112,7 @@
           const url = new URL(THANK_YOU_PAGE_URL);
           const clean = getCleanParams();
 
-          ["order_id","utm_content","email","name","booking_type","role","uuid","lang"].forEach(function(key){
+          ["order_id","utm_content","email","signer","booking_type","role","uuid","lang"].forEach(function(key){
             const value = clean.get(key);
             if(value) url.searchParams.set(key, value);
           });
