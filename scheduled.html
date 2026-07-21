@@ -249,29 +249,84 @@ h1{
 </div>
 <section class="content">
 <div aria-hidden="true" class="success">✓</div>
-<div class="badge">Session time confirmed</div>
-<h1>You’re All Set</h1>
-<p class="subtitle">Your requested session time was selected successfully. The next step is to watch for your SafeNotarize invitation email.</p>
+<div class="badge" id="scheduled-badge">Session time confirmed</div>
+<h1 id="scheduled-heading">You’re All Set</h1>
+<p class="subtitle" id="scheduled-subtitle">Your requested session time was selected successfully. The next step is to watch for your SafeNotarize invitation email.</p>
 <div class="steps">
-<div class="step" data-number="1">
+<div class="step" data-number="1" id="scheduled-step-1">
 <strong>Check your email.</strong> Each signer receives a separate secure link for the session.
         </div>
-<div class="step" data-number="2">
+<div class="step" data-number="2" id="scheduled-step-2">
 <strong>Keep the invitation.</strong> Use the link in that email to join at the scheduled time.
         </div>
-<div class="step" data-number="3">
+<div class="step" data-number="3" id="scheduled-step-3">
 <strong>Be ready with identification.</strong> Each signer should have an accepted, unexpired photo ID available.
         </div>
 </div>
-<div class="reminder">
+<div class="reminder" id="scheduled-reminder">
 <strong>Can’t find the invitation?</strong> Check Spam, Junk, Promotions, or All Mail. Delivery may take a few minutes.
       </div>
 <div class="actions">
-<a class="btn primary" href="https://safenotarize.com">Back to SafeNotarize</a>
-<a class="btn secondary" href="mailto:supervisor@safenotarize.com">Contact Support</a>
+<a class="btn primary" href="https://safenotarize.com" id="scheduled-primary">Back to SafeNotarize</a>
+<a class="btn secondary" href="mailto:supervisor@safenotarize.com" id="scheduled-support">Contact Support</a>
 </div>
-<p class="footer-note">Do not share your secure session link with anyone who is not participating in the notarization.</p>
+<p class="footer-note" id="scheduled-footer-note">Do not share your secure session link with anyone who is not participating in the notarization.</p>
 </section>
 </main>
-<script>function snToggleMenu(b){const p=document.getElementById('sn-mobile-panel');if(!p)return;const o=p.classList.toggle('show');b.setAttribute('aria-expanded',String(o));document.body.style.overflow=o?'hidden':''}document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('#sn-mobile-panel a').forEach(a=>a.addEventListener('click',()=>{const p=document.getElementById('sn-mobile-panel');if(p)p.classList.remove('show');document.body.style.overflow=''})));</script></body>
+<script>
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const values = {};
+  for (const [rawKey, rawValue] of params.entries()) {
+    const key = String(rawKey).toLowerCase();
+    if (!values[key]) values[key] = [];
+    values[key].push(String(rawValue).toLowerCase());
+  }
+  const hasExact = (key, expected) => (values[key] || []).some(value => value === expected);
+  const contains = (key, fragment) => (values[key] || []).some(value => value.includes(fragment));
+  const useHaitian =
+    hasExact('lang', 'ht') ||
+    hasExact('utm_source', 'safenotarize_ht') ||
+    hasExact('utm_campaign', 'online_notary_ht') ||
+    contains('utm_term', 'lang_ht');
+
+  if (!useHaitian) return;
+
+  const haitian = {
+    title: 'Lè Sesyon an Konfime | SafeNotarize',
+    description: 'Lè sesyon SafeNotarize ou a konfime, verifye imel ou pou envitasyon sekirize a epi prepare pyès idantifikasyon ou pou notarizasyon an.',
+    badge: 'Lè sesyon an konfime',
+    heading: 'Ou Pare Nèt',
+    subtitle: 'Lè ou te chwazi pou sesyon an konfime avèk siksè. Kounye a, verifye imel ou pou envitasyon SafeNotarize la.',
+    step1: '<strong>Verifye imel ou.</strong> Chak moun k ap siyen ap resevwa yon lyen sekirize apa pou sesyon an.',
+    step2: '<strong>Konsève envitasyon an.</strong> Sèvi ak lyen ki nan imel la pou antre nan lè sesyon an rive.',
+    step3: '<strong>Prepare pyès idantifikasyon ou.</strong> Chak moun k ap siyen dwe genyen yon pyès idantifikasyon ak foto ki valab epi ki poko ekspire.',
+    reminder: '<strong>Ou pa jwenn envitasyon an?</strong> Verifye Spam, Junk, Promotions oswa All Mail. Li ka pran kèk minit pou imel la rive.',
+    primary: 'Retounen sou SafeNotarize',
+    support: 'Kontakte Sipò',
+    footer: 'Pa pataje lyen sekirize sesyon ou an ak okenn moun ki pap patisipe nan notarizasyon an.'
+  };
+
+  document.documentElement.lang = 'ht';
+  document.title = haitian.title;
+  const description = document.querySelector('meta[name="description"]');
+  if (description) description.setAttribute('content', haitian.description);
+
+  document.getElementById('scheduled-badge').textContent = haitian.badge;
+  document.getElementById('scheduled-heading').textContent = haitian.heading;
+  document.getElementById('scheduled-subtitle').textContent = haitian.subtitle;
+  document.getElementById('scheduled-step-1').innerHTML = haitian.step1;
+  document.getElementById('scheduled-step-2').innerHTML = haitian.step2;
+  document.getElementById('scheduled-step-3').innerHTML = haitian.step3;
+  document.getElementById('scheduled-reminder').innerHTML = haitian.reminder;
+
+  const primary = document.getElementById('scheduled-primary');
+  primary.textContent = haitian.primary;
+  primary.href = 'https://safenotarize.com/ht.html';
+  document.getElementById('scheduled-support').textContent = haitian.support;
+  document.getElementById('scheduled-footer-note').textContent = haitian.footer;
+})();
+
+function snToggleMenu(b){const p=document.getElementById('sn-mobile-panel');if(!p)return;const o=p.classList.toggle('show');b.setAttribute('aria-expanded',String(o));document.body.style.overflow=o?'hidden':''}document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('#sn-mobile-panel a').forEach(a=>a.addEventListener('click',()=>{const p=document.getElementById('sn-mobile-panel');if(p)p.classList.remove('show');document.body.style.overflow=''})));
+</script></body>
 </html>
