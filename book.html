@@ -767,7 +767,6 @@
         uploadUrl.searchParams.set("order_id", orderId);
         uploadUrl.searchParams.set("utm_content", orderId);
 
-        if(payload.primary_signer_email) uploadUrl.searchParams.set("email", payload.primary_signer_email);
         if(payload.booking_type) uploadUrl.searchParams.set("booking_type", payload.booking_type);
         if(payload.booking_type === "other") uploadUrl.searchParams.set("role", "booker");
 

@@ -509,10 +509,45 @@
   <script>
     const makeWebhookUrl = "https://hook.us2.make.com/oy9elq5ctxb9fl74lcwuimwb4zp2gxb2";
     const calendlyEventUrl = "https://calendly.com/supervisor-23/online-notarization-safenotarize";
-    const params = new URLSearchParams(window.location.search);
+    const rawParams = new URLSearchParams(window.location.search);
+    const testMode = rawParams.get("test") || "";
+    const openedFromAppParam = rawParams.get("from_app") === "1";
 
+    function normalizeWorkflowUrl(sourceParams){
+      const clean = new URLSearchParams();
+      const orderIdValue = sourceParams.get("order_id") || sourceParams.get("record_id") || sourceParams.get("utm_content") || "";
+      const uuidValue = sourceParams.get("uuid") || sourceParams.get("invitee_uuid") || sourceParams.get("calendly_uuid") || "";
+      const signerValue = sourceParams.get("signer") || "";
+      const bookingTypeValue = sourceParams.get("booking_type") || "";
+      const roleValue = sourceParams.get("role") || sourceParams.get("viewer") || "";
+      const suppliedLang = (sourceParams.get("lang") || "").toLowerCase();
+      const legacyKreyol = suppliedLang === "ht" ||
+        (sourceParams.get("utm_source") || "").toLowerCase().includes("_ht") ||
+        (sourceParams.get("utm_campaign") || "").toLowerCase().includes("_ht") ||
+        (sourceParams.get("utm_term") || "").toLowerCase().includes("lang_ht");
+      const eventStartTimeValue = sourceParams.get("event_start_time") || sourceParams.get("start_time") || "";
+
+      if(orderIdValue) clean.set("order_id", orderIdValue);
+      if(uuidValue) clean.set("uuid", uuidValue);
+      if(signerValue) clean.set("signer", signerValue);
+      if(bookingTypeValue) clean.set("booking_type", bookingTypeValue);
+      if(roleValue) clean.set("role", roleValue);
+      if(legacyKreyol) clean.set("lang", "ht");
+      else if(suppliedLang) clean.set("lang", suppliedLang);
+      if(eventStartTimeValue) clean.set("event_start_time", eventStartTimeValue);
+
+      const normalizedSearch = clean.toString();
+      const normalizedUrl = window.location.pathname + (normalizedSearch ? `?${normalizedSearch}` : "") + window.location.hash;
+      const currentUrl = window.location.pathname + window.location.search + window.location.hash;
+      if(normalizedUrl !== currentUrl){
+        window.history.replaceState(window.history.state, "", normalizedUrl);
+      }
+      return clean;
+    }
+
+    const params = normalizeWorkflowUrl(rawParams);
     const lang = (params.get("lang") || "").toLowerCase();
-    const isKreyol = lang === "ht" || (params.get("utm_source") || "").includes("_ht") || (params.get("utm_campaign") || "").includes("_ht") || (params.get("utm_term") || "").includes("lang_ht");
+    const isKreyol = lang === "ht";
 
     if(isKreyol){
       document.documentElement.lang = "ht";
@@ -636,8 +671,6 @@
 
     const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
     const uuid = params.get("uuid") || params.get("invitee_uuid") || params.get("calendly_uuid") || "";
-    const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
-    const name = params.get("name") || params.get("invitee_full_name") || "";
     const signer = params.get("signer") || "";
     const role = params.get("role") || params.get("viewer") || "";
     const bookingType = params.get("booking_type") || "";
@@ -682,8 +715,6 @@
       url.searchParams.set("utm_campaign", isKreyol ? "online_notary_ht" : "online_notary");
 
       if(orderId) url.searchParams.set("utm_content", orderId);
-      if(email) url.searchParams.set("email", email);
-      if(name) url.searchParams.set("name", name);
       if(bookingType) url.searchParams.set("utm_term", isKreyol ? `${bookingType}_lang_ht` : bookingType);
       else if(isKreyol) url.searchParams.set("utm_term", "lang_ht");
       if(isKreyol) url.searchParams.set("lang", "ht");
@@ -795,13 +826,13 @@
 
       const signerToCheck = signer || "primary";
 
-      if(!orderId && !uuid && !email){
+      if(!orderId && !uuid){
         showStillPreparing();
         return;
       }
 
       try{
-        const url = `${makeWebhookUrl}?order_id=${encodeURIComponent(orderId)}&uuid=${encodeURIComponent(uuid)}&email=${encodeURIComponent(email)}&signer=${encodeURIComponent(signerToCheck)}`;
+        const url = `${makeWebhookUrl}?order_id=${encodeURIComponent(orderId)}&uuid=${encodeURIComponent(uuid)}&signer=${encodeURIComponent(signerToCheck)}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -915,7 +946,7 @@
       try{
         // Test/demo pages and URLs without a legitimate workflow identifier
         // must never become the installed-app return destination.
-        if(params.get("test") || (!orderId && !uuid)) return;
+        if(testMode || (!orderId && !uuid)) return;
 
         const savedLang = params.get("lang") || (isKreyol ? "ht" : "");
         const minimalUrl = buildMinimalSessionUrl({
@@ -934,13 +965,13 @@
 
     function restoreSessionWhenOpenedAsApp(){
       try{
-        const openedFromApp = params.get("from_app") === "1" || window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+        const openedFromApp = openedFromAppParam || window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
         const savedUrl = getValidatedSavedSessionUrl();
         const currentUrl = window.location.pathname + window.location.search;
 
         // If the iPhone home-screen icon was saved while testing, remove the test mode
         // so the page can check Make/Airtable again instead of staying stuck on a demo screen.
-        if(openedFromApp && params.get("test")){
+        if(openedFromApp && testMode){
           const cleanUrl = new URL(window.location.href);
           cleanUrl.searchParams.delete("test");
           cleanUrl.searchParams.set("from_app", "1");
@@ -952,7 +983,7 @@
           return;
         }
 
-        const hasSessionParams = orderId || uuid || email;
+        const hasSessionParams = orderId || uuid;
         if(openedFromApp && !hasSessionParams && savedUrl && savedUrl !== currentUrl){
           window.location.replace(savedUrl);
         }
@@ -1075,8 +1106,6 @@
     setupLeaveProtection();
     updateScheduleLink(isBookerFlow ? copy.chooseSlot : copy.chooseLater);
     showScheduledTime();
-
-    const testMode = params.get("test") || "";
 
     if(testMode === "ready"){
       showReadyButton("https://safenotarize.com");

@@ -75,7 +75,6 @@
           const clean = new URLSearchParams();
 
           const orderId = params.get("order_id") || params.get("record_id") || params.get("utm_content") || "";
-          const email = params.get("email") || params.get("invitee_email") || params.get("client_email") || "";
           const signer = params.get("signer") || "";
           const bookingType = params.get("booking_type") || "";
           const role = params.get("role") || "";
@@ -85,10 +84,6 @@
           if(orderId){
             clean.set("order_id", orderId);
             clean.set("utm_content", orderId);
-          }
-          if(email){
-            clean.set("email", email);
-            clean.set("invitee_email", email);
           }
           if(signer) clean.set("signer", signer);
           if(bookingType) clean.set("booking_type", bookingType);
@@ -112,7 +107,7 @@
           const url = new URL(THANK_YOU_PAGE_URL);
           const clean = getCleanParams();
 
-          ["order_id","utm_content","email","signer","booking_type","role","uuid","lang"].forEach(function(key){
+          ["order_id","utm_content","signer","booking_type","role","uuid","lang"].forEach(function(key){
             const value = clean.get(key);
             if(value) url.searchParams.set(key, value);
           });
@@ -123,8 +118,11 @@
         function syncUrlAndTallyEmbed(){
           const clean = getCleanParams();
 
-          if(clean.toString()){
-            window.history.replaceState({}, "", `${window.location.pathname}?${clean.toString()}`);
+          const normalizedSearch = clean.toString();
+          const normalizedUrl = window.location.pathname + (normalizedSearch ? `?${normalizedSearch}` : "") + window.location.hash;
+          const currentUrl = window.location.pathname + window.location.search + window.location.hash;
+          if(normalizedUrl !== currentUrl){
+            window.history.replaceState({}, "", normalizedUrl);
           }
 
           const iframe = document.getElementById("tally-upload-frame");
