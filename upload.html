@@ -193,7 +193,11 @@
       }
     });
 
+    const tallyUploadFrame = document.getElementById("tally-upload-frame");
+
     window.addEventListener("message", function(e){
+      if(e.origin !== "https://tally.so" || !tallyUploadFrame || e.source !== tallyUploadFrame.contentWindow) return;
+
       const data = typeof e.data === "string" ? e.data : JSON.stringify(e.data || {});
 
       if(data.includes("Tally.FormSubmitted")){
