@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safenotarize-session-v7';
+const CACHE_NAME = 'safenotarize-session-v8';
 const CACHE_PREFIX = 'safenotarize-session-v';
 const APP_SHELL = [
   '/thank-you.html',
@@ -37,11 +37,14 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(request.url);
 
+  // Never intercept or cache third-party services or unsupported cross-origin requests.
+  if (url.origin !== self.location.origin) return;
+
   // Never cache Make webhook/API responses. Always get fresh session status.
   if (url.hostname.includes('hook.us2.make.com')) return;
 
   if (request.mode === 'navigate') {
-    const isProtectedWorkflow = url.origin === self.location.origin && PROTECTED_WORKFLOW_PATHS.has(url.pathname);
+    const isProtectedWorkflow = PROTECTED_WORKFLOW_PATHS.has(url.pathname);
 
     if (isProtectedWorkflow) {
       event.respondWith(
@@ -52,8 +55,12 @@ self.addEventListener('fetch', event => {
 
     event.respondWith(
       fetch(request, {cache:'no-store'}).then(response => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+        if (response.ok) {
+          const copy = response.clone();
+          event.waitUntil(
+            caches.open(CACHE_NAME).then(cache => cache.put(request, copy)).catch(() => {})
+          );
+        }
         return response;
       }).catch(() => caches.match(request).then(cached => cached || caches.match('/thank-you.html')))
     );
@@ -62,9 +69,13 @@ self.addEventListener('fetch', event => {
 
   event.respondWith(
     caches.match(request).then(cached => cached || fetch(request).then(response => {
-      const copy = response.clone();
-      caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+      if (response.ok) {
+        const copy = response.clone();
+        event.waitUntil(
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy)).catch(() => {})
+        );
+      }
       return response;
-    }).catch(() => cached))
+    }))
   );
 });
