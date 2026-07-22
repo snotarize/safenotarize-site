@@ -581,7 +581,7 @@
       else if(data.document_to==="other"){documentName=data.document_name||""; documentEmail=data.document_email||"";}
 
       return {
-        source:"safenotarize_book_page",submitted_at:new Date().toISOString(),booking_type:data.booking_type,international_signer_passport:airtableInternationalSignerPassport,international_signer_passport_answer:selectedInternationalSignerPassport,
+        source:"safenotarize_book_page",language:"ht",submitted_at:new Date().toISOString(),booking_type:data.booking_type,international_signer_passport:airtableInternationalSignerPassport,international_signer_passport_answer:selectedInternationalSignerPassport,
         booker_name:bookerName,booker_name_bluenotary:toBlueNotaryName(bookerName),booker_email:bookerEmail,booker_phone:bookerPhone,
         primary_signer_name:primaryName,primary_signer_name_bluenotary:toBlueNotaryName(primaryName),primary_signer_email:primaryEmail,primary_signer_phone:primaryPhone,
         invoice_to:data.invoice_to||"",invoice_name:invoiceName,invoice_name_bluenotary:toBlueNotaryName(invoiceName),invoice_email:invoiceEmail,
