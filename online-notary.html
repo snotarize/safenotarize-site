@@ -260,6 +260,66 @@
   .sn-flow-section{padding-left:14px!important;padding-right:14px!important}
 }
 </style>
+
+<style id="sn-phase10h-e-mobile-responsive-fix">
+@media (max-width: 768px){
+  h1{
+    font-size:clamp(2rem,5vw,2.6rem)!important;
+    line-height:1.12!important;
+  }
+  .sn-mobile-flow-grid,
+  .sn-flow-grid,
+  .step-grid{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-auto-rows:auto!important;
+    align-items:stretch!important;
+    gap:12px!important;
+  }
+  .sn-mobile-flow-card,
+  .sn-flow-card,
+  .step-card{
+    box-sizing:border-box!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:18px 14px!important;
+    text-align:center!important;
+    overflow:visible!important;
+  }
+  .sn-mobile-flow-card h3,
+  .sn-mobile-flow-card h4,
+  .sn-flow-card h3,
+  .sn-flow-card h4,
+  .step-card h3,
+  .step-card h4,
+  .sn-mobile-flow-card p,
+  .sn-flow-card p,
+  .step-card p{
+    white-space:normal!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    hyphens:none!important;
+  }
+  .sn-flow-section{
+    padding-bottom:96px!important;
+  }
+}
+@media (max-width: 360px){
+  .sn-mobile-flow-grid,
+  .sn-flow-grid,
+  .step-grid{
+    gap:10px!important;
+  }
+  .sn-mobile-flow-card,
+  .sn-flow-card,
+  .step-card{
+    padding:16px 10px!important;
+  }
+}
+</style>
 </head>
 <body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-start-btn" href="/start.html">Start</a></nav><button aria-expanded="false" aria-label="Open menu" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-mobile-start" href="/start.html">Start</a></div></header>
 <div class="trust-badges">
