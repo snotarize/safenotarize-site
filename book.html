@@ -45,7 +45,11 @@
     .section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;border-bottom:1px solid #edf3f9;padding-bottom:12px}.section-head h2{margin:0;color:var(--navy);font-size:20px;line-height:1.2}.section-head p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.35}
     .progress-wrap{margin:0 0 14px;background:#f3f8fe;border:1px solid #e0edf8;border-radius:14px;padding:10px}.progress-top{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900;font-size:13px;margin-bottom:8px}.progress-bar{height:8px;background:#dbeaf7;border-radius:999px;overflow:hidden}.progress-fill{width:50%;height:100%;background:var(--green);border-radius:999px;transition:width .25s ease}
     .step-card{display:none;animation:softIn .2s ease}.step-card.active{display:block}@keyframes softIn{from{opacity:.25;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .choice-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}.choice{border:2px solid var(--border);border-radius:16px;background:#fff;padding:14px 16px;cursor:pointer;text-align:left;transition:.15s;min-height:74px}.choice.active{border-color:var(--green);background:#fbfffc;box-shadow:0 8px 24px rgba(40,167,69,.10)}.choice strong{display:block;color:var(--navy);margin-bottom:4px;font-size:16px}.choice span{display:block;color:var(--muted);font-size:12.5px;line-height:1.25}
+    .choice-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}.choice{border:2px solid var(--border);border-radius:16px;background:#fff;padding:14px 16px;cursor:pointer;text-align:left;transition:.15s;min-height:116px}.choice.active{border-color:var(--green);background:var(--greenSoft);box-shadow:0 8px 24px rgba(40,167,69,.14)}.choice:focus-visible{outline:3px solid rgba(40,167,69,.28);outline-offset:2px}.choice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px}.choice strong{display:block;color:var(--navy);font-size:16px;line-height:1.2}.choice-copy{display:block;font-size:12.5px;line-height:1.35}.choice-main{color:#31475f;font-weight:800;margin-bottom:4px}.choice-support{color:var(--muted)}.choice-selected{display:none;align-items:center;gap:5px;background:var(--green);color:#fff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900;white-space:nowrap}.choice.active .choice-selected{display:inline-flex}
+    .coordinator-conflict-summary{margin:0 0 14px;padding:13px 14px;border:1px solid #f3b7bd;border-radius:13px;background:#fff3f4;color:#7f111b;line-height:1.4}.coordinator-conflict-summary strong{display:block;margin-bottom:3px}.coordinator-conflict-summary p{margin:0 0 9px;font-size:13px}.coordinator-conflict-summary .mini-btn{border-color:#d98e96;color:#7f111b;background:#fff}
+    .field-error{margin:7px 0 0;color:#a31621;font-size:12.5px;font-weight:700;line-height:1.35}.field [aria-invalid="true"]{border-color:#c1121f;box-shadow:0 0 0 3px rgba(193,18,31,.09)}
+    .mode-switch-backdrop{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,39,77,.58)}.mode-switch-dialog{width:min(100%,480px);background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.24);padding:22px}.mode-switch-dialog h2{margin:0 0 8px;color:var(--navy);font-size:22px}.mode-switch-dialog p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.mode-switch-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.mode-switch-actions .continue{width:auto;margin:0}.mode-switch-actions .back-btn{min-width:90px}.modal-open{overflow:hidden}
+
     .card{border:1px solid var(--border);background:#fbfdff;border-radius:16px;padding:16px;margin-bottom:12px}.card-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.card-title h3{margin:0;color:var(--navy);font-size:16px}.badge{display:inline-block;background:#eef5ff;color:var(--navy);border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;white-space:nowrap}
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
     label{display:block;color:#31475f;font-size:13px;font-weight:800;margin-bottom:7px}input,select,textarea{width:100%;border:1px solid #cbd8e6;border-radius:10px;padding:12px;font-size:15px;color:#223448;background:#fff;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(40,167,69,.11)}textarea{min-height:78px;resize:vertical}.field{margin-bottom:13px}.required{color:var(--danger)}
@@ -136,14 +140,23 @@
 </div>
 <section class="step-card active" id="step-1">
 <div aria-label="Booking type" class="choice-row" role="group">
-<button class="choice active" id="choice-self" onclick="setBookingType('self')" type="button">
-<strong>I am signing</strong><span>I will join the session.</span>
+<button aria-pressed="true" class="choice active" id="choice-self" onclick="requestBookingType('self')" type="button">
+<span class="choice-head"><strong>I am signing</strong><span class="choice-selected"><span aria-hidden="true">✓</span> Selected</span></span>
+<span class="choice-copy choice-main">Choose this if you are one of the people signing the document.</span>
+<span class="choice-copy choice-support">You will receive the session link and may be able to join immediately.</span>
 </button>
-<button class="choice" id="choice-other" onclick="setBookingType('other')" type="button">
-<strong>Booking for someone else</strong><span>Client, family, or signer.</span>
+<button aria-pressed="false" class="choice" id="choice-other" onclick="requestBookingType('other')" type="button">
+<span class="choice-head"><strong>Booking for someone else</strong><span class="choice-selected"><span aria-hidden="true">✓</span> Selected</span></span>
+<span class="choice-copy choice-main">Choose this only if you will NOT sign the document.</span>
+<span class="choice-copy choice-support">You are arranging the session for another person. The signer will receive the session invitation.</span>
 </button>
 </div>
 <input id="booking_type" name="booking_type" type="hidden" value="self"/>
+<div aria-live="assertive" class="coordinator-conflict-summary hidden" id="coordinator-conflict-summary" role="alert">
+<strong>The booking contact cannot also be one of the signers.</strong>
+<p>Choose the signing option if you will participate as a signer.</p>
+<button class="mini-btn" id="switch-to-self-action" onclick="requestBookingType('self')" type="button">Switch to ‘I am signing’</button>
+</div>
 <div class="card hidden" id="booker-card">
 <div class="card-title"><h3>Booking contact</h3><span class="badge">Required</span></div>
 <div class="grid-2">
@@ -238,6 +251,16 @@
 </section>
 </div>
 </form>
+<div aria-hidden="true" class="mode-switch-backdrop hidden" id="mode-switch-modal">
+<div aria-describedby="mode-switch-message" aria-labelledby="mode-switch-title" aria-modal="true" class="mode-switch-dialog" role="dialog">
+<h2 id="mode-switch-title">Switch booking type?</h2>
+<p id="mode-switch-message">Changing the booking type will clear the information and options you entered so the new booking starts correctly.</p>
+<div class="mode-switch-actions">
+<button class="back-btn" id="mode-switch-cancel" type="button">Cancel</button>
+<button class="continue" id="mode-switch-confirm" type="button">Continue and clear</button>
+</div>
+</div>
+</div>
 </div>
 </main>
 <script>
@@ -294,6 +317,10 @@
     let observerCount = 0;
     let submissionInProgress = false;
     let inMemoryBookingRequestId = "";
+    let pendingBookingType = "";
+    let modeSwitchReturnFocus = null;
+    const CONTINUE_BUTTON_TEXT = 'Continue to upload document';
+    const COORDINATOR_CONFLICT_FIELD_MESSAGE = 'It looks like the booking contact is also a signer. If you will sign the document, choose ‘I am signing.’ ‘Booking for someone else’ is only for someone who will not participate as a signer.';
 
     function toBlueNotaryName(name){
       if(!name) return "";
@@ -333,6 +360,8 @@
       const isOther = type === "other";
       self.classList.toggle("active", !isOther);
       other.classList.toggle("active", isOther);
+      self.setAttribute("aria-pressed", String(!isOther));
+      other.setAttribute("aria-pressed", String(isOther));
       bookerCard.classList.toggle("hidden", !isOther);
       [bookerName,bookerEmail,bookerPhone].forEach(function(field){
         field.setCustomValidity("");
@@ -341,6 +370,101 @@
       });
       bookerName.required = isOther;
       bookerEmail.required = isOther;
+      clearCoordinatorConflictErrors();
+    }
+
+    function hasMeaningfulBookingData(){
+      const valueIds = [
+        "primary_name","primary_email","primary_phone",
+        "booker_name","booker_email","booker_phone",
+        "invoice_name","invoice_email","document_name","document_email","notes"
+      ];
+      if(valueIds.some(function(id){
+        const field = document.getElementById(id);
+        return field && String(field.value || "").trim() !== "";
+      })) return true;
+      if(getDynamicBlocks("additional-signers").length || getDynamicBlocks("witnesses").length || getDynamicBlocks("observers").length) return true;
+      if(getEstimateExtraStamps() !== 0) return true;
+      if(normalizeInternationalAnswer(document.getElementById("international_signer_passport").value) !== "no") return true;
+      if(document.getElementById("invoice_to").value !== "primary_signer") return true;
+      if(document.getElementById("document_to").value !== "primary_signer") return true;
+      return false;
+    }
+
+    function openModeSwitchModal(type){
+      const modal = document.getElementById("mode-switch-modal");
+      pendingBookingType = type === "other" ? "other" : "self";
+      modeSwitchReturnFocus = document.activeElement;
+      modal.classList.remove("hidden");
+      modal.setAttribute("aria-hidden","false");
+      document.body.classList.add("modal-open");
+      setTimeout(function(){ document.getElementById("mode-switch-cancel").focus(); },0);
+    }
+
+    function closeModeSwitchModal(restoreFocus){
+      const modal = document.getElementById("mode-switch-modal");
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden","true");
+      document.body.classList.remove("modal-open");
+      pendingBookingType = "";
+      if(restoreFocus && modeSwitchReturnFocus && typeof modeSwitchReturnFocus.focus === "function") modeSwitchReturnFocus.focus();
+      modeSwitchReturnFocus = null;
+    }
+
+    function resetBookingConfiguration(type){
+      const form = document.getElementById("booking-form");
+      form.reset();
+      ["additional-signers","witnesses","observers"].forEach(function(id){ document.getElementById(id).innerHTML = ""; });
+      signerCount = 0;
+      witnessCount = 0;
+      observerCount = 0;
+      document.getElementById("estimate_extra_stamps").value = "0";
+      document.getElementById("international_signer_passport").value = "no";
+      clearSessionPeopleValidation();
+      clearCoordinatorConflictErrors();
+      clearStatus();
+      clearPendingBookingRequestId();
+      submissionInProgress = false;
+      const submitButton = document.getElementById("continue-btn");
+      submitButton.disabled = false;
+      submitButton.textContent = CONTINUE_BUTTON_TEXT;
+      document.querySelectorAll(".step-card").forEach(function(card){ card.classList.remove("active"); });
+      document.getElementById("step-1").classList.add("active");
+      updateProgress(1);
+      setBookingType(type);
+      toggleInvoiceOther();
+      toggleDocumentOther();
+      reindexAllDynamicBlocks();
+      updateEstimate();
+      setTimeout(function(){
+        const firstField = document.getElementById(type === "other" ? "booker_name" : "primary_name");
+        if(firstField) firstField.focus();
+      },0);
+    }
+
+    function requestBookingType(type){
+      type = type === "other" ? "other" : "self";
+      const current = document.getElementById("booking_type").value === "other" ? "other" : "self";
+      if(type === current) return;
+      if(hasMeaningfulBookingData()) openModeSwitchModal(type);
+      else resetBookingConfiguration(type);
+    }
+
+    function handleModeSwitchModalKeydown(event){
+      const modal = document.getElementById("mode-switch-modal");
+      if(modal.classList.contains("hidden")) return;
+      if(event.key === "Escape"){
+        event.preventDefault();
+        closeModeSwitchModal(true);
+        return;
+      }
+      if(event.key !== "Tab") return;
+      const focusable = Array.from(modal.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')).filter(function(element){ return !element.disabled; });
+      if(!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if(event.shiftKey && document.activeElement === first){ event.preventDefault(); last.focus(); }
+      else if(!event.shiftKey && document.activeElement === last){ event.preventDefault(); first.focus(); }
     }
 
     function getDynamicBlocks(containerId){
@@ -448,6 +572,7 @@
       for(const field of fields){
         if(field && !field.checkValidity()){ field.reportValidity(); field.focus(); return false; }
       }
+      if(!validateCoordinatorSignerConflicts({focusFirst:true,strict:true})) return false;
       return validateUniqueSessionPeople();
     }
 
@@ -461,6 +586,7 @@
       wrap.appendChild(block);
       reindexDynamicBlocks("additional-signers");
       updateEstimate();
+      if(!document.getElementById("coordinator-conflict-summary").classList.contains("hidden")) validateCoordinatorSignerConflicts();
     }
 
     function addWitness(){
@@ -500,6 +626,7 @@
       if(containerId) reindexDynamicBlocks(containerId);
       clearSessionPeopleValidation();
       updateEstimate();
+      if(document.getElementById("booking_type").value === "other") validateCoordinatorSignerConflicts();
     }
 
     function setOtherRecipientSection(sectionId, active){
@@ -530,6 +657,119 @@
     }
 
     function normalizeEmail(email){ return (email || "").trim().toLowerCase(); }
+    function normalizeCoordinatorPhone(phone){
+      const digits = String(phone || "").replace(/[^0-9]/g,"");
+      return digits.length >= 7 ? digits : "";
+    }
+    function normalizeCoordinatorName(name){
+      return String(name || "").normalize("NFC").trim().replace(/\s+/g," ").replace(/[’‘]/g,"'").replace(/[‐‑‒–—]/g,"-").replace(/\s*(['-])\s*/g,"$1").toLowerCase();
+    }
+    function isMeaningfulCoordinatorEmail(value){ return value.length >= 5 && value.includes("@"); }
+    function isMeaningfulCoordinatorName(value){ return value.length >= 2; }
+
+    function removeCoordinatorDescription(field,errorId){
+      const describedBy = (field.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean).filter(function(id){ return id !== errorId; });
+      if(describedBy.length) field.setAttribute("aria-describedby",describedBy.join(" "));
+      else field.removeAttribute("aria-describedby");
+    }
+
+    function clearCoordinatorFieldError(field){
+      if(!field || !field.id) return;
+      const errorId = field.id + "-coordinator-error";
+      const error = document.getElementById(errorId);
+      if(error) error.remove();
+      field.removeAttribute("aria-invalid");
+      removeCoordinatorDescription(field,errorId);
+    }
+
+    function setCoordinatorFieldError(field,message){
+      if(!field || !field.id) return;
+      const errorId = field.id + "-coordinator-error";
+      let error = document.getElementById(errorId);
+      if(!error){
+        error = document.createElement("div");
+        error.id = errorId;
+        error.className = "field-error";
+        const fieldWrap = field.closest(".field") || field.parentElement;
+        fieldWrap.appendChild(error);
+      }
+      error.textContent = message;
+      field.setAttribute("aria-invalid","true");
+      const ids = new Set((field.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+      ids.add(errorId);
+      field.setAttribute("aria-describedby",Array.from(ids).join(" "));
+    }
+
+    function getCoordinatorComparisonFields(){
+      const signers = [{
+        name:document.getElementById("primary_name"),
+        email:document.getElementById("primary_email"),
+        phone:document.getElementById("primary_phone")
+      }];
+      for(let i=1;i<=MAX_ADDITIONAL_SIGNERS;i++){
+        const name = getInputByName(`additional_signer_${i}_name`);
+        const email = getInputByName(`additional_signer_${i}_email`);
+        const phone = getInputByName(`additional_signer_${i}_phone`);
+        if(name || email || phone) signers.push({name:name,email:email,phone:phone});
+      }
+      return {
+        booker:{name:document.getElementById("booker_name"),email:document.getElementById("booker_email"),phone:document.getElementById("booker_phone")},
+        signers:signers
+      };
+    }
+
+    function clearCoordinatorConflictErrors(){
+      document.querySelectorAll(".field-error[id$='-coordinator-error']").forEach(function(error){
+        const fieldId = error.id.slice(0,-"-coordinator-error".length);
+        const field = document.getElementById(fieldId);
+        if(field){ field.removeAttribute("aria-invalid"); removeCoordinatorDescription(field,error.id); }
+        error.remove();
+      });
+      const summary = document.getElementById("coordinator-conflict-summary");
+      if(summary) summary.classList.add("hidden");
+    }
+
+    function validateCoordinatorSignerConflicts(options){
+      options = options || {};
+      clearCoordinatorConflictErrors();
+      if(document.getElementById("booking_type").value !== "other") return true;
+      const fields = getCoordinatorComparisonFields();
+      const strict = options.strict === true;
+      const conflicts = [];
+      const bookerValues = {
+        email:normalizeEmail(fields.booker.email.value),
+        phone:normalizeCoordinatorPhone(fields.booker.phone.value),
+        name:normalizeCoordinatorName(fields.booker.name.value)
+      };
+      fields.signers.forEach(function(signer){
+        const signerValues = {
+          email:signer.email ? normalizeEmail(signer.email.value) : "",
+          phone:signer.phone ? normalizeCoordinatorPhone(signer.phone.value) : "",
+          name:signer.name ? normalizeCoordinatorName(signer.name.value) : ""
+        };
+        if((strict ? Boolean(bookerValues.email && signerValues.email) : isMeaningfulCoordinatorEmail(bookerValues.email)) && bookerValues.email === signerValues.email) conflicts.push({booker:fields.booker.email,signer:signer.email});
+        if(bookerValues.phone && bookerValues.phone === signerValues.phone) conflicts.push({booker:fields.booker.phone,signer:signer.phone});
+        if((strict ? Boolean(bookerValues.name && signerValues.name) : isMeaningfulCoordinatorName(bookerValues.name)) && bookerValues.name === signerValues.name) conflicts.push({booker:fields.booker.name,signer:signer.name});
+      });
+      if(!conflicts.length) return true;
+      const affected = [];
+      conflicts.forEach(function(conflict){
+        [conflict.booker,conflict.signer].forEach(function(field){
+          if(field && !affected.includes(field)) affected.push(field);
+        });
+      });
+      affected.forEach(function(field){ setCoordinatorFieldError(field,COORDINATOR_CONFLICT_FIELD_MESSAGE); });
+      const summary = document.getElementById("coordinator-conflict-summary");
+      summary.classList.remove("hidden");
+      if(options.focusFirst && affected.length){
+        document.querySelectorAll(".step-card").forEach(function(card){ card.classList.remove("active"); });
+        document.getElementById("step-1").classList.add("active");
+        updateProgress(1);
+        affected[0].focus();
+        affected[0].scrollIntoView({behavior:"smooth",block:"center"});
+      }
+      return false;
+    }
     function normalizePersonName(name){ return (name || "").trim().replace(/\s+/g," ").toLowerCase(); }
     function getInputByName(name){ return document.querySelector(`[name="${name}"]`); }
 
@@ -712,9 +952,19 @@
       document.getElementById("estimate-total").textContent = money(pricing.estimated_total);
     }
 
+    function isCoordinatorIdentityField(field){
+      if(!field || !field.name) return false;
+      return ["booker_name","booker_email","booker_phone","primary_name","primary_email","primary_phone"].includes(field.name) || /^additional_signer_\d+_(name|email|phone)$/.test(field.name);
+    }
+
     document.addEventListener("input",function(e){
       if(e.target && e.target.matches("input")) e.target.setCustomValidity("");
+      if(isCoordinatorIdentityField(e.target) && !document.getElementById("coordinator-conflict-summary").classList.contains("hidden")) validateCoordinatorSignerConflicts();
     });
+
+    document.addEventListener("blur",function(e){
+      if(isCoordinatorIdentityField(e.target)) validateCoordinatorSignerConflicts();
+    },true);
 
     document.addEventListener("change",function(e){
       if(e.target && e.target.matches('select[data-field="option"]')) syncWitnessFields(e.target);
@@ -868,6 +1118,7 @@
       synchronizeActiveFields();
       const form = e.currentTarget;
       if(!form.checkValidity()){ form.reportValidity(); return; }
+      if(!validateCoordinatorSignerConflicts({focusFirst:true,strict:true})) return;
       if(!validateUniqueSessionPeople()) return;
 
       submissionInProgress = true;
@@ -895,6 +1146,17 @@
         btn.textContent = "Continue to upload document";
       }
     });
+    document.getElementById("mode-switch-cancel").addEventListener("click",function(){ closeModeSwitchModal(true); });
+    document.getElementById("mode-switch-confirm").addEventListener("click",function(){
+      const target = pendingBookingType;
+      closeModeSwitchModal(false);
+      resetBookingConfiguration(target);
+    });
+    document.getElementById("mode-switch-modal").addEventListener("click",function(event){
+      if(event.target === event.currentTarget) closeModeSwitchModal(true);
+    });
+    document.getElementById("mode-switch-modal").addEventListener("keydown",handleModeSwitchModalKeydown);
+
     initializeDocumentGate();
     setBookingType("self");
     toggleInvoiceOther();
