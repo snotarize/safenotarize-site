@@ -277,12 +277,23 @@
       window.location.href = "/documents/library.html";
     }
 
+
     const MAKE_BOOKING_WEBHOOK_URL = "https://hook.us2.make.com/08p65bg26odedngihppgxe1y5wog8638";
     const UPLOAD_PAGE_URL = "https://safenotarize.com/upload.html";
+    const MAX_ADDITIONAL_SIGNERS = 3;
+    const MAX_WITNESSES = 2;
+    const MAX_OBSERVERS = 2;
+    const MAX_EXTRA_STAMPS = 5;
+    const INCLUDED_STAMPS = 2;
+    const BOOKING_REQUEST_STORAGE_KEY = "sn_pending_booking_request_id";
+    const DOCUMENT_SOURCE_ALLOWLIST = new Set(["own","library","generated","template","official"]);
+    const DOCUMENT_TYPE_ALLOWLIST = new Set(["affidavit","affidavit-of-support","business-authorization-letter","child-passport-consent","child-travel-consent","ds-3053","employment-verification-letter","financial-support","general-consent","identity-affidavit","information-release","invitation-letter","letter-of-authorization","medical-consent","minor-medical-consent","name-affidavit","proof-of-residency","proof-of-residency-affidavit","ps-1583","temporary-guardianship-authorization","travel-authorization","vehicle-bill-of-sale","vehicle-gift-affidavit","vehicle-release","vehicle-use"]);
 
     let signerCount = 0;
     let witnessCount = 0;
     let observerCount = 0;
+    let submissionInProgress = false;
+    let inMemoryBookingRequestId = "";
 
     function toBlueNotaryName(name){
       if(!name) return "";
@@ -296,27 +307,119 @@
       }).join(" ");
     }
 
+    function clearAndDisableFields(container, disabled){
+      if(!container) return;
+      container.querySelectorAll("input,select,textarea").forEach(function(field){
+        field.setCustomValidity("");
+        field.disabled = disabled;
+        if(disabled){
+          if(field.tagName === "SELECT") field.selectedIndex = 0;
+          else field.value = "";
+        }
+      });
+    }
+
     function setBookingType(type){
+      type = type === "other" ? "other" : "self";
       const self = document.getElementById("choice-self");
       const other = document.getElementById("choice-other");
       const hidden = document.getElementById("booking_type");
       const bookerCard = document.getElementById("booker-card");
+      const bookerName = document.getElementById("booker_name");
+      const bookerEmail = document.getElementById("booker_email");
+      const bookerPhone = document.getElementById("booker_phone");
 
       hidden.value = type;
+      const isOther = type === "other";
+      self.classList.toggle("active", !isOther);
+      other.classList.toggle("active", isOther);
+      bookerCard.classList.toggle("hidden", !isOther);
+      [bookerName,bookerEmail,bookerPhone].forEach(function(field){
+        field.setCustomValidity("");
+        field.disabled = !isOther;
+        if(!isOther) field.value = "";
+      });
+      bookerName.required = isOther;
+      bookerEmail.required = isOther;
+    }
 
-      if(type === "self"){
-        self.classList.add("active");
-        other.classList.remove("active");
-        bookerCard.classList.add("hidden");
-        document.getElementById("booker_name").required = false;
-        document.getElementById("booker_email").required = false;
-      } else {
-        other.classList.add("active");
-        self.classList.remove("active");
-        bookerCard.classList.remove("hidden");
-        document.getElementById("booker_name").required = true;
-        document.getElementById("booker_email").required = true;
-      }
+    function getDynamicBlocks(containerId){
+      const container = document.getElementById(containerId);
+      if(!container) return [];
+      return Array.from(container.children).filter(function(child){ return child.classList.contains("card"); });
+    }
+
+    function updateDynamicField(block, prefix, slot, suffix){
+      const field = block.querySelector(`[data-field="${suffix}"]`);
+      if(!field) return;
+      const fieldId = `${prefix}_${slot}_${suffix}`;
+      field.name = fieldId;
+      field.id = fieldId;
+      const label = block.querySelector(`[data-field-label="${suffix}"]`);
+      if(label) label.htmlFor = fieldId;
+    }
+
+    function syncWitnessFields(select){
+      if(!select) return;
+      const block = select.closest(".card");
+      if(!block) return;
+      const clientProvided = select.value === "client_provided";
+      ["name","email"].forEach(function(suffix){
+        const field = block.querySelector(`[data-field="${suffix}"]`);
+        if(!field) return;
+        field.setCustomValidity("");
+        field.disabled = !clientProvided;
+        if(!clientProvided) field.value = "";
+      });
+    }
+
+    function reindexDynamicBlocks(containerId){
+      const limit = containerId === "additional-signers" ? MAX_ADDITIONAL_SIGNERS : (containerId === "witnesses" ? MAX_WITNESSES : MAX_OBSERVERS);
+      const allBlocks = getDynamicBlocks(containerId);
+      allBlocks.slice(limit).forEach(function(block){
+        block.querySelectorAll("input,select,textarea").forEach(function(field){ field.required = false; field.disabled = true; field.setCustomValidity(""); });
+        block.remove();
+      });
+      const blocks = getDynamicBlocks(containerId);
+      blocks.forEach(function(block,index){
+        const slot = index + 1;
+        const title = block.querySelector(".card-title h3");
+        const removeButton = block.querySelector(".remove-btn");
+
+        if(containerId === "additional-signers"){
+          block.id = `additional-signer-${slot}`;
+          if(title) title.textContent = `Additional signer ${slot}`;
+          updateDynamicField(block,"additional_signer",slot,"name");
+          updateDynamicField(block,"additional_signer",slot,"email");
+        }else if(containerId === "witnesses"){
+          block.id = `witness-${slot}`;
+          if(title) title.textContent = `Witness ${slot}`;
+          updateDynamicField(block,"witness",slot,"option");
+          updateDynamicField(block,"witness",slot,"name");
+          updateDynamicField(block,"witness",slot,"email");
+          syncWitnessFields(block.querySelector('[data-field="option"]'));
+        }else if(containerId === "observers"){
+          block.id = `observer-${slot}`;
+          if(title) title.textContent = `Observer ${slot}`;
+          updateDynamicField(block,"observer",slot,"name");
+          updateDynamicField(block,"observer",slot,"email");
+          updateDynamicField(block,"observer",slot,"phone");
+          updateDynamicField(block,"observer",slot,"role");
+        }
+
+        block.dataset.slot = String(slot);
+        if(removeButton) removeButton.onclick = function(){ removeBlock(block.id); };
+      });
+
+      signerCount = getDynamicBlocks("additional-signers").length;
+      witnessCount = getDynamicBlocks("witnesses").length;
+      observerCount = getDynamicBlocks("observers").length;
+    }
+
+    function reindexAllDynamicBlocks(){
+      reindexDynamicBlocks("additional-signers");
+      reindexDynamicBlocks("witnesses");
+      reindexDynamicBlocks("observers");
     }
 
     function updateProgress(step){
@@ -324,100 +427,118 @@
       document.getElementById("step-badge").textContent = `Step ${step} of 2`;
       document.getElementById("progress-label").textContent = titles[step] || "Booking";
       document.getElementById("progress-count").textContent = `${step}/2`;
-      document.getElementById("progress-fill").style.width = `${step * 50}%`;
+      document.getElementById("progress-fill").style.width = `${step*50}%`;
     }
 
-    function goToStep(step, validateFirst){
+    function goToStep(step,validateFirst){
       if(validateFirst && !validateStepOne()) return;
       document.querySelectorAll(".step-card").forEach(function(card){ card.classList.remove("active"); });
       const next = document.getElementById(`step-${step}`);
       if(next) next.classList.add("active");
       updateProgress(step);
-      setTimeout(function(){ document.getElementById("booking-form").scrollIntoView({behavior:"smooth", block:"start"}); }, 60);
+      setTimeout(function(){ document.getElementById("booking-form").scrollIntoView({behavior:"smooth",block:"start"}); },60);
     }
 
     function validateStepOne(){
-      const fields = [document.getElementById("primary_name"), document.getElementById("primary_email")];
+      const fields = [document.getElementById("primary_name"),document.getElementById("primary_email")];
       if(document.getElementById("booking_type").value === "other"){
         fields.unshift(document.getElementById("booker_email"));
         fields.unshift(document.getElementById("booker_name"));
       }
       for(const field of fields){
-        if(field && !field.checkValidity()){
-          field.reportValidity();
-          field.focus();
-          return false;
-        }
+        if(field && !field.checkValidity()){ field.reportValidity(); field.focus(); return false; }
       }
       return validateUniqueSessionPeople();
     }
 
     function addAdditionalSigner(){
-      signerCount++;
-      if(signerCount > 3){ alert("For more than 3 additional signers, add them in the notes section."); return; }
       const wrap = document.getElementById("additional-signers");
-      const id = `additional-signer-${signerCount}`;
+      if(getDynamicBlocks("additional-signers").length >= MAX_ADDITIONAL_SIGNERS){ alert("For more than 3 additional signers, add them in the notes section."); return; }
       const block = document.createElement("div");
       block.className = "card";
-      block.id = id;
       block.style.background = "#fff";
-      block.innerHTML = `<div class="card-title"><h3>Additional signer ${signerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-2"><div class="field"><label>Full name <span class="required">*</span></label><input name="additional_signer_${signerCount}_name" required placeholder="Additional signer full name"></div><div class="field"><label>Email address <span class="required">*</span></label><input name="additional_signer_${signerCount}_email" type="email" required placeholder="signer@email.com"></div></div><p style="margin:0;color:#637487;font-size:12.5px;line-height:1.35;">Each signer must use their own email so they can receive their personal SafeNotarize invite.</p>`;
+      block.innerHTML = `<div class="card-title"><h3></h3><button type="button" class="remove-btn">Remove</button></div><div class="grid-2"><div class="field"><label data-field-label="name">Full name <span class="required">*</span></label><input data-field="name" required placeholder="Additional signer full name"></div><div class="field"><label data-field-label="email">Email address <span class="required">*</span></label><input data-field="email" type="email" required placeholder="signer@email.com"></div></div><p style="margin:0;color:#637487;font-size:12.5px;line-height:1.35;">Each signer must use their own email so they can receive their personal SafeNotarize invite.</p>`;
       wrap.appendChild(block);
+      reindexDynamicBlocks("additional-signers");
       updateEstimate();
     }
 
     function addWitness(){
-      witnessCount++;
-      if(witnessCount > 2){ alert("For more than 2 witnesses, add details in the notes section."); return; }
       const wrap = document.getElementById("witnesses");
-      const id = `witness-${witnessCount}`;
+      if(getDynamicBlocks("witnesses").length >= MAX_WITNESSES){ alert("For more than 2 witnesses, add details in the notes section."); return; }
       const block = document.createElement("div");
       block.className = "card";
-      block.id = id;
       block.style.background = "#fff";
-      block.innerHTML = `<div class="card-title"><h3>Witness ${witnessCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-3"><div class="field"><label>Witness option</label><select name="witness_${witnessCount}_option"><option value="safenotarize_provided">SafeNotarize provides witness</option><option value="client_provided">Client provides witness</option></select></div><div class="field"><label>Witness name</label><input name="witness_${witnessCount}_name" placeholder="If client provided"></div><div class="field"><label>Witness email</label><input name="witness_${witnessCount}_email" type="email" placeholder="If client provided"></div></div>`;
+      block.innerHTML = `<div class="card-title"><h3></h3><button type="button" class="remove-btn">Remove</button></div><div class="grid-3"><div class="field"><label data-field-label="option">Witness option</label><select data-field="option"><option value="safenotarize_provided">SafeNotarize provides witness</option><option value="client_provided">Client provides witness</option></select></div><div class="field"><label data-field-label="name">Witness name</label><input data-field="name" placeholder="If client provided"></div><div class="field"><label data-field-label="email">Witness email</label><input data-field="email" type="email" placeholder="If client provided"></div></div>`;
       wrap.appendChild(block);
+      reindexDynamicBlocks("witnesses");
       updateEstimate();
     }
 
     function addObserver(){
-      observerCount++;
-      if(observerCount > 2){ alert("For more than 2 observers, add details in the notes section."); return; }
       const wrap = document.getElementById("observers");
-      const id = `observer-${observerCount}`;
+      if(getDynamicBlocks("observers").length >= MAX_OBSERVERS){ alert("For more than 2 observers, add details in the notes section."); return; }
       const block = document.createElement("div");
       block.className = "card";
-      block.id = id;
       block.style.background = "#fff";
-      block.innerHTML = `<div class="card-title"><h3>Observer ${observerCount}</h3><button type="button" class="remove-btn" onclick="removeBlock('${id}')">Remove</button></div><div class="grid-2"><div class="field"><label>Observer full name</label><input name="observer_${observerCount}_name" placeholder="Observer full name"></div><div class="field"><label>Observer email</label><input name="observer_${observerCount}_email" type="email" placeholder="observer@email.com"></div></div><div class="grid-2"><div class="field"><label>Observer phone</label><input name="observer_${observerCount}_phone" type="tel" placeholder="Optional"></div><div class="field"><label>Contact role</label><select name="observer_${observerCount}_role"><option value="Moderator">Moderator</option><option value="Viewer">Viewer</option><option value="Agent">Agent</option></select></div></div>`;
+      block.innerHTML = `<div class="card-title"><h3></h3><button type="button" class="remove-btn">Remove</button></div><div class="grid-2"><div class="field"><label data-field-label="name">Observer full name</label><input data-field="name" placeholder="Observer full name"></div><div class="field"><label data-field-label="email">Observer email</label><input data-field="email" type="email" placeholder="observer@email.com"></div></div><div class="grid-2"><div class="field"><label data-field-label="phone">Observer phone</label><input data-field="phone" type="tel" placeholder="Optional"></div><div class="field"><label data-field-label="role">Contact role</label><select data-field="role"><option value="Moderator">Moderator</option><option value="Viewer">Viewer</option><option value="Agent">Agent</option></select></div></div>`;
       wrap.appendChild(block);
+      reindexDynamicBlocks("observers");
       updateEstimate();
     }
 
-    function removeBlock(id){ const item = document.getElementById(id); if(item) item.remove(); updateEstimate(); }
-    function toggleInvoiceOther(){ document.getElementById("invoice-other").classList.toggle("hidden", document.getElementById("invoice_to").value !== "other"); }
-    function toggleDocumentOther(){ document.getElementById("document-other").classList.toggle("hidden", document.getElementById("document_to").value !== "other"); }
-    function showStatus(type, message){ const el = document.getElementById("status-message"); el.className = `status-msg ${type}`; el.textContent = message; }
-    function clearStatus(){ const el = document.getElementById("status-message"); el.className = "status-msg"; el.textContent = ""; }
-
-    function normalizeEmail(email){
-      return (email || "").trim().toLowerCase();
+    function removeBlock(id){
+      const item = document.getElementById(id);
+      if(!item) return;
+      const containerId = item.parentElement ? item.parentElement.id : "";
+      item.querySelectorAll("input,select,textarea").forEach(function(field){
+        field.required = false;
+        field.disabled = true;
+        field.setCustomValidity("");
+      });
+      item.remove();
+      if(containerId) reindexDynamicBlocks(containerId);
+      clearSessionPeopleValidation();
+      updateEstimate();
     }
 
-    function normalizePersonName(name){
-      return (name || "").trim().replace(/\s+/g, " ").toLowerCase();
+    function setOtherRecipientSection(sectionId, active){
+      const section = document.getElementById(sectionId);
+      if(!section) return;
+      section.classList.toggle("hidden", !active);
+      clearAndDisableFields(section, !active);
     }
 
-    function showFieldError(field, message){
+    function toggleInvoiceOther(){
+      setOtherRecipientSection("invoice-other", document.getElementById("invoice_to").value === "other");
+    }
+
+    function toggleDocumentOther(){
+      setOtherRecipientSection("document-other", document.getElementById("document_to").value === "other");
+    }
+
+    function showStatus(type, message){
+      const el = document.getElementById("status-message");
+      el.className = `status-msg ${type}`;
+      el.textContent = message;
+    }
+
+    function clearStatus(){
+      const el = document.getElementById("status-message");
+      el.className = "status-msg";
+      el.textContent = "";
+    }
+
+    function normalizeEmail(email){ return (email || "").trim().toLowerCase(); }
+    function normalizePersonName(name){ return (name || "").trim().replace(/\s+/g," ").toLowerCase(); }
+    function getInputByName(name){ return document.querySelector(`[name="${name}"]`); }
+
+    function showFieldError(field,message){
       if(field){
         field.setCustomValidity(message || "");
         field.reportValidity();
         field.focus();
       }
-    }
-
-    function getInputByName(name){
-      return document.querySelector(`[name="${name}"]`);
     }
 
     function clearSessionPeopleValidation(){
@@ -431,228 +552,252 @@
         "observer_1_name","observer_1_email",
         "observer_2_name","observer_2_email"
       ];
-
       names.forEach(function(name){
         const field = getInputByName(name);
         if(field) field.setCustomValidity("");
       });
     }
 
-    function addPersonToList(list, role, nameFieldName, emailFieldName, requireBoth){
+    function addPersonToList(list,role,nameFieldName,emailFieldName,requireBoth){
       const nameField = getInputByName(nameFieldName);
       const emailField = getInputByName(emailFieldName);
-
-      const name = nameField ? nameField.value.trim() : "";
-      const email = emailField ? emailField.value.trim() : "";
-
+      const name = nameField && !nameField.disabled ? nameField.value.trim() : "";
+      const email = emailField && !emailField.disabled ? emailField.value.trim() : "";
       if(!name && !email) return true;
-
-      if(requireBoth && !name){
-        showFieldError(nameField, `${role} needs a full name.`);
-        return false;
-      }
-
-      if(requireBoth && !email){
-        showFieldError(emailField, `${role} needs a different email so this person can receive their own SafeNotarize invite.`);
-        return false;
-      }
-
+      if(requireBoth && !name){ showFieldError(nameField,`${role} needs a full name.`); return false; }
+      if(requireBoth && !email){ showFieldError(emailField,`${role} needs a different email so this person can receive their own SafeNotarize invite.`); return false; }
       if(emailField && email && !emailField.checkValidity()){
-        emailField.reportValidity();
-        emailField.focus();
-        return false;
+        emailField.reportValidity(); emailField.focus(); return false;
       }
-
-      list.push({
-        role: role,
-        name: name,
-        email: email,
-        nameKey: normalizePersonName(name),
-        emailKey: normalizeEmail(email),
-        nameField: nameField,
-        emailField: emailField
-      });
-
+      list.push({role:role,name:name,email:email,nameKey:normalizePersonName(name),emailKey:normalizeEmail(email),nameField:nameField,emailField:emailField});
       return true;
     }
 
     function validateUniqueSessionPeople(){
       clearSessionPeopleValidation();
-
       const people = [];
-
-      if(!addPersonToList(people, "Primary signer", "primary_name", "primary_email", true)) return false;
-
-      for(let i = 1; i <= 3; i++){
+      if(!addPersonToList(people,"Primary signer","primary_name","primary_email",true)) return false;
+      for(let i=1;i<=MAX_ADDITIONAL_SIGNERS;i++){
         const nameField = getInputByName(`additional_signer_${i}_name`);
         const emailField = getInputByName(`additional_signer_${i}_email`);
-
         if(nameField || emailField){
-          if(!addPersonToList(people, `Additional signer ${i}`, `additional_signer_${i}_name`, `additional_signer_${i}_email`, true)) return false;
+          if(!addPersonToList(people,`Additional signer ${i}`,`additional_signer_${i}_name`,`additional_signer_${i}_email`,true)) return false;
         }
       }
-
-      for(let i = 1; i <= 2; i++){
+      for(let i=1;i<=MAX_WITNESSES;i++){
         const option = getInputByName(`witness_${i}_option`);
-        const clientProvided = option && option.value === "client_provided";
-
-        if(clientProvided){
-          if(!addPersonToList(people, `Witness ${i}`, `witness_${i}_name`, `witness_${i}_email`, true)) return false;
+        if(option && option.value === "client_provided"){
+          if(!addPersonToList(people,`Witness ${i}`,`witness_${i}_name`,`witness_${i}_email`,true)) return false;
         }
       }
-
-      for(let i = 1; i <= 2; i++){
+      for(let i=1;i<=MAX_OBSERVERS;i++){
         const nameField = getInputByName(`observer_${i}_name`);
         const emailField = getInputByName(`observer_${i}_email`);
-
         if((nameField && nameField.value.trim()) || (emailField && emailField.value.trim())){
-          if(!addPersonToList(people, `Observer ${i}`, `observer_${i}_name`, `observer_${i}_email`, true)) return false;
+          if(!addPersonToList(people,`Observer ${i}`,`observer_${i}_name`,`observer_${i}_email`,true)) return false;
         }
       }
-
       const emails = new Map();
       const names = new Map();
-
       for(const person of people){
         if(person.emailKey){
           if(emails.has(person.emailKey)){
             const first = emails.get(person.emailKey);
-            showFieldError(
-              person.emailField,
-              `${person.role} is using the same email as ${first.role}. Please enter a different email so everyone gets their own SafeNotarize invite to join the session.`
-            );
+            showFieldError(person.emailField,`${person.role} is using the same email as ${first.role}. Please enter a different email so everyone gets their own SafeNotarize invite to join the session.`);
             return false;
           }
-
-          emails.set(person.emailKey, person);
+          emails.set(person.emailKey,person);
         }
-
         if(person.nameKey){
           if(names.has(person.nameKey)){
             const first = names.get(person.nameKey);
-            showFieldError(
-              person.nameField,
-              `${person.role} has the same name as ${first.role}. Please enter each person separately so the session invites do not get mixed up.`
-            );
+            showFieldError(person.nameField,`${person.role} has the same name as ${first.role}. Please enter each person separately so the session invites do not get mixed up.`);
             return false;
           }
-
-          names.set(person.nameKey, person);
+          names.set(person.nameKey,person);
         }
       }
-
       return true;
     }
 
+    const ESTIMATE_PRICES = {basicSession:25,internationalSession:35,additionalSigner:10,extraStamp:5,safenotarizeWitness:15};
+    function money(value){ return "$" + value; }
 
-    const ESTIMATE_PRICES = {
-      basicSession: 25,
-      internationalSession: 35,
-      additionalSigner: 10,
-      extraStamp: 5,
-      safenotarizeWitness: 15
-    };
-
-    function money(value){
-      return "$" + value;
+    function normalizeSafeInteger(value,min,max){
+      const text = String(value == null ? "" : value).trim();
+      if(!/^\d+$/.test(text)) return min;
+      const number = Number(text);
+      if(!Number.isSafeInteger(number)) return min;
+      return Math.min(max,Math.max(min,number));
     }
 
-    function countEstimateItems(selector){
-      return document.querySelectorAll(selector).length;
+    function normalizeInternationalAnswer(value){
+      return value === "yes" || value === "not_sure" ? value : "no";
     }
 
     function getEstimateExtraStamps(){
       const field = document.getElementById("estimate_extra_stamps");
-      return field ? (parseInt(field.value, 10) || 0) : 0;
+      const count = normalizeSafeInteger(field ? field.value : 0,0,MAX_EXTRA_STAMPS);
+      if(field && field.value !== String(count)) field.value = String(count);
+      return count;
     }
 
     function getSafeNotarizeWitnessCount(){
-      return Array.from(document.querySelectorAll('#witnesses select[name^="witness_"][name$="_option"]')).filter(function(select){
-        return select.value === "safenotarize_provided";
+      return getDynamicBlocks("witnesses").filter(function(block){
+        const select = block.querySelector('[data-field="option"]');
+        return select && select.value === "safenotarize_provided";
       }).length;
     }
 
     function getClientWitnessCount(){
-      return Array.from(document.querySelectorAll('#witnesses select[name^="witness_"][name$="_option"]')).filter(function(select){
-        return select.value === "client_provided";
+      return getDynamicBlocks("witnesses").filter(function(block){
+        const select = block.querySelector('[data-field="option"]');
+        return select && select.value === "client_provided";
       }).length;
     }
 
-    function estimateLine(label, detail, amount){
+    function getCanonicalPricing(){
+      const answerField = document.getElementById("international_signer_passport");
+      const answer = normalizeInternationalAnswer(answerField ? answerField.value : "no");
+      if(answerField) answerField.value = answer;
+      const additionalSignerCount = Math.min(MAX_ADDITIONAL_SIGNERS,getDynamicBlocks("additional-signers").length);
+      const additionalStampCount = getEstimateExtraStamps();
+      const safeWitnessCount = Math.min(MAX_WITNESSES,getSafeNotarizeWitnessCount());
+      const clientWitnessCount = Math.min(MAX_WITNESSES,getClientWitnessCount());
+      const observerCountValue = Math.min(MAX_OBSERVERS,getDynamicBlocks("observers").length);
+      const basePrice = answer === "yes" ? ESTIMATE_PRICES.internationalSession : ESTIMATE_PRICES.basicSession;
+      const additionalSignerSubtotal = additionalSignerCount * ESTIMATE_PRICES.additionalSigner;
+      const additionalStampSubtotal = additionalStampCount * ESTIMATE_PRICES.extraStamp;
+      const safeWitnessSubtotal = safeWitnessCount * ESTIMATE_PRICES.safenotarizeWitness;
+      return {
+        international_signer_passport_answer:answer,
+        requires_international_review:answer === "not_sure",
+        base_price:basePrice,
+        additional_signer_count:additionalSignerCount,
+        additional_signer_subtotal:additionalSignerSubtotal,
+        additional_stamp_count:additionalStampCount,
+        additional_stamp_subtotal:additionalStampSubtotal,
+        total_stamp_count:INCLUDED_STAMPS + additionalStampCount,
+        safenotarize_witness_count:safeWitnessCount,
+        safenotarize_witness_subtotal:safeWitnessSubtotal,
+        client_witness_count:clientWitnessCount,
+        witness_count:safeWitnessCount + clientWitnessCount,
+        observer_count:observerCountValue,
+        estimated_total:basePrice + additionalSignerSubtotal + additionalStampSubtotal + safeWitnessSubtotal,
+        pricing_currency:"USD"
+      };
+    }
+
+    function estimateLine(label,detail,amount){
       const detailHtml = detail ? `<small>${detail}</small>` : "";
       return `<div class="estimate-row"><span>${label}${detailHtml}</span><strong>${money(amount)}</strong></div>`;
     }
 
     function updateEstimate(){
+      const pricing = getCanonicalPricing();
       const lines = [];
-      const locationValue = document.getElementById("international_signer_passport").value || "no";
-      const isInternational = locationValue === "yes";
-      const unsureInternational = locationValue === "not_sure";
-      const basePrice = isInternational ? ESTIMATE_PRICES.internationalSession : ESTIMATE_PRICES.basicSession;
-      let total = basePrice;
-
+      const isInternational = pricing.international_signer_passport_answer === "yes";
+      const unsureInternational = pricing.requires_international_review;
       lines.push(estimateLine(
         isInternational ? "International session" : "Basic session",
         (unsureInternational ? "Estimate shown as basic. If international verification is needed, base session may be $35. " : "") + "Includes 1 signer and 2 stamps.",
-        basePrice
+        pricing.base_price
       ));
-
-      const additionalSigners = countEstimateItems('#additional-signers [id^="additional-signer-"]');
-      if(additionalSigners > 0){
-        const amount = additionalSigners * ESTIMATE_PRICES.additionalSigner;
-        total += amount;
-        lines.push(estimateLine(`Additional signer × ${additionalSigners}`, "$10 each.", amount));
-      }
-
-      const safeWitnesses = getSafeNotarizeWitnessCount();
-      if(safeWitnesses > 0){
-        const amount = safeWitnesses * ESTIMATE_PRICES.safenotarizeWitness;
-        total += amount;
-        lines.push(estimateLine(`SafeNotarize-provided witness × ${safeWitnesses}`, "$15 each.", amount));
-      }
-
-      const clientWitnesses = getClientWitnessCount();
-      if(clientWitnesses > 0){
-        lines.push(estimateLine(`Client-provided witness × ${clientWitnesses}`, "No SafeNotarize witness fee.", 0));
-      }
-
-      const extraStamps = getEstimateExtraStamps();
-      if(extraStamps > 0){
-        const amount = extraStamps * ESTIMATE_PRICES.extraStamp;
-        total += amount;
-        lines.push(estimateLine(`Extra stamp × ${extraStamps}`, "$5 each.", amount));
-      }
-
-      const observers = countEstimateItems('#observers [id^="observer-"]');
-      if(observers > 0){
-        lines.push(estimateLine(`Observer × ${observers}`, "No extra fee.", 0));
-      }
-
+      if(pricing.additional_signer_count > 0) lines.push(estimateLine(`Additional signer × ${pricing.additional_signer_count}`,"$10 each.",pricing.additional_signer_subtotal));
+      if(pricing.safenotarize_witness_count > 0) lines.push(estimateLine(`SafeNotarize-provided witness × ${pricing.safenotarize_witness_count}`,"$15 each.",pricing.safenotarize_witness_subtotal));
+      if(pricing.client_witness_count > 0) lines.push(estimateLine(`Client-provided witness × ${pricing.client_witness_count}`,"No SafeNotarize witness fee.",0));
+      if(pricing.additional_stamp_count > 0) lines.push(estimateLine(`Extra stamp × ${pricing.additional_stamp_count}`,"$5 each.",pricing.additional_stamp_subtotal));
+      if(pricing.observer_count > 0) lines.push(estimateLine(`Observer × ${pricing.observer_count}`,"No extra fee.",0));
       document.getElementById("estimate-lines").innerHTML = lines.join("");
-      document.getElementById("estimate-total").textContent = money(total);
+      document.getElementById("estimate-total").textContent = money(pricing.estimated_total);
     }
 
-    document.addEventListener("input", function(e){
-      if(e.target && e.target.matches("input")){
-        e.target.setCustomValidity("");
-      }
+    document.addEventListener("input",function(e){
+      if(e.target && e.target.matches("input")) e.target.setCustomValidity("");
     });
 
-    document.addEventListener("change", function(e){
+    document.addEventListener("change",function(e){
+      if(e.target && e.target.matches('select[data-field="option"]')) syncWitnessFields(e.target);
       if(e.target && e.target.matches("select")){
         clearSessionPeopleValidation();
         updateEstimate();
       }
     });
 
-    function getFormPayload(){
-      const form = document.getElementById("booking-form");
-      const data = Object.fromEntries(new FormData(form).entries());
-      const selectedInternationalSignerPassport = data.international_signer_passport || "no";
+    function trimFormValue(value){ return typeof value === "string" ? value.trim() : value; }
+
+    function getNormalizedFormData(){
+      const data = {};
+      new FormData(document.getElementById("booking-form")).forEach(function(value,key){ data[key] = trimFormValue(value); });
+      data.booking_type = data.booking_type === "other" ? "other" : "self";
+      return data;
+    }
+
+    function getDocumentContext(){
+      const params = new URLSearchParams(window.location.search);
+      const readyValue = (params.get("document_ready") || "").trim().toLowerCase();
+      const sourceValue = (params.get("document_source") || "").trim().toLowerCase();
+      const typeValue = (params.get("document_type") || "").trim().toLowerCase();
+      return {
+        document_ready:readyValue === "1" || readyValue === "yes" ? "1" : "",
+        document_source:DOCUMENT_SOURCE_ALLOWLIST.has(sourceValue) ? sourceValue : "",
+        document_type:DOCUMENT_TYPE_ALLOWLIST.has(typeValue) ? typeValue : ""
+      };
+    }
+
+    function isValidBookingRequestId(value){
+      return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value || "");
+    }
+
+    function createBookingRequestId(){
+      if(window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+      const bytes = new Uint8Array(16);
+      if(window.crypto && typeof window.crypto.getRandomValues === "function") window.crypto.getRandomValues(bytes);
+      else for(let i=0;i<bytes.length;i++) bytes[i] = Math.floor(Math.random()*256);
+      bytes[6] = (bytes[6] & 15) | 64;
+      bytes[8] = (bytes[8] & 63) | 128;
+      const hex = Array.from(bytes,function(byte){ return byte.toString(16).padStart(2,"0"); }).join("");
+      return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
+    }
+
+    function getOrCreateBookingRequestId(){
+      let stored = "";
+      try{ stored = sessionStorage.getItem(BOOKING_REQUEST_STORAGE_KEY) || ""; }catch(error){ stored = inMemoryBookingRequestId; }
+      if(isValidBookingRequestId(stored)){
+        inMemoryBookingRequestId = stored;
+        return stored;
+      }
+      const created = createBookingRequestId();
+      inMemoryBookingRequestId = created;
+      try{ sessionStorage.setItem(BOOKING_REQUEST_STORAGE_KEY,created); }catch(error){}
+      return created;
+    }
+
+    function clearPendingBookingRequestId(){
+      inMemoryBookingRequestId = "";
+      try{ sessionStorage.removeItem(BOOKING_REQUEST_STORAGE_KEY); }catch(error){}
+    }
+
+    function synchronizeActiveFields(){
+      const bookingType = document.getElementById("booking_type").value === "other" ? "other" : "self";
+      setBookingType(bookingType);
+      toggleInvoiceOther();
+      toggleDocumentOther();
+      reindexAllDynamicBlocks();
+      getDynamicBlocks("witnesses").forEach(function(block){ syncWitnessFields(block.querySelector('[data-field="option"]')); });
+    }
+
+    function getFormPayload(bookingRequestId){
+      synchronizeActiveFields();
+      const data = getNormalizedFormData();
+      const pricing = getCanonicalPricing();
+      const context = getDocumentContext();
+      const selectedInternationalSignerPassport = pricing.international_signer_passport_answer;
       const airtableInternationalSignerPassport = selectedInternationalSignerPassport === "not_sure" ? "no" : selectedInternationalSignerPassport;
       const locationNote = selectedInternationalSignerPassport === "not_sure" ? "Signer location/SSN answer: Not sure. Please confirm before creating the session." : "";
       data.international_signer_passport_raw = selectedInternationalSignerPassport;
       data.international_signer_passport = airtableInternationalSignerPassport;
+
       const primaryName = data.primary_name || "";
       const primaryEmail = data.primary_email || "";
       const primaryPhone = data.primary_phone || "";
@@ -660,127 +805,101 @@
       const bookerEmail = data.booking_type === "self" ? primaryEmail : (data.booker_email || "");
       const bookerPhone = data.booking_type === "self" ? primaryPhone : (data.booker_phone || "");
 
-      let invoiceName = "";
-      let invoiceEmail = "";
+      let invoiceName = "", invoiceEmail = "";
       if(data.invoice_to === "primary_signer"){ invoiceName = primaryName; invoiceEmail = primaryEmail; }
       else if(data.invoice_to === "booker"){ invoiceName = bookerName; invoiceEmail = bookerEmail; }
       else if(data.invoice_to === "other"){ invoiceName = data.invoice_name || ""; invoiceEmail = data.invoice_email || ""; }
 
-      let documentName = "";
-      let documentEmail = "";
+      let documentName = "", documentEmail = "";
       if(data.document_to === "primary_signer"){ documentName = primaryName; documentEmail = primaryEmail; }
       else if(data.document_to === "booker"){ documentName = bookerName; documentEmail = bookerEmail; }
       else if(data.document_to === "both"){ documentName = primaryName; documentEmail = primaryEmail; }
       else if(data.document_to === "other"){ documentName = data.document_name || ""; documentEmail = data.document_email || ""; }
 
       return {
-        source:"safenotarize_book_page",
-        language:"en",
-        submitted_at:new Date().toISOString(),
-        booking_type:data.booking_type,
-        international_signer_passport:airtableInternationalSignerPassport,
-        international_signer_passport_answer:selectedInternationalSignerPassport,
-        booker_name:bookerName,
-        booker_name_bluenotary:toBlueNotaryName(bookerName),
-        booker_email:bookerEmail,
-        booker_phone:bookerPhone,
-        primary_signer_name:primaryName,
-        primary_signer_name_bluenotary:toBlueNotaryName(primaryName),
-        primary_signer_email:primaryEmail,
-        primary_signer_phone:primaryPhone,
-        invoice_to:data.invoice_to || "",
-        invoice_name:invoiceName,
-        invoice_name_bluenotary:toBlueNotaryName(invoiceName),
-        invoice_email:invoiceEmail,
-        document_to:data.document_to || "",
-        document_name:documentName,
-        document_name_bluenotary:toBlueNotaryName(documentName),
-        document_email:documentEmail,
-        notes:[data.notes || "", locationNote].filter(Boolean).join("\n"),
-        additional_signer_1_name:data.additional_signer_1_name || "",
-        additional_signer_1_name_bluenotary:toBlueNotaryName(data.additional_signer_1_name || ""),
-        additional_signer_1_email:data.additional_signer_1_email || "",
-        additional_signer_2_name:data.additional_signer_2_name || "",
-        additional_signer_2_name_bluenotary:toBlueNotaryName(data.additional_signer_2_name || ""),
-        additional_signer_2_email:data.additional_signer_2_email || "",
-        additional_signer_3_name:data.additional_signer_3_name || "",
-        additional_signer_3_name_bluenotary:toBlueNotaryName(data.additional_signer_3_name || ""),
-        additional_signer_3_email:data.additional_signer_3_email || "",
-        witness_1_option:data.witness_1_option || "",
-        witness_1_name:data.witness_1_name || "",
-        witness_1_name_bluenotary:toBlueNotaryName(data.witness_1_name || ""),
-        witness_1_email:data.witness_1_email || "",
-        witness_2_option:data.witness_2_option || "",
-        witness_2_name:data.witness_2_name || "",
-        witness_2_name_bluenotary:toBlueNotaryName(data.witness_2_name || ""),
-        witness_2_email:data.witness_2_email || "",
-        observer_1_name:data.observer_1_name || "",
-        observer_1_name_bluenotary:toBlueNotaryName(data.observer_1_name || ""),
-        observer_1_email:data.observer_1_email || "",
-        observer_1_phone:data.observer_1_phone || "",
-        observer_1_role:data.observer_1_role || "",
-        observer_2_name:data.observer_2_name || "",
-        observer_2_name_bluenotary:toBlueNotaryName(data.observer_2_name || ""),
-        observer_2_email:data.observer_2_email || "",
-        observer_2_phone:data.observer_2_phone || "",
-        observer_2_role:data.observer_2_role || "",
+        source:"safenotarize_book_page",language:"en",submitted_at:new Date().toISOString(),booking_request_id:bookingRequestId || getOrCreateBookingRequestId(),booking_type:data.booking_type,
+        international_signer_passport:airtableInternationalSignerPassport,international_signer_passport_answer:selectedInternationalSignerPassport,requires_international_review:pricing.requires_international_review,
+        base_price:pricing.base_price,additional_signer_count:pricing.additional_signer_count,additional_signer_subtotal:pricing.additional_signer_subtotal,
+        additional_stamp_count:pricing.additional_stamp_count,additional_stamp_subtotal:pricing.additional_stamp_subtotal,total_stamp_count:pricing.total_stamp_count,
+        safenotarize_witness_count:pricing.safenotarize_witness_count,safenotarize_witness_subtotal:pricing.safenotarize_witness_subtotal,
+        client_witness_count:pricing.client_witness_count,witness_count:pricing.witness_count,observer_count:pricing.observer_count,
+        estimated_total:pricing.estimated_total,pricing_currency:pricing.pricing_currency,
+        document_ready:context.document_ready,document_source:context.document_source,document_type:context.document_type,
+        booker_name:bookerName,booker_name_bluenotary:toBlueNotaryName(bookerName),booker_email:bookerEmail,booker_phone:bookerPhone,
+        primary_signer_name:primaryName,primary_signer_name_bluenotary:toBlueNotaryName(primaryName),primary_signer_email:primaryEmail,primary_signer_phone:primaryPhone,
+        invoice_to:data.invoice_to || "",invoice_name:invoiceName,invoice_name_bluenotary:toBlueNotaryName(invoiceName),invoice_email:invoiceEmail,
+        document_to:data.document_to || "",document_name:documentName,document_name_bluenotary:toBlueNotaryName(documentName),document_email:documentEmail,
+        notes:[data.notes || "",locationNote].filter(Boolean).join("\n"),
+        additional_signer_1_name:data.additional_signer_1_name || "",additional_signer_1_name_bluenotary:toBlueNotaryName(data.additional_signer_1_name || ""),additional_signer_1_email:data.additional_signer_1_email || "",
+        additional_signer_2_name:data.additional_signer_2_name || "",additional_signer_2_name_bluenotary:toBlueNotaryName(data.additional_signer_2_name || ""),additional_signer_2_email:data.additional_signer_2_email || "",
+        additional_signer_3_name:data.additional_signer_3_name || "",additional_signer_3_name_bluenotary:toBlueNotaryName(data.additional_signer_3_name || ""),additional_signer_3_email:data.additional_signer_3_email || "",
+        witness_1_option:data.witness_1_option || "",witness_1_name:data.witness_1_name || "",witness_1_name_bluenotary:toBlueNotaryName(data.witness_1_name || ""),witness_1_email:data.witness_1_email || "",
+        witness_2_option:data.witness_2_option || "",witness_2_name:data.witness_2_name || "",witness_2_name_bluenotary:toBlueNotaryName(data.witness_2_name || ""),witness_2_email:data.witness_2_email || "",
+        observer_1_name:data.observer_1_name || "",observer_1_name_bluenotary:toBlueNotaryName(data.observer_1_name || ""),observer_1_email:data.observer_1_email || "",observer_1_phone:data.observer_1_phone || "",observer_1_role:data.observer_1_role || "",
+        observer_2_name:data.observer_2_name || "",observer_2_name_bluenotary:toBlueNotaryName(data.observer_2_name || ""),observer_2_email:data.observer_2_email || "",observer_2_phone:data.observer_2_phone || "",observer_2_role:data.observer_2_role || "",
         raw:data
       };
     }
 
     async function submitIntake(payload){
-      const response = await fetch(MAKE_BOOKING_WEBHOOK_URL, {
+      const response = await fetch(MAKE_BOOKING_WEBHOOK_URL,{
         method:"POST",
         headers:{"Content-Type":"application/x-www-form-urlencoded;charset=utf-8"},
-        body:new URLSearchParams({ value: JSON.stringify(payload) })
+        body:new URLSearchParams({value:JSON.stringify(payload)})
       });
-
       const text = await response.text();
-      let data = {};
-      try{ data = JSON.parse(text); }catch(e){ data = {success:true, order_id:text.trim()}; }
-
-      if(!response.ok) throw new Error(data.message || "Could not save booking details.");
-
-      const orderId = data.order_id || data.record_id || data.id || "";
+      let responseData = {};
+      try{ responseData = JSON.parse(text); }catch(error){ responseData = {success:true,order_id:text.trim()}; }
+      if(!response.ok) throw new Error(responseData.message || "Could not save booking details.");
+      const orderId = responseData.order_id || responseData.record_id || responseData.id || "";
       if(!orderId) throw new Error("Booking saved, but Make did not return an order_id.");
       return orderId;
     }
 
-    document.getElementById("booking-form").addEventListener("submit", async function(e){
-      e.preventDefault();
-      clearStatus();
+    document.getElementById("booking-form").addEventListener("reset",function(){
+      clearPendingBookingRequestId();
+      submissionInProgress = false;
+    });
 
+    document.getElementById("booking-form").addEventListener("submit",async function(e){
+      e.preventDefault();
+      if(submissionInProgress) return;
+      clearStatus();
+      synchronizeActiveFields();
       const form = e.currentTarget;
       if(!form.checkValidity()){ form.reportValidity(); return; }
       if(!validateUniqueSessionPeople()) return;
 
+      submissionInProgress = true;
       const btn = document.getElementById("continue-btn");
       btn.disabled = true;
       btn.textContent = "Saving...";
 
       try{
-        const payload = getFormPayload();
+        const bookingRequestId = getOrCreateBookingRequestId();
+        const payload = getFormPayload(bookingRequestId);
         const orderId = await submitIntake(payload);
-
-        showStatus("success", "Saved. Taking you to upload your document...");
-
+        showStatus("success","Saved. Taking you to upload your document...");
         const uploadUrl = new URL(UPLOAD_PAGE_URL);
-        uploadUrl.searchParams.set("order_id", orderId);
-        uploadUrl.searchParams.set("utm_content", orderId);
-
-        if(payload.booking_type) uploadUrl.searchParams.set("booking_type", payload.booking_type);
-        if(payload.booking_type === "other") uploadUrl.searchParams.set("role", "booker");
-
+        
+        uploadUrl.searchParams.set("order_id",orderId);
+        uploadUrl.searchParams.set("utm_content",orderId);
+        if(payload.booking_type) uploadUrl.searchParams.set("booking_type",payload.booking_type);
+        if(payload.booking_type === "other") uploadUrl.searchParams.set("role","booker");
         window.location.href = uploadUrl.toString();
+        clearPendingBookingRequestId();
       }catch(error){
-        showStatus("error", error.message || "Something went wrong. Please try again.");
+        submissionInProgress = false;
+        showStatus("error",error.message || "Something went wrong. Please try again.");
         btn.disabled = false;
         btn.textContent = "Continue to upload document";
       }
     });
-
     initializeDocumentGate();
     setBookingType("self");
+    toggleInvoiceOther();
+    toggleDocumentOther();
+    reindexAllDynamicBlocks();
     updateProgress(1);
     updateEstimate();
   </script>
