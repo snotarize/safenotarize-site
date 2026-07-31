@@ -132,4 +132,29 @@
   <url><loc>https://safenotarize.com/designation-of-healthcare-surrogate-notary.html</loc></url>
   <url><loc>https://safenotarize.com/revocation-of-power-of-attorney-notary.html</loc></url>
   <url><loc>https://safenotarize.com/certification-of-trust-notary.html</loc></url>
+  <url>
+    <loc>https://safenotarize.com/school-authorization-letter-notary.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://safenotarize.com/child-pickup-authorization-notary.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://safenotarize.com/caregiver-authorization-affidavit-notary.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://safenotarize.com/temporary-guardianship-extension-notary.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://safenotarize.com/parental-consent-school-activities-notary.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
