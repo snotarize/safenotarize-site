@@ -1,0 +1,47 @@
+name: SafeNotarize IndexNow (manual approval)
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'initial = current eligible sitemap URLs; changed = updates since before all upload batches'
+        required: true
+        type: choice
+        options:
+          - changed
+          - initial
+      base_sha:
+        description: 'For changed: full 40-character SHA from BEFORE first upload batch. Leave blank for initial.'
+        required: false
+        type: string
+      dry_run:
+        description: 'Preview URL selection only; do not contact IndexNow'
+        required: true
+        default: true
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: safenotarize-indexnow
+  cancel-in-progress: false
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current site and commit history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate manual inputs and select eligible URLs
+        env:
+          MODE: ${{ inputs.mode }}
+          BASE_SHA: ${{ inputs.base_sha }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [[ "$MODE" == "changed" && -z "$BASE_SHA" ]]; then echo 'Error: base SHA is required for changed mode'; exit 1; fi
+          args=(--mode "$MODE")
+          if [[ "$MODE" == "changed" ]]; then args+=(--base "$BASE_SHA"); fi
+          if [[ "$DRY_RUN" == "true" ]]; then args+=(--dry-run); fi
+          python3 .github/scripts/indexnow_submit.py "${args[@]}"
