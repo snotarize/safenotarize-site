@@ -16,11 +16,12 @@ function inlineScripts(html){
  return [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
   .filter(x=>!/(?:\bsrc=|application\/ld\+json|application\/json)/i.test(x[1])&&x[2].trim()).map(x=>x[2]);
 }
-test('feature fails closed, no live endpoint and no secrets in public config',()=>{
+test('disabled handoff keeps the public Turnstile key and an empty endpoint',()=>{
  const s=read('assets/document-handoff-config.js');
  assert.match(s,/enabled:\s*false/);
  assert.match(s,/endpoint:\s*''/);
- assert.match(s,/turnstileSiteKey:\s*''/);
+ assert.match(s,/multidocEnabled:\s*false/);
+ assert.match(s,/turnstileSiteKey:\s*'0x4[A-Za-z0-9_-]{20,70}'/);
  assert.doesNotMatch(s,/pat[A-Za-z0-9]{15}|Bearer\s+\S{16}|hook\.us2\.make\.com\/[A-Za-z0-9]{10}/);
 });
 test('client enforces HTTPS origin and Cloudflare Turnstile, no fake fixture',()=>{

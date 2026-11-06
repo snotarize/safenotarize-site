@@ -6,6 +6,6 @@ window.SN_HANDOFF = Object.freeze({
   enabled: false,
   multidocEnabled: false,
   endpoint: '',
-  turnstileSiteKey: '',
+  turnstileSiteKey: '0x4AAAAAAF2zhQ7vo9NKBGsh',
   allowedSiteOrigins: ['https://safenotarize.com', 'https://www.safenotarize.com']
 });
