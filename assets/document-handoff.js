@@ -156,14 +156,14 @@
     const button=document.getElementById('download'),box=document.getElementById('next-box');
     if(!button||!box)return;
     const ht=isHt();
-    button.textContent=enabled?(ht?'Kontinye pou rezève':'Continue to booking'):(ht?'Telechaje PDF':'Download PDF');
+    button.textContent=enabled?(ht?'Kontinye pou notarye':'Continue to notarization'):(ht?'Telechaje PDF':'Download PDF');
     const heading=box.querySelector('strong'),description=box.querySelector('p');
     if(heading)heading.textContent=enabled?(ht?'PDF ou a pare':'Your PDF is ready'):(ht?'PDF ou a telechaje':'Your PDF is downloaded');
     if(description)description.textContent=enabled?(ht?'Ajoute enfòmasyon siyatè ak sesyon an. PDF ou a ap ale otomatikman ak randevou a.':'Add signer and session details. Your saved PDF will be included automatically.'):(ht?'Kontinye pou ajoute enfòmasyon randevou a, epi voye PDF ou a.':'Continue to add your booking details, then upload your PDF.');
     const next=document.getElementById('continue');
-    if(next){next.textContent=ht?'Kontinye pou rezève':'Continue to booking';const url=new URL(next.href);if(!enabled)url.searchParams.set('document_source','own');if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;}
+    if(next){next.textContent=ht?'Kontinye pou notarye':'Continue to notarization';const url=new URL(next.href);if(!enabled)url.searchParams.set('document_source','own');if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;}
     const privacy=document.getElementById('privacy')||document.querySelector('.editor .legal');
-    if(privacy)privacy.textContent=enabled?(ht?'Bouyon ou rete nan navigatè sa a. Lè ou kontinye pou rezève, PDF ou a ale jwenn SafeNotarize an sekirite.':'Your draft stays in this browser. When you continue to booking, your PDF is sent securely to SafeNotarize.'):(ht?'Bouyon ou rete nan navigatè sa a jiskaske ou chwazi voye dokiman an.':'Your draft stays in this browser until you choose to upload it.');
+    if(privacy)privacy.textContent=enabled?(ht?'Bouyon ou rete nan navigatè sa a. Lè ou kontinye pou rezève, PDF ou a ale jwenn SafeNotarize an sekirite.':'Your draft stays in this browser. When you continue to notarization, your PDF is sent securely to SafeNotarize.'):(ht?'Bouyon ou rete nan navigatè sa a jiskaske ou chwazi voye dokiman an.':'Your draft stays in this browser until you choose to upload it.');
     if(!document.getElementById('sn-download-copy')){
       const copy=document.createElement('button');copy.type='button';copy.id='sn-download-copy';copy.className='btn';
       copy.textContent=ht?'Telechaje yon kopi PDF':'Download a PDF copy';
@@ -186,13 +186,20 @@
     if(!note){note=document.createElement('div');note.id='sn-generated-pdf-note';note.setAttribute('role','status');note.style.cssText='margin:16px 0;padding:14px;border:1px solid #dce7f2;border-radius:12px;background:#f3f9ff;color:#00274d';const head=document.querySelector('.section-head');if(head)head.after(note);else form.prepend(note);}
     note.replaceChildren();
     if(valid){note.textContent=ht?'PDF ou a ap ale otomatikman ak randevou a. Ou pa bezwen voye li ankò.':'Your PDF will be included automatically. You do not need to upload it again.';return;}
-    const message=document.createElement('p');message.textContent=ht?'PDF la pa disponib ankò nan navigatè sa a. Retounen nan dokiman ou a epi peze Kontinye pou rezève.':'The saved PDF is no longer available in this browser. Return to your document and choose Continue to booking.';
+    const message=document.createElement('p');message.textContent=ht?'PDF la pa disponib ankò nan navigatè sa a. Retounen nan dokiman ou a epi peze Kontinye pou notarye.':'The saved PDF is no longer available in this browser. Return to your document and choose Continue to notarization.';
     const back=document.createElement('a');back.textContent=ht?'Retounen nan dokiman mwen an':'Return to my document';
     back.href=ht?'/documents/library-ht.html':'/documents/library.html';
     try{const ref=new URL(document.referrer);if(['https://safenotarize.com','https://www.safenotarize.com'].includes(ref.origin)&&/^\/documents\/create(?:-ht)?(?:\.html|\/[^/]+\.html)$/.test(ref.pathname)){back.href=ref.pathname+ref.search;back.addEventListener('click',event=>{if(history.length>1){event.preventDefault();history.back();}});}}catch{}
     back.style.cssText='display:inline-block;font-weight:bold;color:#00274d;padding:10px 0';note.append(message,back);
   }
   function initializeUI(){creatorUI();refreshBookingUI();}
+  const stickyHeader=document.querySelector('.sn-site-header');
+  if(stickyHeader){
+    const updateScrollOffset=()=>document.documentElement.style.setProperty(
+      '--sn-sticky-header-height',stickyHeader.getBoundingClientRect().height+'px');
+    updateScrollOffset();
+    if(typeof ResizeObserver==='function')new ResizeObserver(updateScrollOffset).observe(stickyHeader);
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializeUI,{once:true});else initializeUI();
   window.addEventListener('pageshow',event=>{if(event.persisted)initializeUI();});
   window.SafeNotarizeDocumentHandoff={stage,book,canBook,enabled:()=>enabled,multidocEnabled:()=>multidocEnabled,pending:()=>enabled?pending():null,additional:()=>extraDocuments().map(x=>({filename:x.filename,document_type:x.document_type})),clearPending,result:()=>lastResult,refreshBookingUI};
