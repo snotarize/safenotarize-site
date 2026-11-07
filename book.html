@@ -105,7 +105,7 @@
 .sn-pro-footer{background:var(--sn-navy);color:#fff;padding:48px 20px 20px}.sn-footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:30px}.sn-footer-logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;font-size:19px}.sn-footer-logo img{height:44px}.sn-footer-brand p{color:#c9d8e7;line-height:1.65;max-width:300px}.sn-footer-cta{display:inline-flex;background:var(--sn-green);color:#fff;text-decoration:none;padding:11px 16px;border-radius:9px;font-weight:800}.sn-footer-col h4{margin:0 0 14px}.sn-footer-col ul{list-style:none;padding:0}.sn-footer-col li{margin-bottom:9px}.sn-footer-col a{color:#c3d8eb;text-decoration:none;font-size:14px}.sn-footer-bottom{max-width:1200px;margin:34px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between}.sn-footer-bottom p{margin:0;color:#c9d8e7;font-size:13px}.sn-footer-bottom a{color:#fff;font-size:13px}
 @media(max-width:900px){.sn-desktop-nav{display:none}.sn-menu-btn{display:block}.sn-footer-grid{grid-template-columns:repeat(2,1fr)}.sn-footer-brand{grid-column:1/-1}}
 @media(max-width:620px){.sn-header-inner{padding:10px 14px}.sn-brand img{height:36px}.sn-pro-footer{padding:38px 20px 18px}.sn-footer-grid{grid-template-columns:1fr;gap:25px}.sn-footer-brand{grid-column:auto}.sn-footer-col{border-top:1px solid rgba(255,255,255,.12);padding-top:18px}.sn-footer-bottom{display:block;text-align:center}}
-</style><script src="/assets/document-handoff-config.js" defer></script><script src="/assets/document-handoff.js" defer></script></head>
+</style><script src="/assets/document-handoff-config.js?v=20261107-2" defer></script><script src="/assets/document-handoff.js?v=20261107-2" defer></script></head>
 <body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-start-btn" href="/start.html">Start</a></nav><button aria-expanded="false" aria-label="Open menu" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-mobile-start" href="/start.html">Start</a></div></header>
 <main class="page">
 <section class="hero">
@@ -214,7 +214,7 @@
 </section>
 <section class="step-card" id="step-2">
 <div class="card">
-<div class="card-title"><h3>Payment &amp; delivery</h3><span class="badge">Required</span></div>
+<div class="card-title"><h3>Invoice &amp; document delivery</h3><p>Choose where we should send your invoice and completed document. No payment is taken on this page.</p><span class="badge">Required</span></div>
 <div class="grid-2">
 <div class="field">
 <label for="invoice_to">Who should receive the invoice? <span class="required">*</span></label>
@@ -302,7 +302,7 @@
 
 
     const MAKE_BOOKING_WEBHOOK_URL = "https://hook.us2.make.com/08p65bg26odedngihppgxe1y5wog8638";
-    const UPLOAD_PAGE_URL = "https://safenotarize.com/upload.html";
+    const UPLOAD_PAGE_URL = "/upload.html";
     const MAX_ADDITIONAL_SIGNERS = 3;
     const MAX_WITNESSES = 2;
     const MAX_OBSERVERS = 2;
@@ -310,7 +310,7 @@
     const INCLUDED_STAMPS = 2;
     const BOOKING_REQUEST_STORAGE_KEY = "sn_pending_booking_request_id";
     const DOCUMENT_SOURCE_ALLOWLIST = new Set(["own","library","generated","template","official"]);
-    const DOCUMENT_TYPE_ALLOWLIST = new Set(["affidavit","affidavit-of-support","business-authorization-letter","child-passport-consent","child-travel-consent","ds-3053","employment-verification-letter","financial-support","general-consent","identity-affidavit","information-release","invitation-letter","letter-of-authorization","medical-consent","minor-medical-consent","name-affidavit","proof-of-residency","proof-of-residency-affidavit","ps-1583","temporary-guardianship-authorization","travel-authorization","vehicle-bill-of-sale","vehicle-gift-affidavit","vehicle-release","vehicle-use"]);
+    const DOCUMENT_TYPE_ALLOWLIST = new Set(["custom","affidavit","affidavit-of-support","business-authorization-letter","child-passport-consent","child-travel-consent","ds-3053","employment-verification-letter","financial-support","general-consent","identity-affidavit","information-release","invitation-letter","letter-of-authorization","medical-consent","minor-medical-consent","name-affidavit","proof-of-residency","proof-of-residency-affidavit","ps-1583","temporary-guardianship-authorization","travel-authorization","vehicle-bill-of-sale","vehicle-gift-affidavit","vehicle-release","vehicle-use"]);
 
     let signerCount = 0;
     let witnessCount = 0;
@@ -319,7 +319,7 @@
     let inMemoryBookingRequestId = "";
     let pendingBookingType = "";
     let modeSwitchReturnFocus = null;
-    const CONTINUE_BUTTON_TEXT = 'Continue to upload document';
+    const CONTINUE_BUTTON_TEXT = ['library','generated','template'].includes(new URLSearchParams(location.search).get('document_source')) ? 'Confirm booking' : 'Continue to upload document';
     const COORDINATOR_CONFLICT_FIELD_MESSAGE = 'It looks like the booking contact is also a signer. If you will sign the document, choose ‘I am signing.’ ‘Booking for someone else’ is only for someone who will not participate as a signer.';
 
     function toBlueNotaryName(name){
@@ -547,7 +547,7 @@
     }
 
     function updateProgress(step){
-      const titles = {1:"Signer info",2:"Payment & delivery"};
+      const titles = {1:"Signer info",2:"Invoice & document delivery"};
       document.getElementById("step-badge").textContent = `Step ${step} of 2`;
       document.getElementById("progress-label").textContent = titles[step] || "Booking";
       document.getElementById("progress-count").textContent = `${step}/2`;
@@ -990,7 +990,7 @@
       const typeValue = (params.get("document_type") || "").trim().toLowerCase();
       return {
         document_ready:readyValue === "1" || readyValue === "yes" ? "1" : "",
-        document_source:DOCUMENT_SOURCE_ALLOWLIST.has(sourceValue) ? sourceValue : "",
+        document_source:DOCUMENT_SOURCE_ALLOWLIST.has(sourceValue) ? (["generated","template"].includes(sourceValue) ? "library" : sourceValue) : "",
         document_type:DOCUMENT_TYPE_ALLOWLIST.has(typeValue) ? typeValue : ""
       };
     }
@@ -1095,9 +1095,8 @@
       if(window.SafeNotarizeDocumentHandoff?.canBook(payload))return window.SafeNotarizeDocumentHandoff.book(payload);
       // Do not send a second booking to Make when the secure generated PDF is
       // missing. Keep the original Make -> Tally path for owned documents.
-      if(window.SafeNotarizeDocumentHandoff?.enabled?.() &&
-         ['library','generated','template'].includes(payload.document_source))
-        throw new Error('Your generated PDF was not securely transferred. Please return to the document creator before booking.');
+      if(['library','generated','template'].includes(payload.document_source))
+        throw new Error('Your saved PDF is no longer available. Return to your document and save it again before booking.');
  
       const response = await fetch(MAKE_BOOKING_WEBHOOK_URL,{
         method:"POST",
@@ -1145,6 +1144,7 @@
         uploadUrl.searchParams.set("utm_content",orderId);
         if(payload.booking_type) uploadUrl.searchParams.set("booking_type",payload.booking_type);
         if(payload.booking_type === "other") uploadUrl.searchParams.set("role","booker");
+        try{sessionStorage.setItem('sn_standard_booking_receipt',JSON.stringify({order_id:orderId,attached:transferConfirmed,saved_at:Date.now()}));}catch{}
         window.location.href = uploadUrl.toString();
         if(transferConfirmed)window.SafeNotarizeDocumentHandoff?.clearPending();
         clearPendingBookingRequestId();
@@ -1152,7 +1152,8 @@
         submissionInProgress = false;
         showStatus("error",error.message || "Something went wrong. Please try again.");
         btn.disabled = false;
-        btn.textContent = "Continue to upload document";
+        btn.textContent = CONTINUE_BUTTON_TEXT;
+        window.SafeNotarizeDocumentHandoff?.refreshBookingUI?.();
       }
     });
     document.getElementById("mode-switch-cancel").addEventListener("click",function(){ closeModeSwitchModal(true); });
