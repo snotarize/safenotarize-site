@@ -14,7 +14,7 @@
     Array.isArray(cfg.allowedSiteOrigins) && cfg.allowedSiteOrigins.includes(location.origin) &&
     typeof cfg.turnstileSiteKey==='string' && cfg.turnstileSiteKey.length>0;
   const SITE_KEY=cfg.turnstileSiteKey;
-  // Local candidate only: keep this disabled until real detached staging is reviewed.
+  // Multiple-PDF mode is enabled only by its separate release flag.
   const multidocEnabled=enabled && cfg.multidocEnabled===true;
   const STORAGE_KEY = 'sn_phase_b_handoff';
   const EXTRA_KEY = 'sn_phase_b_extra_handoffs';
@@ -52,6 +52,7 @@
       s.onerror = () => reject(new Error('Security check could not load'));
       document.head.appendChild(s);
     });
+    loader.catch(() => { loader=undefined; });
     return loader;
   }
   async function verificationToken() {
@@ -61,13 +62,17 @@
       holder = document.createElement('div');
       holder.id = 'sn-handoff-turnstile';
       holder.style.cssText = 'margin:8px 0;min-height:1px';
-      const preview = document.querySelector('section.preview');
-      (preview || document.body).appendChild(holder);
+      const status=document.getElementById('download-status');
+      if(status)status.before(holder);
+      else (document.querySelector('section.preview') || document.body).appendChild(holder);
     }
     return new Promise((resolve, reject) => {
       let widget;
+      let settled=false;
       const timer = setTimeout(() => { finish(new Error('Security verification timed out')); }, 45000);
       const finish = (err, token) => {
+        if(settled)return;
+        settled=true;
         clearTimeout(timer);
         if (widget !== undefined) { try { ts.remove(widget); } catch {} }
         err ? reject(err) : resolve(token);
@@ -116,16 +121,18 @@
   function stage(...args){const next=stagedSequence.then(()=>stageImpl(...args));stagedSequence=next.catch(()=>{});return next;}
   function canBook(payload){
     const item=enabled?pending():null;
-    return !!item && payload.document_source==='library' && payload.document_type===item.document_type;
+    return !!item && ['library','generated','template'].includes(payload.document_source) && payload.document_type===item.document_type;
   }
   let lastResult=null;
   async function book(payload) {
     const item=pending();
     if(!canBook(payload) || !item)throw new Error('No staged document');
-    const response=await fetch(`${ENDPOINT}/book`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:item.id,token:item.token,payload}),cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error'});
+    let response;
+    try{response=await fetch(`${ENDPOINT}/book`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:item.id,token:item.token,payload}),cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error'});}
+    catch{throw new Error('We could not confirm your booking. Please contact SafeNotarize before starting another booking.');}
     const data=await response.json();
     if(data.order_id && data.attached!==true)throw new Error('Your booking is saved, but your document needs attention. Please contact SafeNotarize before trying again.');
-    if(!response.ok || !data.order_id)throw new Error(data.error==='booking_outcome_uncertain' ? 'Your booking may already be saved. Please contact SafeNotarize before trying again.' : (data.error || 'Booking needs review. Please do not create another booking.'));
+    if(!response.ok || !data.order_id)throw new Error(data.error==='booking_outcome_uncertain' ? 'Your booking may already be saved. Please contact SafeNotarize before trying again.' : 'We could not confirm the PDF attachment. Please contact SafeNotarize before starting another booking.');
     if(data.attached!==true)throw new Error('Your document was not attached. Please contact SafeNotarize.');
     if(multidocEnabled){
       // The root booking is created once; additional documents never call intake or PAD.
@@ -144,5 +151,49 @@
     // Keep capability until the next page navigation; no secrets in URLs.
     return data.order_id;
   }
-  window.SafeNotarizeDocumentHandoff={stage,book,canBook,enabled:()=>enabled,multidocEnabled:()=>multidocEnabled,pending:()=>enabled?pending():null,additional:()=>extraDocuments().map(x=>({filename:x.filename,document_type:x.document_type})),clearPending,result:()=>lastResult};
+  const isHt=()=>document.documentElement.lang==='ht';
+  function creatorUI(){
+    const button=document.getElementById('download'),box=document.getElementById('next-box');
+    if(!button||!box)return;
+    const ht=isHt();
+    button.textContent=enabled?(ht?'Kontinye pou rezève':'Continue to booking'):(ht?'Telechaje PDF':'Download PDF');
+    const heading=box.querySelector('strong'),description=box.querySelector('p');
+    if(heading)heading.textContent=enabled?(ht?'PDF ou a pare':'Your PDF is ready'):(ht?'PDF ou a telechaje':'Your PDF is downloaded');
+    if(description)description.textContent=enabled?(ht?'Ajoute enfòmasyon siyatè ak sesyon an. PDF ou a ap ale otomatikman ak randevou a.':'Add signer and session details. Your saved PDF will be included automatically.'):(ht?'Kontinye pou ajoute enfòmasyon randevou a, epi voye PDF ou a.':'Continue to add your booking details, then upload your PDF.');
+    const next=document.getElementById('continue');
+    if(next){next.textContent=ht?'Kontinye pou rezève':'Continue to booking';const url=new URL(next.href);if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;}
+    const privacy=document.getElementById('privacy')||document.querySelector('.editor .legal');
+    if(privacy)privacy.textContent=enabled?(ht?'Bouyon ou rete nan navigatè sa a. Lè ou kontinye pou rezève, PDF ou a ale jwenn SafeNotarize an sekirite.':'Your draft stays in this browser. When you continue to booking, your PDF is sent securely to SafeNotarize.'):(ht?'Bouyon ou rete nan navigatè sa a jiskaske ou chwazi voye dokiman an.':'Your draft stays in this browser until you choose to upload it.');
+    if(!document.getElementById('sn-download-copy')){
+      const copy=document.createElement('button');copy.type='button';copy.id='sn-download-copy';copy.className='btn';
+      copy.textContent=ht?'Telechaje yon kopi PDF':'Download a PDF copy';
+      copy.style.cssText='background:#fff;color:#00274d;border:1px solid #cbd8e6';
+      copy.addEventListener('click',()=>window.downloadPdf?.({downloadOnly:true}));
+      button.after(copy);
+    }
+  }
+  function refreshBookingUI(){
+    const form=document.getElementById('booking-form'),button=document.getElementById('continue-btn');
+    if(!form||!button||!enabled)return;
+    const params=new URLSearchParams(location.search),source=(params.get('document_source')||'').trim().toLowerCase();
+    if(!['library','generated','template'].includes(source))return;
+    const ht=isHt(),type=(params.get('document_type')||'').trim().toLowerCase();
+    const valid=canBook({document_source:'library',document_type:type});
+    button.textContent=ht?'Konfime randevou a':'Confirm booking';button.disabled=!valid;
+    const instruction=document.querySelector('.section-head p');
+    if(instruction)instruction.textContent=valid?(ht?'PDF ou a deja sove. Ajoute enfòmasyon siyatè ak sesyon an anba a.':'Your PDF is already saved. Add the signer and session details below.'):(ht?'Retounen nan dokiman ou a pou sove PDF la anvan ou rezève.':'Return to your document to save the PDF before booking.');
+    let note=document.getElementById('sn-generated-pdf-note');
+    if(!note){note=document.createElement('div');note.id='sn-generated-pdf-note';note.setAttribute('role','status');note.style.cssText='margin:16px 0;padding:14px;border:1px solid #dce7f2;border-radius:12px;background:#f3f9ff;color:#00274d';const head=document.querySelector('.section-head');if(head)head.after(note);else form.prepend(note);}
+    note.replaceChildren();
+    if(valid){note.textContent=ht?'PDF ou a ap ale otomatikman ak randevou a. Ou pa bezwen voye li ankò.':'Your PDF will be included automatically. You do not need to upload it again.';return;}
+    const message=document.createElement('p');message.textContent=ht?'PDF la pa disponib ankò nan navigatè sa a. Retounen nan dokiman ou a epi peze Kontinye pou rezève.':'The saved PDF is no longer available in this browser. Return to your document and choose Continue to booking.';
+    const back=document.createElement('a');back.textContent=ht?'Retounen nan dokiman mwen an':'Return to my document';
+    back.href=ht?'/documents/library-ht.html':'/documents/library.html';
+    try{const ref=new URL(document.referrer);if(['https://safenotarize.com','https://www.safenotarize.com'].includes(ref.origin)&&/^\/documents\/create(?:-ht)?(?:\.html|\/[^/]+\.html)$/.test(ref.pathname)){back.href=ref.pathname+ref.search;back.addEventListener('click',event=>{if(history.length>1){event.preventDefault();history.back();}});}}catch{}
+    back.style.cssText='display:inline-block;font-weight:bold;color:#00274d;padding:10px 0';note.append(message,back);
+  }
+  function initializeUI(){creatorUI();refreshBookingUI();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializeUI,{once:true});else initializeUI();
+  window.addEventListener('pageshow',event=>{if(event.persisted)initializeUI();});
+  window.SafeNotarizeDocumentHandoff={stage,book,canBook,enabled:()=>enabled,multidocEnabled:()=>multidocEnabled,pending:()=>enabled?pending():null,additional:()=>extraDocuments().map(x=>({filename:x.filename,document_type:x.document_type})),clearPending,result:()=>lastResult,refreshBookingUI};
 })();

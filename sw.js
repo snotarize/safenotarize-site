@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safenotarize-session-v8';
+const CACHE_NAME = 'safenotarize-session-v9';
 const CACHE_PREFIX = 'safenotarize-session-v';
 const APP_SHELL = [
   '/thank-you.html',
@@ -8,6 +8,8 @@ const APP_SHELL = [
 ];
 const PROTECTED_WORKFLOW_PATHS = new Set([
   '/book.html',
+  '/upload-ht.html',
+  '/thank-you-ht.html',
   '/book-ht.html',
   '/upload.html',
   '/thank-you.html',
@@ -40,15 +42,24 @@ self.addEventListener('fetch', event => {
   // Never intercept or cache third-party services or unsupported cross-origin requests.
   if (url.origin !== self.location.origin) return;
 
+  // Handoff configuration and client code must be fresh, including for installed apps.
+  if (url.pathname === '/assets/document-handoff.js' || url.pathname === '/assets/document-handoff-config.js') {
+    event.respondWith(fetch(request, {cache:'no-store'}));
+    return;
+  }
+
   // Never cache Make webhook/API responses. Always get fresh session status.
   if (url.hostname.includes('hook.us2.make.com')) return;
 
   if (request.mode === 'navigate') {
-    const isProtectedWorkflow = PROTECTED_WORKFLOW_PATHS.has(url.pathname);
+    const isProtectedWorkflow = PROTECTED_WORKFLOW_PATHS.has(url.pathname) || url.pathname.startsWith('/documents/');
 
     if (isProtectedWorkflow) {
       event.respondWith(
-        fetch(request, {cache:'no-store'}).catch(() => caches.match('/thank-you.html'))
+        fetch(request, {cache:'no-store'}).catch(() => new Response(
+          '<!doctype html><html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Connection needed | SafeNotarize</title><body style="font:18px Arial;padding:28px;color:#00274d"><h1>A connection is needed</h1><p>Reconnect to the internet, then refresh this page to continue. We cannot send documents or check your session while you are offline.</p><button style="padding:14px" onclick="location.reload()">Try again</button></body></html>',
+          {status:503,headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store'}}
+        ))
       );
       return;
     }

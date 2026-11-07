@@ -436,6 +436,12 @@
       .modal-actions{grid-template-columns:1fr}
     }
   </style>
+<style>
+    /* Session readiness has no measurable percentage. Show the actual status instead. */
+    .progress-wrap{display:none}
+    .save-card{margin-top:14px}
+    #join-button-area .small-btn{margin-top:12px;cursor:pointer}
+  </style>
 </head>
 
 <body>
@@ -443,12 +449,12 @@
     <img src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png" alt="SafeNotarize Logo" class="logo" id="logo-img">
 
     <div class="badge" id="top-badge">SafeNotarize session</div>
-    <h1 id="main-title">Connecting You to Your Notary Session</h1>
+    <h1 id="main-title">Your Notary Session</h1>
     <p id="main-text">Please stay on this page. Your session link will appear here as soon as it is available.</p>
 
     <div class="status-card">
       <div id="loader" class="loader"></div>
-      <p id="session-message"><strong>Connecting you to your notary session.</strong></p>
+      <p id="session-message"><strong>Checking for your session link.</strong></p>
       <p id="session-submessage">Keep this page open. The Join button appears automatically.</p>
 
       <div class="progress-wrap">
@@ -477,14 +483,14 @@
     </div>
 
     <div class="invite-note" id="invite-note">
-      <strong>Invite email sent.</strong> Each signer should use their own SafeNotarize invite email.
+      <strong>Invite email:</strong> Each signer should use their own SafeNotarize invite when it arrives.
     </div>
 
     <div class="save-card" id="install-card">
       <div class="save-icon" aria-hidden="true">↧</div>
       <div>
         <strong id="install-title">Save SafeNotarize</strong>
-        <p id="install-text">Add this page to your Home Screen to return to your session and final document.</p>
+        <p id="install-text">Add a shortcut to return to your session link.</p>
         <button type="button" class="install-btn" id="install-btn">📲 Add to Home Screen</button>
         <div class="install-hint" id="install-hint"></div>
       </div>
@@ -510,7 +516,6 @@
     const makeWebhookUrl = "https://hook.us2.make.com/oy9elq5ctxb9fl74lcwuimwb4zp2gxb2";
     const calendlyEventUrl = "https://calendly.com/supervisor-23/online-notarization-safenotarize";
     const rawParams = new URLSearchParams(window.location.search);
-    const testMode = rawParams.get("test") || "";
     const openedFromAppParam = rawParams.get("from_app") === "1";
 
     function normalizeWorkflowUrl(sourceParams){
@@ -557,15 +562,15 @@
 
     const copy = isKreyol ? {
       initialBadge:"Sesyon SafeNotarize",
-      initialTitle:"N ap konekte w ak sesyon notè ou",
-      initialText:"Bouton pou antre a ap parèt isit la. Sove paj sa a pou retounen nenpòt lè epi jwenn dokiman final ou. Imèl envitasyon an voye tou.",
-      wait:"<strong>N ap konekte w ak sesyon notè ou.</strong>",
-      subWait:"Kite paj sa a ouvè. Bouton an ap parèt otomatikman.",
-      checking:"Koneksyon sekirize ap kòmanse",
+      initialTitle:"Sesyon Notè Ou",
+      initialText:"Bouton pou antre a ap parèt lè lyen sesyon ou pare. Ou ka chwazi yon lè oswa kontakte nou pandan w ap tann.",
+      wait:"<strong>N ap verifye lyen sesyon ou a.</strong>",
+      subWait:"Kite paj sa a ouvè, oswa chwazi yon lè anba a.",
+      checking:"N ap verifye lyen sesyon ou a",
       chooseLater:"Chwazi yon lè pou pita",
       chooseSlot:"Chwazi yon lè",
       needHelp:"Bezwen èd",
-      inviteInitial:"<strong>Imèl envitasyon voye.</strong> Chak siyatè dwe sèvi ak pwòp imèl SafeNotarize pa yo.",
+      inviteInitial:"<strong>Imèl envitasyon:</strong> Chak siyatè dwe sèvi ak pwòp envitasyon SafeNotarize pa li lè li rive.",
       newSession:"Kreye yon nouvo sesyon notè",
       beforeJoin:"Avan ou antre:",
       readyItems:[
@@ -573,17 +578,11 @@
         "Bay aksè kamera ak mikwo.",
         "Kenbe pyès idantite valab ou pare."
       ],
-      waitingMessages:[
-        "Koneksyon sekirize ap kòmanse",
-        "N ap chèche sesyon ou",
-        "N ap ouvri sal notè sekirize ou",
-        "N ap verifye lyen envitasyon ou",
-        "Prèske rive"
-      ],
+      waitingMessages:["N ap verifye lyen sesyon ou a"],
       scheduledTime:"Lè randevou a:",
       readyBadge:"Sesyon an pare",
       readyTitle:"Sesyon ou pare",
-      readyText:"Peze Antre nan sesyon an. Ou ka sove paj sa a pou retounen nenpòt lè epi jwenn dokiman final ou. Imèl envitasyon an voye tou.",
+      readyText:"Peze bouton ki anba a pou antre. Kenbe pyès idantite valab ou pare epi bay aksè kamera ak mikwofòn.",
       readyMessage:"<strong>Nou pare lè ou pare.</strong>",
       readySub:"Bay aksè kamera/mikwo epi kenbe ID ou pare.",
       readyStatus:"Lyen sesyon an pare",
@@ -596,32 +595,35 @@
       bookerSub:"Chak siyatè dwe sèvi ak pwòp imèl pa yo.",
       bookerStatus:"Pare pou chwazi lè",
       bookerInvite:"<strong>Imèl envitasyon:</strong> Apre ou chwazi yon lè, chak siyatè ap resevwa pwòp imèl pa yo.",
-      preparingTitle:"Chwazi kijan ou vle kontinye",
-      preparingText:"Chwazi yon lè oswa tann bouton pou antre a. Sove paj sa a pou retounen nenpòt lè. Imèl envitasyon an voye tou.",
-      preparingMessage:"<strong>Dokiman resevwa.</strong>",
-      preparingSub:"Chak siyatè ap resevwa pwòp imèl pa yo.",
-      preparingStatus:"Pare pou pwochen etap la",
-      preparingInvite:"<strong>Enpòtan:</strong> Pa kreye kont. Si yo mande w sa, fèmen paj la epi sèvi ak imèl SafeNotarize ou.",
-      installTitle:"Sove SafeNotarize App",
-      installText:"Ajoute paj sa a sou ekran telefòn ou pou retounen nan sesyon an ak dokiman final ou.",
-      installButton:"📲 Sove SafeNotarize App",
-      iosInstall:"🍎 Sou iPhone: peze Share, chèche Add to Home Screen, mete Open as Web App OFF, epi peze Add.",
-      installed:"SafeNotarize deja sove sou ekran ou.",
+      preparingTitle:"Lyen Sesyon Ou Poko Pare",
+      preparingText:"Chwazi yon lè oswa kontakte SafeNotarize pou jwenn èd. Ou ka verifye paj sa a ankò tou.",
+      preparingMessage:"<strong>Chwazi pwochen etap ou a.</strong>",
+      preparingSub:"Verifye ankò, chwazi yon lè, oswa mande nou èd.",
+      preparingStatus:"N ap tann lyen sesyon an",
+      preparingInvite:"<strong>Imèl envitasyon:</strong> Chak siyatè dwe sèvi ak pwòp envitasyon SafeNotarize pa li lè li rive.",
+      installTitle:"Sove paj sa a (si ou vle)",
+      installText:"Ajoute yon rakousi pou retounen nan lyen sesyon ou a.",
+      installButton:"Ajoute yon rakousi",
+      iosInstall:"Sou iPhone, peze Share, apre sa Add to Home Screen.",
+      checkAgain:"Verifye ankò",
+      installRequested:"Suiv enstriksyon navigatè a pou fini ajoute rakousi a.",
+      browserInstall:"Ouvri meni navigatè a epi chwazi Add to Home Screen.",
+      installed:"Rakousi a ajoute. Sèvi avè l pou ouvri paj sa a ankò.",
       leaveTitle:"Avan ou kite",
       leaveText:"Sove paj sa a oswa kite l ouvè pou retounen nenpòt lè.",
       stay:"Rete sou paj la",
       leaveAnyway:"Kite kanmenm"
     } : {
       initialBadge:"SafeNotarize session",
-      initialTitle:"Connecting You to Your Notary Session",
-      initialText:"Your Join button will appear here. Save this page to return anytime and get your final document. Your SafeNotarize invite email was also sent.",
-      wait:"<strong>Connecting you to your notary session.</strong>",
-      subWait:"Keep this page open. The Join button appears automatically.",
-      checking:"Starting secure connection",
+      initialTitle:"Your Notary Session",
+      initialText:"Your Join button will appear when your session link is ready. You can choose a time or contact us while you wait.",
+      wait:"<strong>Checking for your session link.</strong>",
+      subWait:"Keep this page open, or choose a time below.",
+      checking:"Checking for your session link",
       chooseLater:"Choose a Later Time",
       chooseSlot:"Choose a Time Slot",
       needHelp:"Need Help",
-      inviteInitial:"<strong>Invite email sent.</strong> Each signer should use their own SafeNotarize invite email.",
+      inviteInitial:"<strong>Invite email:</strong> Each signer should use their own SafeNotarize invite when it arrives.",
       newSession:"Create a New Notary Session",
       beforeJoin:"Before you join:",
       readyItems:[
@@ -629,17 +631,11 @@
         "Allow camera and microphone access.",
         "Have your valid ID ready."
       ],
-      waitingMessages:[
-        "Starting secure connection",
-        "Finding your session",
-        "Opening your secure notary room",
-        "Checking your invite link",
-        "Almost there"
-      ],
+      waitingMessages:["Checking for your session link"],
       scheduledTime:"Scheduled time:",
       readyBadge:"Session ready",
       readyTitle:"Your Session Is Ready",
-      readyText:"Tap Join Session. You can also save this page to return anytime and get your final document. Your invite email was also sent.",
+      readyText:"Use the button below to join. Have your valid ID ready and allow camera and microphone access.",
       readyMessage:"<strong>Ready when you are.</strong>",
       readySub:"Allow camera/mic and have your valid ID ready.",
       readyStatus:"Session link ready",
@@ -652,17 +648,20 @@
       bookerSub:"Each signer must use their own invite email.",
       bookerStatus:"Ready to choose time",
       bookerInvite:"<strong>Invite email:</strong> After you choose a time, each signer gets their own email.",
-      preparingTitle:"Choose How You Want to Continue",
-      preparingText:"Choose a time or wait for your Join button. Save this page to return anytime. Your invite email was also sent.",
-      preparingMessage:"<strong>Upload received.</strong>",
-      preparingSub:"Each signer gets their own invite email.",
-      preparingStatus:"Ready for next step",
-      preparingInvite:"<strong>Important:</strong> Do not sign up. If asked, close that page and use your SafeNotarize invite email.",
-      installTitle:"Save SafeNotarize App",
-      installText:"Add this page to your Home Screen to return to your session and final document.",
-      installButton:"📲 Save SafeNotarize App",
-      iosInstall:"🍎 On iPhone: tap Share, look for Add to Home Screen, turn OFF “Open as Web App”, then tap Add.",
-      installed:"SafeNotarize is already saved on your screen.",
+      preparingTitle:"Your Session Link Is Not Ready Yet",
+      preparingText:"Choose a time or contact SafeNotarize for help. You can also check this page again.",
+      preparingMessage:"<strong>Choose your next step.</strong>",
+      preparingSub:"Check again, choose a time, or ask us for help.",
+      preparingStatus:"Waiting for a session link",
+      preparingInvite:"<strong>Invite email:</strong> Each signer should use their own SafeNotarize invite when it arrives.",
+      installTitle:"Save this page (optional)",
+      installText:"Add a shortcut to return to your session link.",
+      installButton:"Add a shortcut",
+      iosInstall:"On iPhone, tap Share, then Add to Home Screen.",
+      checkAgain:"Check again",
+      installRequested:"Follow your browser prompt to finish adding the shortcut.",
+      browserInstall:"Open your browser menu and choose Add to Home Screen.",
+      installed:"Shortcut added. Use it to reopen this page.",
       leaveTitle:"Before you leave",
       leaveText:"Save this page or keep it open so you can return anytime.",
       stay:"Stay on Page",
@@ -678,7 +677,7 @@
     const isBookerFlow = role === "booker" || signer === "booker" || bookingType === "other";
 
     let attempts = 0;
-    const maxAttempts = 20;
+    const maxAttempts = 10;
 
     function applyInitialCopy(){
       document.getElementById("top-badge").innerText = copy.initialBadge;
@@ -692,7 +691,7 @@
       const newSessionBtn = document.getElementById("new-session-btn");
       if(newSessionBtn){
         newSessionBtn.innerText = copy.newSession;
-        newSessionBtn.href = "https://safenotarize.com/book.html";
+        newSessionBtn.href = isKreyol ? "/book-ht.html" : "/book.html";
       }
       document.getElementById("invite-note").innerHTML = copy.inviteInitial;
       document.getElementById("install-title").innerText = copy.installTitle;
@@ -746,28 +745,30 @@
     }
 
     function updateWaitingVisuals(){
-      let percent;
+      document.querySelector('.status-card').setAttribute('aria-busy','true');
+      document.getElementById('live-status-text').innerText=copy.checking;
+    }
 
-      // Fast start so the wait feels active right away.
-      if(attempts <= 3){
-        percent = 18 + attempts * 14; // 32%, 46%, 60%
-      }
+    function safeSessionLink(value){
+      try{const url=new URL(value);return url.protocol==='https:'&&!url.username&&!url.password&&!url.port?url.href:null;}catch{return null;}
+    }
 
-      // Slow down around 60% to 70% while the real session link is still loading.
-      else if(attempts <= 8){
-        percent = 60 + (attempts - 3) * 2; // 62% to 70%
-      }
-
-      // Keep moving slowly so it does not look stuck.
-      else {
-        percent = Math.min(92, 70 + (attempts - 8) * 1.6);
-      }
-
-      document.getElementById("progress-bar").style.width = percent + "%";
-      document.getElementById("live-status-text").innerText = copy.waitingMessages[attempts % copy.waitingMessages.length];
+    function checkAgainButton(){
+      const button=document.createElement('button');button.type='button';button.className='small-btn';
+      button.textContent=copy.checkAgain;
+      button.addEventListener('click',()=>{
+        attempts=0;applyInitialCopy();
+        document.getElementById('join-button-area').replaceChildren();
+        document.getElementById('loader').classList.remove('hidden');
+        document.getElementById('dots').classList.remove('hidden');
+        checkSessionLink();
+      });
+      document.getElementById('join-button-area').appendChild(button);
     }
 
     function showReadyButton(link){
+      link=safeSessionLink(link);if(!link){showStillPreparing();return;}
+      document.querySelector('.status-card').setAttribute('aria-busy','false');
       document.getElementById("top-badge").innerText = copy.readyBadge;
       document.getElementById("main-title").innerText = copy.readyTitle;
       document.getElementById("main-text").innerText = copy.readyText;
@@ -778,12 +779,14 @@
       document.getElementById("live-status-text").innerText = copy.readyStatus;
       document.getElementById("dots").classList.add("hidden");
       document.getElementById("ready-instructions").classList.remove("hidden");
-      document.getElementById("join-button-area").innerHTML = `<a class="join-btn safe-action" href="${link}" target="_blank" rel="noopener">${copy.joinNow}</a>`;
+      const join=document.createElement('a');join.className='join-btn safe-action';join.href=link;join.target='_blank';join.rel='noopener';join.textContent=copy.joinNow;
+      document.getElementById('join-button-area').replaceChildren(join);
       document.getElementById("invite-note").innerHTML = copy.readyInvite;
       updateScheduleLink(copy.chooseLater);
     }
 
     function showBookerMessage(){
+      document.querySelector('.status-card').setAttribute('aria-busy','false');
       document.getElementById("top-badge").innerText = copy.uploadReceived;
       document.getElementById("main-title").innerText = copy.bookerTitle;
       document.getElementById("main-text").innerText = copy.bookerText;
@@ -800,6 +803,7 @@
     }
 
     function showStillPreparing(){
+      document.querySelector('.status-card').setAttribute('aria-busy','false');
       document.getElementById("top-badge").innerText = copy.uploadReceived;
       document.getElementById("main-title").innerText = copy.preparingTitle;
       document.getElementById("main-text").innerText = copy.preparingText;
@@ -813,6 +817,7 @@
       document.getElementById("join-button-area").innerHTML = `<a class="join-btn safe-action" href="${buildScheduleUrl()}" target="_blank" rel="noopener">${copy.chooseSlot}</a>`;
       document.getElementById("invite-note").innerHTML = copy.preparingInvite;
       updateScheduleLink(copy.chooseLater);
+      checkAgainButton();
     }
 
     async function checkSessionLink(){
@@ -833,10 +838,10 @@
 
       try{
         const url = `${makeWebhookUrl}?order_id=${encodeURIComponent(orderId)}&uuid=${encodeURIComponent(uuid)}&signer=${encodeURIComponent(signerToCheck)}`;
-        const response = await fetch(url);
+        const response = await fetch(url,{cache:"no-store",signal:AbortSignal.timeout(15000)});
         const data = await response.json();
 
-        if(data.ready === true && data.link){
+        if(data.ready === true && safeSessionLink(data.link)){
           showReadyButton(data.link);
           return;
         }
@@ -944,9 +949,8 @@
 
     function saveCurrentSessionForApp(){
       try{
-        // Test/demo pages and URLs without a legitimate workflow identifier
-        // must never become the installed-app return destination.
-        if(testMode || (!orderId && !uuid)) return;
+        // URLs without a workflow identifier must never replace the saved return destination.
+        if(!orderId && !uuid) return;
 
         const savedLang = params.get("lang") || (isKreyol ? "ht" : "");
         const minimalUrl = buildMinimalSessionUrl({
@@ -969,20 +973,6 @@
         const savedUrl = getValidatedSavedSessionUrl();
         const currentUrl = window.location.pathname + window.location.search;
 
-        // If the iPhone home-screen icon was saved while testing, remove the test mode
-        // so the page can check Make/Airtable again instead of staying stuck on a demo screen.
-        if(openedFromApp && testMode){
-          const cleanUrl = new URL(window.location.href);
-          cleanUrl.searchParams.delete("test");
-          cleanUrl.searchParams.set("from_app", "1");
-          if(savedUrl && savedUrl !== currentUrl){
-            window.location.replace(savedUrl);
-          }else{
-            window.location.replace(cleanUrl.toString());
-          }
-          return;
-        }
-
         const hasSessionParams = orderId || uuid;
         if(openedFromApp && !hasSessionParams && savedUrl && savedUrl !== currentUrl){
           window.location.replace(savedUrl);
@@ -1004,7 +994,7 @@
       const installHint = document.getElementById("install-hint");
       if(!installCard || !installBtn || !installHint) return;
 
-      if(isStandalone() || localStorage.getItem("sn_app_installed") === "1"){
+      if(isStandalone()){
         installHint.textContent = copy.installed;
         installHint.classList.add("show");
         installBtn.classList.add("hidden");
@@ -1026,12 +1016,12 @@
             deferredInstallPrompt = null;
             if(choice && choice.outcome === "accepted"){
               localStorage.setItem("sn_app_installed", "1");
-              installHint.textContent = copy.installed;
+              installHint.textContent = copy.installRequested;
               installHint.classList.add("show");
               installBtn.classList.add("hidden");
             }
           }else{
-            installHint.textContent = "Open your browser menu and choose Add to Home Screen.";
+            installHint.textContent = copy.browserInstall;
             installHint.classList.add("show");
           }
           setTimeout(function(){ allowLeave = false; }, 1200);
@@ -1094,7 +1084,7 @@
 
     if("serviceWorker" in navigator){
       window.addEventListener("load", function(){
-        navigator.serviceWorker.register("/sw.js?v=7").catch(function(){});
+        navigator.serviceWorker.register("/sw.js?v=9").catch(function(){});
       });
     }
 
@@ -1107,15 +1097,8 @@
     updateScheduleLink(isBookerFlow ? copy.chooseSlot : copy.chooseLater);
     showScheduledTime();
 
-    if(testMode === "ready"){
-      showReadyButton("https://safenotarize.com");
-    } else if(testMode === "booker"){
-      showBookerMessage();
-    } else if(testMode === "waiting"){
-      showStillPreparing();
-    } else {
-      checkSessionLink();
-    }
+    checkSessionLink();
+
   </script>
 </body>
 </html>
