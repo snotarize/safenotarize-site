@@ -438,7 +438,7 @@
   </style>
 <style>
     /* Session readiness has no measurable percentage. Show the actual status instead. */
-    .progress-wrap{display:none}
+    .progress-wrap,.live-status{display:none}
     .save-card{margin-top:14px}
     #join-button-area .small-btn{margin-top:12px;cursor:pointer}
   </style>
@@ -588,7 +588,7 @@
       readyStatus:"Lyen sesyon an pare",
       joinNow:"Antre nan sesyon an kounye a",
       readyInvite:"<strong>Enpòtan:</strong> Pa kreye kont. Si yo mande w sa, fèmen paj la epi sèvi ak imèl SafeNotarize ou.",
-      uploadReceived:"Dokiman an resevwa",
+      uploadReceived:"Randevou a resevwa",
       bookerTitle:"Chwazi yon lè pou siyatè a",
       bookerText:"Chwazi yon lè. Chak siyatè ap resevwa pwòp imèl SafeNotarize pa yo.",
       bookerMessage:"<strong>Pwochen etap: chwazi yon lè.</strong>",
@@ -641,7 +641,7 @@
       readyStatus:"Session link ready",
       joinNow:"Join Session Now",
       readyInvite:"<strong>Important:</strong> Do not sign up. If asked, close that page and use your SafeNotarize invite email.",
-      uploadReceived:"Upload received",
+      uploadReceived:"Booking received",
       bookerTitle:"Choose a Time for the Signer",
       bookerText:"Choose a time. Each signer will receive their own SafeNotarize invite email.",
       bookerMessage:"<strong>Next step: choose a time.</strong>",
@@ -744,6 +744,12 @@
       }
     }
 
+    function secondarySchedule(visible){
+      const link=document.getElementById('schedule-time-link');
+      link.classList.toggle('hidden',!visible);
+      link.parentElement.style.gridTemplateColumns=visible?'1fr 1fr':'1fr';
+    }
+
     function updateWaitingVisuals(){
       document.querySelector('.status-card').setAttribute('aria-busy','true');
       document.getElementById('live-status-text').innerText=copy.checking;
@@ -757,7 +763,7 @@
       const button=document.createElement('button');button.type='button';button.className='small-btn';
       button.textContent=copy.checkAgain;
       button.addEventListener('click',()=>{
-        attempts=0;applyInitialCopy();
+        attempts=0;applyInitialCopy();secondarySchedule(true);
         document.getElementById('join-button-area').replaceChildren();
         document.getElementById('loader').classList.remove('hidden');
         document.getElementById('dots').classList.remove('hidden');
@@ -767,6 +773,7 @@
     }
 
     function showReadyButton(link){
+      secondarySchedule(true);
       link=safeSessionLink(link);if(!link){showStillPreparing();return;}
       document.querySelector('.status-card').setAttribute('aria-busy','false');
       document.getElementById("top-badge").innerText = copy.readyBadge;
@@ -786,8 +793,9 @@
     }
 
     function showBookerMessage(){
+      secondarySchedule(false);
       document.querySelector('.status-card').setAttribute('aria-busy','false');
-      document.getElementById("top-badge").innerText = copy.uploadReceived;
+      document.getElementById("top-badge").innerText = (orderId||uuid)?copy.uploadReceived:copy.initialBadge;
       document.getElementById("main-title").innerText = copy.bookerTitle;
       document.getElementById("main-text").innerText = copy.bookerText;
       document.getElementById("session-message").innerHTML = copy.bookerMessage;
@@ -803,8 +811,9 @@
     }
 
     function showStillPreparing(){
+      secondarySchedule(false);
       document.querySelector('.status-card').setAttribute('aria-busy','false');
-      document.getElementById("top-badge").innerText = copy.uploadReceived;
+      document.getElementById("top-badge").innerText = (orderId||uuid)?copy.uploadReceived:copy.initialBadge;
       document.getElementById("main-title").innerText = copy.preparingTitle;
       document.getElementById("main-text").innerText = copy.preparingText;
       document.getElementById("session-message").innerHTML = copy.preparingMessage;

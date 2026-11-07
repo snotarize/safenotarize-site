@@ -115,3 +115,19 @@ test('installed-app requests cannot reuse an old cached handoff client',async()=
  }
  assert.deepEqual(calls,['no-store','no-store']);
 });
+
+
+test('template guides explain the saved PDF path without a required re-upload',()=>{
+ for(const name of ['general-affidavit','letter-of-authorization','proof-of-residency-letter','vehicle-release-authorization']){
+  const html=read('documents/'+name+'.html');
+  assert.equal(html.includes('then upload the PDF when prompted'),false,name);
+  assert.ok(html.includes('Your PDF is included automatically.'),name);
+ }
+});
+
+test('session routes retain valid JavaScript after customer-copy cleanup',()=>{
+ for(const path of ['thank-you.html','thank-you-ht.html']){
+  const scripts=inlineScripts(read(path));
+  for(let index=0;index<scripts.length;index++)new Script(scripts[index],{filename:path+':'+index});
+ }
+});

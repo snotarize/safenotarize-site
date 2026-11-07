@@ -1048,8 +1048,7 @@
       if(window.SafeNotarizeDocumentHandoff?.canBook(payload))return window.SafeNotarizeDocumentHandoff.book(payload);
       // Do not send a second booking to Make when the secure generated PDF is
       // missing. Keep the original Make -> Tally path for owned documents.
-      if(window.SafeNotarizeDocumentHandoff?.enabled?.() &&
-         ['library','generated','template'].includes(payload.document_source))
+      if(['library','generated','template'].includes(payload.document_source))
         throw new Error('Your saved PDF is no longer available. Return to your document and save it again before booking.');
  
       const response = await fetch(MAKE_BOOKING_WEBHOOK_URL,{

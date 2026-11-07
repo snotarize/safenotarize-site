@@ -130,7 +130,7 @@
     let response;
     try{response=await fetch(`${ENDPOINT}/book`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:item.id,token:item.token,payload}),cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error'});}
     catch{throw new Error('We could not confirm your booking. Please contact SafeNotarize before starting another booking.');}
-    const data=await response.json();
+    const data=await response.json().catch(()=>{throw new Error(isHt()?'Nou pa t kapab konfime randevou a. Kontakte SafeNotarize anvan ou fè yon lòt randevou.':'We could not confirm your booking. Please contact SafeNotarize before starting another booking.');});
     if(data.order_id && data.attached!==true)throw new Error('Your booking is saved, but your document needs attention. Please contact SafeNotarize before trying again.');
     if(!response.ok || !data.order_id)throw new Error(data.error==='booking_outcome_uncertain' ? 'Your booking may already be saved. Please contact SafeNotarize before trying again.' : 'We could not confirm the PDF attachment. Please contact SafeNotarize before starting another booking.');
     if(data.attached!==true)throw new Error('Your document was not attached. Please contact SafeNotarize.');
@@ -161,7 +161,7 @@
     if(heading)heading.textContent=enabled?(ht?'PDF ou a pare':'Your PDF is ready'):(ht?'PDF ou a telechaje':'Your PDF is downloaded');
     if(description)description.textContent=enabled?(ht?'Ajoute enfòmasyon siyatè ak sesyon an. PDF ou a ap ale otomatikman ak randevou a.':'Add signer and session details. Your saved PDF will be included automatically.'):(ht?'Kontinye pou ajoute enfòmasyon randevou a, epi voye PDF ou a.':'Continue to add your booking details, then upload your PDF.');
     const next=document.getElementById('continue');
-    if(next){next.textContent=ht?'Kontinye pou rezève':'Continue to booking';const url=new URL(next.href);if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;}
+    if(next){next.textContent=ht?'Kontinye pou rezève':'Continue to booking';const url=new URL(next.href);if(!enabled)url.searchParams.set('document_source','own');if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;}
     const privacy=document.getElementById('privacy')||document.querySelector('.editor .legal');
     if(privacy)privacy.textContent=enabled?(ht?'Bouyon ou rete nan navigatè sa a. Lè ou kontinye pou rezève, PDF ou a ale jwenn SafeNotarize an sekirite.':'Your draft stays in this browser. When you continue to booking, your PDF is sent securely to SafeNotarize.'):(ht?'Bouyon ou rete nan navigatè sa a jiskaske ou chwazi voye dokiman an.':'Your draft stays in this browser until you choose to upload it.');
     if(!document.getElementById('sn-download-copy')){
