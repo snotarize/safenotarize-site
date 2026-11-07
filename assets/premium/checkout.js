@@ -7,19 +7,17 @@
     package: '$30 gen ladan 1 siyatè ak 1 so.',
     saved: 'N ap voye PDF ou a bay OneNotary.',
     upload: 'W ap voye dokiman ou sou OneNotary.',
-    intro: 'Peman tès. Sèvi ak yon kat tès Stripe pou otorize montan an anvan ou kòmanse yon sesyon.',
-    email: 'Imèl siyatè yo, youn sou chak liy',
-    emailHelp: 'Chak siyatè anplis koute $10.',
-    stamps: 'So anplis ($10 chak)',
+    intro: 'Peman tès. Sèvi ak yon kat tès Stripe pou otorize $30. W ap ranpli enfòmasyon ou epi verifye idantite ou sou OneNotary.',
+    email: 'Imèl siyatè prensipal la',
+    rates: 'Chak siyatè oswa so anplis koute $10. Chak temwen koute $15.',
+    terms: 'Mwen otorize yon rezèv $30 epi mwen dakò ak pri final la selon sèvis ki fèt yo.',
     card: 'Kat tès',
-    quote: 'Montan pou otorize',
-    submit: 'Otorize epi kontinye',
+    submit: 'Otorize $30 epi kontinye',
     join: 'Kontinye sou OneNotary',
     library: 'Ou bezwen yon dokiman? Gade bibliyotèk la',
     loading: 'N ap prepare peman an…',
     unavailable: 'Peman Premium pa disponib kounye a.',
     missing: 'PDF ou a pa disponib. Retounen nan dokiman ou a epi sove li ankò.',
-    signers: 'Antre yon imèl diferan pou chak siyatè. Ou ka mete jiska 6 siyatè.',
     authorizing: 'N ap verifye otorizasyon kat la…',
     cardError: 'Kat la pa t otorize. Verifye enfòmasyon kat la epi eseye ankò.',
     opening: 'N ap prepare sesyon OneNotary ou a…',
@@ -30,19 +28,17 @@
     package: '$30 includes 1 signer and 1 stamp.',
     saved: 'We’ll send your saved PDF to OneNotary.',
     upload: 'You’ll upload your document on OneNotary.',
-    intro: 'Test checkout. Use a Stripe test card to authorize the amount before starting a session.',
-    email: 'Signer emails, one per line',
-    emailHelp: 'Each additional signer is $10.',
-    stamps: 'Additional stamps ($10 each)',
+    intro: 'Test checkout. Use a Stripe test card for the $30 hold. You’ll complete your information and identity check on OneNotary.',
+    email: 'Primary signer’s email',
+    rates: 'Each additional signer or stamp is $10. Each witness is $15.',
+    terms: 'I authorize a $30 hold and agree to the final price based on the services completed.',
     card: 'Test card',
-    quote: 'Amount to authorize',
-    submit: 'Authorize and continue',
+    submit: 'Authorize $30 and continue',
     join: 'Continue to OneNotary',
     library: 'Need a document? Browse the library',
     loading: 'Preparing checkout…',
     unavailable: 'Premium checkout is currently unavailable.',
     missing: 'Your saved PDF is unavailable. Return to your document and save it again.',
-    signers: 'Enter a different email for each signer. You can add up to 6 signers.',
     authorizing: 'Checking your card authorization…',
     cardError: 'The card authorization failed. Check the card details and try again.',
     opening: 'Preparing your OneNotary session…',
@@ -58,8 +54,8 @@
   const service = window.SafeNotarizePremium;
   const config = service?.settings();
   for (const [id, key] of Object.entries({
-    back: 'back', package: 'package', intro: 'intro', 'email-label': 'email', 'email-help': 'emailHelp',
-    'stamp-label': 'stamps', 'card-label': 'card', submit: 'submit', join: 'join', library: 'library'
+    back: 'back', package: 'package', intro: 'intro', 'email-label': 'email', rates: 'rates',
+    'terms-label': 'terms', 'card-label': 'card', submit: 'submit', join: 'join', library: 'library'
   })) el(id).textContent = copy[key];
   el('back').href = service?.backPath || (ht ? '/start-ht.html' : '/start.html');
   el('library').href = ht ? '/documents/library-ht.html' : '/documents/library.html';
@@ -75,7 +71,8 @@
     return;
   }
 
-  const storageKey = 'sn_premium_order_v1';
+  const storageKey = 'sn_premium_order_v2';
+  const amount = 3000;
   let challenge = '';
   let stripe;
   let card;
@@ -83,17 +80,6 @@
   let busy = false;
 
   const hex = bytes => Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('');
-
-  function details() {
-    const signers = el('emails').value.split('\n').map(email => email.trim().toLowerCase()).filter(Boolean);
-    const counts = { extraSigners: Math.max(0, signers.length - 1), extraStamps: Number(el('stamps').value) };
-    return { signers, counts, amount: 3000 + 1000 * (counts.extraSigners + counts.extraStamps) };
-  }
-
-  function showQuote() {
-    el('emails').setCustomValidity('');
-    el('quote').textContent = copy.quote + ' $' + (details().amount / 100).toFixed(2);
-  }
 
   async function request(path, payload) {
     const response = await fetch(config.endpoint + path, {
@@ -151,13 +137,8 @@
   async function continueToNotary(event) {
     event.preventDefault();
     if (busy || !challenge) return;
-    const { signers, counts, amount } = details();
-    if (!signers.length || signers.length > 6 || new Set(signers).size !== signers.length ||
-        signers.some(email => email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
-      el('emails').setCustomValidity(copy.signers);
-      el('emails').reportValidity();
-      return;
-    }
+    if (!form.reportValidity()) return;
+    const email = el('email').value.trim().toLowerCase();
 
     busy = true;
     submit.disabled = true;
@@ -165,7 +146,10 @@
     try {
       const current = service.documentContext().pending;
       if (source === 'library' && current?.id !== pending.id) throw Error('document_access_denied');
-      const order = { source, signers, counts, documentId: pending?.id, preferredLanguage: ht ? 'ht' : 'en' };
+      const order = {
+        source, signers: [email], documentId: pending?.id, preferredLanguage: ht ? 'ht' : 'en',
+        billingFlow: 'post_session_v1', acceptedTerms: el('terms').checked
+      };
       const { id, access } = await orderFor(order);
       const documentToken = current?.token;
       status.textContent = copy.authorizing;
@@ -181,6 +165,7 @@
       if (link.protocol !== 'https:' || link.host !== 'app.onenotary.us' || link.username || link.password) {
         throw Error('unsafe_link');
       }
+      sessionStorage.setItem('sn_premium_access_' + id, access);
       form.hidden = true;
       el('join').href = link.href;
       el('join').hidden = false;
@@ -204,7 +189,7 @@
   async function initialize() {
     status.textContent = copy.loading;
     try {
-      const availability = await request('/availability?source=' + source);
+      const availability = await request('/availability?billing_flow=post_session_v1&source=' + source);
       if (availability.ready !== true || availability.mode !== 'test') throw Error('premium_unavailable');
       await Promise.all([
         loadScript('https://js.stripe.com/v3/'),
@@ -234,9 +219,7 @@
         'expired-callback': clearChallenge,
         'error-callback': clearChallenge
       });
-      form.addEventListener('input', showQuote);
       form.addEventListener('submit', continueToNotary);
-      showQuote();
       status.textContent = '';
     } catch {
       form.hidden = true;
