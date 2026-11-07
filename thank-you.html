@@ -450,12 +450,12 @@
 
     <div class="badge" id="top-badge">SafeNotarize session</div>
     <h1 id="main-title">Your Notary Session</h1>
-    <p id="main-text">Please stay on this page. Your session link will appear here as soon as it is available.</p>
+    <p id="main-text">Your Join button will appear when your session is ready.</p>
 
     <div class="status-card">
       <div id="loader" class="loader"></div>
       <p id="session-message"><strong>Checking for your session link.</strong></p>
-      <p id="session-submessage">Keep this page open. The Join button appears automatically.</p>
+      <p id="session-submessage">Keep this page open while we check.</p>
 
       <div class="progress-wrap">
         <div class="progress-bar" id="progress-bar"></div>
@@ -563,9 +563,9 @@
     const copy = isKreyol ? {
       initialBadge:"Sesyon SafeNotarize",
       initialTitle:"Sesyon Notè Ou",
-      initialText:"Bouton pou antre a ap parèt lè lyen sesyon ou pare. Ou ka chwazi yon lè oswa kontakte nou pandan w ap tann.",
+      initialText:"Bouton pou antre a ap parèt lè sesyon ou a pare.",
       wait:"<strong>N ap verifye lyen sesyon ou a.</strong>",
-      subWait:"Kite paj sa a ouvè, oswa chwazi yon lè anba a.",
+      subWait:"Kite paj sa a ouvè pandan n ap verifye.",
       checking:"N ap verifye lyen sesyon ou a",
       chooseLater:"Chwazi yon lè pou pita",
       chooseSlot:"Chwazi yon lè",
@@ -616,9 +616,9 @@
     } : {
       initialBadge:"SafeNotarize session",
       initialTitle:"Your Notary Session",
-      initialText:"Your Join button will appear when your session link is ready. You can choose a time or contact us while you wait.",
+      initialText:"Your Join button will appear when your session is ready.",
       wait:"<strong>Checking for your session link.</strong>",
-      subWait:"Keep this page open, or choose a time below.",
+      subWait:"Keep this page open while we check.",
       checking:"Checking for your session link",
       chooseLater:"Choose a Later Time",
       chooseSlot:"Choose a Time Slot",
@@ -677,7 +677,7 @@
     const isBookerFlow = role === "booker" || signer === "booker" || bookingType === "other";
 
     let attempts = 0;
-    const maxAttempts = 10;
+    const maxAttempts = 20;
 
     function applyInitialCopy(){
       document.getElementById("top-badge").innerText = copy.initialBadge;

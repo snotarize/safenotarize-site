@@ -2,11 +2,8 @@ html {
   scroll-padding-block-start: calc(var(--sn-sticky-header-height, 72px) + 12px);
 }
 
-.delivery-description {
-  margin: 0 0 16px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
+#download-status:empty {
+  display: none;
 }
 
 @media (max-width: 800px) {
@@ -39,6 +36,10 @@ html {
   .sn-menu-btn {
     min-width: 44px;
     min-height: 44px;
+  }
+
+  #booking-form .section-head .badge {
+    margin-top: 8px;
   }
 
   #booking-form .card-title {
