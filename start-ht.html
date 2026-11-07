@@ -197,16 +197,21 @@ h1{font-size:21px}
 .sn-pro-footer{background:var(--sn-navy);color:#fff;padding:48px 20px 20px}.sn-footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:30px}.sn-footer-logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;font-size:19px}.sn-footer-logo img{height:44px}.sn-footer-brand p{color:#c9d8e7;line-height:1.65;max-width:300px}.sn-footer-cta{display:inline-flex;background:var(--sn-green);color:#fff;text-decoration:none;padding:11px 16px;border-radius:9px;font-weight:800}.sn-footer-col h4{margin:0 0 14px}.sn-footer-col ul{list-style:none;padding:0}.sn-footer-col li{margin-bottom:9px}.sn-footer-col a{color:#c3d8eb;text-decoration:none;font-size:14px}.sn-footer-bottom{max-width:1200px;margin:34px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between}.sn-footer-bottom p{margin:0;color:#c9d8e7;font-size:13px}.sn-footer-bottom a{color:#fff;font-size:13px}
 @media(max-width:900px){.sn-desktop-nav{display:none}.sn-menu-btn{display:block}.sn-footer-grid{grid-template-columns:repeat(2,1fr)}.sn-footer-brand{grid-column:1/-1}}
 @media(max-width:620px){.sn-header-inner{padding:10px 14px}.sn-brand img{height:36px}.sn-pro-footer{padding:38px 20px 18px}.sn-footer-grid{grid-template-columns:1fr;gap:25px}.sn-footer-brand{grid-column:auto}.sn-footer-col{border-top:1px solid rgba(255,255,255,.12);padding-top:18px}.sn-footer-bottom{display:block;text-align:center}}
-</style></head>
+</style>
+<link rel="stylesheet" href="/assets/premium/premium.css?v=1">
+<script src="/assets/premium/config.js?v=1" defer></script>
+<script src="/assets/premium/services.js?v=1" defer></script>
+</head>
 <body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/ht.html"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/ht.html">Akèy</a><a href="/haitian-online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/ht.html#pricing-block">Pri</a><a href="/ht.html#faq">Kesyon</a><a class="sn-start-btn" href="/start-ht.html">Kòmanse</a></nav><button aria-expanded="false" aria-label="Louvri meni an" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/ht.html">Akèy</a><a href="/haitian-online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/ht.html#pricing-block">Pri</a><a href="/ht.html#faq">Kesyon</a><a class="sn-mobile-start" href="/start-ht.html">Kòmanse</a></div></header>
 
 <main>
-<section class="hero">
+<section class="hero" data-sn-service-intro>
 <span class="pill" id="pill">Prepare dokiman ou an premye</span>
 <h1 id="title">Èske Ou Deja Gen Dokiman Ou?</h1>
 <p id="subtitle">Chwazi opsyon ki mache ak sitiyasyon ou. Pwosesis randevou ak telechajman ou deja genyen an ap rete menm jan an.</p>
 </section>
-<section class="choices">
+<div data-sn-service-choice hidden></div>
+<section class="choices" data-sn-regular>
 <article class="card" id="have-document-card">
 <span class="choice-badge" id="have-badge">Rekòmande</span>
 <div class="icon">📄</div>
@@ -223,7 +228,7 @@ h1{font-size:21px}
 <a class="btn secondary" href="/documents/library-ht.html" id="need-btn">Gade Bibliyotèk Dokiman</a>
 </article>
 </section>
-<p class="small-note" id="disclaimer">Modèl sa yo la pou itilizasyon jeneral sèlman; yo pa konsèy legal. Verifye dokiman an satisfè kondisyon òganizasyon k ap resevwa li a anvan ou itilize li.</p>
+<p class="small-note" id="disclaimer" data-sn-regular>Modèl sa yo la pou itilizasyon jeneral sèlman; yo pa konsèy legal. Verifye dokiman an satisfè kondisyon òganizasyon k ap resevwa li a anvan ou itilize li.</p>
 </main>
 <script>
   const params = new URLSearchParams(location.search);

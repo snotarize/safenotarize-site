@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#00274d">
+  <title>Premium 24/7 | SafeNotarize</title>
+  <link rel="stylesheet" href="/assets/premium/premium.css?v=1">
+  <script src="/assets/premium/config.js?v=1" defer></script>
+  <script src="/assets/document-handoff-config.js?v=20261107-4" defer></script>
+  <script src="/assets/document-handoff.js?v=20261107-4" defer></script>
+  <script src="/assets/premium/services.js?v=1" defer></script>
+  <script src="/assets/premium/checkout.js?v=1" defer></script>
+</head>
+<body class="sn-premium-page">
+  <main class="sn-premium-panel">
+    <a id="premium-back" href="/start.html">Back to service options</a>
+    <h1>Premium 24/7</h1>
+    <p id="premium-package">$30 includes 1 signer and 1 stamp.</p>
+    <p id="premium-document" hidden></p>
+    <p id="premium-intro" hidden>Test checkout. Use a Stripe test card to authorize the amount before starting a session.</p>
+    <form id="premium-form" hidden>
+      <label for="premium-emails" id="premium-email-label">Signer emails, one per line</label>
+      <textarea id="premium-emails" rows="2" inputmode="email" autocomplete="email" required maxlength="1530"></textarea>
+      <p id="premium-email-help">Each additional signer is $10.</p>
+      <label for="premium-stamps" id="premium-stamp-label">Additional stamps ($10 each)</label>
+      <select id="premium-stamps">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <p id="premium-quote"></p>
+      <label id="premium-card-label">Test card</label>
+      <div id="premium-card"></div>
+      <div id="premium-security"></div>
+      <button class="sn-service-action" id="premium-submit" type="submit" disabled>Authorize and continue</button>
+    </form>
+    <p id="premium-status" role="status">Premium checkout is unavailable.</p>
+    <a id="premium-join" class="sn-service-action" rel="noopener noreferrer" hidden>Continue to OneNotary</a>
+    <p><a id="premium-library" href="/documents/library.html" hidden>Need a document? Browse the library</a></p>
+  </main>
+</body>
+</html>
