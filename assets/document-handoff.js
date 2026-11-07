@@ -179,13 +179,20 @@
     if(!['library','generated','template'].includes(source))return;
     const ht=isHt(),type=(params.get('document_type')||'').trim().toLowerCase();
     const valid=canBook({document_source:'library',document_type:type});
-    button.textContent=ht?'Konfime randevou a':'Confirm booking';button.disabled=!valid;
+    button.textContent=ht?'Kontinye pou notarye':'Continue to notarization';
+    button.disabled=!valid;
     const instruction=document.querySelector('.section-head p');
-    if(instruction)instruction.textContent=valid?(ht?'PDF ou a deja sove. Ajoute enfòmasyon siyatè ak sesyon an anba a.':'Your PDF is already saved. Add the signer and session details below.'):(ht?'Retounen nan dokiman ou a pou sove PDF la anvan ou rezève.':'Return to your document to save the PDF before booking.');
+    if(instruction){
+      instruction.textContent=ht?'PDF ou a sove.':'Your PDF is saved.';
+      instruction.hidden=!valid;
+    }
     let note=document.getElementById('sn-generated-pdf-note');
+    if(valid){
+      note?.remove();
+      return;
+    }
     if(!note){note=document.createElement('div');note.id='sn-generated-pdf-note';note.setAttribute('role','status');note.style.cssText='margin:16px 0;padding:14px;border:1px solid #dce7f2;border-radius:12px;background:#f3f9ff;color:#00274d';const head=document.querySelector('.section-head');if(head)head.after(note);else form.prepend(note);}
     note.replaceChildren();
-    if(valid){note.textContent=ht?'PDF ou a ap ale otomatikman ak randevou a. Ou pa bezwen voye li ankò.':'Your PDF will be included automatically. You do not need to upload it again.';return;}
     const message=document.createElement('p');message.textContent=ht?'PDF la pa disponib ankò nan navigatè sa a. Retounen nan dokiman ou a epi peze Kontinye pou notarye.':'The saved PDF is no longer available in this browser. Return to your document and choose Continue to notarization.';
     const back=document.createElement('a');back.textContent=ht?'Retounen nan dokiman mwen an':'Return to my document';
     back.href=ht?'/documents/library-ht.html':'/documents/library.html';
