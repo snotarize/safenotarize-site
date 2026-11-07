@@ -226,7 +226,7 @@
       widget = window.turnstile.render('#premium-security', {
         sitekey: config.turnstileSiteKey,
         action: 'premium_order',
-        size: 'flexible',
+        size: el('security').clientWidth < 300 ? 'compact' : 'flexible',
         callback: token => {
           challenge = token;
           submit.disabled = busy;

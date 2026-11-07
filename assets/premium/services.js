@@ -14,7 +14,8 @@
   const documentType = /^[a-z0-9-]{1,64}$/.test(requestedType) ? requestedType : '';
 
   function settings() {
-    if (config?.enabled !== true || !config.allowedOrigins?.includes(location.origin)) return null;
+    if (config?.enabled !== true || !Array.isArray(config.allowedOrigins) ||
+        !config.allowedOrigins.includes(location.origin)) return null;
     if (!/^pk_test_[a-zA-Z0-9]+$/.test(config.stripePublishableKey || '') || !config.turnstileSiteKey) return null;
     try {
       const endpoint = new URL(config.endpoint);
