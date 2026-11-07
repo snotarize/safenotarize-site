@@ -14,7 +14,9 @@ const PROTECTED_WORKFLOW_PATHS = new Set([
   '/upload.html',
   '/thank-you.html',
   '/scheduled.html',
-  '/pay.html'
+  '/pay.html',
+  '/premium.html',
+  '/premium-complete.html'
 ]);
 
 self.addEventListener('install', event => {
@@ -43,7 +45,8 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   // Handoff configuration and client code must be fresh, including for installed apps.
-  if (url.pathname === '/assets/document-handoff.js' || url.pathname === '/assets/document-handoff-config.js') {
+  if (url.pathname === '/assets/document-handoff.js' || url.pathname === '/assets/document-handoff-config.js' ||
+      url.pathname.startsWith('/assets/premium/')) {
     event.respondWith(fetch(request, {cache:'no-store'}));
     return;
   }
