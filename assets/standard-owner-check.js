@@ -41,8 +41,12 @@
         button.textContent = 'Connection verified';
         if (window.turnstile && widget !== undefined) window.turnstile.remove(widget);
       } else {
+        const error = typeof result.error === 'string' && /^[a-z_-]{1,70}$/.test(result.error) ?
+          result.error : 'unconfirmed_response';
+        const reason = typeof result.reason === 'string' && /^[a-z_-]{1,70}$/.test(result.reason) ?
+          ' / ' + result.reason : '';
         showError(response.status === 410 ? 'This owner check has expired. Return to the chat.' :
-          'The security check was not confirmed. Return to the chat with this message.');
+          'The server check returned ' + error + reason + '. Return to the chat with this message.');
       }
     } catch {
       showError('The connection check could not finish. Return to the chat with this message.');
