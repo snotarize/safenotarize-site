@@ -16,12 +16,17 @@
   function settings() {
     if (config?.enabled !== true || !Array.isArray(config.allowedOrigins) ||
         !config.allowedOrigins.includes(location.origin)) return null;
-    if (!/^pk_test_[a-zA-Z0-9]+$/.test(config.stripePublishableKey || '') || !config.turnstileSiteKey) return null;
+    const mode = config.mode ?? 'test';
+    if (mode !== 'test' && mode !== 'live') return null;
+    const keyPattern = mode === 'live' ? /^pk_live_[a-zA-Z0-9]+$/ : /^pk_test_[a-zA-Z0-9]+$/;
+    if (!keyPattern.test(config.stripePublishableKey || '') || !config.turnstileSiteKey) return null;
     try {
       const endpoint = new URL(config.endpoint);
       if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password || endpoint.port ||
           endpoint.pathname.replace(/\/$/, '') !== '/phase-c' || endpoint.search || endpoint.hash) return null;
-      return { ...config, endpoint: endpoint.origin + '/phase-c' };
+      if (mode === 'live' && (endpoint.origin !== location.origin ||
+          !['https://www.safenotarize.com', 'https://safenotarize.com'].includes(endpoint.origin))) return null;
+      return { ...config, mode, endpoint: endpoint.origin + '/phase-c' };
     } catch {
       return null;
     }
@@ -52,7 +57,8 @@
   };
 
   const chooser = document.querySelector('[data-sn-service-choice]');
-  if (!chooser || !settings()) return;
+  const premium = settings();
+  if (!chooser || !premium || (premium.mode === 'live' && premium.acceptingOrders !== true)) return;
 
   if (params.get('service') === 'regular') {
     const haveDocument = document.getElementById('have-btn');

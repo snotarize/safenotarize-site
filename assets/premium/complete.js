@@ -48,18 +48,34 @@
   byId('premium-complete-heading').textContent = text.title;
   refresh.textContent = text.refresh;
   const config = window.SafeNotarizePremium?.settings();
+  const live = config?.mode === 'live';
   let order;
   try {
     const id = query.get('order');
     const access = /^[a-f0-9-]{36}$/i.test(id || '') ? sessionStorage.getItem('sn_premium_access_' + id) : null;
     const stored = JSON.parse(sessionStorage.getItem('sn_premium_order_v2') || 'null');
     const key = access || (stored?.id === id ? stored.access : null);
-    if (/^[a-f0-9-]{36}$/i.test(id || '') && /^[a-f0-9]{64}$/.test(key || '')) {
-      order = { id, access: key };
+    if (/^[a-f0-9-]{36}$/i.test(id || '')) {
+      let resume;
+      if (live) {
+        const resumeKey = 'sn_premium_resume_' + id;
+        const fragment = new URLSearchParams(location.hash.slice(1));
+        if (fragment.has('resume')) {
+          history.replaceState(null, '', location.pathname + location.search);
+          if (/^\d{10}\.[a-f0-9]{64}$/.test(fragment.get('resume') || '')) {
+            sessionStorage.setItem(resumeKey, fragment.get('resume'));
+          }
+        }
+        resume = sessionStorage.getItem(resumeKey);
+      }
+      if (/^[a-f0-9]{64}$/.test(key || '')) order = { id, access: key };
+      else if (live && /^\d{10}\.[a-f0-9]{64}$/.test(resume || '')) order = { id, access: resume };
     }
   } catch {}
   if (!config || !order) {
-    status.textContent = config ? text.reopen : text.retry;
+    status.textContent = live
+      ? (ht ? 'Retounen sou paj sa a depi nan sesyon OneNotary ou.' : 'Open this page from your OneNotary session to continue.')
+      : config ? text.reopen : text.retry;
     return;
   }
 
@@ -69,7 +85,7 @@
   const money = cents => '$' + (cents / 100).toFixed(2);
 
   async function request(path, input = {}, file = false) {
-    const response = await fetch(config.endpoint + path, {
+    const options = {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ ...order, ...input }),
@@ -78,7 +94,9 @@
       redirect: 'error',
       referrerPolicy: 'no-referrer',
       signal: AbortSignal.timeout(30000)
-    });
+    };
+    if (live) options.credentials = 'same-origin';
+    const response = await fetch(config.endpoint + path, options);
     if (!response.ok) throw Error('request_failed');
     return file ? response.blob() : response.json();
   }
@@ -110,7 +128,8 @@
     documents.forEach((doc, index) => {
       const filename = 'safenotarize-notarized-' + (index + 1) + '.pdf';
       const label = text.download + (documents.length > 1 ? ' ' + (index + 1) : '');
-      const downloadPath = '/phase-c/delivery/file/' + doc.id + '/' + filename;
+      const scope = live ? order.id + '/' : '';
+      const downloadPath = '/phase-c/delivery/file/' + scope + doc.id + '/' + filename;
       if (/^[a-f0-9-]{36}$/i.test(doc.id) && doc.downloadPath === downloadPath &&
           new URL(config.endpoint).origin === location.origin) {
         const link = document.createElement('a');

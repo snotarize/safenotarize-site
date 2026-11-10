@@ -53,6 +53,13 @@
   const submit = el('submit');
   const service = window.SafeNotarizePremium;
   const config = service?.settings();
+  const live = config?.mode === 'live';
+  if (live) {
+    copy.intro = ht
+      ? 'N ap mete yon rezèv $30 sou kat ou. W ap verifye idantite ou sou OneNotary.'
+      : 'We’ll place a $30 hold on your card. You’ll verify your identity on OneNotary.';
+    copy.card = ht ? 'Enfòmasyon kat la' : 'Card information';
+  }
   for (const [id, key] of Object.entries({
     back: 'back', package: 'package', intro: 'intro', 'email-label': 'email', rates: 'rates',
     'terms-label': 'terms', 'card-label': 'card', submit: 'submit', join: 'join', library: 'library'
@@ -123,7 +130,7 @@
   async function authorize(secret, amount) {
     const result = await stripe.retrievePaymentIntent(secret);
     const intent = result.paymentIntent;
-    if (result.error || intent?.amount !== amount || intent.currency !== 'usd' || intent.livemode !== false) {
+    if (result.error || intent?.amount !== amount || intent.currency !== 'usd' || intent.livemode !== live) {
       throw Error('payment_contract_invalid');
     }
     if (intent.status === 'requires_capture') return;
@@ -190,7 +197,7 @@
     status.textContent = copy.loading;
     try {
       const availability = await request('/availability?billing_flow=post_session_v1&source=' + source);
-      if (availability.ready !== true || availability.mode !== 'test') throw Error('premium_unavailable');
+      if (availability.ready !== true || availability.mode !== config.mode) throw Error('premium_unavailable');
       await Promise.all([
         loadScript('https://js.stripe.com/v3/'),
         loadScript('https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit')

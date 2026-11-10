@@ -42,7 +42,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
 
   // Never intercept or cache third-party services or unsupported cross-origin requests.
-  if (url.origin !== self.location.origin) return;
+  if (url.origin !== self.location.origin || url.pathname.startsWith('/phase-c/')) return;
 
   // Handoff configuration and client code must be fresh, including for installed apps.
   if (url.pathname === '/assets/document-handoff.js' || url.pathname === '/assets/document-handoff-config.js' ||
