@@ -108,10 +108,25 @@
     if (!documents.length) throw Error('documents_unavailable');
     downloads.replaceChildren();
     documents.forEach((doc, index) => {
+      const filename = 'safenotarize-notarized-' + (index + 1) + '.pdf';
+      const label = text.download + (documents.length > 1 ? ' ' + (index + 1) : '');
+      const downloadPath = '/phase-c/delivery/file/' + doc.id + '/' + filename;
+      if (/^[a-f0-9-]{36}$/i.test(doc.id) && doc.downloadPath === downloadPath &&
+          new URL(config.endpoint).origin === location.origin) {
+        const link = document.createElement('a');
+        link.className = 'sn-service-action';
+        link.textContent = label;
+        link.href = downloadPath;
+        link.download = filename;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        downloads.append(link);
+        return;
+      }
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'sn-service-action';
-      button.textContent = text.download + (documents.length > 1 ? ' ' + (index + 1) : '');
+      button.textContent = label;
       button.addEventListener('click', async () => {
         button.disabled = true;
         try {
@@ -120,7 +135,7 @@
           const url = URL.createObjectURL(file);
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'safenotarize-notarized-' + (index + 1) + '.pdf';
+          link.download = filename;
           link.click();
           setTimeout(() => URL.revokeObjectURL(url), 10000);
         } catch {
