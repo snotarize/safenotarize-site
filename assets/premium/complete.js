@@ -9,6 +9,7 @@
     payment: 'Konfime pri final la sou Stripe. N ap retire rezèv $30 la apre peman an.',
     paid: 'Peman an konfime. Dokiman notarye ou pare.',
     review: 'SafeNotarize ap verifye sesyon an oswa peman an.',
+    resume: 'Retounen sou paj sa a depi nan sesyon OneNotary ou.',
     reopen: 'Ouvri paj sa a nan menm tab kote ou te kòmanse sesyon an.',
     retry: 'Nou pa kapab tcheke estati a kounye a. Eseye ankò.',
     refresh: 'Tcheke estati a',
@@ -26,6 +27,7 @@
     payment: 'Confirm your final total on Stripe. We’ll release the $30 hold after payment.',
     paid: 'Payment confirmed. Your notarized document is ready.',
     review: 'SafeNotarize is reviewing the session or payment.',
+    resume: 'Open this page from your OneNotary session to continue.',
     reopen: 'Open this page in the same browser tab where you started your session.',
     retry: 'We couldn’t check the status right now. Try again.',
     refresh: 'Check status',
@@ -49,6 +51,10 @@
   refresh.textContent = text.refresh;
   const config = window.SafeNotarizePremium?.settings();
   const live = config?.mode === 'live';
+  if (live && new URL(config.endpoint).origin !== location.origin) {
+    status.textContent = text.resume;
+    return;
+  }
   let order;
   try {
     const id = query.get('order');
@@ -73,9 +79,7 @@
     }
   } catch {}
   if (!config || !order) {
-    status.textContent = live
-      ? (ht ? 'Retounen sou paj sa a depi nan sesyon OneNotary ou.' : 'Open this page from your OneNotary session to continue.')
-      : config ? text.reopen : text.retry;
+    status.textContent = live ? text.resume : config ? text.reopen : text.retry;
     return;
   }
 

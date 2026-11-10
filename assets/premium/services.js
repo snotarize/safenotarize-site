@@ -24,8 +24,9 @@
       const endpoint = new URL(config.endpoint);
       if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password || endpoint.port ||
           endpoint.pathname.replace(/\/$/, '') !== '/phase-c' || endpoint.search || endpoint.hash) return null;
-      if (mode === 'live' && (endpoint.origin !== location.origin ||
-          !['https://www.safenotarize.com', 'https://safenotarize.com'].includes(endpoint.origin))) return null;
+      const premiumHost = 'https://safenotarize-phase-c-premium-production.karlberryj.workers.dev';
+      if (mode === 'live' && (endpoint.origin !== premiumHost ||
+          !['https://www.safenotarize.com', 'https://safenotarize.com', premiumHost].includes(location.origin))) return null;
       return { ...config, mode, endpoint: endpoint.origin + '/phase-c' };
     } catch {
       return null;
