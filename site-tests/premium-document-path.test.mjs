@@ -83,7 +83,8 @@ for(const lang of ['en','ht']){
     const html=read(path.slice(1));
     assert.match(html,/<script src="\/assets\/premium\/services\.js\?v=5" defer><\/script>/);
     const targets=[...html.matchAll(/href=["']([^"']*(?:create(?:-ht)?\.html\?type=|\/create\/)[^"']*)["']/g)]
-      .map(match=>match[1].replaceAll('&amp;','&'));
+      .map(match=>match[1].replaceAll('&amp;','&'))
+      .filter(href=>!href.includes('/create/ds-3053.html'));
     assert.equal(new Set(targets).size,24);
     const library=new URL(path+'?service=premium',origin);
     const links=targets.map(href=>element(library,href));
@@ -164,5 +165,5 @@ test('Regular keeps its completed-document booking link',()=>{
   assert.equal(book.pathname,'/book.html');
   assert.equal(book.searchParams.get('service'),'regular');
   assert.equal(book.searchParams.get('document_source'),'own');
-  assert.equal(elements['need-btn'].href,origin+'/documents/library.html');
+  assert.equal(elements['need-btn'].href,origin+'/documents/library.html?service=regular');
 });

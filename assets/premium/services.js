@@ -99,16 +99,18 @@
 
   const chooser = document.querySelector('[data-sn-service-choice]');
   const premium = settings();
-  if (!chooser || !premium || (premium.mode === 'live' && premium.acceptingOrders !== true)) return;
-
   if (selectedService === 'regular') {
     if (haveDocument) {
       const book = new URL(haveDocument.href);
       book.searchParams.set('service', 'regular');
       haveDocument.href = relative(book);
+      libraryPath.searchParams.set('service', 'regular');
+      document.getElementById('need-btn').href = relative(libraryPath);
     }
     return;
   }
+
+  if (!chooser || !premium || (premium.mode === 'live' && premium.acceptingOrders !== true)) return;
 
   const rates = premium.pricing;
   const copy = ht ? {
