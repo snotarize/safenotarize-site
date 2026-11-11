@@ -16,6 +16,8 @@
     pay: 'Peye pri final la',
     download: 'Telechaje dokiman notarye a',
     base: 'Premium (1 siyatè ak 1 so)',
+    notarization: 'Notarizasyon (1 siyatè ak 1 so)',
+    service: 'Aksè 24/7 ak livrezon PDF an sekirite',
     signers: 'Siyatè anplis',
     stamps: 'So anplis',
     witnesses: 'Temwen',
@@ -34,6 +36,8 @@
     pay: 'Pay final total',
     download: 'Download notarized document',
     base: 'Premium (1 signer and 1 stamp)',
+    notarization: 'Online notarization (1 signer and 1 stamp)',
+    service: 'Premium 24/7 access and secure PDF delivery',
     signers: 'Additional signers',
     stamps: 'Additional stamps',
     witnesses: 'Witnesses',
@@ -107,11 +111,14 @@
 
   function showTotal(info) {
     if (!Number.isSafeInteger(info.amount)) return;
+    const pricing = config.pricing;
+    const base = live ? [[text.notarization, pricing.notarization], [text.service, pricing.service]]
+      : [[text.base, pricing.base]];
     const rows = [
-      [text.base, 3000],
-      [text.signers, (info.signers - 1) * 1000],
-      [text.stamps, (info.stamps - 1) * 1000],
-      [text.witnesses, info.witnesses * 1500]
+      ...base,
+      [text.signers, (info.signers - 1) * pricing.additionalSigner],
+      [text.stamps, (info.stamps - 1) * pricing.additionalStamp],
+      [text.witnesses, info.witnesses * pricing.witness]
     ].filter(([, amount]) => amount > 0);
     rows.push([text.total, info.amount]);
     breakdown.replaceChildren();

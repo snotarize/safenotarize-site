@@ -12,6 +12,8 @@
   );
   const requestedType = (params.get('document_type') || '').trim().toLowerCase();
   const documentType = /^[a-z0-9-]{1,64}$/.test(requestedType) ? requestedType : '';
+  const testPricing = { base: 3000, additionalSigner: 1000, additionalStamp: 1000, witness: 1500 };
+  const dollars = cents => '$' + (cents / 100);
 
   function settings() {
     if (config?.enabled !== true || !Array.isArray(config.allowedOrigins) ||
@@ -27,7 +29,12 @@
       const premiumHost = 'https://safenotarize-phase-c-premium-production.karlberryj.workers.dev';
       if (mode === 'live' && (endpoint.origin !== premiumHost ||
           !['https://www.safenotarize.com', 'https://safenotarize.com', premiumHost].includes(location.origin))) return null;
-      return { ...config, mode, endpoint: endpoint.origin + '/phase-c' };
+      const pricing = mode === 'live' ? config.pricing : testPricing;
+      if (mode === 'live' && (!pricing ||
+          !['base', 'notarization', 'service', 'additionalSigner', 'additionalStamp', 'witness']
+            .every(key => Number.isSafeInteger(pricing[key]) && pricing[key] > 0) ||
+          pricing.base !== pricing.notarization + pricing.service)) return null;
+      return { ...config, mode, pricing, endpoint: endpoint.origin + '/phase-c' };
     } catch {
       return null;
     }
@@ -71,27 +78,34 @@
     return;
   }
 
+  const rates = premium.pricing;
   const copy = ht ? {
     heading: 'Chwazi sèvis notarizasyon ou',
     pill: 'Notarizasyon sou entènèt',
     regular: 'Regilye',
     regularIncluded: '1 siyatè ak 2 so',
+    regularRates: ['$10 pou chak siyatè anplis', '$5 pou chak so anplis', '$15 pou chak temwen SafeNotarize bay'],
     regularAction: 'Chwazi Regilye',
     premiumIncluded: '1 siyatè ak 1 so',
     premiumDetails: 'Konekte ak yon notè sou OneNotary.',
-    premiumAction: 'Chwazi Premium'
+    premiumRates: [dollars(rates.additionalSigner) + ' pou chak siyatè anplis',
+      dollars(rates.additionalStamp) + ' pou chak so anplis', dollars(rates.witness) + ' pou chak temwen'],
+    premiumAction: 'Notarye kounye a'
   } : {
     heading: 'Choose your notarization service',
     pill: 'Online Notarization',
     regular: 'Regular',
     regularIncluded: '1 signer and 2 stamps',
+    regularRates: ['$10 per additional signer', '$5 per additional stamp', '$15 per SafeNotarize-provided witness'],
     regularAction: 'Choose Regular',
     premiumIncluded: '1 signer and 1 stamp',
     premiumDetails: 'Connect with a notary on OneNotary.',
-    premiumAction: 'Choose Premium'
+    premiumRates: [dollars(rates.additionalSigner) + ' per additional signer',
+      dollars(rates.additionalStamp) + ' per additional stamp', dollars(rates.witness) + ' per witness'],
+    premiumAction: 'Notarize now'
   };
 
-  function plan({name, price, included, details, action, href, premium = false}) {
+  function plan({name, price, included, rates, details, action, href, premium = false}) {
     const card = document.createElement('article');
     card.className = premium ? 'sn-service-card sn-service-premium' : 'sn-service-card';
     const heading = document.createElement('h2');
@@ -107,6 +121,14 @@
       summary.textContent = details;
       card.append(summary);
     }
+    const rateList = document.createElement('ul');
+    rateList.className = 'sn-service-rates';
+    for (const rate of rates) {
+      const item = document.createElement('li');
+      item.textContent = rate;
+      rateList.append(item);
+    }
+    card.append(rateList);
     const link = document.createElement('a');
     link.className = 'sn-service-action';
     link.href = href;
@@ -119,8 +141,10 @@
   regular.searchParams.set('service', 'regular');
   chooser.classList.add('sn-service-options');
   chooser.append(
-    plan({name: copy.regular, price: '$25', included: copy.regularIncluded, action: copy.regularAction, href: relative(regular)}),
-    plan({name: 'Premium 24/7', price: '$30', included: copy.premiumIncluded, details: copy.premiumDetails, action: copy.premiumAction, href: relative(checkoutPath), premium: true})
+    plan({name: copy.regular, price: '$25', included: copy.regularIncluded, rates: copy.regularRates,
+      action: copy.regularAction, href: relative(regular)}),
+    plan({name: 'Premium 24/7', price: dollars(rates.base), included: copy.premiumIncluded, rates: copy.premiumRates,
+      details: copy.premiumDetails, action: copy.premiumAction, href: relative(checkoutPath), premium: true})
   );
   const intro = document.querySelector('[data-sn-service-intro]');
   intro.querySelector('h1').textContent = copy.heading;

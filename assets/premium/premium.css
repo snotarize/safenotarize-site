@@ -44,6 +44,11 @@
   font-weight: 800;
 }
 
+.sn-service-rates {
+  margin: 4px 0 16px;
+  padding-left: 20px;
+}
+
 .sn-service-premium {
   border-color: #83bc95;
   background: #f5fbf7;

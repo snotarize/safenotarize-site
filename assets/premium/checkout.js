@@ -55,9 +55,21 @@
   const config = service?.settings();
   const live = config?.mode === 'live';
   if (live) {
+    const { base, notarization, service: delivery, additionalSigner, additionalStamp, witness } = config.pricing;
+    const dollars = cents => '$' + (cents / 100);
+    copy.package = ht
+      ? `${dollars(base)} pou 1 siyatè ak 1 so. ${dollars(notarization)} pou notarizasyon an ak ${dollars(delivery)} pou aksè 24/7 ak livrezon PDF an sekirite.`
+      : `${dollars(base)} for 1 signer and 1 stamp. ${dollars(notarization)} for notarization and ${dollars(delivery)} for 24/7 access and secure PDF delivery.`;
+    copy.rates = ht
+      ? `${dollars(additionalSigner)} pou chak siyatè anplis, ${dollars(additionalStamp)} pou chak so anplis ak ${dollars(witness)} pou chak temwen.`
+      : `${dollars(additionalSigner)} per additional signer, ${dollars(additionalStamp)} per additional stamp, and ${dollars(witness)} per witness.`;
     copy.intro = ht
-      ? 'N ap mete yon rezèv $30 sou kat ou. W ap verifye idantite ou sou OneNotary.'
-      : 'We’ll place a $30 hold on your card. You’ll verify your identity on OneNotary.';
+      ? 'W ap verifye idantite ou sou OneNotary.'
+      : 'You’ll verify your identity on OneNotary.';
+    copy.terms = ht
+      ? `Mwen otorize yon rezèv ${dollars(base)} epi mwen dakò ak pri final la selon sèvis ki fèt yo.`
+      : `I authorize a ${dollars(base)} hold and agree to the final price based on the services completed.`;
+    copy.submit = ht ? `Otorize ${dollars(base)} epi kontinye` : `Authorize ${dollars(base)} and continue`;
     copy.card = ht ? 'Enfòmasyon kat la' : 'Card information';
   }
   for (const [id, key] of Object.entries({
@@ -79,7 +91,7 @@
   }
 
   const storageKey = 'sn_premium_order_v2';
-  const amount = 3000;
+  const amount = config.pricing.base;
   let challenge = '';
   let stripe;
   let card;
