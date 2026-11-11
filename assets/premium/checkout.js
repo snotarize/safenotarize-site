@@ -93,6 +93,7 @@
   const { source, pending } = service.documentContext();
   if (source === 'library' && !pending) {
     status.textContent = copy.missing;
+    el('library').hidden = false;
     return;
   }
 

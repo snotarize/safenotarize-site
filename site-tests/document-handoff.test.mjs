@@ -36,7 +36,8 @@ for(const path of [...booking,...creators]){
  test(path+' retains valid inline JavaScript and shared feature flag',()=>{
   const html=read(path);
   assert.ok(/<script src="\/assets\/document-handoff-config\.js\?v=20261107-4" defer><\/script>/.test(html),'Current configuration revision expected');
-  assert.ok(/<script src="\/assets\/document-handoff\.js\?v=20261111-1" defer><\/script>/.test(html),'Current handoff revision expected');
+  const revision=booking.includes(path)?'20261111-2':'20261111-1';
+  assert.ok(html.includes(`<script src="/assets/document-handoff.js?v=${revision}" defer></script>`),'Current handoff revision expected');
   const scripts=inlineScripts(html);
   assert.ok(scripts.length>0,'Inline JS expected');
   for(let i=0;i<scripts.length;i++)new Script(scripts[i],{filename:path+':script-'+i});
@@ -75,7 +76,7 @@ test('every library creation path has a booking-supported document type',()=>{
    }
   }
  }
- assert.equal(paths.size,48,'All English and Creole document choices must be covered');
+ assert.equal(paths.size,50,'All English and Creole document choices must be covered');
 });
 
 test('all standard PDFs omit generated-by branding and retain a local PDF-copy option',()=>{

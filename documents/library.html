@@ -1,354 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Library &amp; Official Forms | SafeNotarize</title>
+  <meta name="description" content="Search document templates and official forms. Fill out DS-3053 online, create a PDF, or use your own document to start notarization with SafeNotarize.">
+  <link rel="canonical" href="https://safenotarize.com/documents/library.html">
+  <link rel="alternate" hreflang="en" href="https://safenotarize.com/documents/library.html">
+  <link rel="alternate" hreflang="ht" href="https://safenotarize.com/documents/library-ht.html">
+  <link rel="stylesheet" href="/assets/document-library.css?v=1">
+  <script src="/assets/premium/services.js?v=5" defer></script>
+  <script type="module" src="/assets/document-library.js?v=1"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="/">SafeNotarize</a>
+      <nav aria-label="SafeNotarize">
+        <a href="/start.html" data-document-service>Start notarization</a>
+        <a href="/documents/library-ht.html" lang="ht" data-document-service>Kreyòl</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Document library</h1>
+        <p>Fill out an official form, create a document, or bring one you already have.</p>
+        <div class="search" role="search">
+          <label for="document-search">Search documents</label>
+          <div class="search-field">
+            <input id="document-search" type="search" placeholder="DS-3053, affidavit, travel consent" autocomplete="off">
+            <button id="clear-search" type="button" hidden>Clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1.0" name="viewport"/><title>Document Library &amp; Official Forms | SafeNotarize</title><meta content="Browse document templates and official forms, create or upload your PDF, and continue to a secure SafeNotarize online notary session when needed." name="description"/><link href="https://safenotarize.com/documents/library.html" rel="canonical"/><style>
-:root{
-  --navy:#06294d;
-  --navy-2:#0b3b69;
-  --green:#1f9d55;
-  --green-dark:#177840;
-  --ink:#1e3145;
-  --muted:#5f7286;
-  --line:#dce6ef;
-  --page:#f5f8fb;
-  --white:#ffffff;
-  --soft-blue:#eef5fb;
-  --soft-green:#edf8f1;
-  --shadow:0 14px 34px rgba(6,41,77,.08);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  background:var(--page);
-  color:var(--ink);
-  -webkit-font-smoothing:antialiased;
-}
-a,button{touch-action:manipulation}
-header{
-  background:rgba(6,41,77,.98);
-  border-bottom:1px solid rgba(255,255,255,.09);
-  position:sticky;
-  top:0;
-  z-index:50;
-}
-.head{
-  max-width:1180px;
-  margin:auto;
-  min-height:68px;
-  padding:10px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:18px;
-}
-.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:850;letter-spacing:-.02em}
-.brand img{height:43px;width:auto;display:block}
-.back{
-  color:#fff;
-  text-decoration:none;
-  font-weight:750;
-  border:1px solid rgba(255,255,255,.28);
-  background:rgba(255,255,255,.06);
-  padding:10px 15px;
-  border-radius:999px;
-  font-size:14px;
-}
-.back:hover{background:rgba(255,255,255,.12)}
-main{max-width:1180px;margin:auto;padding:40px 20px 72px}
-.hero{
-  background:linear-gradient(135deg,#ffffff 0%,#f1f7fc 100%);
-  border:1px solid var(--line);
-  box-shadow:var(--shadow);
-  border-radius:24px;
-  padding:40px 28px 30px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.hero:after{
-  content:"";
-  position:absolute;
-  width:260px;height:260px;border-radius:50%;
-  background:rgba(31,157,85,.07);
-  right:-130px;top:-150px;
-}
-.hero>*{position:relative;z-index:1}
-.pill{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  background:var(--soft-green);
-  color:var(--green-dark);
-  border:1px solid #d4ebdd;
-  font-size:12px;
-  font-weight:850;
-  padding:7px 11px;
-  border-radius:999px;
-  margin-bottom:13px;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-}
-.pill:before{content:"✓";font-size:12px}
-h1{
-  margin:0 auto 12px;
-  color:var(--navy);
-  font-size:clamp(30px,4vw,45px);
-  line-height:1.08;
-  letter-spacing:-.035em;
-  max-width:780px;
-}
-.hero p{
-  max-width:690px;
-  margin:0 auto;
-  color:var(--muted);
-  line-height:1.65;
-  font-size:16px;
-}
-.trust-row{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
-  margin-top:22px;
-  color:#486074;
-  font-size:13px;
-  font-weight:700;
-}
-.trust-row span{display:flex;align-items:center;gap:7px}
-.trust-row span:before{content:"✓";color:var(--green);font-weight:900}
-.tabs{
-  width:max-content;
-  max-width:100%;
-  margin:26px auto 4px;
-  padding:5px;
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:999px;
-  box-shadow:0 8px 20px rgba(6,41,77,.05);
-  display:flex;
-  gap:4px;
-}
-.tab{
-  appearance:none;
-  border:0;
-  background:transparent;
-  color:var(--navy);
-  border-radius:999px;
-  padding:11px 16px;
-  font-weight:800;
-  cursor:pointer;
-  min-height:44px;
-  white-space:nowrap;
-}
-.tab.active{background:var(--navy);color:#fff;box-shadow:0 5px 14px rgba(6,41,77,.18)}
-.section{margin-top:36px}
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:20px;
-  margin-bottom:17px;
-}
-.section-head h2{color:var(--navy);margin:0;font-size:27px;letter-spacing:-.025em}
-.section-head p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.55;max-width:720px}
+    <div class="container">
+      <section id="quick-actions" class="quick-actions" aria-labelledby="featured-title">
+        <article class="featured">
+          <h2 id="featured-title">Child passport consent</h2>
+          <p>Fill out the official DS-3053, review your details, and continue to notarization.</p>
+          <a class="btn create" href="/documents/create/ds-3053.html" data-document-service>Fill out DS-3053</a>
+        </article>
+        <div class="quick-links">
+          <a id="browse-templates" href="#templates-section"><strong>Create a document</strong><span>Use a template or start from scratch.</span></a>
+          <a href="/book.html?document_ready=1&amp;document_source=own" data-document-booking><strong>I have my document</strong><span>Continue to notarization.</span></a>
+        </div>
+      </section>
 
-.category-group{margin-top:26px}
-.section-head + .category-group{margin-top:0}
-.category-title{color:var(--navy);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line);font-size:18px;line-height:1.3;letter-spacing:-.015em}
-.category-group.search-empty{display:none}
+      <div class="filters" role="group" aria-label="Filter documents">
+        <button type="button" id="tab-all" data-filter="all" aria-pressed="true">All documents</button>
+        <button type="button" id="tab-official" data-filter="official" aria-pressed="false">Official forms</button>
+        <button type="button" id="tab-templates" data-filter="templates" aria-pressed="false">Templates and guides</button>
+      </div>
+      <p class="search-status" id="search-status" role="status"></p>
 
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.card{
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 10px 25px rgba(6,41,77,.055);
-  border-radius:18px;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  min-width:0;
-  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
-}
-.card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(6,41,77,.09);border-color:#cad9e7}
-.card.official{
-  grid-column:span 1;
-  border-top:4px solid var(--navy-2);
-  background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);
-}
-.tag{
-  display:inline-flex;
-  align-self:flex-start;
-  align-items:center;
-  gap:6px;
-  background:var(--soft-blue);
-  color:var(--navy-2);
-  border:1px solid #dce9f4;
-  border-radius:999px;
-  padding:6px 9px;
-  font-size:11px;
-  font-weight:850;
-  margin-bottom:12px;
-}
-.official .tag{background:var(--soft-green);color:var(--green-dark);border-color:#d7ebdf}
-.official .tag:before{content:"Official";font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:var(--navy);padding:3px 6px;border-radius:999px}
-.card h3{color:var(--navy);margin:0 0 8px;font-size:19px;line-height:1.3;letter-spacing:-.015em}
-.code{font-size:13px;font-weight:900;color:var(--green-dark);margin-bottom:6px;letter-spacing:.02em}
-.card p{margin:0 0 18px;color:var(--muted);line-height:1.58;font-size:14px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:auto}
-.btn{
-  text-decoration:none;
-  text-align:center;
-  border-radius:11px;
-  padding:12px 10px;
-  font-weight:820;
-  font-size:14px;
-  min-height:47px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  line-height:1.25;
-  border:1px solid transparent;
-}
-.create{background:var(--navy);color:#fff}
-.create:hover{background:var(--navy-2)}
-.upload{background:var(--green);color:#fff}
-.upload:hover{background:var(--green-dark)}
-.official-link{background:#fff;color:var(--navy);border-color:#cbd9e6}
-.official-link:hover{background:#f3f7fa}
-.wide{grid-column:1/-1}
-.notice{
-  margin-top:30px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-left:4px solid var(--green);
-  border-radius:14px;
-  padding:15px 17px;
-  font-size:13px;
-  line-height:1.6;
-  color:var(--muted);
-}
-.hidden-section{display:none}
-
-.search-wrap{
-  max-width:760px;
-  margin:22px auto 0;
-  position:relative;
-}
-.search-icon{
-  position:absolute;
-  left:16px;
-  top:50%;
-  transform:translateY(-50%);
-  width:20px;
-  height:20px;
-  color:#60758a;
-  pointer-events:none;
-}
-.search-input{
-  width:100%;
-  min-height:56px;
-  padding:14px 48px 14px 48px;
-  border:1px solid #cbd9e6;
-  border-radius:15px;
-  background:#fff;
-  color:var(--ink);
-  font:inherit;
-  font-size:16px;
-  box-shadow:0 10px 24px rgba(6,41,77,.07);
-  outline:none;
-}
-.search-input:focus{
-  border-color:var(--navy-2);
-  box-shadow:0 0 0 4px rgba(11,59,105,.10),0 10px 24px rgba(6,41,77,.07);
-}
-.search-input::placeholder{color:#7a8b9b}
-.clear-search{
-  position:absolute;
-  right:10px;
-  top:50%;
-  transform:translateY(-50%);
-  width:36px;
-  height:36px;
-  border:0;
-  border-radius:50%;
-  background:#edf3f7;
-  color:var(--navy);
-  font-size:20px;
-  line-height:1;
-  cursor:pointer;
-  display:none;
-}
-.clear-search.visible{display:block}
-.search-meta{
-  margin:10px auto 0;
-  min-height:19px;
-  color:var(--muted);
-  font-size:13px;
-  font-weight:700;
-}
-.no-results{
-  display:none;
-  margin:24px auto 0;
-  max-width:650px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:24px 18px;
-  text-align:center;
-  box-shadow:0 10px 24px rgba(6,41,77,.05);
-}
-.no-results.visible{display:block}
-.no-results h2{margin:0 0 7px;color:var(--navy);font-size:21px}
-.no-results p{margin:0;color:var(--muted);line-height:1.55}
-.card.search-hidden{display:none}
-.section.search-empty{display:none}
-@media(max-width:700px){
-  .search-wrap{margin-top:17px}
-  .search-input{min-height:52px;font-size:16px;border-radius:13px;padding-left:44px}
-}
-
-@media(max-width:980px){
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:700px){
-  header{position:static}
-  .head{min-height:58px;padding:8px 12px}
-  .brand img{height:35px}.brand span{display:none}
-  .back{font-size:12px;padding:8px 11px}
-  main{padding:18px 11px 45px}
-  .hero{padding:25px 16px 22px;border-radius:18px}
-  .hero p{font-size:14px;line-height:1.55}
-  .trust-row{gap:9px 15px;margin-top:17px;font-size:12px}
-  .tabs{
-    width:100%;
-    overflow:auto;
-    justify-content:flex-start;
-    margin-top:17px;
-    border-radius:14px;
-  }
-  .tab{flex:0 0 auto;padding:10px 13px;font-size:13px}
-  .section{margin-top:26px}
-  .section-head{display:block;margin-bottom:12px}
-  .section-head h2{font-size:22px}
-  .grid{grid-template-columns:1fr;gap:11px}
-  .card{padding:16px;border-radius:15px}
-  .card:hover{transform:none}
-  .card h3{font-size:18px}
-  .actions{grid-template-columns:1fr}
-  .wide{grid-column:auto}
-  .btn{font-size:15px;min-height:49px}
-}
-</style><script src="/assets/premium/services.js?v=5" defer></script></head><body><header><div class="head"><a class="brand" href="https://safenotarize.com" id="brand"><img alt="SafeNotarize Logo" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><a class="back" href="../start.html" id="back">Back</a></div></header><main><section class="hero"><span class="pill" id="pill">Document library</span><h1 id="title">Choose a Template or Official Form</h1><p id="subtitle">Create a document and send it with your booking, or use your own completed document.</p><div class="trust-row"><span>Official agency links</span><span>Mobile-friendly process</span><span>Live online notary</span></div></section><div aria-label="Popular document paths" style="max-width:1050px;margin:0 auto 20px;padding:16px;background:#eef7ff;border:1px solid #d8e8f5;border-radius:14px;text-align:center;line-height:1.9"><strong>Popular document paths:</strong> <a href="/documents/official/ps-1583.html">USPS Form 1583</a> · <a href="/documents/official/ds-3053.html">DS-3053</a> · <a href="/documents/child-travel-consent.html">Child Travel Consent</a> · <a href="/documents/child-passport-consent.html">Child Passport Consent</a> · <a href="/documents/affidavit-of-support.html">Affidavit of Support</a></div>
-<div class="search-wrap" role="search">
-<svg aria-hidden="true" class="search-icon" viewbox="0 0 24 24">
-<path d="M10.5 4a6.5 6.5 0 1 0 3.98 11.64l4.44 4.44 1.41-1.41-4.44-4.44A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z" fill="currentColor"></path>
-</svg>
-<input aria-label="Search the document library" autocomplete="off" class="search-input" id="document-search" placeholder="Search by document name, form number, or purpose" type="search"/>
-<button aria-label="Clear search" class="clear-search" id="clear-search" type="button">×</button>
-</div>
-<div aria-live="polite" class="search-meta" id="search-meta"></div>
-<section class="section" id="online-notary-guides-section"><div class="section-head"><h2>Online Notary Preparation Guides</h2><p>Prepare for international signing, witness participation, and secure identity verification before starting the booking flow.</p></div><div class="grid"><article class="card" data-search="international online notary abroad overseas outside united states remote notarization passport"><span class="tag">Service guide</span><h3>International Online Notary</h3><p>Guidance for eligible signers who need to notarize a U.S. document while located outside the United States.</p><div class="actions"><a class="btn official-link" href="/international-online-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article><article class="card" data-search="online notary witnesses remote witness customer provided safenotarize witness"><span class="tag">Service guide</span><h3>Online Notary With Witnesses</h3><p>Learn the difference between the notary and document witnesses, plus how remote witness participation may work.</p><div class="actions"><a class="btn official-link" href="/online-notary-with-witnesses.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article><article class="card" data-search="acceptable identification id online notarization passport credential identity verification"><span class="tag">Preparation guide</span><h3>Acceptable ID for Online Notarization</h3><p>Review passport, name-match, expiration, physical-condition, and identity-verification preparation.</p><div class="actions"><a class="btn official-link" href="/acceptable-id-online-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article></div></section><section class="section" id="affidavit-guides-section"><div class="section-head"><h2>Affidavit Notary Guides</h2><p>Prepare for high-intent affidavit transactions and confirm the correct form with the receiving organization.</p></div><div class="grid"><article class="card" data-search="affidavit heirship inheritance estate property online notary"><span class="tag">Affidavit guide</span><h3>Affidavit of Heirship</h3><p>Family-history and estate facts used in some inheritance and property processes.</p><div class="actions"><a class="btn official-link" href="/affidavit-of-heirship-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article><article class="card" data-search="single status affidavit no marriage marriage abroad online notary"><span class="tag">Affidavit guide</span><h3>Single Status Affidavit</h3><p>Marital-status declarations that may be requested for marriage in another country.</p><div class="actions"><a class="btn official-link" href="/single-status-affidavit-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article><article class="card" data-search="affidavit loss lost document passport certificate online notary"><span class="tag">Affidavit guide</span><h3>Affidavit of Loss</h3><p>Statements explaining a lost, destroyed, or unavailable document, credential, or item.</p><div class="actions"><a class="btn official-link" href="/affidavit-of-loss-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article><article class="card" data-search="affidavit correction clerical error document correction online notary"><span class="tag">Affidavit guide</span><h3>Affidavit of Correction</h3><p>Statements identifying a factual or clerical error and the requested correction.</p><div class="actions"><a class="btn official-link" href="/affidavit-of-correction-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article></div></section><div class="tabs"><button class="tab active" id="tab-all" onclick="showSection('all')" type="button">All Documents</button><button class="tab" id="tab-templates" onclick="showSection('templates')" type="button">General Templates</button><button class="tab" id="tab-official" onclick="showSection('official')" type="button">Official Forms</button></div><section class="section" id="templates-section"><div class="section-head"><h2 id="templates-title">Create a General Template</h2><p id="templates-subtitle">Choose a document, complete the fields, and save your PDF. Then add your booking details. No download or re-upload is needed.</p></div><div class="category-group"><h3 class="category-title">Create from Scratch</h3><div class="grid"><article class="card" data-search="custom write your own blank document create from scratch"><span class="tag">Custom document</span><h3>Create Your Own Document</h3><p>Enter your own title and write the document in your own words.</p><div class="actions"><a class="btn create create-link wide" data-type="custom" href="create.html?type=custom">Create Your Own Document</a></div></article></div></div><div class="category-group"><h3 class="category-title">Affidavits &amp; Statements</h3><div class="grid"><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="General Affidavit" data-ht="Afidavi Jeneral">General Affidavit</h3><p data-en="A general sworn written statement for facts the signer personally knows." data-ht="Yon deklarasyon ekri sou sèman pou enfòmasyon siyatè a konnen pèsonèlman.">A general sworn written statement for facts the signer personally knows.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/general-affidavit-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/general-affidavit.html">Document Page</a><a class="btn create create-link" data-type="affidavit" href="create.html?type=affidavit">Create This Document</a><a class="btn upload book-link" data-type="affidavit" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=affidavit">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Proof of Residency Letter" data-ht="Lèt Prèv Adrès">Proof of Residency Letter</h3><p data-en="A written statement confirming where a person currently lives." data-ht="Yon deklarasyon ekri ki konfime kote yon moun ap viv kounye a.">A written statement confirming where a person currently lives.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/proof-of-residency-letter-guide.html">Read the Guide</a><a class="btn create create-link" data-type="proof-of-residency" href="create.html?type=proof-of-residency">Create This Document</a><a class="btn upload book-link" data-type="proof-of-residency" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=proof-of-residency">I Already Have One</a></div></article><article class="card" data-search="employment verification letter job work employer income document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Employment Verification Letter" data-ht="Lèt Verifikasyon Travay">Employment Verification Letter</h3><p data-en="Learn what an employment confirmation letter should include and when notarization may be requested." data-ht="Aprann sa yon lèt verifikasyon travay dwe genyen ak kilè yo ka mande notarizasyon.">Learn what an employment confirmation letter should include and when notarization may be requested.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/employment-verification-letter.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/employment-verification-letter.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=employment-verification-letter">I Already Have One</a></div></article><article class="card" data-search="proof residency affidavit address landlord homeowner school bank benefits document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Proof of Residency Affidavit" data-ht="Afidavi Prèv Adrès">Proof of Residency Affidavit</h3><p data-en="Learn how a sworn residency statement confirms an address and what supporting evidence may be requested." data-ht="Aprann kijan yon afidavi rezidans konfime yon adrès ak ki prèv yo ka mande.">Learn how a sworn residency statement confirms an address and what supporting evidence may be requested.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/proof-of-residency-affidavit.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/proof-of-residency-affidavit.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=proof-of-residency-affidavit">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Identity Affidavit</h3><p>A sworn statement confirming a person’s identity and identification details.</p><div class="actions"><a class="btn official-link" href="/documents/identity-affidavit.html">Read the Guide</a><a class="btn create create-link" data-type="identity-affidavit" href="/documents/create.html?type=identity-affidavit">Create This Document</a><a class="btn upload book-link" data-type="identity-affidavit" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=identity-affidavit">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Name Affidavit</h3><p>A sworn statement confirming that two names or spellings identify the same person.</p><div class="actions"><a class="btn official-link" href="/documents/name-affidavit.html">Read the Guide</a><a class="btn create create-link" data-type="name-affidavit" href="/documents/create.html?type=name-affidavit">Create This Document</a><a class="btn upload book-link" data-type="name-affidavit" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=name-affidavit">I Already Have One</a></div></article></div></div><div class="category-group"><h3 class="category-title">Consent &amp; Authorization</h3><div class="grid"><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="General Consent Letter" data-ht="Lèt Konsantman Jeneral">General Consent Letter</h3><p data-en="Written consent allowing a person, organization, or activity to proceed under stated conditions." data-ht="Yon konsantman ekri ki pèmèt yon moun, òganizasyon, oswa aktivite fèt selon kondisyon ki ekri yo.">Written consent allowing a person, organization, or activity to proceed under stated conditions.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/general-consent-letter-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/general-consent-letter.html">Document Page</a><a class="btn create create-link" data-type="general-consent" href="create.html?type=general-consent">Create This Document</a><a class="btn upload book-link" data-type="general-consent" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=general-consent">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Release of Information Authorization" data-ht="Otorizasyon Pou Bay Enfòmasyon">Release of Information Authorization</h3><p data-en="Authorization allowing specified records or information to be released to another person or organization." data-ht="Otorizasyon ki pèmèt yo bay yon lòt moun oswa òganizasyon enfòmasyon oswa dosye ki presize yo.">Authorization allowing specified records or information to be released to another person or organization.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/release-of-information-authorization-guide.html">Read the Guide</a><a class="btn create create-link" data-type="information-release" href="create.html?type=information-release">Create This Document</a><a class="btn upload book-link" data-type="information-release" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=information-release">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Child Travel Consent" data-ht="Konsantman Vwayaj Pou Timoun">Child Travel Consent</h3><p data-en="Authorization for a minor to travel with a parent, relative, or responsible adult." data-ht="Otorizasyon pou yon timoun vwayaje ak yon paran, fanmi, oswa yon granmoun responsab.">Authorization for a minor to travel with a parent, relative, or responsible adult.</p><div class="actions"><a class="btn official-link" href="/documents/child-travel-consent.html">Read the Guide</a><a class="btn create create-link" data-type="child-travel-consent" href="create.html?type=child-travel-consent">Create This Document</a><a class="btn upload book-link" data-type="child-travel-consent" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=child-travel-consent">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Letter of Authorization" data-ht="Lèt Otorizasyon">Letter of Authorization</h3><p data-en="Permission for another person to perform a specific action on the signer’s behalf." data-ht="Pèmisyon pou yon lòt moun fè yon aksyon presi nan non siyatè a.">Permission for another person to perform a specific action on the signer’s behalf.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/letter-of-authorization-guide.html">Read the Guide</a><a class="btn create create-link" data-type="letter-of-authorization" href="create.html?type=letter-of-authorization">Create This Document</a><a class="btn upload book-link" data-type="letter-of-authorization" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=letter-of-authorization">I Already Have One</a></div></article><article class="card" data-search="child passport consent letter parent guardian minor ds-3053 document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Child Passport Consent Letter" data-ht="Konsantman Pou Paspò Timoun">Child Passport Consent Letter</h3><p data-en="Understand parent or guardian consent for a minor's passport process and possible notarization requirements." data-ht="Konprann konsantman paran oswa gadyen pou pwosesis paspò yon timoun ak kondisyon notarizasyon posib.">Understand parent or guardian consent for a minor's passport process and possible notarization requirements.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/child-passport-consent.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/child-passport-consent.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=child-passport-consent">I Already Have One</a></div></article><article class="card" data-search="temporary guardianship authorization caregiver child minor parent permission document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Temporary Guardianship Authorization" data-ht="Otorizasyon Gadyen Tanporè">Temporary Guardianship Authorization</h3><p data-en="Learn how a parent can document limited caregiver authority for a child during a temporary period." data-ht="Aprann kijan yon paran ka bay yon moun otorizasyon limite pou pran swen yon timoun pandan yon tan.">Learn how a parent can document limited caregiver authority for a child during a temporary period.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/temporary-guardianship-authorization.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/temporary-guardianship-authorization.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=temporary-guardianship-authorization">I Already Have One</a></div></article><article class="card" data-search="minor medical consent child caregiver doctor treatment emergency health authorization document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Minor Medical Consent" data-ht="Konsantman Medikal Pou Timoun">Minor Medical Consent</h3><p data-en="Learn how a parent can authorize a caregiver to obtain medical care for a child and when notarization may be requested." data-ht="Aprann kijan yon paran ka bay yon moun otorizasyon pou jwenn swen medikal pou yon timoun.">Learn how a parent can authorize a caregiver to obtain medical care for a child and when notarization may be requested.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/minor-medical-consent.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/minor-medical-consent.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=minor-medical-consent">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Medical Consent Authorization</h3><p>Written authorization allowing a caregiver or provider to arrange specified medical care.</p><div class="actions"><a class="btn official-link" href="/documents/medical-consent.html">Read the Guide</a><a class="btn create create-link" data-type="medical-consent" href="/documents/create.html?type=medical-consent">Create This Document</a><a class="btn upload book-link" data-type="medical-consent" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=medical-consent">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Travel Authorization Letter</h3><p>Written permission authorizing a person to travel for specified dates and purposes.</p><div class="actions"><a class="btn official-link" href="/documents/travel-authorization.html">Read the Guide</a><a class="btn create create-link" data-type="travel-authorization" href="/documents/create.html?type=travel-authorization">Create This Document</a><a class="btn upload book-link" data-type="travel-authorization" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=travel-authorization">I Already Have One</a></div></article><article class="card" data-search="invitation letter visitor family travel event business host visa document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Invitation Letter" data-ht="Lèt Envitasyon">Invitation Letter</h3><p data-en="Learn what to include in a personal, visitor, travel, event, or business invitation letter." data-ht="Aprann sa pou mete nan yon lèt envitasyon pèsonèl, vwayaj, evènman, oswa biznis.">Learn what to include in a personal, visitor, travel, event, or business invitation letter.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/invitation-letter.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/invitation-letter.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=invitation-letter">I Already Have One</a></div></article><article class="card" data-search="business authorization letter employee agent manager representative account documents document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Business Authorization Letter" data-ht="Lèt Otorizasyon Biznis">Business Authorization Letter</h3><p data-en="Learn how a business can give an employee, agent, or representative limited written authority." data-ht="Aprann kijan yon biznis ka bay yon anplwaye, ajan, oswa reprezantan otorizasyon limite.">Learn how a business can give an employee, agent, or representative limited written authority.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/business-authorization-letter.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/business-authorization-letter.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=business-authorization-letter">I Already Have One</a></div></article></div></div><div class="category-group" id="business-corporate-guides"><h3 class="category-title">Business &amp; Corporate Notary Guides</h3><div class="grid">
+      <section class="section" id="official-section" data-library-category="official">
+        <div class="section-head"><h2>Official forms</h2></div>
+        <div class="grid">
+          <article class="card official" data-search="DS3053 passport child consent statement konsantman paspò timoun">
+            <span class="tag">U.S. Department of State</span>
+            <h3>DS-3053 · Child passport consent</h3>
+            <p>For a legal parent or guardian who can’t attend a child’s U.S. passport appointment.</p>
+            <div class="actions">
+              <a class="btn create" href="/documents/create/ds-3053.html" data-document-service>Fill out DS-3053</a>
+              <a class="btn" href="/documents/official/ds-3053.html" data-document-service>Form guide</a>
+            </div>
+          </article>
+          <article class="card official" data-search="PS1583 USPS mail receiving agency application CMRA virtual mailbox bwat postal">
+            <span class="tag">U.S. Postal Service</span>
+            <h3>USPS Form 1583</h3>
+            <p>Application for a private or virtual mailbox.</p>
+            <div class="actions">
+              <a class="btn" href="/documents/official/ps-1583.html" data-document-service>Form guide</a>
+              <a class="btn upload" href="/book.html?document_ready=1&amp;document_source=official&amp;document_type=ps-1583" data-document-booking="ps-1583">I have my Form 1583</a>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section class="section" data-library-category="templates" id="templates-section"><div class="section-head"><h2 id="templates-title">Templates and document guides</h2><p id="templates-subtitle">Choose a document, complete the fields, and save your PDF. Then add your booking details. No download or re-upload is needed.</p></div><div class="category-group"><h3 class="category-title">Create from Scratch</h3><div class="grid"><article class="card" data-search="custom write your own blank document create from scratch"><span class="tag">Custom document</span><h3>Create Your Own Document</h3><p>Enter your own title and write the document in your own words.</p><div class="actions"><a class="btn create create-link wide" data-type="custom" href="create.html?type=custom">Create Your Own Document</a></div></article></div></div><div class="category-group"><h3 class="category-title">Affidavits &amp; Statements</h3><div class="grid"><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="General Affidavit" data-ht="Afidavi Jeneral">General Affidavit</h3><p data-en="A general sworn written statement for facts the signer personally knows." data-ht="Yon deklarasyon ekri sou sèman pou enfòmasyon siyatè a konnen pèsonèlman.">A general sworn written statement for facts the signer personally knows.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/general-affidavit-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/general-affidavit.html">Document Page</a><a class="btn create create-link" data-type="affidavit" href="create.html?type=affidavit">Create This Document</a><a class="btn upload book-link" data-type="affidavit" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=affidavit">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Proof of Residency Letter" data-ht="Lèt Prèv Adrès">Proof of Residency Letter</h3><p data-en="A written statement confirming where a person currently lives." data-ht="Yon deklarasyon ekri ki konfime kote yon moun ap viv kounye a.">A written statement confirming where a person currently lives.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/proof-of-residency-letter-guide.html">Read the Guide</a><a class="btn create create-link" data-type="proof-of-residency" href="create.html?type=proof-of-residency">Create This Document</a><a class="btn upload book-link" data-type="proof-of-residency" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=proof-of-residency">I Already Have One</a></div></article><article class="card" data-search="employment verification letter job work employer income document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Employment Verification Letter" data-ht="Lèt Verifikasyon Travay">Employment Verification Letter</h3><p data-en="Learn what an employment confirmation letter should include and when notarization may be requested." data-ht="Aprann sa yon lèt verifikasyon travay dwe genyen ak kilè yo ka mande notarizasyon.">Learn what an employment confirmation letter should include and when notarization may be requested.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/employment-verification-letter.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/employment-verification-letter.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=employment-verification-letter">I Already Have One</a></div></article><article class="card" data-search="proof residency affidavit address landlord homeowner school bank benefits document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Proof of Residency Affidavit" data-ht="Afidavi Prèv Adrès">Proof of Residency Affidavit</h3><p data-en="Learn how a sworn residency statement confirms an address and what supporting evidence may be requested." data-ht="Aprann kijan yon afidavi rezidans konfime yon adrès ak ki prèv yo ka mande.">Learn how a sworn residency statement confirms an address and what supporting evidence may be requested.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/proof-of-residency-affidavit.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/proof-of-residency-affidavit.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=proof-of-residency-affidavit">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Identity Affidavit</h3><p>A sworn statement confirming a person’s identity and identification details.</p><div class="actions"><a class="btn official-link" href="/documents/identity-affidavit.html">Read the Guide</a><a class="btn create create-link" data-type="identity-affidavit" href="/documents/create.html?type=identity-affidavit">Create This Document</a><a class="btn upload book-link" data-type="identity-affidavit" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=identity-affidavit">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Name Affidavit</h3><p>A sworn statement confirming that two names or spellings identify the same person.</p><div class="actions"><a class="btn official-link" href="/documents/name-affidavit.html">Read the Guide</a><a class="btn create create-link" data-type="name-affidavit" href="/documents/create.html?type=name-affidavit">Create This Document</a><a class="btn upload book-link" data-type="name-affidavit" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=name-affidavit">I Already Have One</a></div></article></div></div><div class="category-group"><h3 class="category-title">Consent &amp; Authorization</h3><div class="grid"><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="General Consent Letter" data-ht="Lèt Konsantman Jeneral">General Consent Letter</h3><p data-en="Written consent allowing a person, organization, or activity to proceed under stated conditions." data-ht="Yon konsantman ekri ki pèmèt yon moun, òganizasyon, oswa aktivite fèt selon kondisyon ki ekri yo.">Written consent allowing a person, organization, or activity to proceed under stated conditions.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/general-consent-letter-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/general-consent-letter.html">Document Page</a><a class="btn create create-link" data-type="general-consent" href="create.html?type=general-consent">Create This Document</a><a class="btn upload book-link" data-type="general-consent" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=general-consent">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Release of Information Authorization" data-ht="Otorizasyon Pou Bay Enfòmasyon">Release of Information Authorization</h3><p data-en="Authorization allowing specified records or information to be released to another person or organization." data-ht="Otorizasyon ki pèmèt yo bay yon lòt moun oswa òganizasyon enfòmasyon oswa dosye ki presize yo.">Authorization allowing specified records or information to be released to another person or organization.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/release-of-information-authorization-guide.html">Read the Guide</a><a class="btn create create-link" data-type="information-release" href="create.html?type=information-release">Create This Document</a><a class="btn upload book-link" data-type="information-release" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=information-release">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Child Travel Consent" data-ht="Konsantman Vwayaj Pou Timoun">Child Travel Consent</h3><p data-en="Authorization for a minor to travel with a parent, relative, or responsible adult." data-ht="Otorizasyon pou yon timoun vwayaje ak yon paran, fanmi, oswa yon granmoun responsab.">Authorization for a minor to travel with a parent, relative, or responsible adult.</p><div class="actions"><a class="btn official-link" href="/documents/child-travel-consent.html">Read the Guide</a><a class="btn create create-link" data-type="child-travel-consent" href="create.html?type=child-travel-consent">Create This Document</a><a class="btn upload book-link" data-type="child-travel-consent" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=child-travel-consent">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Letter of Authorization" data-ht="Lèt Otorizasyon">Letter of Authorization</h3><p data-en="Permission for another person to perform a specific action on the signer’s behalf." data-ht="Pèmisyon pou yon lòt moun fè yon aksyon presi nan non siyatè a.">Permission for another person to perform a specific action on the signer’s behalf.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/letter-of-authorization-guide.html">Read the Guide</a><a class="btn create create-link" data-type="letter-of-authorization" href="create.html?type=letter-of-authorization">Create This Document</a><a class="btn upload book-link" data-type="letter-of-authorization" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=letter-of-authorization">I Already Have One</a></div></article><article class="card" data-search="child passport consent letter parent guardian minor ds-3053 document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Child Passport Consent Letter" data-ht="Konsantman Pou Paspò Timoun">Child Passport Consent Letter</h3><p data-en="Understand parent or guardian consent for a minor's passport process and possible notarization requirements." data-ht="Konprann konsantman paran oswa gadyen pou pwosesis paspò yon timoun ak kondisyon notarizasyon posib.">Understand parent or guardian consent for a minor's passport process and possible notarization requirements.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/child-passport-consent.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/child-passport-consent.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=child-passport-consent">I Already Have One</a></div></article><article class="card" data-search="temporary guardianship authorization caregiver child minor parent permission document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Temporary Guardianship Authorization" data-ht="Otorizasyon Gadyen Tanporè">Temporary Guardianship Authorization</h3><p data-en="Learn how a parent can document limited caregiver authority for a child during a temporary period." data-ht="Aprann kijan yon paran ka bay yon moun otorizasyon limite pou pran swen yon timoun pandan yon tan.">Learn how a parent can document limited caregiver authority for a child during a temporary period.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/temporary-guardianship-authorization.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/temporary-guardianship-authorization.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=temporary-guardianship-authorization">I Already Have One</a></div></article><article class="card" data-search="minor medical consent child caregiver doctor treatment emergency health authorization document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Minor Medical Consent" data-ht="Konsantman Medikal Pou Timoun">Minor Medical Consent</h3><p data-en="Learn how a parent can authorize a caregiver to obtain medical care for a child and when notarization may be requested." data-ht="Aprann kijan yon paran ka bay yon moun otorizasyon pou jwenn swen medikal pou yon timoun.">Learn how a parent can authorize a caregiver to obtain medical care for a child and when notarization may be requested.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/minor-medical-consent.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/minor-medical-consent.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=minor-medical-consent">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Medical Consent Authorization</h3><p>Written authorization allowing a caregiver or provider to arrange specified medical care.</p><div class="actions"><a class="btn official-link" href="/documents/medical-consent.html">Read the Guide</a><a class="btn create create-link" data-type="medical-consent" href="/documents/create.html?type=medical-consent">Create This Document</a><a class="btn upload book-link" data-type="medical-consent" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=medical-consent">I Already Have One</a></div></article><article class="card"><span class="tag">General template</span><h3>Travel Authorization Letter</h3><p>Written permission authorizing a person to travel for specified dates and purposes.</p><div class="actions"><a class="btn official-link" href="/documents/travel-authorization.html">Read the Guide</a><a class="btn create create-link" data-type="travel-authorization" href="/documents/create.html?type=travel-authorization">Create This Document</a><a class="btn upload book-link" data-type="travel-authorization" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=travel-authorization">I Already Have One</a></div></article><article class="card" data-search="invitation letter visitor family travel event business host visa document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Invitation Letter" data-ht="Lèt Envitasyon">Invitation Letter</h3><p data-en="Learn what to include in a personal, visitor, travel, event, or business invitation letter." data-ht="Aprann sa pou mete nan yon lèt envitasyon pèsonèl, vwayaj, evènman, oswa biznis.">Learn what to include in a personal, visitor, travel, event, or business invitation letter.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/invitation-letter.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/invitation-letter.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=invitation-letter">I Already Have One</a></div></article><article class="card" data-search="business authorization letter employee agent manager representative account documents document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Business Authorization Letter" data-ht="Lèt Otorizasyon Biznis">Business Authorization Letter</h3><p data-en="Learn how a business can give an employee, agent, or representative limited written authority." data-ht="Aprann kijan yon biznis ka bay yon anplwaye, ajan, oswa reprezantan otorizasyon limite.">Learn how a business can give an employee, agent, or representative limited written authority.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/business-authorization-letter.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/business-authorization-letter.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=business-authorization-letter">I Already Have One</a></div></article></div></div><div class="category-group" id="business-corporate-guides"><h3 class="category-title">Business &amp; Corporate Notary Guides</h3><div class="grid">
 <article class="card" data-search="corporate board resolution business authorization online notary guide"><span class="tag">Corporate authority guide</span><h3>Corporate Resolution Notary</h3><p>Prepare a completed board or corporate resolution and representative-capacity signature for online notarization.</p><div class="actions"><a class="btn official-link" href="/corporate-resolution-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article>
 <article class="card" data-search="llc member manager resolution company authorization online notary guide"><span class="tag">LLC authority guide</span><h3>LLC Member Resolution Notary</h3><p>Review member-managed, manager-managed, company-name, and recipient requirements before the session.</p><div class="actions"><a class="btn official-link" href="/llc-member-resolution-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article>
 <article class="card" data-search="secretary certificate incumbency corporate officer records notary guide"><span class="tag">Corporate records guide</span><h3>Secretary’s Certificate Notary</h3><p>Understand certification of resolutions, officers, incumbency, signatures, and attached company records.</p><div class="actions"><a class="btn official-link" href="/secretarys-certificate-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article>
@@ -358,76 +90,15 @@ h1{
 <article class="card" data-search="florida lien release waiver satisfaction contractor affidavit notary guide"><span class="tag">Florida construction guide</span><h3>Florida Lien Release</h3><p>Understand the difference between payment waivers, recorded lien releases, satisfactions, and contractor affidavits.</p><div class="actions"><a class="btn official-link" href="/florida-lien-release-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article>
 <article class="card" data-search="vehicle title affidavit motor vehicle correction ownership notary guide"><span class="tag">Vehicle title guide</span><h3>Vehicle Title Affidavit</h3><p>Review agency-specific title facts, identification, corrections, and supporting-document requirements.</p><div class="actions"><a class="btn official-link" href="/vehicle-title-affidavit-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article>
 <article class="card" data-search="lost vehicle title affidavit duplicate title dmv notarization guide"><span class="tag">Vehicle title guide</span><h3>Lost Vehicle Title Affidavit</h3><p>Learn how a sworn loss statement may support—but does not replace—the official duplicate-title process.</p><div class="actions"><a class="btn official-link" href="/lost-vehicle-title-affidavit-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article>
-</div></div><div class="category-group"><h3 class="category-title">Vehicle Documents</h3><div class="grid"><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Vehicle Release Authorization" data-ht="Otorizasyon Pou Lage Machin">Vehicle Release Authorization</h3><p data-en="Authorization for a tow yard, repair shop, impound lot, dealer, or other holder to release a vehicle." data-ht="Otorizasyon pou yon pakin remokaj, garaj, depo machin, konsesyonè, oswa lòt moun lage yon machin.">Authorization for a tow yard, repair shop, impound lot, dealer, or other holder to release a vehicle.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-release-authorization-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/vehicle-release-authorization.html">Document Page</a><a class="btn create create-link" data-type="vehicle-release" href="create.html?type=vehicle-release">Create This Document</a><a class="btn upload book-link" data-type="vehicle-release" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-release">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Vehicle Use Authorization" data-ht="Otorizasyon Pou Itilize Machin">Vehicle Use Authorization</h3><p data-en="Permission for another person to use or travel with a vehicle." data-ht="Pèmisyon pou yon lòt moun itilize oswa vwayaje ak yon machin.">Permission for another person to use or travel with a vehicle.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-use-authorization-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/vehicle-use-authorization.html">Document Page</a><a class="btn create create-link" data-type="vehicle-use" href="create.html?type=vehicle-use">Create This Document</a><a class="btn upload book-link" data-type="vehicle-use" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-use">I Already Have One</a></div></article><article class="card" data-search="vehicle bill of sale car truck buyer seller title transfer document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Vehicle Bill of Sale" data-ht="Papye Vant Machin">Vehicle Bill of Sale</h3><p data-en="Learn what to include when documenting a vehicle sale and when buyer or seller signatures may need notarization." data-ht="Aprann sa pou mete nan yon dokiman vant machin ak kilè siyati achtè oswa vandè ka bezwen notarizasyon.">Learn what to include when documenting a vehicle sale and when buyer or seller signatures may need notarization.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-bill-of-sale.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/vehicle-bill-of-sale.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-bill-of-sale">I Already Have One</a></div></article><article class="card" data-search="vehicle gift affidavit car donor recipient vin title transfer family document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Vehicle Gift Affidavit" data-ht="Afidavi Kado Machin">Vehicle Gift Affidavit</h3><p data-en="Learn what to include when transferring a vehicle as a gift and why state forms may still be required." data-ht="Aprann sa pou mete lè w bay yon machin kòm kado ak poukisa fòm leta ka toujou nesesè.">Learn what to include when transferring a vehicle as a gift and why state forms may still be required.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-gift-affidavit.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/vehicle-gift-affidavit.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-gift-affidavit">I Already Have One</a></div></article></div></div></section><section class="section" id="official-section"><div class="section-head"><h2 id="official-title">Official Forms Commonly Brought to a Notary</h2><p id="official-subtitle">Use the current form from the issuing government agency. SafeNotarize does not recreate or modify official forms.</p></div><div class="grid"><article class="card official"><span class="tag" data-en="U.S. Department of State" data-ht="Depatman Deta Etazini">U.S. Department of State</span><div class="code">DS-3053</div><h3 data-en="Statement of Consent: U.S. Passport Issuance to a Child" data-ht="Deklarasyon Konsantman Pou Bay Yon Timoun Paspò Ameriken">Statement of Consent: U.S. Passport Issuance to a Child</h3><p data-en="For a parent or guardian who cannot appear in person with a child applying for a U.S. passport." data-ht="Pou yon paran oswa responsab ki pa ka prezan ak timoun nan lè y ap aplike pou yon paspò ameriken.">For a parent or guardian who cannot appear in person with a child applying for a U.S. passport.</p><div class="actions"><a class="btn create guide-link" data-en-href="official/ds-3053.html" data-ht-href="official/ds-3053.html" href="official/ds-3053.html">Form Guide</a><a class="btn official-link" href="https://eforms.state.gov/Forms/ds3053.pdf" rel="noopener" target="_blank">Official Form</a><a class="btn upload wide official-book-link" data-slug="ds-3053" href="/book.html?document_ready=1&amp;document_source=official&amp;document_type=ds-3053">Notarize This Form Online</a></div></article><article class="card official"><span class="tag" data-en="U.S. Postal Service" data-ht="Sèvis Postal Etazini">U.S. Postal Service</span><div class="code">PS Form 1583</div><h3 data-en="Application for Delivery of Mail Through Agent" data-ht="Aplikasyon Pou Resevwa Lapòs Atravè Yon Ajan">Application for Delivery of Mail Through Agent</h3><p data-en="Used by customers of commercial mail receiving agencies and virtual mailbox providers." data-ht="Pou kliyan sèvis bwat postal prive, CMRA, oswa sèvis adrès postal vityèl.">Used by customers of commercial mail receiving agencies and virtual mailbox providers. Open the USPS forms page and confirm the downloaded PDF is upright before uploading it.</p><div class="actions"><a class="btn create guide-link" data-en-href="official/ps-1583.html" data-ht-href="official/ps-1583.html" href="official/ps-1583.html">Form Guide</a><a class="btn official-link" href="https://about.usps.com/forms/ps1583.pdf" rel="noopener" target="_blank">Official Form</a><a class="btn upload wide official-book-link" data-slug="ps-1583" href="/book.html?document_ready=1&amp;document_source=official&amp;document_type=ps-1583">Notarize This Form Online</a></div></article></div></section>
-<div class="no-results" id="no-results">
-<h2 id="no-results-title">No matching document found</h2>
-<p id="no-results-text">Try a shorter term such as “affidavit,” “travel,” “vehicle,” “consent,” “passport,” or “1583.”</p>
-</div>
-<div class="notice" id="notice"><strong>Important:</strong> SafeNotarize is not a law firm or government agency. Confirm that you are using the correct current form and follow the issuing agency’s instructions.</div></main><script>
-function showSection(w){const t=document.getElementById('templates-section'),o=document.getElementById('official-section');t.classList.toggle('hidden-section',w==='official');o.classList.toggle('hidden-section',w==='templates');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById(w==='templates'?'tab-templates':w==='official'?'tab-official':'tab-all').classList.add('active')}const searchInput=document.getElementById('document-search');
-const clearSearch=document.getElementById('clear-search');
-const searchMeta=document.getElementById('search-meta');
-const noResults=document.getElementById('no-results');
-const cards=[...document.querySelectorAll('.card')];
-
-function normalizeSearch(value){
-  return (value||'')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g,'')
-    .replace(/[^a-z0-9\s-]/g,' ')
-    .replace(/\s+/g,' ')
-    .trim();
-}
-
-function searchableCardText(card){
-  const extra=[
-    card.dataset.search||'',
-    ...[...card.querySelectorAll('[data-en],[data-ht]')].flatMap(el=>[
-      el.dataset.en||'',el.dataset.ht||''
-    ])
-  ].join(' ');
-  return normalizeSearch(card.textContent+' '+extra);
-}
-
-function applyLibrarySearch(){
-  const query=normalizeSearch(searchInput.value);
-  let shown=0;
-
-  cards.forEach(card=>{
-    const matches=!query || searchableCardText(card).includes(query);
-    card.classList.toggle('search-hidden',!matches);
-    if(matches) shown++;
-  });
-
-
-  document.querySelectorAll('.category-group').forEach(group=>{
-    const hasVisible=[...group.querySelectorAll('.card')].some(card=>!card.classList.contains('search-hidden'));
-    group.classList.toggle('search-empty',Boolean(query) && !hasVisible);
-  });
-
-  ['templates-section','official-section'].forEach(id=>{
-    const section=document.getElementById(id);
-    const hasVisible=[...section.querySelectorAll('.card')].some(card=>!card.classList.contains('search-hidden'));
-    section.classList.toggle('search-empty',query && !hasVisible);
-  });
-
-  clearSearch.classList.toggle('visible',Boolean(query));
-  noResults.classList.toggle('visible',Boolean(query) && shown===0);
-
-  if(!query){
-    searchMeta.textContent='';
-  }else{
-    searchMeta.textContent=`${shown} matching document${shown===1?'':'s'} found`;
-  }
-}
-
-searchInput.addEventListener('input',applyLibrarySearch);
-searchInput.addEventListener('search',applyLibrarySearch);
-clearSearch.addEventListener('click',()=>{
-  searchInput.value='';
-  applyLibrarySearch();
-  searchInput.focus();
-});
-
-</script></body></html>
+</div></div><div class="category-group"><h3 class="category-title">Vehicle Documents</h3><div class="grid"><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Vehicle Release Authorization" data-ht="Otorizasyon Pou Lage Machin">Vehicle Release Authorization</h3><p data-en="Authorization for a tow yard, repair shop, impound lot, dealer, or other holder to release a vehicle." data-ht="Otorizasyon pou yon pakin remokaj, garaj, depo machin, konsesyonè, oswa lòt moun lage yon machin.">Authorization for a tow yard, repair shop, impound lot, dealer, or other holder to release a vehicle.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-release-authorization-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/vehicle-release-authorization.html">Document Page</a><a class="btn create create-link" data-type="vehicle-release" href="create.html?type=vehicle-release">Create This Document</a><a class="btn upload book-link" data-type="vehicle-release" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-release">I Already Have One</a></div></article><article class="card"><span class="tag" data-en="General template" data-ht="Modèl jeneral">General template</span><h3 data-en="Vehicle Use Authorization" data-ht="Otorizasyon Pou Itilize Machin">Vehicle Use Authorization</h3><p data-en="Permission for another person to use or travel with a vehicle." data-ht="Pèmisyon pou yon lòt moun itilize oswa vwayaje ak yon machin.">Permission for another person to use or travel with a vehicle.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-use-authorization-guide.html">Read the Guide</a><a class="btn official-link" href="/documents/vehicle-use-authorization.html">Document Page</a><a class="btn create create-link" data-type="vehicle-use" href="create.html?type=vehicle-use">Create This Document</a><a class="btn upload book-link" data-type="vehicle-use" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-use">I Already Have One</a></div></article><article class="card" data-search="vehicle bill of sale car truck buyer seller title transfer document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Vehicle Bill of Sale" data-ht="Papye Vant Machin">Vehicle Bill of Sale</h3><p data-en="Learn what to include when documenting a vehicle sale and when buyer or seller signatures may need notarization." data-ht="Aprann sa pou mete nan yon dokiman vant machin ak kilè siyati achtè oswa vandè ka bezwen notarizasyon.">Learn what to include when documenting a vehicle sale and when buyer or seller signatures may need notarization.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-bill-of-sale.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/vehicle-bill-of-sale.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-bill-of-sale">I Already Have One</a></div></article><article class="card" data-search="vehicle gift affidavit car donor recipient vin title transfer family document guide"><span class="tag" data-en="Document guide" data-ht="Gid dokiman">Document guide</span><h3 data-en="Vehicle Gift Affidavit" data-ht="Afidavi Kado Machin">Vehicle Gift Affidavit</h3><p data-en="Learn what to include when transferring a vehicle as a gift and why state forms may still be required." data-ht="Aprann sa pou mete lè w bay yon machin kòm kado ak poukisa fòm leta ka toujou nesesè.">Learn what to include when transferring a vehicle as a gift and why state forms may still be required.</p><div class="actions"><a class="btn official-link" data-en="Read the Guide" data-ht="Li Gid la" href="/documents/vehicle-gift-affidavit.html">Read the Guide</a><a class="btn create" data-en="Create This Document" data-ht="Kreye Dokiman Sa a" href="/documents/create/vehicle-gift-affidavit.html">Create This Document</a><a class="btn upload wide" data-en="I Already Have One" data-ht="Mwen Deja Gen Youn" href="/book.html?document_ready=1&amp;document_source=own&amp;document_type=vehicle-gift-affidavit">I Already Have One</a></div></article></div></div></section>
+<section class="section" data-library-category="templates" id="online-notary-guides-section"><div class="section-head"><h2>Online Notary Preparation Guides</h2><p>Prepare for international signing, witness participation, and secure identity verification before starting the booking flow.</p></div><div class="grid"><article class="card" data-search="international online notary abroad overseas outside united states remote notarization passport"><span class="tag">Service guide</span><h3>International Online Notary</h3><p>Guidance for eligible signers who need to notarize a U.S. document while located outside the United States.</p><div class="actions"><a class="btn official-link" href="/international-online-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article><article class="card" data-search="online notary witnesses remote witness customer provided safenotarize witness"><span class="tag">Service guide</span><h3>Online Notary With Witnesses</h3><p>Learn the difference between the notary and document witnesses, plus how remote witness participation may work.</p><div class="actions"><a class="btn official-link" href="/online-notary-with-witnesses.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article><article class="card" data-search="acceptable identification id online notarization passport credential identity verification"><span class="tag">Preparation guide</span><h3>Acceptable ID for Online Notarization</h3><p>Review passport, name-match, expiration, physical-condition, and identity-verification preparation.</p><div class="actions"><a class="btn official-link" href="/acceptable-id-online-notary.html">Read the Guide</a><a class="btn upload wide" href="/start.html">Start Online Notarization</a></div></article></div></section><section class="section" data-library-category="templates" id="affidavit-guides-section"><div class="section-head"><h2>Affidavit Notary Guides</h2><p>Prepare for high-intent affidavit transactions and confirm the correct form with the receiving organization.</p></div><div class="grid"><article class="card" data-search="affidavit heirship inheritance estate property online notary"><span class="tag">Affidavit guide</span><h3>Affidavit of Heirship</h3><p>Family-history and estate facts used in some inheritance and property processes.</p><div class="actions"><a class="btn official-link" href="/affidavit-of-heirship-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article><article class="card" data-search="single status affidavit no marriage marriage abroad online notary"><span class="tag">Affidavit guide</span><h3>Single Status Affidavit</h3><p>Marital-status declarations that may be requested for marriage in another country.</p><div class="actions"><a class="btn official-link" href="/single-status-affidavit-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article><article class="card" data-search="affidavit loss lost document passport certificate online notary"><span class="tag">Affidavit guide</span><h3>Affidavit of Loss</h3><p>Statements explaining a lost, destroyed, or unavailable document, credential, or item.</p><div class="actions"><a class="btn official-link" href="/affidavit-of-loss-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article><article class="card" data-search="affidavit correction clerical error document correction online notary"><span class="tag">Affidavit guide</span><h3>Affidavit of Correction</h3><p>Statements identifying a factual or clerical error and the requested correction.</p><div class="actions"><a class="btn official-link" href="/affidavit-of-correction-notary.html">Read the Guide</a><a class="btn create-link" href="/start.html">Start Notarization</a></div></article></div></section>
+      <div class="no-results" id="no-results" hidden>
+        <h2>No matching documents</h2>
+        <p>Try a different search or clear the filters to see all documents.</p>
+        <button class="btn" id="reset-filters" type="button">Clear filters</button>
+      </div>
+      <footer class="library-footer">Follow the issuing agency’s instructions for official forms and the receiving organization’s requirements for your document.</footer>
+    </div>
+  </main>
+</body>
+</html>
