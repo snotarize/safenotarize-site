@@ -21,6 +21,7 @@
     authorizing: 'N ap verifye otorizasyon kat la…',
     cardError: 'Kat la pa t otorize. Verifye enfòmasyon kat la epi eseye ankò.',
     opening: 'N ap prepare sesyon OneNotary ou a…',
+    invalidEstimate: 'Verifye kantite siyatè, so ak temwen yo.',
     retry: 'Nou pa t kapab kontinye. Eseye ankò sou menm paj sa a.',
     review: 'Nou bezwen verifye demann sa a. Kontakte SafeNotarize anvan ou kòmanse yon lòt.'
   } : {
@@ -42,6 +43,7 @@
     authorizing: 'Checking your card authorization…',
     cardError: 'The card authorization failed. Check the card details and try again.',
     opening: 'Preparing your OneNotary session…',
+    invalidEstimate: 'Check the number of additional signers, stamps, and witnesses.',
     retry: 'We couldn’t continue. Try again on this page.',
     review: 'SafeNotarize needs to review this request before you start another one.'
   };
@@ -54,6 +56,7 @@
   const service = window.SafeNotarizePremium;
   const config = service?.settings();
   const live = config?.mode === 'live';
+  const estimated = live && config.estimatedAuthorization === true;
   if (live) {
     const { base, notarization, service: delivery, additionalSigner, additionalStamp, witness } = config.pricing;
     const dollars = cents => '$' + (cents / 100);
@@ -91,7 +94,11 @@
   }
 
   const storageKey = 'sn_premium_order_v2';
-  const amount = config.pricing.base;
+  const estimateFields = [
+    ['extraSigners', 'extra-signers', 'additionalSigner', ht ? 'Siyatè anplis' : 'Additional signers'],
+    ['extraStamps', 'extra-stamps', 'additionalStamp', ht ? 'So anplis' : 'Additional stamps'],
+    ['witnesses', 'witnesses', 'witness', ht ? 'Temwen' : 'Witnesses']
+  ];
   let challenge = '';
   let stripe;
   let card;
@@ -99,6 +106,48 @@
   let busy = false;
 
   const hex = bytes => Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('');
+
+  function estimate() {
+    const details = {};
+    let amount = config.pricing.base;
+    if (estimated) {
+      for (const [key, input, rate] of estimateFields) {
+        const quantity = el(input).valueAsNumber;
+        if (!Number.isSafeInteger(quantity) || quantity < 0) throw Error('invalid_quantity');
+        details[key] = quantity;
+        amount += quantity * config.pricing[rate];
+      }
+      if (!Number.isSafeInteger(amount) || amount > 99999999) throw Error('invalid_quantity');
+    }
+    return { amount, details };
+  }
+
+  function showEstimate() {
+    let total;
+    try { total = '$' + (estimate().amount / 100); }
+    catch { return; }
+    el('terms-label').textContent = ht
+      ? `Mwen otorize yon rezèv ${total}. Apre sesyon an, SafeNotarize ap pran montan final la sou kat sa a si rezèv la kouvri li. Si total la pi wo, m ap konfime peman an sou Stripe.`
+      : `I authorize a ${total} hold. After the session, SafeNotarize will charge this card for the final total if the hold covers it. If the total is higher, I’ll confirm payment in Stripe.`;
+    submit.textContent = ht ? `Otorize ${total} epi kontinye` : `Authorize ${total} and continue`;
+  }
+
+  function initializeEstimate() {
+    const panel = el('estimate');
+    const saved = JSON.parse(sessionStorage.getItem(storageKey) || 'null')?.estimate;
+    el('estimate-label').textContent = ht ? 'Estimasyon pou sèvis anplis' : 'Estimated extras';
+    for (const [key, input, , label] of estimateFields) {
+      el(input + '-label').textContent = label;
+      if (Number.isSafeInteger(saved?.[key]) && saved[key] >= 0) el(input).value = saved[key];
+    }
+    panel.hidden = false;
+    panel.disabled = Boolean(saved);
+    panel.addEventListener('input', () => {
+      el('terms').checked = false;
+      showEstimate();
+    });
+    showEstimate();
+  }
 
   async function request(path, payload) {
     const response = await fetch(config.endpoint + path, {
@@ -134,7 +183,8 @@
       if (existing.fingerprint !== fingerprint) throw Error('order_details_changed');
       return existing;
     }
-    const item = { id: crypto.randomUUID(), access: hex(crypto.getRandomValues(new Uint8Array(32))), fingerprint };
+    const item = { id: crypto.randomUUID(), access: hex(crypto.getRandomValues(new Uint8Array(32))), fingerprint,
+      ...(payload.estimate ? { estimate: payload.estimate } : {}) };
     sessionStorage.setItem(storageKey, JSON.stringify(item));
     return item;
   }
@@ -163,13 +213,16 @@
     submit.disabled = true;
     let joined = false;
     try {
+      const { amount, details } = estimate();
       const current = service.documentContext().pending;
       if (source === 'library' && current?.id !== pending.id) throw Error('document_access_denied');
       const order = {
         source, signers: [email], documentId: pending?.id, preferredLanguage: ht ? 'ht' : 'en',
-        billingFlow: 'post_session_v1', acceptedTerms: el('terms').checked
+        billingFlow: 'post_session_v1', acceptedTerms: el('terms').checked,
+        ...(estimated ? { estimate: details } : {})
       };
       const { id, access } = await orderFor(order);
+      if (estimated) el('estimate').disabled = true;
       const documentToken = current?.token;
       status.textContent = copy.authorizing;
       const payment = await request('/payment', { ...order, id, access, documentToken, turnstile: challenge });
@@ -194,6 +247,7 @@
     } catch (error) {
       const code = error.message;
       status.textContent = code === 'card_authorization_failed' ? copy.cardError
+        : code === 'invalid_quantity' ? copy.invalidEstimate
         : ['document_access_denied', 'document_already_claimed', 'document_unavailable', 'document_invalid'].includes(code) ? copy.missing
         : ['payment_contract_invalid', 'payment_outcome_unknown', 'order_details_changed', 'payload_mismatch',
           'order_needs_review', 'session_outcome_unknown', 'unsafe_link'].includes(code) ? copy.review
@@ -221,6 +275,7 @@
       el('document').hidden = false;
       el('library').hidden = source === 'library';
       el('intro').hidden = false;
+      if (estimated) initializeEstimate();
       form.hidden = false;
       card.mount('#premium-card');
       function clearChallenge() {

@@ -134,6 +134,7 @@
 }
 
 .sn-premium-panel input[type="email"],
+.sn-premium-estimate input,
 #premium-card {
   width: 100%;
   min-height: 46px;
@@ -152,6 +153,25 @@
 
 .sn-premium-panel #premium-rates {
   margin-top: 10px;
+}
+
+.sn-premium-estimate {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  min-width: 0;
+  margin: 12px 0;
+  padding: 0;
+  border: 0;
+}
+
+.sn-premium-estimate legend {
+  font-weight: 700;
+}
+
+.sn-premium-estimate label {
+  margin-top: 6px;
+  font-weight: 400;
 }
 
 .sn-premium-panel .sn-premium-terms {

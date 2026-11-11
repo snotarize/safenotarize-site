@@ -7,12 +7,12 @@
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#00274d">
   <title>Premium 24/7 | SafeNotarize</title>
-  <link rel="stylesheet" href="/assets/premium/premium.css?v=2">
+  <link rel="stylesheet" href="/assets/premium/premium.css?v=3">
   <script src="https://safenotarize-phase-c-premium-production.karlberryj.workers.dev/phase-c/config.js" defer></script>
   <script src="/assets/document-handoff-config.js?v=20261107-4" defer></script>
   <script src="/assets/document-handoff.js?v=20261107-4" defer></script>
   <script src="/assets/premium/services.js?v=4" defer></script>
-  <script src="/assets/premium/checkout.js?v=4" defer></script>
+  <script src="/assets/premium/checkout.js?v=5" defer></script>
 </head>
 <body class="sn-premium-page">
   <main class="sn-premium-panel">
@@ -25,6 +25,21 @@
       <label for="premium-email" id="premium-email-label">Primary signer’s email</label>
       <input id="premium-email" type="email" autocomplete="email" maxlength="254" required>
       <p id="premium-rates">Each additional signer or stamp is $10. Each witness is $15.</p>
+      <fieldset id="premium-estimate" class="sn-premium-estimate" hidden disabled>
+        <legend id="premium-estimate-label">Estimated extras</legend>
+        <div>
+          <label for="premium-extra-signers" id="premium-extra-signers-label">Additional signers</label>
+          <input id="premium-extra-signers" type="number" min="0" step="1" value="0" required>
+        </div>
+        <div>
+          <label for="premium-extra-stamps" id="premium-extra-stamps-label">Additional stamps</label>
+          <input id="premium-extra-stamps" type="number" min="0" step="1" value="0" required>
+        </div>
+        <div>
+          <label for="premium-witnesses" id="premium-witnesses-label">Witnesses</label>
+          <input id="premium-witnesses" type="number" min="0" step="1" value="0" required>
+        </div>
+      </fieldset>
       <label class="sn-premium-terms">
         <input type="checkbox" id="premium-terms" required>
         <span id="premium-terms-label">I authorize a $30 hold and agree to the final price based on the services completed.</span>
