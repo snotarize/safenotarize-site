@@ -36,7 +36,7 @@ for(const path of [...booking,...creators]){
  test(path+' retains valid inline JavaScript and shared feature flag',()=>{
   const html=read(path);
   assert.ok(/<script src="\/assets\/document-handoff-config\.js\?v=20261107-4" defer><\/script>/.test(html),'Current configuration revision expected');
-  assert.ok(/<script src="\/assets\/document-handoff\.js\?v=20261107-4" defer><\/script>/.test(html),'Current handoff revision expected');
+  assert.ok(/<script src="\/assets\/document-handoff\.js\?v=20261111-1" defer><\/script>/.test(html),'Current handoff revision expected');
   const scripts=inlineScripts(html);
   assert.ok(scripts.length>0,'Inline JS expected');
   for(let i=0;i<scripts.length;i++)new Script(scripts[i],{filename:path+':script-'+i});

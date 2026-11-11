@@ -156,12 +156,32 @@
     const button=document.getElementById('download'),box=document.getElementById('next-box');
     if(!button||!box)return;
     const ht=isHt();
+    const premium=new URLSearchParams(location.search).get('service')==='premium';
     button.textContent=enabled?(ht?'Kontinye pou notarye':'Continue to notarization'):(ht?'Telechaje PDF':'Download PDF');
     const heading=box.querySelector('strong'),description=box.querySelector('p');
     if(heading)heading.textContent=enabled?(ht?'PDF ou a pare':'Your PDF is ready'):(ht?'PDF ou a telechaje':'Your PDF is downloaded');
     if(description)description.textContent=enabled?(ht?'Ajoute enfòmasyon siyatè ak sesyon an. PDF ou a ap ale otomatikman ak randevou a.':'Add signer and session details. Your saved PDF will be included automatically.'):(ht?'Kontinye pou ajoute enfòmasyon randevou a, epi voye PDF ou a.':'Continue to add your booking details, then upload your PDF.');
     const next=document.getElementById('continue');
-    if(next){next.textContent=ht?'Kontinye pou notarye':'Continue to notarization';const url=new URL(next.href);if(!enabled)url.searchParams.set('document_source','own');if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;}
+    if(next){
+      next.textContent=ht?'Kontinye pou notarye':'Continue to notarization';
+      const url=new URL(next.href);
+      if(!enabled)url.searchParams.set('document_source','own');
+      if(premium&&url.origin===location.origin){
+        url.pathname='/premium.html';
+        url.searchParams.delete('document_ready');
+        url.searchParams.set('service','premium');
+        if(ht)url.searchParams.set('lang','ht');
+        if(!enabled)url.searchParams.delete('document_type');
+      }
+      if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;
+    }
+    if(premium){
+      for(const link of document.querySelectorAll('a[href="/documents/library.html"], a[href="/documents/library-ht.html"]')){
+        const library=new URL(link.href);
+        library.searchParams.set('service','premium');
+        link.href=library.pathname+library.search;
+      }
+    }
     const privacy=document.getElementById('privacy')||document.querySelector('.editor .legal');
     if(privacy)privacy.textContent=enabled?(ht?'Bouyon ou rete nan navigatè sa a. Lè ou kontinye pou rezève, PDF ou a ale jwenn SafeNotarize an sekirite.':'Your draft stays in this browser. When you continue to notarization, your PDF is sent securely to SafeNotarize.'):(ht?'Bouyon ou rete nan navigatè sa a jiskaske ou chwazi voye dokiman an.':'Your draft stays in this browser until you choose to upload it.');
     if(!document.getElementById('sn-download-copy')){

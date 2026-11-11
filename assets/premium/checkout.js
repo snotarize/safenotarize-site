@@ -80,7 +80,10 @@
     'terms-label': 'terms', 'card-label': 'card', submit: 'submit', join: 'join', library: 'library'
   })) el(id).textContent = copy[key];
   el('back').href = service?.backPath || (ht ? '/start-ht.html' : '/start.html');
-  el('library').href = ht ? '/documents/library-ht.html' : '/documents/library.html';
+  if (service?.backToDocumentOptions) {
+    el('back').textContent = ht ? 'Retounen nan opsyon dokiman yo' : 'Back to document options';
+  }
+  el('library').href = service?.libraryPath || (ht ? '/documents/library-ht.html' : '/documents/library.html');
 
   if (!config) {
     status.textContent = copy.unavailable;

@@ -3,8 +3,9 @@
 
   const config = window.SN_PREMIUM;
   const params = new URLSearchParams(location.search);
+  const selectedService = params.get('service');
   const ht = document.documentElement.lang === 'ht' ||
-    (location.pathname === '/premium.html' && params.get('lang') === 'ht');
+    (/^\/premium(?:\.html)?$/.test(location.pathname) && params.get('lang') === 'ht');
   const startPath = ht ? '/start-ht.html' : '/start.html';
   const bookPath = ht ? '/book-ht.html' : '/book.html';
   const generated = ['library', 'generated', 'template'].includes(
@@ -49,9 +50,17 @@
     return { source: generated ? 'library' : 'own', pending };
   }
 
-  const checkoutPath = new URL('/premium.html', location.origin);
-  if (ht) checkoutPath.searchParams.set('lang', 'ht');
+  const relative = url => url.pathname + url.search + url.hash;
+  const preparePath = new URL(startPath, location.origin);
+  preparePath.searchParams.set('service', 'premium');
+  const libraryPath = new URL(ht ? '/documents/library-ht.html' : '/documents/library.html', location.origin);
+  libraryPath.searchParams.set('service', 'premium');
+  const ownCheckout = new URL('/premium.html', location.origin);
+  if (ht) ownCheckout.searchParams.set('lang', 'ht');
+  const checkoutPath = new URL(ownCheckout);
+  const backToDocumentOptions = selectedService === 'premium' && !generated;
   const backPath = new URL(generated ? bookPath : startPath, location.origin);
+  if (backToDocumentOptions) backPath.searchParams.set('service', 'premium');
   if (generated) {
     checkoutPath.searchParams.set('document_source', 'library');
     checkoutPath.searchParams.set('document_type', documentType);
@@ -59,17 +68,40 @@
     backPath.searchParams.set('document_source', 'library');
     backPath.searchParams.set('document_type', documentType);
   }
-  const relative = url => url.pathname + url.search + url.hash;
   window.SafeNotarizePremium = {
-    settings, documentContext, backPath: relative(backPath)
+    settings, documentContext, backPath: relative(backPath), backToDocumentOptions, libraryPath: relative(libraryPath)
   };
+
+  if (selectedService === 'premium' && /^\/documents\/library(?:-ht)?(?:\.html)?$/.test(location.pathname)) {
+    for (const link of document.querySelectorAll('a[href*="create"]')) {
+      const template = new URL(link.href);
+      if (template.origin === location.origin &&
+          /^\/documents\/(?:create(?:-ht)?\.html|create\/[a-z0-9-]+\.html)$/.test(template.pathname)) {
+        template.searchParams.set('service', 'premium');
+        link.href = relative(template);
+      }
+    }
+  }
+
+  const haveDocument = document.getElementById('have-btn');
+  if (selectedService === 'premium' && haveDocument) {
+    ownCheckout.searchParams.set('service', 'premium');
+    ownCheckout.searchParams.set('document_source', 'own');
+    haveDocument.href = relative(ownCheckout);
+    haveDocument.textContent = ht ? 'Kontinye nan peman Premium' : 'Continue to Premium Checkout';
+    if (ht) document.getElementById('subtitle').textContent = 'Chwazi opsyon ki mache ak sitiyasyon ou.';
+    document.querySelector('#have-list li:last-child').textContent = ht
+      ? 'Voye dokiman an sou OneNotary apre ou otorize kat ou'
+      : 'Upload it in OneNotary after authorizing your card';
+    document.getElementById('need-btn').href = relative(libraryPath);
+    return;
+  }
 
   const chooser = document.querySelector('[data-sn-service-choice]');
   const premium = settings();
   if (!chooser || !premium || (premium.mode === 'live' && premium.acceptingOrders !== true)) return;
 
-  if (params.get('service') === 'regular') {
-    const haveDocument = document.getElementById('have-btn');
+  if (selectedService === 'regular') {
     if (haveDocument) {
       const book = new URL(haveDocument.href);
       book.searchParams.set('service', 'regular');
@@ -144,7 +176,8 @@
     plan({name: copy.regular, price: '$25', included: copy.regularIncluded, rates: copy.regularRates,
       action: copy.regularAction, href: relative(regular)}),
     plan({name: 'Premium 24/7', price: dollars(rates.base), included: copy.premiumIncluded, rates: copy.premiumRates,
-      details: copy.premiumDetails, action: copy.premiumAction, href: relative(checkoutPath), premium: true})
+      details: copy.premiumDetails, action: copy.premiumAction,
+      href: relative(documentContext().pending ? checkoutPath : preparePath), premium: true})
   );
   const intro = document.querySelector('[data-sn-service-intro]');
   intro.querySelector('h1').textContent = copy.heading;
