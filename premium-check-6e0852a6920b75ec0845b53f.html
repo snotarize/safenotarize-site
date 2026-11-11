@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://challenges.cloudflare.com https://safenotarize-phase-c-premium-production.karlberryj.workers.dev; connect-src https://challenges.cloudflare.com https://safenotarize-phase-c-premium-production.karlberryj.workers.dev; frame-src https://challenges.cloudflare.com; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>SafeNotarize checkout security check</title>
+<style>
+  body {font:1rem system-ui,sans-serif;color:#102e4a;background:#f3f7fb;margin:0;padding:2rem 1rem}
+  main {max-width:31rem;margin:0 auto;padding:1.5rem;background:white;border-radius:1rem}
+  h1 {font-size:1.45rem;margin-top:0}
+  #widget {margin:.75rem 0}
+</style>
+<main>
+  <h1>SafeNotarize checkout security check</h1>
+  <p id="result" role="status" aria-live="polite">Loading the security check…</p>
+  <div id="widget"></div>
+</main>
+<script>
+  (() => {
+    const status=document.getElementById('result');
+    const endpoint='https://safenotarize-phase-c-premium-production.karlberryj.workers.dev/phase-c';
+    const access=new URLSearchParams(location.hash.slice(1)).get('access');
+    if(!/^[0-9a-f]{64}$/.test(access||'')){
+      status.textContent='This check needs the full link.';
+      return;
+    }
+    async function check(input){
+      const result=await fetch(endpoint+'/launch-security-check',{
+        method:'POST',credentials:'omit',cache:'no-store',
+        headers:{'content-type':'text/plain;charset=UTF-8'},body:JSON.stringify({key:access,...input})
+      });
+      return result.json();
+    }
+    const done=()=>{
+      document.getElementById('widget').hidden=true;
+      status.textContent='Security check complete. You can close this page.';
+    };
+    async function start(){
+      let available;
+      try{available=await check({status:true});}catch{}
+      if(!available?.ready){
+        status.textContent='The security check is unavailable. Refresh in a moment.';
+        return;
+      }
+      if(available.verified){done();return;}
+      const config=window.SN_PREMIUM;
+      if(config?.mode!=='live'||config.acceptingOrders!==false||!config.turnstileSiteKey){
+        status.textContent='The security check is unavailable.';
+        return;
+      }
+      window.renderSafeNotarizeSecurityCheck=()=>{
+        status.textContent='Complete the Cloudflare check if it appears.';
+        window.turnstile.render('#widget',{
+          sitekey:config.turnstileSiteKey,action:'premium_order',size:'compact',
+          callback:async token=>{
+            status.textContent='Confirming the security check…';
+            try{
+              const result=await check({token});
+              if(result.verified){done();return;}
+            }catch{}
+            status.textContent='The security check did not complete. Refresh this page to retry.';
+          },
+          'error-callback':()=>{status.textContent='Cloudflare could not load the check. Refresh this page to retry.';}
+        });
+      };
+      const widget=document.createElement('script');
+      widget.src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=renderSafeNotarizeSecurityCheck&render=explicit';
+      widget.async=true;
+      widget.onerror=()=>{status.textContent='Cloudflare could not load the check. Refresh this page to retry.';};
+      document.head.append(widget);
+    }
+    const config=document.createElement('script');
+    config.src=endpoint+'/config.js';
+    config.onload=start;
+    config.onerror=()=>{status.textContent='Checkout could not load. Refresh in a moment.';};
+    document.head.append(config);
+  })();
+</script>
