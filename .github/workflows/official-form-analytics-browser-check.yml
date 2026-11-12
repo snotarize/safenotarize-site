@@ -1,0 +1,24 @@
+name: Verify official form analytics in Chrome
+on:
+  push:
+    branches: [qa/official-form-analytics-2026-11-12]
+    paths: [.github/workflows/official-form-analytics-browser-check.yml]
+permissions:
+  contents: read
+jobs:
+  browser-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Run the site tests
+        run: node --test site-tests/*.test.mjs
+      - name: Verify Google tag requests in Chrome with simulated providers
+        run: |
+          npm install --prefix "$RUNNER_TEMP/official-form-check" --no-audit --no-fund --no-save playwright@1.56.1
+          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium)" NODE_PATH="$RUNNER_TEMP/official-form-check/node_modules" node .github/official-form-analytics-check.cjs
