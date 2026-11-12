@@ -2,7 +2,7 @@ name: Verify official form analytics in Chrome
 on:
   push:
     branches: [qa/official-form-analytics-2026-11-12]
-    paths: [.github/workflows/official-form-analytics-browser-check.yml]
+    paths: [.github/workflows/official-form-analytics-browser-check.yml, .github/official-form-analytics-check.cjs]
 permissions:
   contents: read
 jobs:

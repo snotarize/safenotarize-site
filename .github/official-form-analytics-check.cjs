@@ -5,6 +5,7 @@ const { setTimeout: pause } = require('node:timers/promises');
 const { chromium } = require('playwright');
 
 const site = 'https://safenotarize.com';
+const analyticsFrame = 'https://safenotarize-official-form-analytics.karlberryj.workers.dev';
 const worker = 'https://safenotarize-phase-c-premium-production.karlberryj.workers.dev';
 const stream = 'G-EJKPHSTSNH';
 const ps = '/documents/official/ps-1583.html';
@@ -39,9 +40,17 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
         const body = await readFile(file).catch(() => null);
         return body ? route.fulfill({ body, contentType: mime[extname(file)] }) : route.abort();
       }
+      if (url.origin === analyticsFrame && url.pathname === '/booking-analytics.html') {
+        const body = '<!doctype html><meta name="referrer" content="no-referrer"><script defer src="' +
+          site + '/assets/official-forms/booking-analytics.js?v=1"></script>';
+        return route.fulfill({ body, contentType: 'text/html', headers: {
+          'referrer-policy': 'no-referrer',
+          'content-security-policy': "default-src 'none'; script-src https://safenotarize.com https://www.googletagmanager.com; connect-src https://*.google-analytics.com https://*.analytics.google.com https://analytics.google.com https://www.googletagmanager.com; img-src https://*.google-analytics.com https://www.googletagmanager.com; frame-ancestors https://safenotarize.com https://www.safenotarize.com; base-uri 'none'; form-action 'none'"
+        }});
+      }
       if (url.hostname === 'www.googletagmanager.com' && /^\/gtag\/(?:js|destination)$/.test(url.pathname) &&
           url.searchParams.get('id') === stream) {
-        const response = await fetch('https://www.googletagmanager.com' + url.pathname + '?id=' + stream);
+        const response = await fetch(url.href);
         if (!response.ok) throw Error('Google tag source was unavailable');
         scriptRequests.push(url.pathname);
         return js(await response.text());

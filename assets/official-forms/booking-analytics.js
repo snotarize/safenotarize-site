@@ -3,7 +3,8 @@
 
   const site = 'https://safenotarize.com';
   const origins = new Set([site, 'https://www.safenotarize.com']);
-  const framePath = '/assets/official-forms/booking-analytics.html';
+  const frameOrigin = 'https://safenotarize-official-form-analytics.karlberryj.workers.dev';
+  const framePath = '/booking-analytics.html';
   const stream = 'G-EJKPHSTSNH';
   const channel = 'safenotarize-official-form-analytics';
   const journeyKey = 'sn_official_form_journey:';
@@ -22,7 +23,7 @@
   const routes = new Set(['standard', 'premium']);
   const orderIdPattern = /^(?:rec[a-zA-Z0-9]{14,20}|[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})$/;
 
-  if (!origins.has(location.origin) || navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
+  if (navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
 
   function validJourney(journey, lifetime = journeyLifetime) {
     const age = Date.now() - journey?.startedAt;
@@ -63,6 +64,7 @@
         });
         window.gtag('config', stream, {
           ...fields, client_id: clientId, send_page_view: false,
+          cookie_expires: 0, cookie_update: false,
           allow_google_signals: false, allow_ad_personalization_signals: false
         });
         const tag = document.createElement('script');
@@ -82,11 +84,11 @@
     });
   }
 
-  if (location.pathname === framePath) {
+  if (location.origin === frameOrigin && location.pathname === framePath) {
     runFrame();
     return;
   }
-  if (window.parent !== window) return;
+  if (!origins.has(location.origin) || window.parent !== window) return;
 
   let frame;
   let sequence = 0;
@@ -96,12 +98,12 @@
     const element = document.createElement('iframe');
     element.hidden = true;
     element.title = 'SafeNotarize Analytics';
-    element.setAttribute('sandbox', 'allow-scripts');
+    element.setAttribute('sandbox', 'allow-scripts allow-same-origin');
     element.referrerPolicy = 'no-referrer';
-    element.src = framePath;
+    element.src = frameOrigin + framePath;
     const ready = new Promise(resolve => element.addEventListener('load', resolve, { once: true }));
     const attribution = { page: journey.page, engine: journey.engine, startedAt: journey.startedAt, clientId: journey.clientId };
-    void ready.then(() => element.contentWindow?.postMessage({ channel, name: null, journey: attribution }, '*'));
+    void ready.then(() => element.contentWindow?.postMessage({ channel, name: null, journey: attribution }, frameOrigin));
     document.body.append(element);
     frame = { element, ready, attribution, clientId: journey.clientId };
     return frame;
@@ -117,14 +119,14 @@
         resolve();
       }
       function acknowledge(message) {
-        if (message.origin === 'null' && message.source === element.contentWindow &&
+        if (message.origin === frameOrigin && message.source === element.contentWindow &&
             message.data?.channel === channel && message.data.sequence === eventSequence) finish();
       }
       const timer = setTimeout(finish, 650);
       window.addEventListener('message', acknowledge);
       void ready.then(() => element.contentWindow?.postMessage({
         channel, sequence: eventSequence, name, route, journey: attribution
-      }, '*'));
+      }, frameOrigin));
     });
   }
 
