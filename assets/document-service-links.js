@@ -10,7 +10,9 @@ export function documentBookingUrl({ language, documentType, saved = false, docu
   if (premium && ht) query.set('lang', 'ht');
   if (!premium) query.set('document_ready', '1');
   query.set('document_source', saved ? 'library' : premium ? 'own' : documentSource);
-  if (documentType && (saved || !premium)) query.set('document_type', documentType);
+  if (documentType && (saved || !premium || ['ds-3053', 'ps-1583'].includes(documentType))) {
+    query.set('document_type', documentType);
+  }
   return `${path}?${query}`;
 }
 

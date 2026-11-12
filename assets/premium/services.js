@@ -57,6 +57,10 @@
   libraryPath.searchParams.set('service', 'premium');
   const ownCheckout = new URL('/premium.html', location.origin);
   if (ht) ownCheckout.searchParams.set('lang', 'ht');
+  if (!generated && ['ds-3053', 'ps-1583'].includes(documentType)) {
+    preparePath.searchParams.set('document_type', documentType);
+    ownCheckout.searchParams.set('document_type', documentType);
+  }
   const checkoutPath = new URL(ownCheckout);
   const backToDocumentOptions = selectedService === 'premium' && !generated;
   const backPath = new URL(generated ? bookPath : startPath, location.origin);

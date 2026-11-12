@@ -47,6 +47,21 @@ function chooser(){
 }
 const premiumHref=selectors=>selectors['[data-sn-service-choice]'].children[1].children.at(-1).href;
 
+test('Premium keeps the official form context through the completed-document choice',()=>{
+  const choices=chooser();
+  renderServices('/book.html?document_ready=1&document_source=official&document_type=ps-1583',
+    {window:{SN_PREMIUM:config},selectors:choices});
+  const prepare=premiumHref(choices);
+  assert.equal(new URL(prepare).searchParams.get('document_type'),'ps-1583');
+  const elements={'have-btn':element(prepare),'need-btn':element(prepare)};
+  renderServices(prepare,{window:{SN_PREMIUM:config},elements,
+    selectors:{'#have-list li:last-child':element(prepare)}});
+  const checkout=new URL(elements['have-btn'].href);
+  assert.equal(checkout.pathname,'/premium.html');
+  assert.equal(checkout.searchParams.get('document_source'),'own');
+  assert.equal(checkout.searchParams.get('document_type'),'ps-1583');
+});
+
 for(const lang of ['en','ht']){
   const ht=lang==='ht';
   const suffix=ht?'-ht':'';

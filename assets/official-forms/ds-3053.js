@@ -1,4 +1,4 @@
-import { documentBookingUrl, selectedService } from '../document-service-links.js';
+import { documentBookingUrl, selectedService } from '../document-service-links.js?v=2';
 import { buildConsentPdf, passportDate } from './ds-3053-pdf.js';
 
 const language = new URLSearchParams(location.search).get('lang') === 'ht' ? 'ht' : 'en';
@@ -192,6 +192,7 @@ edit.addEventListener('click', () => {
 
 next.addEventListener('click', async () => {
   if (next.disabled || !pdf) return;
+  window.SafeNotarizeFormAnalytics?.continueBooking(documentType);
   next.disabled = edit.disabled = true;
   handoffStatus.textContent = text('Sending your PDF securely…', 'N ap voye PDF ou a an sekirite…');
   try {
