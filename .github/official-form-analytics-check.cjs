@@ -30,6 +30,10 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
   const fixtureTag = '<!doctype html><h1>Isolated tag test</h1><script async src="https://www.googletagmanager.com/gtag/js?id=' +
     stream + '"></script><script>window.dataLayer=[]; function gtag(){dataLayer.push(arguments);} gtag("js", new Date());' +
     'gtag("config","' + stream + '",{send_page_view:false}); gtag("event","fixture_tag_check",{send_to:"' + stream + '"});</script>';
+  const probe = '<!doctype html>' +
+    '<iframe sandbox="allow-scripts allow-same-origin" src="' + analyticsFrame + '/tag-check.html?variant=sandbox"></iframe>' +
+    '<iframe src="' + analyticsFrame + '/tag-check.html?variant=cross_origin"></iframe>' +
+    '<iframe src="/tag-check.html?variant=same_origin"></iframe>';
   try {
     const context = await browser.newContext({ serviceWorkers: 'block' });
     await context.route('**/*', async route => {
@@ -40,6 +44,14 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
       const js = body => route.fulfill({ contentType: 'application/javascript', body, headers: cors });
       const json = value => route.fulfill({ json: value, headers: cors });
       if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
+      if (url.pathname === '/tag-check.html' && (url.origin === site || url.origin === analyticsFrame)) {
+        const variant = url.searchParams.get('variant');
+        const name = ['sandbox', 'cross_origin', 'same_origin'].includes(variant) ? 'fixture_' + variant : 'fixture_tag_check';
+        return route.fulfill({ body: fixtureTag.replace('fixture_tag_check', name), contentType: 'text/html' });
+      }
+      if (url.origin === site && url.pathname === '/frame-probe.html') {
+        return route.fulfill({ body: probe, contentType: 'text/html' });
+      }
       if (url.pathname.includes('/collect')) {
         const body = request.postData() || '';
         if (url.searchParams.get('tid') === stream) {
@@ -53,7 +65,6 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
         return route.fulfill({ status: 204, headers: cors });
       }
       if (url.origin === site) {
-        if (url.pathname === '/tag-check.html') return route.fulfill({ body: fixtureTag, contentType: 'text/html' });
         const file = resolve(root, '.' + url.pathname);
         if (!file.startsWith(root + sep) || !mime[extname(file)]) return route.abort();
         const body = await readFile(file).catch(() => null);
@@ -137,7 +148,9 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
       const baseline = await context.newPage();
       await baseline.goto(site + '/tag-check.html');
       for (let i = 0; i < 45 && !events.some(event => event.en === 'fixture_tag_check'); i++) await pause(100);
-      throw Error(error.message + '; top-level tag sent: ' + events.some(event => event.en === 'fixture_tag_check') +
+      await baseline.goto(site + '/frame-probe.html');
+      await pause(3500);
+      throw Error(error.message + '; probe events sent: ' + events.map(event => event.en).join(', ') +
         '; all endpoint paths: ' + [...network].slice(-20).join(', '));
     }
     assert.equal(psLanding.dr, 'https://www.bing.com/');
