@@ -7,7 +7,8 @@ const origin = 'https://safenotarize.com';
 const channel = 'safenotarize-official-form-analytics';
 const psForm = '/documents/official/ps-1583.html';
 const dsForm = '/documents/ht/official/ds-3053.html';
-const framePath = '/assets/official-forms/booking-analytics.html';
+const frameOrigin = 'https://safenotarize-official-form-analytics.karlberryj.workers.dev';
+const framePath = frameOrigin + '/booking-analytics.html';
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const source = read('assets/official-forms/booking-analytics.js');
 const standardOrder = 'rec12345678901234';
@@ -42,10 +43,11 @@ function open(path, { referrer = '', session = storage(), bookings = storage(), 
       remove() {},
       setAttribute(name, value) { this[name] = value; },
       contentWindow: {
-        postMessage(payload) {
+        postMessage(payload, destination) {
+          assert.equal(destination, frameOrigin);
           if (!payload.name) return;
           outgoing.push(payload);
-          pageListeners.get('message')?.({ origin: 'null', source: this, data: { channel, sequence: payload.sequence } });
+          pageListeners.get('message')?.({ origin: frameOrigin, source: this, data: { channel, sequence: payload.sequence } });
         }
       }
     })
