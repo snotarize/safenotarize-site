@@ -151,9 +151,72 @@ const commencement = {
   ]
 };
 
+const termination = {
+  title: ['Notice of Termination', 'Avi pou Mete Fen'],
+  intro: [
+    'Prepare the Orange County, Florida form to end a recorded Notice of Commencement.',
+    'Prepare fòm Konte Orange, Florida, pou mete fen nan yon Avi Kòmansman Travay ki te anrejistre.'
+  ],
+  filename: 'Orange-County-Notice-of-Termination.pdf',
+  template: 'orange-county-notice-of-termination-2020.pdf',
+  source: 'https://www.occompt.com/DocumentCenter/View/154/Notice-of-Termination-of-Notice-of-Commencement-PDF',
+  recording: 'https://www.occompt.com/415/E-File-NOC',
+  groups: [
+    {
+      title: ['Recorded Notice of Commencement', 'Avi Kòmansman Travay ki te anrejistre'],
+      fields: [
+        field('recordedDate', ['Recording date', 'Dat anrejistreman'], [235, 238, 118], {
+          type: 'date', yearSlot: [363, 238, 30], required: true,
+          hint: ['Use the date stamped on the recorded notice.', 'Sèvi ak dat ki make sou avi ki te anrejistre a.']
+        }),
+        field('instrumentNumber', ['Official records instrument number', 'Nimewo dokiman nan rejis ofisyèl la'], [365, 251, 128], { required: true })
+      ]
+    },
+    {
+      title: ['Property and termination date', 'Pwopriyete ak dat avi a ap fini'],
+      fields: [
+        field('propertyDescription', ['Legal description for a partial termination', 'Deskripsyon legal si avi a fini pou yon pati sèlman'], [92, 357, 438], {
+          wide: true, multiline: true,
+          hint: [
+            'Leave this blank if the termination applies to all property covered by the recorded notice.',
+            'Kite espas sa a vid si avi a ap fini pou tout pwopriyete ki nan avi anrejistre a.'
+          ]
+        }),
+        field('propertyStreet', ['Property street address, if available', 'Adrès ri pwopriyete a, si li disponib'], [230, 371, 300], { wide: true }),
+        field('effectiveDate', ['Termination date, if specified', 'Dat avi a ap fini, si ou mete youn'], [342, 430, 86], {
+          type: 'date', yearSlot: [440, 430, 26], wide: true,
+          hint: [
+            'Leave blank to use the county form’s 30-day default. A date you enter must be at least 30 days after the termination is recorded.',
+            'Kite li vid pou sèvi ak 30 jou ki sou fòm konte a. Si ou mete yon dat, li dwe omwen 30 jou apre anrejistreman avi fen an.'
+          ]
+        })
+      ]
+    },
+    {
+      title: ['Property owner', 'Pwopriyetè'],
+      fields: [
+        field('ownerName', ['Owner’s full name', 'Non konplè pwopriyetè a'], [74, 561, 283], { required: true }),
+        field('ownerMailingAddress', ['Owner’s full mailing address', 'Adrès postal konplè pwopriyetè a'], [74, 587, 283], { required: true })
+      ]
+    },
+    {
+      title: ['Preparer and return address', 'Moun ki prepare fòm nan ak adrès pou voye l tounen'],
+      fields: [
+        field('preparedBy', ['Prepared by', 'Non moun ki prepare fòm nan'], [74, 74, 250], { required: true, wide: true }),
+        field('preparedStreet', ['Preparer’s street address', 'Adrès ri moun ki prepare fòm nan'], [74, 86, 250]),
+        field('preparedLocality', ['Preparer’s city, state and ZIP code', 'Vil, eta ak kòd postal moun ki prepare fòm nan'], [74, 98, 250]),
+        field('returnTo', ['Return to', 'Non moun pou voye fòm nan tounen bay'], [74, 132, 250], { required: true, wide: true }),
+        field('returnStreet', ['Return street address', 'Adrès ri pou voye l tounen'], [74, 144, 250], { required: true }),
+        field('returnLocality', ['Return city, state and ZIP code', 'Vil, eta ak kòd postal pou voye l tounen'], [74, 156, 250], { required: true })
+      ]
+    }
+  ]
+};
+
 const forms = new Map([
   ['declaration-of-domicile', domicile],
-  ['notice-of-commencement', commencement]
+  ['notice-of-commencement', commencement],
+  ['notice-of-termination', termination]
 ]);
 
 export function countyForm(type) {
@@ -179,18 +242,30 @@ export async function buildCountyPdf(source, definition, values, pdfLib) {
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const black = rgb(0, 0, 0);
 
+  function drawField(id, [x, top, width], value) {
+    let size;
+    try {
+      size = Math.min(9.5, width / font.widthOfTextAtSize(value, 1));
+    } catch {
+      throw Object.assign(new Error('Unsupported PDF character'), { field: id, reason: 'characters' });
+    }
+    if (size < 8) throw Object.assign(new Error('County PDF field is too long'), { field: id, reason: 'length' });
+    page.drawText(value, { x, y: page.getHeight() - top, size, font, color: black });
+  }
+
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
   for (const group of [...definition.groups, ...(definition.optionalGroups ?? [])]) {
-    for (const { id, slot: [x, top, width] } of group.fields) {
+    for (const { id, slot, yearSlot } of group.fields) {
       const value = values[id];
       if (!value) continue;
-      let size;
-      try {
-        size = Math.min(9.5, width / font.widthOfTextAtSize(value, 1));
-      } catch {
-        throw Object.assign(new Error('Unsupported PDF character'), { field: id, reason: 'characters' });
+      if (yearSlot) {
+        const [month, day, year] = value.split('/');
+        drawField(id, slot, `${monthNames[Number(month) - 1]} ${Number(day)}`);
+        drawField(id, yearSlot, year);
+      } else {
+        drawField(id, slot, value);
       }
-      if (size < 8) throw Object.assign(new Error('County PDF field is too long'), { field: id, reason: 'length' });
-      page.drawText(value, { x, y: page.getHeight() - top, size, font, color: black });
     }
   }
 

@@ -8,8 +8,13 @@ import { buildCountyPdf, countyDate, countyForm } from '../assets/official-forms
 const { PDFArray, PDFDocument, PDFName, PDFRawStream, StandardFonts, decodePDFRawStream } = pdfLib;
 const revisions = [
   ['declaration-of-domicile', '115122d28442d2df559825469e4a8fe20cf187466748897dd8a4b86d9bd7e4ad', 6, 516],
-  ['notice-of-commencement', '4f260bcd99ab466c469d1b9c858854c943e1ce5e0f155ab924c7069d27a24051', 33, 594]
+  ['notice-of-commencement', '4f260bcd99ab466c469d1b9c858854c943e1ce5e0f155ab924c7069d27a24051', 33, 594],
+  ['notice-of-termination', '0eb4d9c32e761d4957a21bf1d35892c7fd7e5c7e9b983f3ccafc8b780fbe2bf5', 13, 587]
 ];
+const dateFixtures = {
+  recordedDate: { value: '09/17/2025', printed: ['September 17', '2025'] },
+  effectiveDate: { value: '04/08/2027', printed: ['April 8', '2027'] }
+};
 
 function pageContents(page) {
   const contents = page.node.Contents();
@@ -27,7 +32,8 @@ for (const [type, hash, fieldCount, lastBaseline] of revisions) {
     const source = await readTemplate(definition);
     assert.equal(createHash('sha256').update(source).digest('hex'), hash);
     const groups = [...definition.groups, ...(definition.optionalGroups ?? [])];
-    const values = Object.fromEntries(groups.flatMap(group => group.fields.map(({ id }) => [id, `TÉST ${id}`])));
+    const values = Object.fromEntries(groups.flatMap(group => group.fields.map(({ id }) =>
+      [id, dateFixtures[id]?.value ?? `TÉST ${id}`])));
     assert.equal(Object.keys(values).length, fieldCount);
 
     const bytes = await buildCountyPdf(source, definition, values, pdfLib);
@@ -45,9 +51,10 @@ for (const [type, hash, fieldCount, lastBaseline] of revisions) {
 
     const overlay = Buffer.from(decodePDFRawStream(filledStreams.at(-1)).decode()).toString('ascii');
     const font = await filled.embedFont(StandardFonts.Helvetica);
-    for (const value of Object.values(values)) assert.ok(overlay.includes(font.encodeText(value).toString()));
+    const printed = Object.entries(values).flatMap(([id, value]) => dateFixtures[id]?.printed ?? [value]);
+    for (const value of printed) assert.ok(overlay.includes(font.encodeText(value).toString()));
     const baselines = [...overlay.matchAll(/1 0 0 1 \d+ (\d+) Tm/g)].map(match => Number(match[1]));
-    assert.equal(baselines.length, fieldCount);
+    assert.equal(baselines.length, printed.length);
     assert.equal(Math.min(...baselines), 792 - lastBaseline);
   });
 }
@@ -61,7 +68,7 @@ test('county PDF generation identifies overflowing and unsupported entries', asy
     { field: 'owner', reason: 'characters' });
 });
 
-test('county editor recognizes the two county forms and formats an optional date', () => {
+test('county editor rejects unknown forms and formats an optional date', () => {
   assert.equal(countyForm('constructor'), undefined);
   assert.equal(countyDate('2027-04-08'), '04/08/2027');
 });
