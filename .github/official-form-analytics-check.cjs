@@ -27,6 +27,9 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
   const scriptRequests = [];
   const errors = [];
   const network = new Set();
+  const fixtureTag = '<!doctype html><h1>Isolated tag test</h1><script async src="https://www.googletagmanager.com/gtag/js?id=' +
+    stream + '"></script><script>window.dataLayer=[]; function gtag(){dataLayer.push(arguments);} gtag("js", new Date());' +
+    'gtag("config","' + stream + '",{send_page_view:false}); gtag("event","fixture_tag_check",{send_to:"' + stream + '"});</script>';
   try {
     const context = await browser.newContext({ serviceWorkers: 'block' });
     await context.route('**/*', async route => {
@@ -37,7 +40,20 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
       const js = body => route.fulfill({ contentType: 'application/javascript', body, headers: cors });
       const json = value => route.fulfill({ json: value, headers: cors });
       if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
+      if (url.pathname.includes('/collect')) {
+        const body = request.postData() || '';
+        if (url.searchParams.get('tid') === stream) {
+          collected.push(request.url() + '\n' + body);
+          for (const line of body.split('\n')) {
+            const params = new URLSearchParams(url.search);
+            for (const [key, value] of new URLSearchParams(line)) params.set(key, value);
+            if (params.has('en')) events.push(Object.fromEntries(params));
+          }
+        }
+        return route.fulfill({ status: 204, headers: cors });
+      }
       if (url.origin === site) {
+        if (url.pathname === '/tag-check.html') return route.fulfill({ body: fixtureTag, contentType: 'text/html' });
         const file = resolve(root, '.' + url.pathname);
         if (!file.startsWith(root + sep) || !mime[extname(file)]) return route.abort();
         const body = await readFile(file).catch(() => null);
@@ -57,18 +73,6 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
         if (!response.ok) throw Error('Google tag source was unavailable');
         scriptRequests.push(url.pathname);
         return js(await response.text());
-      }
-      if (url.pathname.includes('/collect')) {
-        const body = request.postData() || '';
-        if (url.searchParams.get('tid') === stream) {
-          collected.push(request.url() + '\n' + body);
-          for (const line of body.split('\n')) {
-            const params = new URLSearchParams(url.search);
-            for (const [key, value] of new URLSearchParams(line)) params.set(key, value);
-            if (params.has('en')) events.push(Object.fromEntries(params));
-          }
-        }
-        return route.fulfill({ status: 204, headers: cors });
       }
       if (url.hostname === 'hook.us2.make.com') {
         assert.equal(request.method(), 'GET');
@@ -113,6 +117,8 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
       const frame = page.frames().find(frame => frame.url().startsWith(analyticsFrame));
       const frameStatus = await frame?.evaluate(() => ({
         sameOrigin: window.origin === location.origin,
+        visible: document.visibilityState,
+        cookiesEnabled: navigator.cookieEnabled,
         layer: window.dataLayer?.map(args => [args[0], typeof args[1] === 'string' ? args[1] : typeof args[1]]),
         google: Object.keys(window.google_tag_manager || {}).filter(key => key.startsWith('G-') || key.startsWith('GT-'))
       })).catch(() => null);
@@ -124,7 +130,16 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
     }
 
     await page.goto(site + ps + '?email=' + marker + '%40example.test', { referer: 'https://www.bing.com/search?q=' + marker });
-    const psLanding = await expectEvent('page_view', ps);
+    let psLanding;
+    try {
+      psLanding = await expectEvent('page_view', ps);
+    } catch (error) {
+      const baseline = await context.newPage();
+      await baseline.goto(site + '/tag-check.html');
+      for (let i = 0; i < 45 && !events.some(event => event.en === 'fixture_tag_check'); i++) await pause(100);
+      throw Error(error.message + '; top-level tag sent: ' + events.some(event => event.en === 'fixture_tag_check') +
+        '; all endpoint paths: ' + [...network].slice(-20).join(', '));
+    }
     assert.equal(psLanding.dr, 'https://www.bing.com/');
     await page.locator('a[data-document-booking="ps-1583"]').first().click();
     await page.waitForURL(/\/book\.html/);
