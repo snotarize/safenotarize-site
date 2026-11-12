@@ -1,7 +1,8 @@
 (() => {
   'use strict';
 
-  const ht = new URLSearchParams(location.search).get('lang') === 'ht';
+  const params = new URLSearchParams(location.search);
+  const ht = params.get('lang') === 'ht';
   const copy = ht ? {
     back: 'Retounen nan opsyon sèvis yo',
     package: '$30 gen ladan 1 siyatè ak 1 so.',
@@ -247,6 +248,7 @@
       el('join').hidden = false;
       status.textContent = '';
       joined = true;
+      if (live) await window.SafeNotarizeFormAnalytics?.confirmPremiumBooking(params.get('document_type'), id);
       location.assign(link.href);
     } catch (error) {
       const code = error.message;
