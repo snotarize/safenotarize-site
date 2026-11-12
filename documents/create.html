@@ -66,7 +66,7 @@ const configs={
 'vehicle-release':{en:'Vehicle Release Authorization',ht:'Otorizasyon Pou Lage Machin',fields:[['owner','Vehicle owner full name','Non konplè pwopriyetè machin nan'],['recipient','Person authorized to receive vehicle','Moun ki gen otorizasyon pou pran machin nan'],['holder','Tow yard, repair shop, impound lot, dealer, or holder','Pakin remokaj, garaj, depo, konsesyonè, oswa moun ki kenbe machin nan'],['vehicle','Vehicle year, make, and model','Ane, mak, ak modèl machin nan'],['vin','VIN or license plate','VIN oswa nimewo plak'],['items','Authority to receive keys, property, or documents','Otorizasyon pou resevwa kle, byen, oswa dokiman','textarea']]},
 'vehicle-use':{en:'Vehicle Use Authorization',ht:'Otorizasyon Pou Itilize Machin',fields:[['owner','Vehicle owner full name','Non konplè pwopriyetè machin nan'],['driver','Authorized driver','Chofè ki gen otorizasyon an'],['vehicle','Vehicle year, make, model','Ane, mak, ak modèl machin nan'],['vin','VIN or plate number','VIN oswa nimewo plak'],['use','What the driver may do and any limits','Sa chofè a gen pèmisyon pou li fè ak limit li dwe respekte','textarea'],['use_period','Dates or duration of permission (optional)','Dat oswa dire pèmisyon an (si sa nesesè)'],['use_area','Places the driver may go (optional)','Kote chofè a gen pèmisyon pou li ale (si sa nesesè)']]},
 'identity-affidavit':{en:'Identity Affidavit',ht:'Afidavi Idantite',fields:[['name','Affiant full legal name','Non legal konplè moun nan'],['dob','Date of birth','Dat nesans'],['address','Current address','Adrès aktyèl'],['id','Identification details','Detay pyès idantite'],['statement','Identity facts to confirm','Enfòmasyon idantite pou konfime','textarea']]},
-'name-affidavit':{en:'Name Affidavit',ht:'Afidavi Non',fields:[['name','Current legal name','Non legal aktyèl'],['other','Other name or spelling','Lòt non oswa lòt fason yo ekri li'],['reason','Reason both names refer to the same person','Rezon ki fè de non yo se menm moun nan','textarea'],['dob','Date of birth','Dat nesans']]},
+'name-affidavit':{en:'Name Affidavit',ht:'Afidavi Non',fields:[['name','Current legal name','Non legal aktyèl'],['other','Other name exactly as it appears on the record','Lòt non an jan li ekri sou dokiman an'],['additional_names','Additional names or spellings (optional, one per line)','Lòt non oswa lòt òtograf (si sa nesesè, youn sou chak liy)','textarea'],['reason','Explanation or records showing these names (optional)','Esplikasyon oswa dokiman kote non yo parèt (si sa nesesè)','textarea'],['dob','Date of birth','Dat nesans']]},
 'medical-consent':{en:'Medical Consent Authorization',ht:'Otorizasyon Konsantman Medikal',fields:[['giver','Parent, guardian, or patient','Paran, responsab, oswa pasyan'],['patient','Patient full name','Non konplè pasyan an'],['provider','Authorized caregiver or provider','Moun oswa pwofesyonèl ki resevwa otorizasyon an'],['care','Medical care being authorized','Swen medikal yo otorize a','textarea'],['dates','Effective dates','Dat otorizasyon an']]},
 'travel-authorization':{en:'Travel Authorization Letter',ht:'Lèt Otorizasyon Vwayaj',fields:[['giver','Person giving authorization','Moun k ap bay otorizasyon an'],['traveler','Authorized traveler','Moun ki gen otorizasyon pou vwayaje'],['destination','Destination','Destinasyon'],['dates','Travel dates','Dat vwayaj la'],['purpose','Purpose and travel details','Rezon ak detay vwayaj la','textarea']]}
 };
@@ -82,7 +82,7 @@ const requiredFields={
 'vehicle-release':['owner','recipient','holder','vehicle','vin'],
 'vehicle-use':['owner','driver','vehicle','vin','use'],
 'identity-affidavit':['name','dob','address','id','statement'],
-'name-affidavit':['name','other','reason','dob'],
+'name-affidavit':['name','other','dob'],
 'medical-consent':['giver','patient','provider','care','dates'],
 'travel-authorization':['giver','traveler','destination','dates','purpose']
 };
@@ -125,7 +125,9 @@ if(type==='vehicle-use'){
   html+=`<p>${fmt(value('use'))}</p>`;
 }
 if(type==='identity-affidavit')html+=`<p>I, <strong>${esc(value('name'))}</strong>, born ${esc(value('dob'))} and residing at ${esc(value('address'))}, declare that the following identification information and facts are true:</p><p>Identification: ${esc(value('id'))}</p><p>${fmt(value('statement'))}</p>`;
-if(type==='name-affidavit')html+=`<p>I, <strong>${esc(value('name'))}</strong>, declare that I am also known as <strong>${esc(value('other'))}</strong>, and that both names identify the same person.</p><p>${fmt(value('reason'))}</p><p>Date of birth: ${esc(value('dob'))}</p>`;
+if(type==='name-affidavit'){
+  for(const paragraph of documentParagraphs())html+=`<p>${fmt(paragraph)}</p>`;
+}
 if(type==='medical-consent')html+=`<p>I, <strong>${esc(value('giver'))}</strong>, authorize <strong>${esc(value('provider'))}</strong> to obtain, arrange, or consent to the following care for <strong>${esc(value('patient'))}</strong>:</p><p>${fmt(value('care'))}</p><p>Effective dates: ${esc(value('dates'))}</p>`;
 if(type==='travel-authorization')html+=`<p>I, <strong>${esc(value('giver'))}</strong>, authorize <strong>${esc(value('traveler'))}</strong> to travel to ${esc(value('destination'))} during ${esc(value('dates'))}.</p><p>${fmt(value('purpose'))}</p>`;
 if(type==='custom')html+=`<div class="sig"><div class="signature-grid"><div class="signature-field"><div class="line"></div><div class="field-label">Signature</div></div><div class="signature-field"><div class="line"></div><div class="field-label">Date</div></div></div><div class="printed-name-field"><div class="line"></div><div class="field-label">Printed Name</div></div></div><div class="notary-placeholder"><h2>NOTARY SECTION</h2></div>`;
@@ -173,7 +175,12 @@ function documentParagraphs(){
     p.push(...splitUserParagraphs(value('use')));
   }
   if(type==='identity-affidavit')p.push(`I, ${value('name')}, born ${value('dob')} and residing at ${value('address')}, declare that the following identification information and facts are true:`,`Identification: ${value('id')}`,...splitUserParagraphs(value('statement')));
-  if(type==='name-affidavit')p.push(`I, ${value('name')}, declare that I am also known as ${value('other')}, and that both names identify the same person.`,...splitUserParagraphs(value('reason')),`Date of birth: ${value('dob')}`);
+  if(type==='name-affidavit'){
+    p.push(`I, ${value('name')}, declare that I am also known as ${value('other')}, and that both names identify the same person.`);
+    const additionalNames=value('additional_names').split(/\r?\n/).map(name=>name.trim()).filter(Boolean);
+    if(additionalNames.length)p.push('Additional names that identify me:',...additionalNames);
+    p.push(...optionalParagraphs('reason'),`Date of birth: ${value('dob')}`);
+  }
   if(type==='medical-consent')p.push(`I, ${value('giver')}, authorize ${value('provider')} to obtain, arrange, or consent to the following care for ${value('patient')}:`,...splitUserParagraphs(value('care')),`Effective dates: ${value('dates')}`);
   if(type==='travel-authorization')p.push(`I, ${value('giver')}, authorize ${value('traveler')} to travel to ${value('destination')} during ${value('dates')}.`,...splitUserParagraphs(value('purpose')));
   return p.filter(Boolean);
