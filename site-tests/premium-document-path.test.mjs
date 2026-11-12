@@ -62,6 +62,24 @@ test('Premium keeps the official form context through the completed-document cho
   assert.equal(checkout.searchParams.get('document_type'),'ps-1583');
 });
 
+test('Premium keeps the vehicle release context through choosing and returning from checkout',()=>{
+  const choices=chooser();
+  renderServices('/book-ht.html?document_ready=1&document_source=own&document_type=vehicle-release',
+    {lang:'ht',window:{SN_PREMIUM:config},selectors:choices});
+  const prepare=premiumHref(choices);
+  assert.equal(new URL(prepare).searchParams.get('document_type'),'vehicle-release');
+  const elements={'have-btn':element(prepare),'need-btn':element(prepare),subtitle:element(prepare)};
+  renderServices(prepare,{lang:'ht',window:{SN_PREMIUM:config},elements,
+    selectors:{'#have-list li:last-child':element(prepare)}});
+  const checkout=new URL(elements['have-btn'].href);
+  assert.equal(checkout.pathname,'/premium.html');
+  assert.equal(checkout.searchParams.get('document_source'),'own');
+  assert.equal(checkout.searchParams.get('document_type'),'vehicle-release');
+  const back=new URL(renderServices(checkout.href).backPath,origin);
+  assert.equal(back.pathname,'/start-ht.html');
+  assert.equal(back.searchParams.get('document_type'),'vehicle-release');
+});
+
 for(const lang of ['en','ht']){
   const ht=lang==='ht';
   const suffix=ht?'-ht':'';

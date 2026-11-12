@@ -9,6 +9,8 @@ const psForm = '/documents/official/ps-1583.html';
 const dsForm = '/documents/ht/official/ds-3053.html';
 const frameOrigin = origin;
 const framePath = '/assets/official-forms/booking-analytics.html';
+const vehicleGuide = '/documents/vehicle-release-authorization.html';
+const referralTags = '?utm_source=ketterle_sons&utm_medium=referral&utm_campaign=vehicle_release';
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const source = read('assets/official-forms/booking-analytics.js');
 const standardOrder = 'rec12345678901234';
@@ -158,4 +160,84 @@ test('the isolated Google tag only receives allowlisted event fields and clean p
   assert.equal(event[2].form_language, 'en');
   assert.equal(event[2].send_to, config[1]);
   assert.doesNotMatch(JSON.stringify(commands), /synthetic/);
+});
+
+test('each Ketterle placement follows customer PDFs and templates through verified bookings', async () => {
+  for (const [placement, suffix, documentSource, route] of [
+    ['counter_qr', '&utm_content=counter_qr', 'own', 'standard'],
+    ['checklist_pdf', '&utm_content=checklist_pdf', 'own', 'premium'],
+    ['website_link', '', 'library', 'premium'],
+    ['counter_qr', '&utm_content=counter_qr', 'library', 'standard']
+  ]) {
+    const url = vehicleGuide + referralTags + suffix + '&email=synthetic%40example.test';
+    const landing = open(url);
+    const reload = open(url, { ...landing, navigation: 'reload' });
+    await tick();
+    assert.deepEqual(landing.outgoing.map(event => event.name), ['page_view']);
+    assert.deepEqual(reload.outgoing, []);
+
+    const path = route === 'standard' ? '/book.html' : '/premium.html';
+    const booking = open(`${path}?document_source=${documentSource}&document_type=vehicle-release`, landing);
+    await tick();
+    assert.deepEqual(booking.outgoing.map(event => event.name), ['notarization_continue']);
+    const api = booking.window.SafeNotarizeFormAnalytics;
+    let confirmation = booking;
+    if (route === 'standard') {
+      api.rememberStandardBooking('vehicle-release', standardOrder);
+      confirmation = open('/thank-you.html', { bookings: landing.bookings });
+      const confirmed = confirmation.window.SafeNotarizeFormAnalytics;
+      await confirmed.confirmStandardBooking('rec09876543210987');
+      assert.deepEqual(confirmation.outgoing, []);
+      await confirmed.confirmStandardBooking(standardOrder);
+      await confirmed.confirmStandardBooking(standardOrder);
+    } else {
+      await api.confirmPremiumBooking('ps-1583', premiumOrder);
+      assert.equal(booking.outgoing.length, 1);
+      await api.confirmPremiumBooking('vehicle-release', premiumOrder);
+      await api.confirmPremiumBooking('vehicle-release', premiumOrder);
+    }
+    const confirmations = confirmation.outgoing.filter(event => event.name === 'notarization_booking_confirmed');
+    assert.equal(confirmations.length, 1);
+    const [event] = confirmations;
+    assert.equal(event.route, route);
+    assert.equal(event.journey.placement, placement);
+    assert.equal(event.journey.clientId, landing.outgoing[0].journey.clientId);
+
+    const parent = { postMessage() {} };
+    const frame = open(framePath + '?v=2', { parent });
+    frame.message({ source: parent, origin, data: event });
+    const tagEvent = frame.window.dataLayer.find(args => args[0] === 'event')[2];
+    assert.equal(tagEvent.campaign_source, 'ketterle_sons');
+    assert.equal(tagEvent.campaign_medium, 'referral');
+    assert.equal(tagEvent.campaign_name, 'vehicle_release');
+    assert.equal(tagEvent.campaign_content, placement);
+    assert.equal(tagEvent.page_location, origin + vehicleGuide + referralTags + '&utm_content=' + placement);
+    assert.equal(tagEvent.page_referrer, '');
+    assert.equal(tagEvent.document_type, 'vehicle-release');
+    assert.equal(tagEvent.booking_route, route);
+    assert.doesNotMatch(JSON.stringify(frame.window.dataLayer), /synthetic|rec12345678901234|a914a7d1/);
+  }
+});
+
+test('invalid and paid campaign tags clear an earlier Ketterle journey on a new landing', async () => {
+  for (const query of ['', referralTags + '&gclid=example', referralTags + '&utm_content=unknown',
+    referralTags.replace('ketterle_sons', 'other_source')]) {
+    const landing = open(vehicleGuide + referralTags + '&utm_content=counter_qr');
+    const next = open(vehicleGuide + query, landing);
+    const booking = open('/book.html?document_source=own&document_type=vehicle-release', next);
+    await tick();
+    assert.deepEqual(next.outgoing, []);
+    assert.deepEqual(booking.outgoing, []);
+  }
+});
+
+test('English and Kreyòl vehicle guides load tracking and carry the document type on every PDF link', () => {
+  for (const page of [vehicleGuide, '/documents/ht/vehicle-release-authorization.html']) {
+    const html = read(page.slice(1));
+    assert.match(html, /src="\/assets\/official-forms\/booking-analytics\.js\?v=2"/);
+    const ownPdfLinks = [...html.matchAll(/href="(\/book(?:-ht)?\.html\?[^\"]*document_source=own[^\"]*)"/g)];
+    assert.ok(ownPdfLinks.length > 0);
+    assert.ok(ownPdfLinks.every(([, href]) => new URL(href.replaceAll('&amp;', '&'), origin)
+      .searchParams.get('document_type') === 'vehicle-release'));
+  }
 });

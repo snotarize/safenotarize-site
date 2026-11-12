@@ -5,6 +5,7 @@
   const origins = new Set([site, 'https://www.safenotarize.com']);
   const frameOrigin = location.origin;
   const framePath = '/assets/official-forms/booking-analytics.html';
+  const frameVersion = '?v=2';
   const stream = 'G-EJKPHSTSNH';
   const channel = 'safenotarize-official-form-analytics';
   const journeyKey = 'sn_official_form_journey:';
@@ -12,11 +13,18 @@
   const hour = 60 * 60 * 1000;
   const journeyLifetime = 4 * hour;
   const bookingLifetime = 24 * hour;
-  const formPages = new Map([
+  const vehicleReleaseType = 'vehicle-release';
+  const referralSource = 'ketterle_sons';
+  const referralCampaign = 'vehicle_release';
+  const referralPlacements = new Set(['counter_qr', 'checklist_pdf', 'website_link']);
+  const paidClickIds = ['gclid', 'dclid', 'gbraid', 'wbraid', 'msclkid'];
+  const landingPages = new Map([
     ['/documents/official/ds-3053.html', { type: 'ds-3053', language: 'en', title: 'DS-3053' }],
     ['/documents/ht/official/ds-3053.html', { type: 'ds-3053', language: 'ht', title: 'DS-3053' }],
     ['/documents/official/ps-1583.html', { type: 'ps-1583', language: 'en', title: 'USPS Form 1583' }],
-    ['/documents/ht/official/ps-1583.html', { type: 'ps-1583', language: 'ht', title: 'USPS Form 1583' }]
+    ['/documents/ht/official/ps-1583.html', { type: 'ps-1583', language: 'ht', title: 'USPS Form 1583' }],
+    ['/documents/vehicle-release-authorization.html', { type: vehicleReleaseType, language: 'en', title: 'Vehicle Release Authorization' }],
+    ['/documents/ht/vehicle-release-authorization.html', { type: vehicleReleaseType, language: 'ht', title: 'Vehicle Release Authorization' }]
   ]);
   const engines = new Map([['google', 'https://www.google.com/'], ['bing', 'https://www.bing.com/']]);
   const events = new Set(['page_view', 'notarization_continue', 'notarization_booking_confirmed']);
@@ -27,10 +35,33 @@
 
   function validJourney(journey, lifetime = journeyLifetime) {
     const age = Date.now() - journey?.startedAt;
-    return formPages.has(journey?.page) && engines.has(journey.engine) &&
+    const landing = landingPages.get(journey?.page);
+    if (!landing) return false;
+    const validSource = landing.type === vehicleReleaseType
+      ? referralPlacements.has(journey.placement) && journey.engine === undefined
+      : engines.has(journey.engine) && journey.placement === undefined;
+    return validSource &&
       age >= 0 && age < lifetime && Number.isSafeInteger(journey.startedAt) &&
       typeof journey.clientId === 'string' && /^\d{1,10}\.\d{10}$/.test(journey.clientId) &&
       journey.clientId.split('.')[1] === String(Math.floor(journey.startedAt / 1000));
+  }
+
+  function acquisition(journey) {
+    const page = site + journey.page;
+    if (!journey.placement) {
+      return {
+        page_location: page, page_referrer: engines.get(journey.engine),
+        campaign_source: journey.engine, campaign_medium: 'organic'
+      };
+    }
+    const tags = new URLSearchParams({
+      utm_source: referralSource, utm_medium: 'referral',
+      utm_campaign: referralCampaign, utm_content: journey.placement
+    });
+    return {
+      page_location: `${page}?${tags}`, page_referrer: '', campaign_source: referralSource,
+      campaign_medium: 'referral', campaign_name: referralCampaign, campaign_content: journey.placement
+    };
   }
 
   function runFrame() {
@@ -45,13 +76,10 @@
           (name === 'notarization_booking_confirmed' ? !routes.has(route) : route !== undefined))) return;
       if (clientId && clientId !== journey.clientId) return;
 
-      const form = formPages.get(journey.page);
+      const landing = landingPages.get(journey.page);
       const fields = {
-        page_location: site + journey.page,
-        page_referrer: engines.get(journey.engine),
-        page_title: `${form.title} | SafeNotarize`,
-        campaign_source: journey.engine,
-        campaign_medium: 'organic',
+        ...acquisition(journey),
+        page_title: `${landing.title} | SafeNotarize`,
         session_id: Math.floor(journey.startedAt / 1000)
       };
       if (!clientId) {
@@ -76,7 +104,10 @@
 
       if (name === null) return;
       window.gtag('event', name, {
-        ...fields, send_to: stream, form_type: form.type, form_language: form.language,
+        ...fields, send_to: stream,
+        ...(landing.type === vehicleReleaseType
+          ? { document_type: landing.type, document_language: landing.language }
+          : { form_type: landing.type, form_language: landing.language }),
         ...(route ? { booking_route: route } : {}),
         event_timeout: 450,
         event_callback: () => message.source.postMessage({ channel, sequence }, message.origin)
@@ -99,9 +130,12 @@
     element.hidden = true;
     element.title = 'SafeNotarize Analytics';
     element.referrerPolicy = 'no-referrer';
-    element.src = frameOrigin + framePath;
+    element.src = frameOrigin + framePath + frameVersion;
     const ready = new Promise(resolve => element.addEventListener('load', resolve, { once: true }));
-    const attribution = { page: journey.page, engine: journey.engine, startedAt: journey.startedAt, clientId: journey.clientId };
+    const attribution = {
+      page: journey.page, startedAt: journey.startedAt, clientId: journey.clientId,
+      ...(journey.placement ? { placement: journey.placement } : { engine: journey.engine })
+    };
     void ready.then(() => element.contentWindow?.postMessage({ channel, name: null, journey: attribution }, frameOrigin));
     document.body.append(element);
     frame = { element, ready, attribution, clientId: journey.clientId };
@@ -131,7 +165,7 @@
 
   function readJourney(type) {
     const journey = JSON.parse(sessionStorage.getItem(journeyKey + type) || 'null');
-    return validJourney(journey) && formPages.get(journey.page).type === type ? journey : null;
+    return validJourney(journey) && landingPages.get(journey.page).type === type ? journey : null;
   }
 
   function saveJourney(type, journey) {
@@ -198,12 +232,28 @@
     confirmPremiumBooking: (type, orderId) => confirmBooking('premium', orderId, type)
   };
 
-  function startJourney(form, params) {
-    let referrer;
-    try { referrer = new URL(document.referrer); } catch { /* Direct visit. */ }
+  function referringPage() {
+    try { return new URL(document.referrer); } catch { return null; }
+  }
+
+  function beginJourney(type, source) {
+    const existing = readJourney(type);
+    const navigation = performance.getEntriesByType('navigation')[0]?.type;
+    if (existing?.page === location.pathname && existing.engine === source.engine &&
+        existing.placement === source.placement && ['reload', 'back_forward'].includes(navigation)) return;
+
+    const startedAt = Date.now();
+    const random = crypto.getRandomValues(new Uint32Array(1))[0];
+    const journey = { page: location.pathname, ...source, startedAt, clientId: `${random}.${Math.floor(startedAt / 1000)}` };
+    saveJourney(type, journey);
+    void send('page_view', journey);
+  }
+
+  function startOrganicJourney(form, params) {
+    const referrer = referringPage();
     const medium = (params.get('utm_medium') || '').trim().toLowerCase();
     const paidOrOtherCampaign = (medium && medium !== 'organic') ||
-      ['gclid', 'dclid', 'gbraid', 'wbraid', 'msclkid'].some(key => params.has(key));
+      paidClickIds.some(key => params.has(key));
     let engine;
     if (!paidOrOtherCampaign) {
       const host = referrer?.hostname || '';
@@ -217,22 +267,29 @@
       return;
     }
 
-    const existing = readJourney(form.type);
-    const navigation = performance.getEntriesByType('navigation')[0]?.type;
-    if (existing?.page === location.pathname && existing.engine === engine &&
-        ['reload', 'back_forward'].includes(navigation)) return;
+    beginJourney(form.type, { engine });
+  }
 
-    const startedAt = Date.now();
-    const random = crypto.getRandomValues(new Uint32Array(1))[0];
-    const journey = { page: location.pathname, engine, startedAt, clientId: `${random}.${Math.floor(startedAt / 1000)}` };
-    saveJourney(form.type, journey);
-    void send('page_view', journey);
+  function startVehicleReferral(params) {
+    const placement = params.get('utm_content') ?? 'website_link';
+    const paid = paidClickIds.some(key => params.has(key));
+    if (!paid && params.get('utm_source') === referralSource && params.get('utm_medium') === 'referral' &&
+        params.get('utm_campaign') === referralCampaign && referralPlacements.has(placement)) {
+      beginJourney(vehicleReleaseType, { placement });
+    } else if (paid || ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].some(key => params.has(key)) ||
+        !origins.has(referringPage()?.origin)) {
+      sessionStorage.removeItem(journeyKey + vehicleReleaseType);
+    }
   }
 
   optional(() => {
     const params = new URLSearchParams(location.search);
-    const form = formPages.get(location.pathname);
-    if (form) startJourney(form, params);
+    const form = landingPages.get(location.pathname);
+    if (form?.type === vehicleReleaseType) {
+      startVehicleReferral(params);
+      return;
+    }
+    if (form) startOrganicJourney(form, params);
     if (form || location.pathname === '/documents/create/ds-3053.html') {
       const type = form?.type ?? 'ds-3053';
       document.addEventListener('click', event => {
@@ -247,6 +304,11 @@
     if (!/^\/(?:book(?:-ht)?|premium)\.html$/.test(location.pathname)) return;
     const type = params.get('document_type');
     const journey = readJourney(type);
+    // Both the finished template and the tow yard's own form reach a booking page with this type.
+    if (type === vehicleReleaseType && journey && !journey.continued) {
+      journey.continued = true;
+      saveJourney(type, journey);
+    }
     if (journey?.continued) {
       reportContinue(type, journey);
       if (location.pathname === '/premium.html') frameFor(journey);
