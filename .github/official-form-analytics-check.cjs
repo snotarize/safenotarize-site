@@ -26,11 +26,14 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
   const collected = [];
   const scriptRequests = [];
   const errors = [];
+  const network = new Set();
   try {
     const context = await browser.newContext({ serviceWorkers: 'block' });
     await context.route('**/*', async route => {
       const request = route.request();
       const url = new URL(request.url());
+      if (url.origin !== site) network.add(url.host + url.pathname + (url.pathname.includes('/collect')
+        ? ':' + (url.searchParams.get('tid') || 'missing-tid') : ''));
       const js = body => route.fulfill({ contentType: 'application/javascript', body, headers: cors });
       const json = value => route.fulfill({ json: value, headers: cors });
       if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
@@ -95,6 +98,11 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
 
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
+    page.on('console', message => {
+      if (/Content Security Policy|google-analytics|googletagmanager/i.test(message.text())) {
+        errors.push(message.text().slice(0, 280));
+      }
+    });
     async function expectEvent(name, path, route) {
       for (let i = 0; i < 60; i++) {
         const result = events.find(event => event.en === name && event.dl === site + path &&
@@ -102,10 +110,17 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
         if (result) return result;
         await pause(100);
       }
+      const frame = page.frames().find(frame => frame.url().startsWith(analyticsFrame));
+      const frameStatus = await frame?.evaluate(() => ({
+        sameOrigin: window.origin === location.origin,
+        layer: window.dataLayer?.map(args => [args[0], typeof args[1] === 'string' ? args[1] : typeof args[1]]),
+        google: Object.keys(window.google_tag_manager || {}).filter(key => key.startsWith('G-') || key.startsWith('GT-'))
+      })).catch(() => null);
       throw Error('Missing ' + name + ' for ' + path + ' ' + (route || '') +
         '; Google scripts: ' + scriptRequests.join(', ') +
         '; received: ' + events.map(event => event.en).join(', ') +
-        '; browser errors: ' + errors.join(', '));
+        '; frame: ' + JSON.stringify(frameStatus) + '; network: ' + [...network].slice(-32).join(', ') +
+        '; browser errors: ' + errors.slice(-10).join(', '));
     }
 
     await page.goto(site + ps + '?email=' + marker + '%40example.test', { referer: 'https://www.bing.com/search?q=' + marker });
