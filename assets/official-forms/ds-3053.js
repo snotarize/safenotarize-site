@@ -192,7 +192,7 @@ edit.addEventListener('click', () => {
 
 next.addEventListener('click', async () => {
   if (next.disabled || !pdf) return;
-  window.SafeNotarizeFormAnalytics?.continueBooking(documentType, true);
+  window.SafeNotarizeFormAnalytics?.continueBooking(documentType);
   next.disabled = edit.disabled = true;
   handoffStatus.textContent = text('Sending your PDF securely…', 'N ap voye PDF ou a an sekirite…');
   try {
