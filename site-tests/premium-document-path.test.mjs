@@ -78,63 +78,66 @@ for(const lang of ['en','ht']){
     assert.equal(api.libraryPath,'/documents/library'+suffix+'.html?service=premium');
   });
 
-  test('all '+lang+' library creators carry Premium into checkout after the shared PDF handoff',async()=>{
+  test('all '+lang+' library creators carry the selected service through the shared PDF handoff',async()=>{
     const path='/documents/library'+suffix+'.html';
     const html=read(path.slice(1));
-    assert.match(html,/<script src="\/assets\/premium\/services\.js\?v=5" defer><\/script>/);
+    assert.match(html,/<script src="\/assets\/premium\/services\.js\?v=7" defer><\/script>/);
     const targets=[...html.matchAll(/href=["']([^"']*(?:create(?:-ht)?\.html\?type=|\/create\/)[^"']*)["']/g)]
       .map(match=>match[1].replaceAll('&amp;','&'))
       .filter(href=>!href.includes('/create/ds-3053.html'));
     assert.equal(new Set(targets).size,24);
-    const library=new URL(path+'?service=premium',origin);
-    const links=targets.map(href=>element(library,href));
-    const outside=element(library,'https://example.invalid/documents/create.html?type=custom');
-    renderServices(library.href,{lang,groups:{'a[href*="create"]':[...links,outside]}});
-    assert.equal(outside.href,'https://example.invalid/documents/create.html?type=custom');
+    for(const service of ['regular','premium']){
+      const library=new URL(path+'?service='+service,origin);
+      const links=[...new Set(targets)].map(href=>element(library,href));
+      const outside=element(library,'https://example.invalid/documents/create.html?type=custom');
+      renderServices(library.href,{lang,groups:{'a[href*="create"]':[...links,outside]}});
+      assert.equal(outside.href,'https://example.invalid/documents/create.html?type=custom');
 
-    for(const link of links){
-      const location=new URL(link.href);
-      assert.equal(location.searchParams.get('service'),'premium');
-      const type=location.searchParams.get('type')||location.pathname.split('/').at(-1).replace('.html','');
-      const next=element(location,'/book'+suffix+'.html?document_ready=1&document_source=library&document_type='+encodeURIComponent(type));
-      const nodes={download:element(location),'next-box':{querySelector:()=>null},continue:next,
-        'sn-download-copy':element(location),'sn-handoff-turnstile':element(location)};
-      const back=element(location,path);
-      const session=new Map();
-      const sessionStorage={getItem:key=>session.get(key)??null,setItem:(key,value)=>session.set(key,value),removeItem:key=>session.delete(key)};
-      let pass;
-      const window={
-        SN_HANDOFF:{enabled:true,endpoint:'https://handoff.example.test',allowedSiteOrigins:[origin],turnstileSiteKey:'fixture'},
-        addEventListener(){},
-        turnstile:{render(_holder,options){pass=options.callback;return 'widget';},execute(){pass('test-token');},remove(){}}
-      };
-      const id='f235dd9d-0881-44c3-8be3-875883d66341';
-      const token='a'.repeat(64);
-      const document={
-        readyState:'complete',documentElement:{lang},getElementById:key=>nodes[key]??null,
-        querySelector:()=>null,querySelectorAll:()=>[back]
-      };
-      runInNewContext(handoff,{document,window,location,sessionStorage,URL,URLSearchParams,Blob,FormData,setTimeout,clearTimeout,
-        fetch:async(url,options)=>{
-          assert.equal(url,'https://handoff.example.test/upload');
-          assert.equal(options.body.get('document_type'),type);
-          return Response.json({id,token});
-        }
-      });
-      await window.SafeNotarizeDocumentHandoff.stage(new Blob(['%PDF fixture']),type+'.pdf',type);
-      const checkout=new URL(next.href);
-      assert.equal(checkout.pathname,'/premium.html');
-      assert.equal(checkout.searchParams.get('service'),'premium');
-      assert.equal(checkout.searchParams.get('document_source'),'library');
-      assert.equal(checkout.searchParams.get('document_type'),type);
-      assert.equal(checkout.searchParams.get('lang'),ht?'ht':null);
-      assert.equal(checkout.href.includes(token),false);
-      assert.equal(back.href,library.href);
-      const api=renderServices(checkout.href,{window:{SN_PREMIUM:config,SafeNotarizeDocumentHandoff:window.SafeNotarizeDocumentHandoff}});
-      const context=api.documentContext();
-      assert.equal(context.source,'library');
-      assert.equal(context.pending.id,id);
-      assert.equal(context.pending.token,token);
+      for(const link of links){
+        const location=new URL(link.href);
+        assert.equal(location.searchParams.get('service'),service);
+        const type=location.searchParams.get('type')||location.pathname.split('/').at(-1).replace('.html','');
+        const next=element(location,'/book'+suffix+'.html?document_ready=1&document_source=library&document_type='+encodeURIComponent(type));
+        const nodes={download:element(location),'next-box':{querySelector:()=>null},continue:next,
+          'sn-download-copy':element(location),'sn-handoff-turnstile':element(location)};
+        const back=element(location,path);
+        const session=new Map();
+        const sessionStorage={getItem:key=>session.get(key)??null,setItem:(key,value)=>session.set(key,value),removeItem:key=>session.delete(key)};
+        let pass;
+        const window={
+          SN_HANDOFF:{enabled:true,endpoint:'https://handoff.example.test',allowedSiteOrigins:[origin],turnstileSiteKey:'fixture'},
+          addEventListener(){},
+          turnstile:{render(_holder,options){pass=options.callback;return 'widget';},execute(){pass('test-token');},remove(){}}
+        };
+        const id='f235dd9d-0881-44c3-8be3-875883d66341';
+        const token='a'.repeat(64);
+        const document={
+          readyState:'complete',documentElement:{lang},getElementById:key=>nodes[key]??null,
+          querySelector:()=>null,querySelectorAll:()=>[back]
+        };
+        runInNewContext(handoff,{document,window,location,sessionStorage,URL,URLSearchParams,Blob,FormData,setTimeout,clearTimeout,
+          fetch:async(url,options)=>{
+            assert.equal(url,'https://handoff.example.test/upload');
+            assert.equal(options.body.get('document_type'),type);
+            return Response.json({id,token});
+          }
+        });
+        await window.SafeNotarizeDocumentHandoff.stage(new Blob(['%PDF fixture']),type+'.pdf',type);
+        const checkout=new URL(next.href);
+        assert.equal(checkout.pathname,service==='premium'?'/premium.html':'/book'+suffix+'.html');
+        assert.equal(checkout.searchParams.get('document_ready'),service==='premium'?null:'1');
+        assert.equal(checkout.searchParams.get('service'),service);
+        assert.equal(checkout.searchParams.get('document_source'),'library');
+        assert.equal(checkout.searchParams.get('document_type'),type);
+        assert.equal(checkout.searchParams.get('lang'),service==='premium'&&ht?'ht':null);
+        assert.equal(checkout.href.includes(token),false);
+        assert.equal(back.href,library.href);
+        const api=renderServices(checkout.href,{window:{SN_PREMIUM:config,SafeNotarizeDocumentHandoff:window.SafeNotarizeDocumentHandoff}});
+        const context=api.documentContext();
+        assert.equal(context.source,'library');
+        assert.equal(context.pending.id,id);
+        assert.equal(context.pending.token,token);
+      }
     }
   });
 }

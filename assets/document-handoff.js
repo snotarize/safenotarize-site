@@ -157,7 +157,9 @@
     const button=document.getElementById('download'),box=document.getElementById('next-box');
     if(!button||!box)return;
     const ht=isHt();
-    const premium=new URLSearchParams(location.search).get('service')==='premium';
+    const service=new URLSearchParams(location.search).get('service');
+    const premium=service==='premium';
+    const selectedService=premium||service==='regular';
     button.textContent=enabled?(ht?'Kontinye pou notarye':'Continue to notarization'):(ht?'Telechaje PDF':'Download PDF');
     const heading=box.querySelector('strong'),description=box.querySelector('p');
     if(heading)heading.textContent=enabled?(ht?'PDF ou a pare':'Your PDF is ready'):(ht?'PDF ou a telechaje':'Your PDF is downloaded');
@@ -167,19 +169,21 @@
       next.textContent=ht?'Kontinye pou notarye':'Continue to notarization';
       const url=new URL(next.href);
       if(!enabled)url.searchParams.set('document_source','own');
-      if(premium&&url.origin===location.origin){
-        url.pathname='/premium.html';
-        url.searchParams.delete('document_ready');
-        url.searchParams.set('service','premium');
-        if(ht)url.searchParams.set('lang','ht');
-        if(!enabled)url.searchParams.delete('document_type');
+      if(selectedService&&url.origin===location.origin){
+        url.searchParams.set('service',service);
+        if(premium){
+          url.pathname='/premium.html';
+          url.searchParams.delete('document_ready');
+          if(ht)url.searchParams.set('lang','ht');
+          if(!enabled)url.searchParams.delete('document_type');
+        }
       }
       if(['safenotarize.com','www.safenotarize.com'].includes(url.hostname))next.href=url.pathname+url.search;
     }
-    if(premium){
+    if(selectedService){
       for(const link of document.querySelectorAll('a[href="/documents/library.html"], a[href="/documents/library-ht.html"]')){
         const library=new URL(link.href);
-        library.searchParams.set('service','premium');
+        library.searchParams.set('service',service);
         link.href=library.pathname+library.search;
       }
     }
