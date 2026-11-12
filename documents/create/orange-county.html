@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com https://safenotarize-standard-production-handoff.karlberryj.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'">
+  <title>Orange County Official Forms | SafeNotarize</title>
+  <link rel="stylesheet" href="/assets/official-forms/ds-3053.css?v=2">
+  <link rel="stylesheet" href="/assets/official-forms/orange-county.css?v=1">
+  <script src="/assets/document-handoff-config.js?v=20261107-4" defer></script>
+  <script src="/assets/document-handoff.js?v=20261112-2" defer></script>
+  <script type="module" src="/assets/official-forms/orange-county-editor.js?v=1"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav aria-label="SafeNotarize">
+      <a class="brand" id="home-link" href="/">
+        <img src="/White-logo-transparent-background.png" width="36" height="36" alt="">
+        <span>SafeNotarize</span>
+      </a>
+      <a id="library-link" href="/documents/library.html" data-ht="Bibliyotèk dokiman">Document library</a>
+    </nav>
+  </header>
+  <main>
+    <div class="intro">
+      <h1 id="form-title" data-ht="Fòm ofisyèl Konte Orange">Orange County official forms</h1>
+      <p id="form-intro" data-ht="Chwazi yon fòm nan bibliyotèk dokiman an.">Choose a form from the document library.</p>
+    </div>
+    <noscript><p>Enable JavaScript to fill out your form online. <a href="https://www.occompt.com/174/Forms-Publications">Get a form from the county</a>.</p></noscript>
+
+    <form id="county-form" autocomplete="off" hidden>
+      <p class="privacy" data-ht="Enfòmasyon ou rete nan navigatè sa a pandan w ap ranpli fòm nan. N ap voye PDF la an sekirite lè ou chwazi kontinye pou notarye.">Your details stay in this browser while you fill out the form. The PDF is sent securely when you choose to continue to notarization.</p>
+      <div class="actions" id="form-actions">
+        <button class="primary" id="review-button" type="submit" data-ht="Verifye enfòmasyon yo">Review your details</button>
+        <p id="form-status" role="status" class="status"></p>
+      </div>
+    </form>
+
+    <section class="review" id="review" aria-labelledby="review-title" hidden>
+      <h2 id="review-title" tabindex="-1" data-ht="Verifye enfòmasyon yo">Review your details</h2>
+      <div class="review-grid" id="review-details"></div>
+      <div class="note">
+        <p data-ht="Tann notè a pou w siyen. Apre notarizasyon an, voye fòm ou a bay Konte Orange pou yo anrejistre li.">Wait for the notary before signing. After notarization, submit your form to Orange County for recording.</p>
+        <p id="bond-note" data-ht="Si gen yon garanti peman, mete yon kopi ladan lè w ap anrejistre fòm nan." hidden>If there is a payment bond, include a copy when recording the notice.</p>
+      </div>
+      <div class="actions">
+        <button class="primary" type="button" id="continue-button" data-ht="Kontinye pou notarye">Continue to notarization</button>
+        <a class="secondary" id="pdf-copy" data-ht="Telechaje PDF la">Download PDF</a>
+        <button class="text-button" id="edit-button" type="button" data-ht="Modifye enfòmasyon yo">Edit details</button>
+      </div>
+      <div id="sn-handoff-turnstile" data-fit-widget></div>
+      <p id="handoff-status" role="status" class="status"></p>
+      <p id="manual-upload" hidden><a id="upload-link" data-ht="Kontinye ak yon PDF ou telechaje">Continue with a downloaded PDF</a></p>
+    </section>
+
+    <footer id="county-resources" hidden>
+      <a id="official-pdf" target="_blank" rel="noopener" data-ht="Louvri PDF ofisyèl la">Open the official PDF</a>
+      <a id="recording-link" target="_blank" rel="noopener" data-ht="Enstriksyon Konte Orange pou anrejistreman">Orange County recording instructions</a>
+      <a id="completed-form-link" hidden data-ht="Notarye yon fòm ki deja ranpli">Notarize a completed form</a>
+    </footer>
+  </main>
+</body>
+</html>
