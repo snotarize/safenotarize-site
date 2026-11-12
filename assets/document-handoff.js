@@ -221,11 +221,14 @@
     const message=document.createElement('p');message.textContent=ht?'PDF la pa disponib ankò nan navigatè sa a. Retounen nan dokiman ou a epi peze Kontinye pou notarye.':'The saved PDF is no longer available in this browser. Return to your document and choose Continue to notarization.';
     const back=document.createElement('a');back.textContent=ht?'Retounen nan dokiman mwen an':'Return to my document';
     back.href=ht?'/documents/library-ht.html':'/documents/library.html';
-    if(type==='ds-3053'){
+    const countyForm=['declaration-of-domicile','notice-of-commencement'].includes(type);
+    if(type==='ds-3053'||countyForm){
       const query=new URLSearchParams();
+      if(countyForm)query.set('type',type);
       if(ht)query.set('lang','ht');
       if(params.get('service')==='regular')query.set('service','regular');
-      back.href='/documents/create/ds-3053.html'+(query.size?'?'+query:'');
+      const editor=countyForm?'orange-county':'ds-3053';
+      back.href='/documents/create/'+editor+'.html'+(query.size?'?'+query:'');
     }
     try{const ref=new URL(document.referrer);if(['https://safenotarize.com','https://www.safenotarize.com'].includes(ref.origin)&&/^\/documents\/create(?:-ht)?(?:\.html|\/[^/]+\.html)$/.test(ref.pathname)){back.href=ref.pathname+ref.search;back.addEventListener('click',event=>{if(history.length>1){event.preventDefault();history.back();}});}}catch{}
     back.style.cssText='display:inline-block;font-weight:bold;color:#00274d;padding:10px 0';note.append(message,back);
