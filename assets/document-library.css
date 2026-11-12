@@ -76,44 +76,48 @@ button { font: inherit; cursor: pointer; }
 h1 { margin: 0 0 18px; color: var(--navy); font-size: clamp(2rem, 4.8vw, 3rem); line-height: 1.12; letter-spacing: -.032em; }
 .document-guide { padding: clamp(16px, 3vw, 28px); border: 1px solid var(--border); border-radius: 16px; background: #fff; box-shadow: 0 6px 22px rgb(0 39 77 / 6%); }
 .document-guide h2 { margin: 0 0 14px; color: var(--navy); font-size: clamp(1.25rem, 2.6vw, 1.65rem); line-height: 1.25; }
-.document-guide h2, .section, .category-group { scroll-margin-top: 92px; }
-.guide-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.guide-options.results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.guide-choice {
-  position: relative;
+.document-guide, .document-panel, .section, .category-group { scroll-margin-top: 92px; }
+.document-panels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 16px;
+}
+.document-panels.searching { grid-template-columns: repeat(auto-fit, minmax(min(265px, 100%), 1fr)); }
+@media (min-width: 970px) {
+  .document-panels:not(.searching) { grid-template-columns: minmax(0, .82fr) minmax(0, .96fr) minmax(0, 1.22fr); }
+}
+.document-panel { min-width: 0; padding: 15px; border: 1px solid #c4d4e0; border-radius: 11px; background: #fff; }
+.document-panel h3 { margin: 0 0 9px; color: var(--navy); font-size: 1.075rem; line-height: 1.28; }
+.own-panel { border-color: #a1cdb0; background: #eef8f0; }
+.own-panel h3 { color: var(--green-dark); }
+.own-panel p { margin: 0 0 13px; color: #355c43; font-size: .9rem; }
+.own-panel .btn { min-height: 44px; }
+
+.direct-links { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.direct-links li { min-width: 0; border-top: 1px solid var(--border); }
+.document-link {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 3px;
-  min-width: 0;
-  min-height: 76px;
-  padding: 12px 32px 12px 14px;
-  border: 1px solid #c4d4e0;
-  border-radius: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 7px;
+  border-radius: 6px;
   color: var(--navy);
-  background: #fff;
+  font-size: .9rem;
+  font-weight: 650;
+  line-height: 1.35;
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
-.guide-choice::after {
-  content: '';
-  position: absolute;
-  right: 14px;
-  top: calc(50% - 4px);
-  width: 8px;
-  height: 8px;
-  border: solid currentColor;
-  border-width: 2px 2px 0 0;
-  transform: rotate(45deg);
+.document-link:hover { background: #eef5f9; text-decoration: underline; }
+.form-detail { margin: -1px 7px 8px; color: var(--muted); font-size: .85rem; line-height: 1.4; }
+.panel-secondary { display: inline-flex; align-items: center; min-height: 44px; padding: 0 7px; font-size: .86rem; font-weight: 650; }
+.template-panel, .search-guides { container-type: inline-size; }
+.search-guides { margin-top: 14px; }
+@container (min-width: 285px) {
+  .template-links { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 9px; }
 }
-.guide-choice strong { font-size: 1rem; line-height: 1.25; }
-.guide-choice span { color: var(--muted); font-size: .85rem; line-height: 1.35; }
-.guide-choice:hover { background: #f0f6fa; border-color: #8ca9bf; }
-.guide-choice.primary { color: var(--green-dark); border-color: #a1cdb0; background: #eef8f0; }
-.guide-choice.primary span { color: #355c43; }
-.guide-choice.primary:hover { border-color: var(--green); background: #e3f3e7; }
-.guide-back, .guide-custom { display: inline-flex; align-items: center; min-height: 44px; font-size: .9rem; font-weight: 700; }
-.guide-back { margin: -6px 0 2px; }
-.guide-custom { margin: 8px 0 -6px; }
 
 .document-catalog { margin-top: 18px; scroll-margin-top: 82px; }
 .document-catalog > summary {
@@ -132,7 +136,6 @@ h1 { margin: 0 0 18px; color: var(--navy); font-size: clamp(2rem, 4.8vw, 3rem); 
 .document-catalog > summary::before { content: '+'; font-size: 1.1rem; line-height: 1; }
 .document-catalog[open] > summary::before { content: '−'; }
 .document-catalog > summary:hover { text-decoration: underline; }
-.document-catalog > .search { margin-top: 6px; }
 .search { max-width: 680px; }
 .search label { display: block; margin: 0 0 6px; font-size: .875rem; font-weight: 680; }
 .search-field { display: flex; min-height: 50px; border: 1px solid #a8bac9; border-radius: 9px; background: white; }
@@ -155,7 +158,7 @@ h1 { margin: 0 0 18px; color: var(--navy); font-size: clamp(2rem, 4.8vw, 3rem); 
 }
 .filters button:hover { border-color: var(--green); }
 .filters [aria-pressed="true"] { border-color: var(--navy); background: var(--navy); color: white; }
-.search-status { margin: 0 0 8px; color: var(--muted); font-size: .875rem; }
+.search-status { margin: 8px 0 0; color: var(--muted); font-size: .875rem; }
 .search-status:empty { margin: 0; }
 
 .section { margin: 24px 0 35px; }
@@ -188,7 +191,7 @@ h1 { margin: 0 0 18px; color: var(--navy); font-size: clamp(2rem, 4.8vw, 3rem); 
 .btn.create, .btn.upload { border-color: var(--green); background: var(--green); color: white; }
 .btn.create:hover, .btn.upload:hover { background: var(--green-dark); }
 .no-results { margin: 24px 0; padding: 20px; border: 1px solid var(--border); border-radius: 11px; background: white; }
-.no-results h2 { margin: 0; font-size: 1.25rem; }
+.no-results h3 { margin: 0; font-size: 1.125rem; }
 .no-results p { margin: 6px 0 12px; color: var(--muted); }
 .library-footer { margin: 22px 0 16px; color: var(--muted); font-size: .875rem; }
 
@@ -197,13 +200,15 @@ h1 { margin: 0 0 18px; color: var(--navy); font-size: clamp(2rem, 4.8vw, 3rem); 
   .sn-mobile-menu { display: block; }
 }
 
+@media (max-width: 780px) {
+  .document-panels, .document-panels.searching { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 620px) {
   .sn-header-inner { padding: 10px 14px; gap: 8px; }
   .sn-brand { gap: 7px; }
   .sn-brand img { width: 36px; height: 36px; }
   .container { padding: 23px 14px 24px; }
   h1 { margin-bottom: 14px; }
-  .guide-options, .guide-options.results { grid-template-columns: minmax(0, 1fr); }
-  .guide-choice { min-height: 59px; }
   .filters button { padding-inline: 10px; }
 }
