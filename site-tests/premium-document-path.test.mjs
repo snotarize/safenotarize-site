@@ -85,7 +85,7 @@ for(const lang of ['en','ht']){
     const targets=[...html.matchAll(/href=["']([^"']*(?:create(?:-ht)?\.html\?type=|\/create\/)[^"']*)["']/g)]
       .map(match=>match[1].replaceAll('&amp;','&'))
       .filter(href=>!href.includes('/create/ds-3053.html'));
-    assert.equal(new Set(targets).size,26);
+    assert.equal(new Set(targets).size,27);
     for(const service of ['regular','premium']){
       const library=new URL(path+'?service='+service,origin);
       const links=[...new Set(targets)].map(href=>element(library,href));

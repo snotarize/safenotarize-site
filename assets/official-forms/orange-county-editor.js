@@ -1,5 +1,5 @@
 import { documentBookingUrl, selectedService } from '../document-service-links.js';
-import { buildCountyPdf, countyDate, countyForm } from './orange-county-forms.js';
+import { buildCountyPdf, countyDate, countyForm } from './orange-county-forms.js?v=2';
 
 const query = new URLSearchParams(location.search);
 const ht = query.get('lang') === 'ht';
@@ -51,6 +51,7 @@ function renderGroup(group) {
 
 function mountEditor() {
   const { title, intro, filename, template, source, recording, groups, optionalGroups = [] } = definition;
+  const isTermination = documentType === 'notice-of-termination';
   const allGroups = [...groups, ...optionalGroups];
   const form = byId('county-form');
   const review = byId('review');
@@ -70,10 +71,12 @@ function mountEditor() {
   document.title = `${text(...title)} | SafeNotarize`;
   byId('form-title').textContent = text(...title);
   byId('form-intro').textContent = text(...intro);
+  byId('termination-rules').hidden = !isTermination;
   byId('official-pdf').href = source;
   byId('recording-link').href = recording;
   byId('county-resources').hidden = false;
   byId('upload-link').href = completedForm.href = documentBookingUrl({ language, documentType });
+  completedForm.hidden = !isTermination;
   download.download = filename;
   form.prepend(...groups.map(renderGroup));
   if (optionalGroups.length) {
@@ -116,7 +119,7 @@ function mountEditor() {
     download.href = URL.createObjectURL(pdf);
     form.hidden = true;
     review.hidden = false;
-    completedForm.hidden = true;
+    completedForm.hidden = !isTermination;
     next.hidden = !handoff?.enabled();
     manualUpload.hidden = !next.hidden;
     handoffStatus.textContent = next.hidden
