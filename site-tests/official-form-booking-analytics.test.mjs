@@ -7,8 +7,8 @@ const origin = 'https://safenotarize.com';
 const channel = 'safenotarize-official-form-analytics';
 const psForm = '/documents/official/ps-1583.html';
 const dsForm = '/documents/ht/official/ds-3053.html';
-const frameOrigin = 'https://safenotarize-official-form-analytics.karlberryj.workers.dev';
-const framePath = frameOrigin + '/booking-analytics.html';
+const frameOrigin = origin;
+const framePath = '/assets/official-forms/booking-analytics.html';
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const source = read('assets/official-forms/booking-analytics.js');
 const standardOrder = 'rec12345678901234';
@@ -100,16 +100,17 @@ test('organic USPS landing, continue, and Standard confirmation are tied to the 
 test('the Kreyòl DS-3053 editor and Premium booking share one journey and one confirmation', async () => {
   const landing = open(dsForm, { referrer: 'https://www.google.fr/search?q=synthetic' });
   const editor = open('/documents/create/ds-3053.html?lang=ht', landing);
-  editor.window.SafeNotarizeFormAnalytics.continueBooking('ds-3053', true);
-  editor.window.SafeNotarizeFormAnalytics.continueBooking('ds-3053', true);
+  editor.window.SafeNotarizeFormAnalytics.continueBooking('ds-3053');
+  editor.window.SafeNotarizeFormAnalytics.continueBooking('ds-3053');
   await tick();
-  assert.deepEqual(editor.outgoing.map(event => event.name), ['notarization_continue']);
+  assert.deepEqual(editor.outgoing, []);
   const checkout = open('/premium.html?lang=ht&document_source=library&document_type=ds-3053', editor);
   const api = checkout.window.SafeNotarizeFormAnalytics;
   await api.confirmPremiumBooking('ps-1583', premiumOrder);
   await api.confirmPremiumBooking('ds-3053', premiumOrder);
   await api.confirmPremiumBooking('ds-3053', premiumOrder);
   assert.deepEqual(checkout.outgoing.map(event => [event.name, event.route]), [
+    ['notarization_continue', undefined],
     ['notarization_booking_confirmed', 'premium']
   ]);
   assert.equal(checkout.outgoing[0].journey.page, dsForm);

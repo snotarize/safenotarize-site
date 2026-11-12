@@ -3,8 +3,8 @@
 
   const site = 'https://safenotarize.com';
   const origins = new Set([site, 'https://www.safenotarize.com']);
-  const frameOrigin = 'https://safenotarize-official-form-analytics.karlberryj.workers.dev';
-  const framePath = '/booking-analytics.html';
+  const frameOrigin = location.origin;
+  const framePath = '/assets/official-forms/booking-analytics.html';
   const stream = 'G-EJKPHSTSNH';
   const channel = 'safenotarize-official-form-analytics';
   const journeyKey = 'sn_official_form_journey:';
@@ -23,7 +23,7 @@
   const routes = new Set(['standard', 'premium']);
   const orderIdPattern = /^(?:rec[a-zA-Z0-9]{14,20}|[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})$/;
 
-  if (navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
+  if (!origins.has(frameOrigin) || navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
 
   function validJourney(journey, lifetime = journeyLifetime) {
     const age = Date.now() - journey?.startedAt;
@@ -84,11 +84,11 @@
     });
   }
 
-  if (location.origin === frameOrigin && location.pathname === framePath) {
+  if (location.pathname === framePath) {
     runFrame();
     return;
   }
-  if (!origins.has(location.origin) || window.parent !== window) return;
+  if (window.parent !== window) return;
 
   let frame;
   let sequence = 0;
@@ -98,7 +98,6 @@
     const element = document.createElement('iframe');
     element.hidden = true;
     element.title = 'SafeNotarize Analytics';
-    element.setAttribute('sandbox', 'allow-scripts allow-same-origin');
     element.referrerPolicy = 'no-referrer';
     element.src = frameOrigin + framePath;
     const ready = new Promise(resolve => element.addEventListener('load', resolve, { once: true }));
@@ -162,13 +161,12 @@
     try { return callback(); } catch { return undefined; }
   }
 
-  function continueBooking(type, sendHere = false) {
+  function continueBooking(type) {
     optional(() => {
       const journey = readJourney(type);
       if (!journey || journey.continued) return;
       journey.continued = true;
       saveJourney(type, journey);
-      if (sendHere) reportContinue(type, journey);
     });
   }
 

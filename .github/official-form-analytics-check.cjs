@@ -12,6 +12,7 @@ const ps = '/documents/official/ps-1583.html';
 const ds = '/documents/ht/official/ds-3053.html';
 const order = 'rec12345678901234';
 const marker = 'SyntheticSensitive';
+const qaRevision = 'first-party-frame';
 const root = process.cwd();
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript' };
 const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*',
@@ -125,7 +126,7 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
         if (result) return result;
         await pause(100);
       }
-      const frame = page.frames().find(frame => frame.url().startsWith(analyticsFrame));
+      const frame = page.frames().find(frame => frame.url().includes('/booking-analytics.html'));
       const frameStatus = await frame?.evaluate(() => ({
         sameOrigin: window.origin === location.origin,
         visible: document.visibilityState,
@@ -137,7 +138,7 @@ const config = { enabled: true, mode: 'live', acceptingOrders: true, allowedOrig
         '; Google scripts: ' + scriptRequests.join(', ') +
         '; received: ' + events.map(event => event.en).join(', ') +
         '; frame: ' + JSON.stringify(frameStatus) + '; network: ' + [...network].slice(-32).join(', ') +
-        '; browser errors: ' + errors.slice(-10).join(', '));
+        '; revision: ' + qaRevision + '; browser errors: ' + errors.slice(-10).join(', '));
     }
 
     await page.goto(site + ps + '?email=' + marker + '%40example.test', { referer: 'https://www.bing.com/search?q=' + marker });
