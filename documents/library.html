@@ -4,29 +4,165 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Document Library &amp; Official Forms | SafeNotarize</title>
-  <meta name="description" content="Search document templates and official forms. Fill out DS-3053 online, create a PDF, or use your own document to start notarization with SafeNotarize.">
+  <meta name="description" content="Find the document you need for online notarization. Fill out the official DS-3053, create a document from a template, or bring a PDF you already have.">
   <link rel="canonical" href="https://safenotarize.com/documents/library.html">
   <link rel="alternate" hreflang="en" href="https://safenotarize.com/documents/library.html">
   <link rel="alternate" hreflang="ht" href="https://safenotarize.com/documents/library-ht.html">
-  <link rel="stylesheet" href="/assets/document-library.css?v=1">
-  <script src="/assets/premium/services.js?v=5" defer></script>
-  <script type="module" src="/assets/document-library.js?v=1"></script>
+  <link rel="stylesheet" href="/assets/document-library.css?v=2">
+  <script src="/assets/premium/services.js?v=7" defer></script>
+  <script type="module" src="/assets/document-library.js?v=2"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <a class="brand" href="/">SafeNotarize</a>
-      <nav aria-label="SafeNotarize">
-        <a href="/start.html" data-document-service>Start notarization</a>
-        <a href="/documents/library-ht.html" lang="ht" data-document-service>Kreyòl</a>
+  <header class="sn-site-header">
+    <div class="sn-header-inner">
+      <a class="sn-brand" href="/">
+        <img src="/White-logo-transparent-background.png" width="40" height="40" alt="">
+        <span>SafeNotarize</span>
+      </a>
+      <nav class="sn-desktop-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/online-notary.html">Online Notary</a>
+        <a href="/documents/library.html" aria-current="page" data-document-service>Document Library</a>
+        <a href="/#pricing-block">Pricing</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/start.html" class="sn-start-btn" data-document-service>Start</a>
       </nav>
+      <div class="sn-header-actions">
+        <a class="sn-header-language" id="library-language" href="/documents/library-ht.html" lang="ht" hreflang="ht" data-document-service>Kreyòl</a>
+        <details class="sn-mobile-menu">
+          <summary class="sn-menu-btn" aria-label="Menu"></summary>
+          <nav class="sn-mobile-panel" aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/online-notary.html">Online Notary</a>
+            <a href="/documents/library.html" aria-current="page" data-document-service>Document Library</a>
+            <a href="/#pricing-block">Pricing</a>
+            <a href="/#faq">FAQ</a>
+            <a href="/start.html" class="sn-start-btn" data-document-service>Start</a>
+          </nav>
+        </details>
+      </div>
     </div>
   </header>
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1>Document library</h1>
-        <p>Fill out an official form, create a document, or bring one you already have.</p>
+  <main class="library-main">
+    <div class="container">
+      <h1>Document Library</h1>
+      <div class="document-guide" id="document-guide">
+        <section id="guide-start" data-guide-step aria-labelledby="guide-start-title">
+          <h2 id="guide-start-title" tabindex="-1">What do you need to do?</h2>
+          <div class="guide-options">
+            <a class="guide-choice primary" href="/book.html?document_ready=1&amp;document_source=own" data-document-booking>
+              <strong>Notarize my document</strong>
+              <span>I already have the document I need.</span>
+            </a>
+            <a class="guide-choice" href="#document-catalog" data-guide-to="guide-forms">
+              <strong>Fill out an official form</strong>
+              <span>Child passport consent or a virtual mailbox form.</span>
+            </a>
+            <a class="guide-choice" href="#document-catalog" data-guide-to="guide-templates">
+              <strong>Use a template</strong>
+              <span>Create a letter, affidavit, or authorization.</span>
+            </a>
+          </div>
+        </section>
+        <section id="guide-forms" data-guide-step aria-labelledby="guide-forms-title" hidden>
+          <a class="guide-back" href="#document-catalog" data-guide-to="guide-start">Back to choices</a>
+          <h2 id="guide-forms-title" tabindex="-1">Which form do you need?</h2>
+          <div class="guide-options results">
+            <a class="guide-choice primary" href="/documents/create/ds-3053.html" data-document-service>
+              <strong>Fill out DS-3053</strong>
+              <span>Consent for a child’s U.S. passport application.</span>
+            </a>
+            <a class="guide-choice" href="/documents/official/ps-1583.html" data-document-service>
+              <strong>USPS Form 1583</strong>
+              <span>Open the guide for a private or virtual mailbox.</span>
+            </a>
+          </div>
+        </section>
+        <section id="guide-templates" data-guide-step aria-labelledby="guide-templates-title" hidden>
+          <a class="guide-back" href="#document-catalog" data-guide-to="guide-start">Back to choices</a>
+          <h2 id="guide-templates-title" tabindex="-1">What are you preparing?</h2>
+          <div class="guide-options">
+            <a class="guide-choice" href="#document-catalog" data-guide-to="guide-family">
+              <strong>Travel and family</strong>
+              <span>Child travel, temporary care, or medical consent.</span>
+            </a>
+            <a class="guide-choice" href="#document-catalog" data-guide-to="guide-statements">
+              <strong>Affidavits and letters</strong>
+              <span>Proof of address, sworn statements, or invitations.</span>
+            </a>
+            <a class="guide-choice" href="#document-catalog" data-guide-to="guide-business">
+              <strong>Vehicles and business</strong>
+              <span>Vehicle sales, gifts, or business authorizations.</span>
+            </a>
+          </div>
+          <a class="guide-custom" href="create.html?type=custom" data-document-service>Write my own document</a>
+        </section>
+        <section id="guide-family" data-guide-step aria-labelledby="guide-family-title" hidden>
+          <a class="guide-back" href="#document-catalog" data-guide-to="guide-templates">Back to templates</a>
+          <h2 id="guide-family-title" tabindex="-1">Travel and family</h2>
+          <div class="guide-options results">
+            <a class="guide-choice" href="create.html?type=child-travel-consent" data-document-service>
+              <strong>Child travel consent</strong>
+              <span>Give permission for a child to travel.</span>
+            </a>
+            <a class="guide-choice" href="/documents/create/ds-3053.html" data-document-service>
+              <strong>Child passport consent</strong>
+              <span>Fill out the official DS-3053.</span>
+            </a>
+            <a class="guide-choice" href="/documents/create/temporary-guardianship-authorization.html" data-document-service>
+              <strong>Temporary guardianship</strong>
+              <span>Authorize someone to care for a child temporarily.</span>
+            </a>
+            <a class="guide-choice" href="/documents/create/minor-medical-consent.html" data-document-service>
+              <strong>Minor medical consent</strong>
+              <span>Give someone permission to authorize a child’s medical care.</span>
+            </a>
+          </div>
+        </section>
+        <section id="guide-statements" data-guide-step aria-labelledby="guide-statements-title" hidden>
+          <a class="guide-back" href="#document-catalog" data-guide-to="guide-templates">Back to templates</a>
+          <h2 id="guide-statements-title" tabindex="-1">Affidavits and letters</h2>
+          <div class="guide-options results">
+            <a class="guide-choice" href="/documents/create/proof-of-residency-affidavit.html" data-document-service>
+              <strong>Proof of address</strong>
+              <span>Create a sworn statement about where you live.</span>
+            </a>
+            <a class="guide-choice" href="create.html?type=affidavit" data-document-service>
+              <strong>General affidavit</strong>
+              <span>Write a sworn statement about facts you know.</span>
+            </a>
+            <a class="guide-choice" href="/documents/create/affidavit-of-support.html" data-document-service>
+              <strong>Financial support</strong>
+              <span>Describe the financial support you provide.</span>
+            </a>
+            <a class="guide-choice" href="/documents/create/invitation-letter.html" data-document-service>
+              <strong>Invitation letter</strong>
+              <span>Prepare a letter inviting someone to visit.</span>
+            </a>
+          </div>
+        </section>
+        <section id="guide-business" data-guide-step aria-labelledby="guide-business-title" hidden>
+          <a class="guide-back" href="#document-catalog" data-guide-to="guide-templates">Back to templates</a>
+          <h2 id="guide-business-title" tabindex="-1">Vehicles and business</h2>
+          <div class="guide-options results">
+            <a class="guide-choice" href="/documents/create/vehicle-bill-of-sale.html" data-document-service>
+              <strong>Sell a vehicle</strong>
+              <span>Create a vehicle bill of sale.</span>
+            </a>
+            <a class="guide-choice" href="/documents/create/vehicle-gift-affidavit.html" data-document-service>
+              <strong>Give a vehicle as a gift</strong>
+              <span>Create a vehicle gift affidavit.</span>
+            </a>
+            <a class="guide-choice" href="/documents/create/business-authorization-letter.html" data-document-service>
+              <strong>Authorize someone for a business</strong>
+              <span>Create a business authorization letter.</span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <details class="document-catalog" id="document-catalog">
+        <summary>Browse all documents</summary>
         <div class="search" role="search">
           <label for="document-search">Search documents</label>
           <div class="search-field">
@@ -34,22 +170,6 @@
             <button id="clear-search" type="button" hidden>Clear</button>
           </div>
         </div>
-      </div>
-    </section>
-
-    <div class="container">
-      <section id="quick-actions" class="quick-actions" aria-labelledby="featured-title">
-        <article class="featured">
-          <h2 id="featured-title">Child passport consent</h2>
-          <p>Fill out the official DS-3053, review your details, and continue to notarization.</p>
-          <a class="btn create" href="/documents/create/ds-3053.html" data-document-service>Fill out DS-3053</a>
-        </article>
-        <div class="quick-links">
-          <a id="browse-templates" href="#templates-section"><strong>Create a document</strong><span>Use a template or start from scratch.</span></a>
-          <a href="/book.html?document_ready=1&amp;document_source=own" data-document-booking><strong>I have my document</strong><span>Continue to notarization.</span></a>
-        </div>
-      </section>
-
       <div class="filters" role="group" aria-label="Filter documents">
         <button type="button" id="tab-all" data-filter="all" aria-pressed="true">All documents</button>
         <button type="button" id="tab-official" data-filter="official" aria-pressed="false">Official forms</button>
@@ -98,6 +218,7 @@
         <button class="btn" id="reset-filters" type="button">Clear filters</button>
       </div>
       <footer class="library-footer">Follow the issuing agency’s instructions for official forms and the receiving organization’s requirements for your document.</footer>
+      </details>
     </div>
   </main>
 </body>

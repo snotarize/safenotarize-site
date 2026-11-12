@@ -1,7 +1,7 @@
 const requestedService = new URLSearchParams(location.search).get('service');
 export const selectedService = ['regular', 'premium'].includes(requestedService) ? requestedService : '';
 
-export function documentBookingUrl({ language, documentType, saved = false }) {
+export function documentBookingUrl({ language, documentType, saved = false, documentSource = documentType ? 'official' : 'own' }) {
   const ht = language === 'ht';
   const premium = selectedService === 'premium';
   const path = premium ? '/premium.html' : ht ? '/book-ht.html' : '/book.html';
@@ -9,7 +9,7 @@ export function documentBookingUrl({ language, documentType, saved = false }) {
   if (selectedService) query.set('service', selectedService);
   if (premium && ht) query.set('lang', 'ht');
   if (!premium) query.set('document_ready', '1');
-  query.set('document_source', saved ? 'library' : documentType && !premium ? 'official' : 'own');
+  query.set('document_source', saved ? 'library' : premium ? 'own' : documentSource);
   if (documentType && (saved || !premium)) query.set('document_type', documentType);
   return `${path}?${query}`;
 }

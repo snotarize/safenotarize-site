@@ -3,7 +3,7 @@
   font-family: Inter, system-ui, -apple-system, sans-serif;
   background: #f4f7fa;
   color: #142f45;
-  --navy: #082c4d;
+  --navy: #00274d;
   --green: #146a46;
   --green-dark: #0e5638;
   --line: #d5e1e9;
@@ -28,7 +28,15 @@ a { color: var(--green-dark); text-underline-offset: 3px; }
   gap: 16px;
 }
 .site-header a { color: white; font-size: .875rem; }
-.site-header .brand { font-size: 1.125rem; font-weight: 780; text-decoration: none; }
+.site-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 900 19px/1.2 Arial, sans-serif;
+  text-decoration: none;
+}
+.site-header .brand img { display: block; object-fit: contain; }
+#library-link { text-align: right; }
 
 main { max-width: 840px; margin: auto; padding: 30px 24px 40px; }
 .intro { margin-bottom: 26px; }

@@ -72,12 +72,12 @@
     settings, documentContext, backPath: relative(backPath), backToDocumentOptions, libraryPath: relative(libraryPath)
   };
 
-  if (selectedService === 'premium' && /^\/documents\/library(?:-ht)?(?:\.html)?$/.test(location.pathname)) {
+  if (['premium', 'regular'].includes(selectedService) && /^\/documents\/library(?:-ht)?(?:\.html)?$/.test(location.pathname)) {
     for (const link of document.querySelectorAll('a[href*="create"]')) {
       const template = new URL(link.href);
       if (template.origin === location.origin &&
           /^\/documents\/(?:create(?:-ht)?\.html|create\/[a-z0-9-]+\.html)$/.test(template.pathname)) {
-        template.searchParams.set('service', 'premium');
+        template.searchParams.set('service', selectedService);
         link.href = relative(template);
       }
     }
