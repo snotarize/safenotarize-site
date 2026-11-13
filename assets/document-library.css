@@ -39,11 +39,9 @@ button { font: inherit; cursor: pointer; }
 .sn-brand { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 900; white-space: nowrap; }
 .sn-brand img { display: block; width: 40px; height: 40px; object-fit: contain; }
 .sn-desktop-nav { display: flex; align-items: center; gap: 24px; margin-left: auto; }
-.sn-desktop-nav a, .sn-header-language { font-size: 14px; font-weight: 700; }
-.sn-desktop-nav a:hover, .sn-desktop-nav a[aria-current], .sn-header-language:hover { text-decoration: underline; }
+.sn-desktop-nav a { font-size: 14px; font-weight: 700; }
+.sn-desktop-nav a:hover, .sn-desktop-nav a[aria-current] { text-decoration: underline; }
 .sn-site-header .sn-start-btn { padding: 10px 17px; border-radius: 9px; background: #28a745; color: var(--navy); }
-.sn-header-actions { display: flex; align-items: center; gap: 12px; }
-.sn-header-language { display: inline-flex; align-items: center; min-height: 44px; }
 .sn-mobile-menu { display: none; }
 .sn-menu-btn {
   display: grid;
@@ -94,6 +92,7 @@ h1 { margin: 0 0 18px; color: var(--navy); font-size: clamp(2rem, 4.8vw, 3rem); 
 .own-panel h3 { color: var(--green-dark); }
 .own-panel p { margin: 0 0 13px; color: #355c43; font-size: .9rem; }
 .own-panel .btn { min-height: 44px; }
+.own-panel-upload { margin-bottom: 9px; }
 
 .direct-links { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
 .direct-links li { min-width: 0; border-top: 1px solid var(--border); }

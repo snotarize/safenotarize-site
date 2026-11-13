@@ -132,6 +132,10 @@ for(const lang of ['en','ht']){
     const path='/documents/library'+suffix+'.html';
     const html=read(path.slice(1));
     assert.match(html,/<script src="\/assets\/premium\/services\.js\?v=7" defer><\/script>/);
+    const ownPanel=html.match(/<section[^>]+id="notarize-panel"[^>]*>[\s\S]*?<\/section>/)[0];
+    assert.equal(anchorHref(ownPanel,'create-own-document'),'/documents/create'+suffix+'.html?type=custom');
+    assert.equal(html.match(/type=custom/g).length,1);
+    assert.doesNotMatch(html, /id="library-language"/);
     const targets=[...html.matchAll(/href=["']([^"']*(?:create(?:-ht)?\.html\?type=|\/create\/)[^"']*)["']/g)]
       .map(match=>match[1].replaceAll('&amp;','&'))
       .filter(href=>!href.includes('/create/ds-3053.html'));
