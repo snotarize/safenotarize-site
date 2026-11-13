@@ -95,11 +95,11 @@
     ownCheckout.searchParams.set('service', 'premium');
     ownCheckout.searchParams.set('document_source', 'own');
     haveDocument.href = relative(ownCheckout);
-    haveDocument.textContent = ht ? 'Kontinye nan peman Premium' : 'Continue to Premium Checkout';
+    haveDocument.textContent = ht ? 'Kontinye nan peman' : 'Continue to Checkout';
     if (ht) document.getElementById('subtitle').textContent = 'Chwazi opsyon ki mache ak sitiyasyon ou.';
     document.querySelector('#have-list li:last-child').textContent = ht
-      ? 'Voye dokiman an sou OneNotary apre ou otorize kat ou'
-      : 'Upload it in OneNotary after authorizing your card';
+      ? 'Voye dokiman an apre ou fin otorize kat ou'
+      : 'Upload your document after authorizing your card';
     document.getElementById('need-btn').href = relative(libraryPath);
     return;
   }
@@ -121,76 +121,124 @@
 
   const rates = premium.pricing;
   const copy = ht ? {
-    heading: 'Chwazi sèvis notarizasyon ou',
-    pill: 'Notarizasyon sou entènèt',
-    regular: 'Regilye',
-    regularIncluded: '1 siyatè ak 2 so',
-    regularRates: ['$10 pou chak siyatè anplis', '$5 pou chak so anplis', '$15 pou chak temwen SafeNotarize bay'],
-    regularAction: 'Chwazi Regilye',
-    premiumIncluded: '1 siyatè ak 1 so',
-    premiumDetails: 'Konekte ak yon notè sou OneNotary.',
-    premiumRates: [dollars(rates.additionalSigner) + ' pou chak siyatè anplis',
-      dollars(rates.additionalStamp) + ' pou chak so anplis', dollars(rates.witness) + ' pou chak temwen'],
-    premiumAction: 'Notarye kounye a'
+    heading: 'Kilè ou bezwen yon notè sou entènèt?',
+    from: 'Apati',
+    standard: 'Estanda',
+    standardDescription: 'Antre lè notè a pare oswa chwazi yon lè.',
+    standardIncluded: '1 siyatè, 2 so',
+    standardAction: 'Chwazi sèvis estanda',
+    onDemand: 'Sou demann',
+    onDemandDescription: 'Bezwen yon notè vit oswa apre lè travay? Mande youn kounye a.',
+    onDemandIncluded: '1 siyatè, 1 so',
+    onDemandAction: 'Chwazi sèvis sou demann',
+    prices: 'Gade pri sèvis anplis',
+    addOn: 'Sèvis anplis',
+    extraSigner: 'Siyatè anplis',
+    extraStamp: 'So anplis',
+    witness: 'Temwen',
+    witnessNote: 'Pou sèvis estanda a, pri sa a aplike pou temwen SafeNotarize bay.'
   } : {
-    heading: 'Choose your notarization service',
-    pill: 'Online Notarization',
-    regular: 'Regular',
-    regularIncluded: '1 signer and 2 stamps',
-    regularRates: ['$10 per additional signer', '$5 per additional stamp', '$15 per SafeNotarize-provided witness'],
-    regularAction: 'Choose Regular',
-    premiumIncluded: '1 signer and 1 stamp',
-    premiumDetails: 'Connect with a notary on OneNotary.',
-    premiumRates: [dollars(rates.additionalSigner) + ' per additional signer',
-      dollars(rates.additionalStamp) + ' per additional stamp', dollars(rates.witness) + ' per witness'],
-    premiumAction: 'Notarize now'
+    heading: 'When do you need an online notary?',
+    from: 'From',
+    standard: 'Standard',
+    standardDescription: 'Join when a notary is ready or choose a time.',
+    standardIncluded: '1 signer, 2 stamps',
+    standardAction: 'Choose Standard',
+    onDemand: 'On-Demand',
+    onDemandDescription: 'Need it soon or after hours? Request a notary now.',
+    onDemandIncluded: '1 signer, 1 stamp',
+    onDemandAction: 'Choose On-Demand',
+    prices: 'See add-on prices',
+    addOn: 'Add-on',
+    extraSigner: 'Extra signer',
+    extraStamp: 'Extra stamp',
+    witness: 'Witness',
+    witnessNote: 'The Standard witness fee applies to witnesses SafeNotarize provides.'
   };
 
-  function plan({name, price, included, rates, details, action, href, premium = false}) {
+  function plan({name, description, price, included, action, href}) {
     const card = document.createElement('article');
-    card.className = premium ? 'sn-service-card sn-service-premium' : 'sn-service-card';
+    card.className = 'sn-service-card';
     const heading = document.createElement('h2');
     heading.textContent = name;
+    const summary = document.createElement('p');
+    summary.className = 'sn-service-description';
+    summary.textContent = description;
+
+    const cost = document.createElement('div');
+    cost.className = 'sn-service-cost';
     const amount = document.createElement('p');
     amount.className = 'sn-service-price';
-    amount.textContent = price;
+    const priceText = document.createElement('strong');
+    priceText.textContent = price;
+    amount.append(copy.from + ' ', priceText);
     const allowance = document.createElement('p');
+    allowance.className = 'sn-service-included';
     allowance.textContent = included;
-    card.append(heading, amount, allowance);
-    if (details) {
-      const summary = document.createElement('p');
-      summary.textContent = details;
-      card.append(summary);
-    }
-    const rateList = document.createElement('ul');
-    rateList.className = 'sn-service-rates';
-    for (const rate of rates) {
-      const item = document.createElement('li');
-      item.textContent = rate;
-      rateList.append(item);
-    }
-    card.append(rateList);
+    cost.append(amount, allowance);
+
     const link = document.createElement('a');
     link.className = 'sn-service-action';
     link.href = href;
     link.textContent = action;
-    card.append(link);
+    card.append(heading, summary, cost, link);
     return card;
+  }
+
+  function addOnPrices() {
+    const details = document.createElement('details');
+    details.className = 'sn-service-add-ons';
+    const summary = document.createElement('summary');
+    summary.textContent = copy.prices;
+    const table = document.createElement('table');
+    const head = document.createElement('thead');
+    const headings = document.createElement('tr');
+    for (const name of [copy.addOn, copy.standard, copy.onDemand]) {
+      const cell = document.createElement('th');
+      cell.scope = 'col';
+      cell.textContent = name;
+      headings.append(cell);
+    }
+    head.append(headings);
+
+    const body = document.createElement('tbody');
+    for (const [name, standardPrice, onDemandPrice] of [
+      [copy.extraSigner, '$10', rates.additionalSigner],
+      [copy.extraStamp, '$5', rates.additionalStamp],
+      [copy.witness, '$15', rates.witness]
+    ]) {
+      const row = document.createElement('tr');
+      const label = document.createElement('th');
+      label.scope = 'row';
+      label.textContent = name;
+      const standard = document.createElement('td');
+      standard.textContent = standardPrice;
+      const onDemand = document.createElement('td');
+      onDemand.textContent = dollars(onDemandPrice);
+      row.append(label, standard, onDemand);
+      body.append(row);
+    }
+    table.append(head, body);
+    const note = document.createElement('p');
+    note.textContent = copy.witnessNote;
+    details.append(summary, table, note);
+    return details;
   }
 
   const regular = new URL(location.href);
   regular.searchParams.set('service', 'regular');
   chooser.classList.add('sn-service-options');
   chooser.append(
-    plan({name: copy.regular, price: '$25', included: copy.regularIncluded, rates: copy.regularRates,
-      action: copy.regularAction, href: relative(regular)}),
-    plan({name: 'Premium 24/7', price: dollars(rates.base), included: copy.premiumIncluded, rates: copy.premiumRates,
-      details: copy.premiumDetails, action: copy.premiumAction,
-      href: relative(documentContext().pending ? checkoutPath : preparePath), premium: true})
+    plan({name: copy.standard, description: copy.standardDescription, price: '$25',
+      included: copy.standardIncluded, action: copy.standardAction, href: relative(regular)}),
+    plan({name: copy.onDemand + ' 24/7', description: copy.onDemandDescription, price: dollars(rates.base),
+      included: copy.onDemandIncluded, action: copy.onDemandAction,
+      href: relative(documentContext().pending ? checkoutPath : preparePath)}),
+    addOnPrices()
   );
   const intro = document.querySelector('[data-sn-service-intro]');
   intro.querySelector('h1').textContent = copy.heading;
-  intro.querySelector('.pill').textContent = copy.pill;
+  intro.querySelector('.pill').hidden = true;
   intro.querySelector('p').hidden = true;
   document.querySelectorAll('[data-sn-regular]').forEach(node => { node.hidden = true; });
   chooser.hidden = false;

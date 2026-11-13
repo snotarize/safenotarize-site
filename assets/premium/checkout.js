@@ -4,51 +4,54 @@
   const params = new URLSearchParams(location.search);
   const ht = params.get('lang') === 'ht';
   const copy = ht ? {
+    title: 'Notarizasyon sou demann 24/7',
     back: 'Retounen nan opsyon sèvis yo',
     package: '$30 gen ladan 1 siyatè ak 1 so.',
-    saved: 'N ap voye PDF ou a bay OneNotary.',
-    upload: 'W ap voye dokiman ou sou OneNotary.',
-    intro: 'Peman tès. Sèvi ak yon kat tès Stripe pou otorize $30. W ap ranpli enfòmasyon ou epi verifye idantite ou sou OneNotary.',
+    saved: 'PDF ou te sove a ap disponib nan sesyon an.',
+    upload: 'W ap voye dokiman ou lè ou antre nan sesyon an.',
+    intro: 'Peman tès. Sèvi ak yon kat tès Stripe pou otorize $30.',
     email: 'Imèl siyatè prensipal la',
     rates: 'Chak siyatè oswa so anplis koute $10. Chak temwen koute $15.',
     terms: 'Mwen otorize yon rezèv $30 epi mwen dakò ak pri final la selon sèvis ki fèt yo.',
     card: 'Kat tès',
     submit: 'Otorize $30 epi kontinye',
-    join: 'Kontinye sou OneNotary',
+    join: 'Antre nan sesyon ou',
     library: 'Ou bezwen yon dokiman? Gade bibliyotèk la',
     loading: 'N ap prepare peman an…',
-    unavailable: 'Peman Premium pa disponib kounye a.',
+    unavailable: 'Peman pou sèvis sou demann lan pa disponib kounye a.',
     missing: 'PDF ou a pa disponib. Retounen nan dokiman ou a epi sove li ankò.',
     authorizing: 'N ap verifye otorizasyon kat la…',
     cardError: 'Kat la pa t otorize. Verifye enfòmasyon kat la epi eseye ankò.',
-    opening: 'N ap prepare sesyon OneNotary ou a…',
+    opening: 'N ap prepare sesyon ou a…',
     invalidEstimate: 'Verifye kantite siyatè, so ak temwen yo.',
     retry: 'Nou pa t kapab kontinye. Eseye ankò sou menm paj sa a.',
     review: 'Nou bezwen verifye demann sa a. Kontakte SafeNotarize anvan ou kòmanse yon lòt.'
   } : {
+    title: 'On-Demand 24/7',
     back: 'Back to service options',
     package: '$30 includes 1 signer and 1 stamp.',
-    saved: 'We’ll send your saved PDF to OneNotary.',
-    upload: 'You’ll upload your document on OneNotary.',
-    intro: 'Test checkout. Use a Stripe test card for the $30 hold. You’ll complete your information and identity check on OneNotary.',
+    saved: 'Your saved PDF will be ready in your session.',
+    upload: 'You’ll upload your document when you enter the session.',
+    intro: 'Test checkout. Use a Stripe test card for the $30 hold.',
     email: 'Primary signer’s email',
     rates: 'Each additional signer or stamp is $10. Each witness is $15.',
     terms: 'I authorize a $30 hold and agree to the final price based on the services completed.',
     card: 'Test card',
     submit: 'Authorize $30 and continue',
-    join: 'Continue to OneNotary',
+    join: 'Join your session',
     library: 'Need a document? Browse the library',
     loading: 'Preparing checkout…',
-    unavailable: 'Premium checkout is currently unavailable.',
+    unavailable: 'On-demand checkout is currently unavailable.',
     missing: 'Your saved PDF is unavailable. Return to your document and save it again.',
     authorizing: 'Checking your card authorization…',
     cardError: 'The card authorization failed. Check the card details and try again.',
-    opening: 'Preparing your OneNotary session…',
+    opening: 'Preparing your session…',
     invalidEstimate: 'Check the number of additional signers, stamps, and witnesses.',
     retry: 'We couldn’t continue. Try again on this page.',
     review: 'SafeNotarize needs to review this request before you start another one.'
   };
   document.documentElement.lang = ht ? 'ht' : 'en';
+  document.title = `${copy.title} | SafeNotarize`;
 
   const el = id => document.getElementById('premium-' + id);
   const form = el('form');
@@ -68,8 +71,8 @@
       ? `${dollars(additionalSigner)} pou chak siyatè anplis, ${dollars(additionalStamp)} pou chak so anplis ak ${dollars(witness)} pou chak temwen.`
       : `${dollars(additionalSigner)} per additional signer, ${dollars(additionalStamp)} per additional stamp, and ${dollars(witness)} per witness.`;
     copy.intro = ht
-      ? 'W ap verifye idantite ou sou OneNotary.'
-      : 'You’ll verify your identity on OneNotary.';
+      ? 'N ap mete yon rezèv tanporè sou kat ou. W ap peye montan final la apre sesyon an.'
+      : 'We’ll place a temporary hold on your card. You’ll pay the final total after your session.';
     copy.terms = ht
       ? `Mwen otorize yon rezèv ${dollars(base)} epi mwen dakò ak pri final la selon sèvis ki fèt yo.`
       : `I authorize a ${dollars(base)} hold and agree to the final price based on the services completed.`;
@@ -77,7 +80,7 @@
     copy.card = ht ? 'Enfòmasyon kat la' : 'Card information';
   }
   for (const [id, key] of Object.entries({
-    back: 'back', package: 'package', intro: 'intro', 'email-label': 'email', rates: 'rates',
+    title: 'title', back: 'back', package: 'package', intro: 'intro', 'email-label': 'email', rates: 'rates',
     'terms-label': 'terms', 'card-label': 'card', submit: 'submit', join: 'join', library: 'library'
   })) el(id).textContent = copy[key];
   el('back').href = service?.backPath || (ht ? '/start-ht.html' : '/start.html');

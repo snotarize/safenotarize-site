@@ -6,22 +6,22 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#00274d">
-  <title>Premium 24/7 | SafeNotarize</title>
-  <link rel="stylesheet" href="/assets/premium/premium.css?v=3">
+  <title>On-Demand 24/7 | SafeNotarize</title>
+  <link rel="stylesheet" href="/assets/premium/premium.css?v=4">
   <script src="https://safenotarize-phase-c-premium-production.karlberryj.workers.dev/phase-c/config.js" defer></script>
   <script src="/assets/document-handoff-config.js?v=20261107-4" defer></script>
   <script src="/assets/document-handoff.js?v=20261111-2" defer></script>
-  <script src="/assets/premium/services.js?v=8" defer></script>
+  <script src="/assets/premium/services.js?v=9" defer></script>
   <script src="/assets/official-forms/booking-analytics.js?v=2" defer></script>
-  <script src="/assets/premium/checkout.js?v=8" defer></script>
+  <script src="/assets/premium/checkout.js?v=9" defer></script>
 </head>
 <body class="sn-premium-page">
   <main class="sn-premium-panel">
     <a id="premium-back" href="/start.html">Back to service options</a>
-    <h1>Premium 24/7</h1>
+    <h1 id="premium-title">On-Demand 24/7</h1>
     <p id="premium-package">$30 includes 1 signer and 1 stamp.</p>
     <p id="premium-document" hidden></p>
-    <p id="premium-intro" hidden>Test checkout. Use a Stripe test card for the $30 hold. You’ll complete your information and identity check on OneNotary.</p>
+    <p id="premium-intro" hidden></p>
     <form id="premium-form" hidden>
       <label for="premium-email" id="premium-email-label">Primary signer’s email</label>
       <input id="premium-email" type="email" autocomplete="email" maxlength="254" required>
@@ -50,8 +50,8 @@
       <div id="premium-security"></div>
       <button class="sn-service-action" id="premium-submit" type="submit" disabled>Authorize $30 and continue</button>
     </form>
-    <p id="premium-status" role="status">Premium checkout is unavailable.</p>
-    <a id="premium-join" class="sn-service-action" rel="noopener noreferrer" hidden>Continue to OneNotary</a>
+    <p id="premium-status" role="status">On-demand checkout is unavailable.</p>
+    <a id="premium-join" class="sn-service-action" rel="noopener noreferrer" hidden>Join your session</a>
     <p><a id="premium-library" href="/documents/library.html" hidden>Need a document? Browse the library</a></p>
   </main>
 </body>

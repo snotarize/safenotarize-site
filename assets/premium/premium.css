@@ -1,6 +1,6 @@
 [data-sn-service-choice][hidden],
 [data-sn-regular][hidden],
-[data-sn-service-intro] p[hidden],
+[data-sn-service-intro] [hidden],
 .sn-premium-page [hidden] {
   display: none;
 }
@@ -27,31 +27,82 @@
 .sn-service-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-}
-
-.sn-service-card h2,
-.sn-service-card p {
-  margin: 0 0 8px;
+  padding: clamp(14px, 3vw, 22px);
 }
 
 .sn-service-card h2 {
-  font-size: 1.2rem;
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  line-height: 1.2;
 }
 
-.sn-service-card .sn-service-price {
-  font-size: 2rem;
+.sn-service-description {
+  margin: 0 0 12px;
+  color: #40536a;
+  font-size: .9375rem;
+  line-height: 1.4;
+}
+
+.sn-service-cost {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin: auto 0 12px;
+}
+
+.sn-service-price,
+.sn-service-included {
+  margin: 0;
+  font-size: .9375rem;
+  line-height: 1.3;
+}
+
+.sn-service-price strong {
+  font-size: 1.5rem;
   font-weight: 800;
 }
 
-.sn-service-rates {
-  margin: 4px 0 16px;
-  padding-left: 20px;
+.sn-service-included {
+  color: #40536a;
 }
 
-.sn-service-premium {
-  border-color: #83bc95;
-  background: #f5fbf7;
+.sn-service-add-ons {
+  grid-column: 1 / -1;
+  color: #00274d;
+}
+
+.sn-service-add-ons summary {
+  min-height: 44px;
+  padding: 12px 0;
+  font-size: .9375rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sn-service-add-ons table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: .875rem;
+}
+
+.sn-service-add-ons th,
+.sn-service-add-ons td {
+  padding: 8px;
+  border-bottom: 1px solid #dce7f2;
+  text-align: center;
+}
+
+.sn-service-add-ons th:first-child {
+  text-align: start;
+}
+
+.sn-service-add-ons p {
+  margin: 8px 0 0;
+  color: #40536a;
+  font-size: .8125rem;
+  line-height: 1.4;
 }
 
 .sn-service-action {
@@ -72,15 +123,8 @@
   cursor: pointer;
 }
 
-.sn-service-card .sn-service-action {
-  margin-top: auto;
-}
-
-.sn-service-premium .sn-service-action {
-  background: #13733a;
-}
-
 .sn-service-action:focus-visible,
+.sn-service-add-ons summary:focus-visible,
 .sn-premium-panel a:focus-visible {
   outline: 3px solid #13733a;
   outline-offset: 3px;
