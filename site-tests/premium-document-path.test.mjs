@@ -16,12 +16,18 @@ const config={
 
 function element(location,initialHref=''){
   let href=initialHref;
+  const attributes=new Map(),listeners=new Map(),classes=new Set();
   return {
-    children:[],hidden:false,classList:{add(){}},
+    children:[],hidden:false,classes,
+    classList:{add:name=>classes.add(name),toggle:(name,on)=>on?classes.add(name):classes.delete(name)},
     get href(){return new URL(href,location).href;},
     set href(value){href=value;},
+    setAttribute(name,value){attributes.set(name,value);},
+    getAttribute(name){return attributes.get(name);},
     append(...children){this.children.push(...children);},
-    after(){},addEventListener(){}
+    addEventListener(name,listener){listeners.set(name,listener);},
+    click(){listeners.get('click')?.();},
+    focus(){this.focused=true;},scrollIntoView(){},after(){}
   };
 }
 function anchorHref(html,id){
@@ -32,6 +38,7 @@ function renderServices(path,{lang='en',window={},elements={},selectors={},group
   const location=new URL(path,origin);
   const chooser=selectors['[data-sn-service-choice]'];
   if(chooser)chooser.hidden=true;
+  window.history ??= { replaceState(_state,_title,url){location.href=new URL(url,location).href;} };
   const document={
     documentElement:{lang},createElement:()=>element(location),
     getElementById:id=>elements[id]??null,
@@ -42,73 +49,83 @@ function renderServices(path,{lang='en',window={},elements={},selectors={},group
   return window.SafeNotarizePremium;
 }
 function chooser(){
-  const options=element(origin),intro={querySelector:()=>element(origin)};
+  const options=element(origin),intro={querySelector:()=>element(origin),querySelectorAll:()=>[]};
   return {'[data-sn-service-choice]':options,'[data-sn-service-intro]':intro};
 }
 const premiumHref=selectors=>selectors['[data-sn-service-choice]'].children[1].children.at(-1).href;
+const documentOptions=selectors=>selectors['[data-sn-service-choice]'].children.find(node=>node.id==='sn-document-options');
 
-test('Premium keeps the official form context through the completed-document choice',()=>{
+test('a completed official form goes directly to checkout and retains its document type',()=>{
   const choices=chooser();
   renderServices('/book.html?document_ready=1&document_source=official&document_type=ps-1583',
     {window:{SN_PREMIUM:config},selectors:choices});
-  const prepare=premiumHref(choices);
-  assert.equal(new URL(prepare).searchParams.get('document_type'),'ps-1583');
-  const elements={'have-btn':element(prepare),'need-btn':element(prepare)};
-  renderServices(prepare,{window:{SN_PREMIUM:config},elements,
-    selectors:{'#have-list li:last-child':element(prepare)}});
-  const checkout=new URL(elements['have-btn'].href);
+  const checkout=new URL(premiumHref(choices));
   assert.equal(checkout.pathname,'/premium.html');
   assert.equal(checkout.searchParams.get('document_source'),'own');
   assert.equal(checkout.searchParams.get('document_type'),'ps-1583');
+  assert.equal(documentOptions(choices),undefined);
 });
 
 test('Premium keeps the vehicle release context through choosing and returning from checkout',()=>{
   const choices=chooser();
   renderServices('/book-ht.html?document_ready=1&document_source=own&document_type=vehicle-release',
     {lang:'ht',window:{SN_PREMIUM:config},selectors:choices});
-  const prepare=premiumHref(choices);
-  assert.equal(new URL(prepare).searchParams.get('document_type'),'vehicle-release');
-  const elements={'have-btn':element(prepare),'need-btn':element(prepare),subtitle:element(prepare)};
-  renderServices(prepare,{lang:'ht',window:{SN_PREMIUM:config},elements,
-    selectors:{'#have-list li:last-child':element(prepare)}});
-  const checkout=new URL(elements['have-btn'].href);
+  const checkout=new URL(premiumHref(choices));
   assert.equal(checkout.pathname,'/premium.html');
   assert.equal(checkout.searchParams.get('document_source'),'own');
   assert.equal(checkout.searchParams.get('document_type'),'vehicle-release');
   const back=new URL(renderServices(checkout.href).backPath,origin);
   assert.equal(back.pathname,'/start-ht.html');
   assert.equal(back.searchParams.get('document_type'),'vehicle-release');
+  assert.equal(documentOptions(choices),undefined);
 });
 
 for(const lang of ['en','ht']){
   const ht=lang==='ht';
   const suffix=ht?'-ht':'';
-  test('Premium opens the '+lang+' document choices and keeps the selected service on both paths',()=>{
-    const start='/start'+suffix;
-    const html=read(start.slice(1)+'.html');
+  test('the '+lang+' start reveals the document answers in place and updates both links when the service changes',()=>{
+    const start='/start'+suffix+'.html';
     const selectors=chooser();
-    renderServices(start,{lang,window:{SN_PREMIUM:config},selectors});
-    const preparation=origin+start+'.html?service=premium';
-    assert.equal(premiumHref(selectors),preparation);
-    const elements={
-      'have-btn':element(preparation,anchorHref(html,'have-btn')),
-      'need-btn':element(preparation,anchorHref(html,'need-btn')),
-      subtitle:element(preparation)
-    };
-    const choices=chooser();
-    choices['#have-list li:last-child']=element(preparation);
-    renderServices(preparation,{lang,window:{SN_PREMIUM:config},elements,selectors:choices});
-    assert.equal(choices['[data-sn-service-choice]'].hidden,true);
-    const own=new URL(elements['have-btn'].href);
+    let selectedUrl;
+    renderServices(start,{lang,window:{SN_PREMIUM:config,history:{replaceState(_state,_title,url){selectedUrl=url;}}},selectors});
+    const [standard,onDemand]=selectors['[data-sn-service-choice]'].children;
+    const standardButton=standard.children.at(-1),onDemandButton=onDemand.children.at(-1);
+    const options=documentOptions(selectors);
+    const [question,answers]=options.children;
+    const [ready,need]=answers.children;
+    assert.equal(options.hidden,true);
+    standardButton.click();
+    assert.equal(options.hidden,false);
+    assert.equal(question.focused,true);
+    assert.equal(standardButton.getAttribute('aria-pressed'),'true');
+    assert.ok(standard.classes.has('sn-service-selected'));
+    assert.equal(selectedUrl,start+'?service=regular');
+    const standardUrl=new URL(ready.href);
+    assert.equal(standardUrl.pathname,'/book'+suffix+'.html');
+    assert.equal(standardUrl.searchParams.get('document_source'),'own');
+    assert.equal(standardUrl.searchParams.get('document_ready'),'1');
+    assert.equal(standardUrl.searchParams.get('service'),'regular');
+    assert.equal(need.href,origin+'/documents/library'+suffix+'.html?service=regular');
+
+    onDemandButton.click();
+    assert.equal(standardButton.getAttribute('aria-pressed'),'false');
+    assert.equal(onDemandButton.getAttribute('aria-pressed'),'true');
+    assert.equal(selectedUrl,start+'?service=premium');
+    const own=new URL(ready.href);
     assert.equal(own.pathname,'/premium.html');
     assert.equal(own.searchParams.get('service'),'premium');
     assert.equal(own.searchParams.get('document_source'),'own');
     assert.equal(own.searchParams.get('lang'),ht?'ht':null);
-    assert.equal(elements['need-btn'].href,origin+'/documents/library'+suffix+'.html?service=premium');
+    assert.equal(need.href,origin+'/documents/library'+suffix+'.html?service=premium');
     const api=renderServices(own.href,{window:{SN_PREMIUM:config}});
     assert.equal(api.backToDocumentOptions,true);
-    assert.equal(api.backPath,start+'.html?service=premium');
+    assert.equal(api.backPath,start+'?service=premium');
     assert.equal(api.libraryPath,'/documents/library'+suffix+'.html?service=premium');
+
+    const preselected=chooser();
+    renderServices(selectedUrl,{lang,window:{SN_PREMIUM:config},selectors:preselected});
+    assert.equal(documentOptions(preselected).hidden,false);
+    assert.equal(preselected['[data-sn-service-choice]'].children[1].children.at(-1).getAttribute('aria-pressed'),'true');
   });
 
   test('all '+lang+' library creators carry the selected service through the shared PDF handoff',async()=>{
@@ -187,19 +204,23 @@ test('the booking chooser opens Premium with a matching saved PDF and otherwise 
     const href=new URL(premiumHref(selectors));
     assert.equal(href.pathname,available?'/premium.html':'/start.html');
     assert.equal(href.searchParams.get(available?'document_type':'service'),available?'custom':'premium');
+    assert.equal(documentOptions(selectors),undefined);
+    const standard=new URL(selectors['[data-sn-service-choice]'].children[0].children.at(-1).href);
+    assert.equal(standard.pathname,'/book.html');
+    assert.equal(standard.searchParams.get('document_source'),'library');
+    assert.equal(standard.searchParams.get('document_type'),'custom');
+    assert.equal(standard.searchParams.get('service'),'regular');
   }
 });
 
-test('Regular keeps its completed-document booking link',()=>{
-  const location=new URL('/start?service=regular',origin);
-  const html=read('start.html');
-  const elements={'have-btn':element(location,anchorHref(html,'have-btn')),'need-btn':element(location,anchorHref(html,'need-btn'))};
+test('the Standard fallback remains usable when on-demand is unavailable',()=>{
   const selectors=chooser();
-  renderServices(location.href,{window:{SN_PREMIUM:config},elements,selectors});
+  renderServices('/start.html?service=premium',{window:{SN_PREMIUM:{...config,acceptingOrders:false}},selectors});
   assert.equal(selectors['[data-sn-service-choice]'].hidden,true);
-  const book=new URL(elements['have-btn'].href);
+  const html=read('start.html');
+  const book=new URL(anchorHref(html,'have-btn'),origin);
   assert.equal(book.pathname,'/book.html');
   assert.equal(book.searchParams.get('service'),'regular');
   assert.equal(book.searchParams.get('document_source'),'own');
-  assert.equal(elements['need-btn'].href,origin+'/documents/library.html?service=regular');
+  assert.equal(anchorHref(html,'need-btn'),'/documents/library.html?service=regular');
 });

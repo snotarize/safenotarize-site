@@ -8,9 +8,8 @@
     (/^\/premium(?:\.html)?$/.test(location.pathname) && params.get('lang') === 'ht');
   const startPath = ht ? '/start-ht.html' : '/start.html';
   const bookPath = ht ? '/book-ht.html' : '/book.html';
-  const generated = ['library', 'generated', 'template'].includes(
-    (params.get('document_source') || '').trim().toLowerCase()
-  );
+  const documentSource = (params.get('document_source') || '').trim().toLowerCase();
+  const generated = ['library', 'generated', 'template'].includes(documentSource);
   const requestedType = (params.get('document_type') || '').trim().toLowerCase();
   const documentType = /^[a-z0-9-]{1,64}$/.test(requestedType) ? requestedType : '';
   const testPricing = { base: 3000, additionalSigner: 1000, additionalStamp: 1000, witness: 1500 };
@@ -56,18 +55,16 @@
   const libraryPath = new URL(ht ? '/documents/library-ht.html' : '/documents/library.html', location.origin);
   libraryPath.searchParams.set('service', 'premium');
   const ownCheckout = new URL('/premium.html', location.origin);
+  ownCheckout.searchParams.set('service', 'premium');
+  ownCheckout.searchParams.set('document_source', 'own');
   if (ht) ownCheckout.searchParams.set('lang', 'ht');
-  if (!generated && ['ds-3053', 'ps-1583', 'vehicle-release'].includes(documentType)) {
-    preparePath.searchParams.set('document_type', documentType);
+  if (documentType) {
     ownCheckout.searchParams.set('document_type', documentType);
+    preparePath.searchParams.set('document_type', documentType);
   }
   const checkoutPath = new URL(ownCheckout);
   const backToDocumentOptions = selectedService === 'premium' && !generated;
-  const backPath = new URL(generated ? bookPath : startPath, location.origin);
-  if (backToDocumentOptions) {
-    backPath.searchParams.set('service', 'premium');
-    if (documentType === 'vehicle-release') backPath.searchParams.set('document_type', documentType);
-  }
+  const backPath = backToDocumentOptions ? preparePath : new URL(generated ? bookPath : startPath, location.origin);
   if (generated) {
     checkoutPath.searchParams.set('document_source', 'library');
     checkoutPath.searchParams.set('document_type', documentType);
@@ -90,34 +87,18 @@
     }
   }
 
-  const haveDocument = document.getElementById('have-btn');
-  if (selectedService === 'premium' && haveDocument) {
-    ownCheckout.searchParams.set('service', 'premium');
-    ownCheckout.searchParams.set('document_source', 'own');
-    haveDocument.href = relative(ownCheckout);
-    haveDocument.textContent = ht ? 'Kontinye nan peman' : 'Continue to Checkout';
-    if (ht) document.getElementById('subtitle').textContent = 'Chwazi opsyon ki mache ak sitiyasyon ou.';
-    document.querySelector('#have-list li:last-child').textContent = ht
-      ? 'Voye dokiman an apre ou fin otorize kat ou'
-      : 'Upload your document after authorizing your card';
-    document.getElementById('need-btn').href = relative(libraryPath);
-    return;
-  }
-
   const chooser = document.querySelector('[data-sn-service-choice]');
-  const premium = settings();
-  if (selectedService === 'regular') {
-    if (haveDocument) {
-      const book = new URL(haveDocument.href);
-      book.searchParams.set('service', 'regular');
-      haveDocument.href = relative(book);
-      libraryPath.searchParams.set('service', 'regular');
-      document.getElementById('need-btn').href = relative(libraryPath);
-    }
-    return;
-  }
+  if (!chooser) return;
 
-  if (!chooser || !premium || (premium.mode === 'live' && premium.acceptingOrders !== true)) return;
+  const bookingPage = /^\/book(?:-ht)?(?:\.html)?$/.test(location.pathname);
+  const ready = ['1', 'yes'].includes((params.get('document_ready') || '').trim().toLowerCase());
+  const pendingDocument = documentContext().pending;
+  const hasDocument = !!pendingDocument || (bookingPage &&
+    (ready || generated || documentSource === 'own'));
+  if (hasDocument && selectedService === 'regular') return;
+
+  const premium = settings();
+  if (!premium || (premium.mode === 'live' && premium.acceptingOrders !== true)) return;
 
   const rates = premium.pricing;
   const copy = ht ? {
@@ -131,6 +112,12 @@
     onDemandDescription: 'Bezwen yon notè vit oswa apre lè travay? Mande youn kounye a.',
     onDemandIncluded: '1 siyatè, 1 so',
     onDemandAction: 'Chwazi sèvis sou demann',
+    documentQuestion: 'Èske dokiman ou pare?',
+    haveDocument: 'Wi, mwen gen dokiman mwen',
+    bookNext: 'Kontinye pou pran randevou',
+    checkoutNext: 'Kontinye nan peman',
+    needDocument: 'Mwen bezwen yon fòm oswa yon modèl',
+    libraryNext: 'Louvri Bibliyotèk Dokiman an',
     prices: 'Gade pri sèvis anplis',
     addOn: 'Sèvis anplis',
     extraSigner: 'Siyatè anplis',
@@ -148,6 +135,12 @@
     onDemandDescription: 'Need it soon or after hours? Request a notary now.',
     onDemandIncluded: '1 signer, 1 stamp',
     onDemandAction: 'Choose On-Demand',
+    documentQuestion: 'Is your document ready?',
+    haveDocument: 'Yes, I have my document',
+    bookNext: 'Continue to booking',
+    checkoutNext: 'Continue to checkout',
+    needDocument: 'I need a form or template',
+    libraryNext: 'Open Document Library',
     prices: 'See add-on prices',
     addOn: 'Add-on',
     extraSigner: 'Extra signer',
@@ -156,7 +149,9 @@
     witnessNote: 'The Standard witness fee applies to witnesses SafeNotarize provides.'
   };
 
-  function plan({name, description, price, included, action, href}) {
+  const serviceButtons = [];
+
+  function plan({name, description, price, included, action, service, href}) {
     const card = document.createElement('article');
     card.className = 'sn-service-card';
     const heading = document.createElement('h2');
@@ -177,11 +172,23 @@
     allowance.textContent = included;
     cost.append(amount, allowance);
 
-    const link = document.createElement('a');
-    link.className = 'sn-service-action';
-    link.href = href;
-    link.textContent = action;
-    card.append(heading, summary, cost, link);
+    const control = document.createElement(href ? 'a' : 'button');
+    control.className = 'sn-service-action';
+    if (href) {
+      control.href = href;
+      control.textContent = action;
+    } else {
+      control.type = 'button';
+      control.setAttribute('aria-pressed', 'false');
+      control.setAttribute('aria-controls', 'sn-document-options');
+      const check = document.createElement('span');
+      check.className = 'sn-service-check';
+      check.setAttribute('aria-hidden', 'true');
+      check.textContent = '✓';
+      control.append(check, action);
+      serviceButtons.push({ service, card, control });
+    }
+    card.append(heading, summary, cost, control);
     return card;
   }
 
@@ -225,21 +232,87 @@
     return details;
   }
 
-  const regular = new URL(location.href);
+  function documentAnswer(label, next) {
+    const link = document.createElement('a');
+    link.className = 'sn-document-answer';
+    const title = document.createElement('span');
+    title.textContent = label;
+    link.append(title, next);
+    return link;
+  }
+
+  const regular = new URL(hasDocument && bookingPage ? location.href : bookPath, location.origin);
   regular.searchParams.set('service', 'regular');
+  regular.searchParams.set('document_ready', '1');
+  if (!bookingPage || !hasDocument) {
+    regular.searchParams.set('document_source', pendingDocument ? 'library' : 'own');
+    if (documentType) regular.searchParams.set('document_type', documentType);
+  }
+
+  const onDemand = hasDocument && generated
+    ? (pendingDocument ? checkoutPath : preparePath)
+    : ownCheckout;
   chooser.classList.add('sn-service-options');
   chooser.append(
     plan({name: copy.standard, description: copy.standardDescription, price: '$25',
-      included: copy.standardIncluded, action: copy.standardAction, href: relative(regular)}),
+      included: copy.standardIncluded, action: copy.standardAction, service: 'regular',
+      href: hasDocument ? relative(regular) : null}),
     plan({name: copy.onDemand + ' 24/7', description: copy.onDemandDescription, price: dollars(rates.base),
-      included: copy.onDemandIncluded, action: copy.onDemandAction,
-      href: relative(documentContext().pending ? checkoutPath : preparePath)}),
-    addOnPrices()
+      included: copy.onDemandIncluded, action: copy.onDemandAction, service: 'premium',
+      href: hasDocument ? relative(onDemand) : null})
   );
+  if (!hasDocument) {
+    const documentOptions = document.createElement('section');
+    documentOptions.id = 'sn-document-options';
+    documentOptions.className = 'sn-document-options';
+    documentOptions.hidden = true;
+    const question = document.createElement('h2');
+    question.id = 'sn-document-question';
+    question.tabIndex = -1;
+    question.textContent = copy.documentQuestion;
+    documentOptions.setAttribute('aria-labelledby', question.id);
+    const readyNext = document.createElement('small');
+    const readyLink = documentAnswer(copy.haveDocument, readyNext);
+    const libraryNext = document.createElement('small');
+    libraryNext.textContent = copy.libraryNext;
+    const needLink = documentAnswer(copy.needDocument, libraryNext);
+    const answers = document.createElement('div');
+    answers.className = 'sn-document-answers';
+    answers.append(readyLink, needLink);
+    documentOptions.append(question, answers);
+    chooser.append(documentOptions);
+
+    function showDocumentOptions(service) {
+      const isOnDemand = service === 'premium';
+      for (const button of serviceButtons) {
+        const active = button.service === service;
+        button.control.setAttribute('aria-pressed', String(active));
+        button.card.classList.toggle('sn-service-selected', active);
+      }
+      readyLink.href = relative(isOnDemand ? onDemand : regular);
+      readyNext.textContent = isOnDemand ? copy.checkoutNext : copy.bookNext;
+      const library = new URL(libraryPath);
+      library.searchParams.set('service', service);
+      needLink.href = relative(library);
+      documentOptions.hidden = false;
+    }
+
+    for (const { service, control } of serviceButtons) {
+      control.addEventListener('click', () => {
+        showDocumentOptions(service);
+        const url = new URL(location.href);
+        url.searchParams.set('service', service);
+        window.history.replaceState(window.history.state, '', relative(url));
+        question.focus({ preventScroll: true });
+        documentOptions.scrollIntoView({ block: 'nearest' });
+      });
+    }
+    if (selectedService === 'regular' || selectedService === 'premium') showDocumentOptions(selectedService);
+  }
+  chooser.append(addOnPrices());
   const intro = document.querySelector('[data-sn-service-intro]');
   intro.querySelector('h1').textContent = copy.heading;
-  intro.querySelector('.pill').hidden = true;
-  intro.querySelector('p').hidden = true;
+  intro.querySelectorAll('.pill, p').forEach(node => { node.hidden = true; });
   document.querySelectorAll('[data-sn-regular]').forEach(node => { node.hidden = true; });
   chooser.hidden = false;
 })();
