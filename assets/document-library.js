@@ -3,11 +3,33 @@ import { documentBookingUrl, selectedService } from './document-service-links.js
 const catalog = document.getElementById('document-catalog');
 const language = document.documentElement.lang;
 const ht = language === 'ht';
-const languageLink = document.getElementById('library-language');
+
+function requestedLibraryLanguage() {
+  const requested = new URLSearchParams(location.search).get('lang');
+  if (requested === 'ht' || requested === 'en') return requested;
+  if (ht || !document.referrer) return language;
+
+  const referrer = new URL(document.referrer);
+  if (referrer.origin !== location.origin &&
+      referrer.origin !== 'https://safenotarize.com' &&
+      referrer.origin !== 'https://www.safenotarize.com') return language;
+
+  const path = referrer.pathname.replace(/\.html$/, '');
+  const fromKreyol = referrer.searchParams.get('lang') === 'ht' ||
+    path === '/ht' || path === '/haitian-online-notary' ||
+    path.endsWith('-ht') || path.startsWith('/documents/ht/');
+  return fromKreyol ? 'ht' : language;
+}
+
+const requestedLanguage = requestedLibraryLanguage();
+if (requestedLanguage !== language) {
+  const library = new URL(location.href);
+  library.pathname = requestedLanguage === 'ht' ? '/documents/library-ht.html' : '/documents/library.html';
+  location.replace(library.href);
+}
 
 function showLinkedSection() {
   const id = location.hash.slice(1);
-  languageLink.hash = location.hash;
   if (!id) return;
   const renamed = {
     'guide-start': 'document-guide',
@@ -46,6 +68,9 @@ const status = document.getElementById('search-status');
 const empty = document.getElementById('no-results');
 const panels = document.getElementById('document-panels');
 const ownPanel = document.getElementById('notarize-panel');
+const upload = document.getElementById('own-document-upload');
+const custom = document.getElementById('create-own-document');
+const customSearch = normalize(`${custom.textContent} ${custom.dataset.search}`);
 const formsPanel = document.getElementById('guide-forms');
 const templatesPanel = document.getElementById('guide-templates');
 const guidesPanel = document.getElementById('search-guides');
@@ -122,7 +147,7 @@ for (const card of catalog.querySelectorAll('article.card')) {
   entries.push({ kind, key, title, searchable, row });
 }
 
-const templateRank = entry => entry.key === 'custom' ? priority.length + 1 : rank.get(entry.key) ?? priority.length;
+const templateRank = entry => rank.get(entry.key) ?? priority.length;
 for (const [kind, list] of Object.entries(lists)) {
   const group = entries.filter(entry => entry.kind === kind);
   if (kind === 'template') {
@@ -136,6 +161,7 @@ function updateResults() {
   const terms = query ? query.split(/\s+/) : [];
   const searching = terms.length > 0;
   const exactForm = entries.find(entry => entry.kind === 'form' && terms.includes(normalize(entry.key)));
+  const customMatch = searching && !exactForm && terms.every(term => customSearch.includes(term));
   const matches = { form: 0, template: 0, guide: 0 };
   for (const entry of entries) {
     const visible = exactForm ? entry === exactForm :
@@ -144,13 +170,14 @@ function updateResults() {
     if (visible) matches[entry.kind]++;
   }
 
-  const count = matches.form + matches.template + matches.guide;
+  const count = matches.form + matches.template + matches.guide + Number(customMatch);
   panels.classList.toggle('searching', searching);
-  ownPanel.hidden = searching;
+  upload.hidden = searching;
+  ownPanel.hidden = searching && !customMatch;
   formsPanel.hidden = !matches.form;
   templatesPanel.hidden = !matches.template;
   guidesPanel.hidden = !matches.guide;
-  panels.hidden = !matches.form && !matches.template && searching;
+  panels.hidden = ownPanel.hidden && formsPanel.hidden && templatesPanel.hidden;
   catalog.hidden = searching;
   clear.hidden = !search.value;
   empty.hidden = !searching || count > 0;
