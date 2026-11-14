@@ -237,6 +237,7 @@
       if (payment.orderId !== id || payment.amount !== amount || typeof payment.clientSecret !== 'string') {
         throw Error('payment_contract_invalid');
       }
+      if (live) await window.SafeNotarizeOrderAttribution?.premium(id, access, source);
       await authorize(payment.clientSecret, amount);
 
       status.textContent = copy.opening;
