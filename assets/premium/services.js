@@ -101,6 +101,7 @@
   if (!premium || (premium.mode === 'live' && premium.acceptingOrders !== true)) return;
 
   const rates = premium.pricing;
+  const isStartLanding = Boolean(document.querySelector('[data-sn-start-landing]'));
   const copy = ht ? {
     heading: 'Kilè ou bezwen yon notè sou entènèt?',
     from: 'Apati',
@@ -130,11 +131,13 @@
     standard: 'Standard',
     standardDescription: 'Join when a notary is ready or choose a time.',
     standardIncluded: '1 signer, 2 stamps',
-    standardAction: 'Choose Standard',
+    standardAction: isStartLanding ? 'Book Standard' : 'Choose Standard',
     onDemand: 'On-Demand',
-    onDemandDescription: 'Need it soon or after hours? Request a notary now.',
+    onDemandDescription: isStartLanding
+      ? 'Need it soon or after hours?'
+      : 'Need it soon or after hours? Request a notary now.',
     onDemandIncluded: '1 signer, 1 stamp',
-    onDemandAction: 'Choose On-Demand',
+    onDemandAction: isStartLanding ? 'Request a notary now' : 'Choose On-Demand',
     documentQuestion: 'Is your document ready?',
     haveDocument: 'Yes, I have my document',
     bookNext: 'Continue to booking',
@@ -154,6 +157,7 @@
   function plan({name, description, price, included, action, service, href}) {
     const card = document.createElement('article');
     card.className = 'sn-service-card';
+    card.setAttribute('data-sn-service', service);
     const heading = document.createElement('h2');
     heading.textContent = name;
     const summary = document.createElement('p');
@@ -310,9 +314,11 @@
     if (selectedService === 'regular' || selectedService === 'premium') showDocumentOptions(selectedService);
   }
   chooser.append(addOnPrices());
-  const intro = document.querySelector('[data-sn-service-intro]');
-  intro.querySelector('h1').textContent = copy.heading;
-  intro.querySelectorAll('.pill, p').forEach(node => { node.hidden = true; });
+  if (!isStartLanding) {
+    const intro = document.querySelector('[data-sn-service-intro]');
+    intro.querySelector('h1').textContent = copy.heading;
+    intro.querySelectorAll('.pill, p').forEach(node => { node.hidden = true; });
+  }
   document.querySelectorAll('[data-sn-regular]').forEach(node => { node.hidden = true; });
   chooser.hidden = false;
 })();

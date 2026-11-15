@@ -9,10 +9,32 @@
 <style>
 :root{--navy:#00274d;--text:#40536a}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff,#eef6ff);min-height:100vh;color:var(--text)}
-main{max-width:900px;margin:auto;padding:38px 18px 54px}
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg,#f7fbff,#eef6ff);
+  color: var(--text);
+}
+main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 38px 18px 54px;
+}
 .hero{text-align:center;max-width:720px;margin:auto}
 h1{margin:0;color:var(--navy);font-size:clamp(1.375rem,4vw,1.625rem);line-height:1.2}
+.hero p {
+  margin: 8px 0 0;
+  line-height: 1.45;
+}
+.sn-service-options:not(:has(> .sn-service-selected)) [data-sn-service="regular"] .sn-service-action {
+  background: #13733a;
+}
 .small-note{margin:14px auto 0;max-width:760px;font-size:.8125rem;line-height:1.4}
 @media(max-width:700px){main{padding:18px 12px 28px}}
 </style>
@@ -29,16 +51,18 @@ h1{margin:0;color:var(--navy);font-size:clamp(1.375rem,4vw,1.625rem);line-height
 </style>
 <link rel="stylesheet" href="/assets/premium/premium.css?v=5">
 <script src="https://safenotarize-phase-c-premium-production.karlberryj.workers.dev/phase-c/config.js" defer></script>
-<script src="/assets/premium/services.js?v=10" defer></script>
+<script src="/assets/premium/services.js?v=11" defer></script>
 <script src="/assets/order-attribution.js?v=1" defer></script>
 </head>
 <body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-start-btn" href="/start.html">Start</a></nav><button aria-expanded="false" aria-label="Open menu" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/">Home</a><a href="/online-notary.html">Online Notary</a><a href="/documents/library.html">Document Library</a><a href="/#pricing-block">Pricing</a><a href="/#faq">FAQ</a><a class="sn-mobile-start" href="/start.html">Start</a></div></header>
 <main>
-<section class="hero" data-sn-service-intro>
-<h1>Is your document ready?</h1>
+<section class="hero" data-sn-service-intro data-sn-start-landing>
+<h1>Notarize online from $25</h1>
+<p>Meet a notary by video from your phone or computer.</p>
 </section>
 <div data-sn-service-choice hidden></div>
-<section class="sn-document-options sn-start-fallback" data-sn-regular>
+<section class="sn-document-options sn-start-fallback" data-sn-regular aria-labelledby="sn-fallback-question">
+<h2 id="sn-fallback-question">Is your document ready?</h2>
 <div class="sn-document-answers">
 <a class="sn-document-answer" href="/book.html?document_source=own&amp;document_ready=1&amp;service=regular" id="have-btn"><span>Yes, I have my document</span><small>Continue to booking</small></a>
 <a class="sn-document-answer" href="/documents/library.html?service=regular" id="need-btn"><span>I need a form or template</span><small>Open Document Library</small></a>
