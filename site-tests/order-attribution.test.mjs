@@ -15,11 +15,13 @@ const now = 1_794_585_600_000;
 const click = 'test-click-id-no-provider';
 const digest = value => createHash('sha256').update(value).digest('hex');
 
-function browser({ path, referrer = '', storage = new Map(), requests = [], optedOut = false, status = 204, time = now }) {
+function browser({ path, referrer = '', storage = new Map(), requests = [], optedOut = false, status = 204,
+  time = now, standardFormOpen = false }) {
   const location = new URL(path, origin);
   const window = {};
   runInNewContext(source, {
-    location, document: { referrer }, window, URL, URLSearchParams, crypto: webcrypto, TextEncoder,
+    location, document: { referrer, getElementById: id => id === 'booking-form' && standardFormOpen
+      ? { classList: { contains: () => false } } : null }, window, URL, URLSearchParams, crypto: webcrypto, TextEncoder,
     Date: { now: () => time },
     navigator: { globalPrivacyControl: optedOut },
     sessionStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) },
@@ -91,12 +93,59 @@ test('failed collection retries on the return page and excludes that page’s UR
   assert.equal(requests.length, 2);
 });
 
+test('ChatGPT campaign stages and both order paths share a visit without transmitting the ad click reference', async () => {
+  const path = '/start.html?utm_source=chatgpt&utm_medium=cpc&utm_campaign=online_notary_chatgpt&oppref=fixture-reference';
+  for (const [route, service, booking, order, proof] of [
+    ['standard', 'regular', '/book.html?document_ready=1&service=regular', standardId, requestId],
+    ['premium', 'premium', '/premium.html?service=premium', premiumId, access]
+  ]) {
+    const storage = new Map();
+    const requests = [];
+    browser({ path, storage, requests }).serviceSelected(service);
+    const form = browser({ path: booking, referrer: origin + '/start.html', storage, requests,
+      standardFormOpen: route === 'standard' });
+    if (route === 'premium') form.bookingStarted(route);
+    await form[route](order, proof, 'own');
+    const visitId = requests[0].body.visitId;
+    assert.match(visitId, /^[\da-f-]{36}$/);
+    assert.deepEqual(requests.slice(0, 3).map(request => request.body), [
+      { stage: 'landing', route: '', visitId },
+      { stage: 'service_selected', route, visitId },
+      { stage: 'booking_started', route, visitId }
+    ]);
+    assert.ok(requests.slice(0, 3).every(request => request.url.endsWith('/v1/chatgpt-funnel')));
+    assert.deepEqual(requests[3].body, {
+      route, orderId: order, proof: digest(proof), documentSource: 'own', source: 'other_paid', chatgptVisitId: visitId
+    });
+    assert.equal(JSON.stringify(requests).includes('fixture-reference'), false);
+    assert.equal(JSON.stringify(requests).includes(proof), false);
+    browser({ path, storage, requests });
+    assert.equal(requests.at(-1).body.visitId, visitId);
+  }
+});
+
+test('other paid visits and privacy opt-outs do not report ChatGPT stages', () => {
+  const requests = [];
+  const path = '/start.html?utm_source=chatgpt&utm_medium=cpc&utm_campaign=online_notary_chatgpt';
+  assert.equal(browser({ path, requests, optedOut: true }), undefined);
+  const other = browser({ path: path.replace('online_notary_chatgpt', 'another-campaign'), requests });
+  other.serviceSelected('regular');
+  other.bookingStarted('standard');
+  assert.deepEqual(requests, []);
+});
+
 test('the supported booking pages load attribution before notifying it of a real order', () => {
-  for (const file of ['start.html', 'start-ht.html', 'documents/vehicle-release-authorization.html', 'documents/library.html', 'book.html', 'book-ht.html', 'premium.html']) {
+  for (const file of ['start.html', 'start-ht.html', 'book.html', 'book-ht.html', 'premium.html']) {
+    assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=2" defer><\/script>/);
+  }
+  for (const file of ['documents/vehicle-release-authorization.html', 'documents/library.html']) {
     assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=1" defer><\/script>/);
   }
   for (const file of ['book.html', 'book-ht.html']) {
     assert.match(read(file), /const orderId = await submitIntake\(payload\);\s+await window\.SafeNotarizeOrderAttribution\?\.standard\(orderId, bookingRequestId, payload\.document_source\)/);
   }
   assert.match(read('assets/premium/checkout.js'), /payment_contract_invalid'\);\s+}\s+if \(live\) await window\.SafeNotarizeOrderAttribution\?\.premium\(id, access, source\);/);
+  assert.match(read('assets/premium/checkout.js'), /form\.addEventListener\('submit', continueToNotary\);\s+status\.textContent = '';\s+window\.SafeNotarizeOrderAttribution\?\.bookingStarted\?\.\('premium'\);/);
+  assert.match(read('assets/premium/services.js'), /addEventListener\('click', \(\) => window\.SafeNotarizeOrderAttribution\?\.serviceSelected\?\.\(service\)\)/);
+  assert.match(read('premium.html'), /id="premium-status" role="status">Loading secure checkout…</);
 });
