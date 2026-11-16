@@ -178,6 +178,7 @@
 
     const control = document.createElement(href ? 'a' : 'button');
     control.className = 'sn-service-action';
+    control.addEventListener('click', () => window.SafeNotarizeOrderAttribution?.serviceSelected?.(service));
     if (href) {
       control.href = href;
       control.textContent = action;

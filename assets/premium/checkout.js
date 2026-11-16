@@ -40,7 +40,7 @@
     submit: 'Authorize $30 and continue',
     join: 'Join your session',
     library: 'Need a document? Browse the library',
-    loading: 'Preparing checkout…',
+    loading: 'Loading secure checkout…',
     unavailable: 'On-demand checkout is currently unavailable.',
     missing: 'Your saved PDF is unavailable. Return to your document and save it again.',
     authorizing: 'Checking your card authorization…',
@@ -305,6 +305,7 @@
       });
       form.addEventListener('submit', continueToNotary);
       status.textContent = '';
+      window.SafeNotarizeOrderAttribution?.bookingStarted?.('premium');
     } catch {
       form.hidden = true;
       status.textContent = copy.unavailable;

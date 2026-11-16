@@ -4,7 +4,7 @@
   const origins = new Set(['https://safenotarize.com', 'https://www.safenotarize.com']);
   if (!origins.has(location.origin) || navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
 
-  const endpoint = 'https://safenotarize-vehicle-release-metrics.karlberryj.workers.dev/v1/orders';
+  const endpoint = 'https://safenotarize-vehicle-release-metrics.karlberryj.workers.dev/v1/';
   const visitKey = 'sn_order_attribution_visit';
   const pendingKey = 'sn_order_attribution_pending';
   const lifetime = 24 * 60 * 60 * 1000;
@@ -50,6 +50,14 @@
         ...(clickType ? { clickType, clickId: params.get(clickType) } : {}) });
       return;
     }
+    if (medium === 'cpc' && taggedSource === 'chatgpt' && name === 'online_notary_chatgpt' &&
+        typeof crypto.randomUUID === 'function') {
+      const previousId = visit().chatgptVisitId;
+      const visitId = uuid.test(previousId) ? previousId : crypto.randomUUID();
+      save(visitKey, { source: 'other_paid', startedAt, chatgptVisitId: visitId });
+      trackStage('landing', '', visitId);
+      return;
+    }
     if (paidMedium || params.has('msclkid')) {
       save(visitKey, { source: 'other_paid', startedAt });
       return;
@@ -80,16 +88,27 @@
     return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
+  function post(path, body) {
+    return fetch(endpoint + path, {
+      method: 'POST', body: JSON.stringify(body), keepalive: true,
+      headers: { 'content-type': 'text/plain;charset=UTF-8' },
+      credentials: 'omit', referrerPolicy: 'no-referrer', redirect: 'error'
+    });
+  }
+
+  function trackStage(stage, route, visitId = visit().chatgptVisitId) {
+    try {
+      if (!uuid.test(visitId)) return;
+      void post('chatgpt-funnel', { stage, route, visitId }).catch(() => {});
+    } catch { /* Measurement never blocks a booking. */ }
+  }
+
   function send(row) {
     const key = orderKey(row);
     if (inFlight.has(key)) return;
     inFlight.add(key);
     const { createdAt, ...body } = row;
-    void fetch(endpoint, {
-      method: 'POST', body: JSON.stringify(body), keepalive: true,
-      headers: { 'content-type': 'text/plain;charset=UTF-8' },
-      credentials: 'omit', referrerPolicy: 'no-referrer', redirect: 'error'
-    }).then(response => {
+    void post('orders', body).then(response => {
       if (response.ok) save(pendingKey, pending().filter(item => orderKey(item) !== key));
     }).catch(() => {}).finally(() => inFlight.delete(key));
   }
@@ -105,6 +124,12 @@
   }
 
   window.SafeNotarizeOrderAttribution = {
+    serviceSelected(service) {
+      trackStage('service_selected', service === 'regular' ? 'standard' : 'premium');
+    },
+    bookingStarted(route) {
+      trackStage('booking_started', route);
+    },
     async standard(orderId, requestId, documentSource) {
       try {
         if (!standardId.test(orderId) || !uuid.test(requestId)) return;
@@ -125,6 +150,10 @@
 
   try {
     if (!resultPage) captureVisit();
+    const standardForm = document.getElementById?.('booking-form');
+    if (standardForm && !standardForm.classList.contains('intake-hidden')) {
+      trackStage('booking_started', 'standard');
+    }
     for (const row of pending()) send(row);
   } catch { /* The site remains usable when attribution is unavailable. */ }
 })();
