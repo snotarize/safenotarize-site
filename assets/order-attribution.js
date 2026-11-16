@@ -11,6 +11,7 @@
   const campaignNames = new Set(['online_notary_transactions', 'vehicle_release_orlando']);
   const clickTypes = ['gclid', 'gbraid', 'wbraid'];
   const clickPattern = /^[A-Za-z0-9_-]{8,256}$/;
+  const openAiClickPattern = /^[A-Za-z0-9._~+\/=-]{8,512}$/;
   const standardId = /^rec[A-Za-z0-9]{14,20}$/;
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const resultPage = /^\/(?:thank-you(?:-ht)?|premium-complete|upload(?:-ht)?)(?:\.html)?$/.test(location.pathname);
@@ -54,7 +55,12 @@
         typeof crypto.randomUUID === 'function') {
       const previousId = visit().chatgptVisitId;
       const visitId = uuid.test(previousId) ? previousId : crypto.randomUUID();
-      save(visitKey, { source: 'other_paid', startedAt, chatgptVisitId: visitId });
+      const reference = params.get('oppref');
+      const isAdReference = reference && reference !== 'preview_mock' && openAiClickPattern.test(reference);
+      save(visitKey, {
+        source: 'other_paid', startedAt, chatgptVisitId: visitId,
+        ...(isAdReference ? { chatgptClickRef: reference } : {})
+      });
       trackStage('landing', '', visitId);
       return;
     }

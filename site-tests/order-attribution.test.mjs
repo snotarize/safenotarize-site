@@ -93,7 +93,7 @@ test('failed collection retries on the return page and excludes that page’s UR
   assert.equal(requests.length, 2);
 });
 
-test('ChatGPT campaign stages and both order paths share a visit without transmitting the ad click reference', async () => {
+test('both booking paths carry the original ChatGPT click reference only with the order', async () => {
   const path = '/start.html?utm_source=chatgpt&utm_medium=cpc&utm_campaign=online_notary_chatgpt&oppref=fixture-reference';
   for (const [route, service, booking, order, proof] of [
     ['standard', 'regular', '/book.html?document_ready=1&service=regular', standardId, requestId],
@@ -115,13 +115,23 @@ test('ChatGPT campaign stages and both order paths share a visit without transmi
     ]);
     assert.ok(requests.slice(0, 3).every(request => request.url.endsWith('/v1/chatgpt-funnel')));
     assert.deepEqual(requests[3].body, {
-      route, orderId: order, proof: digest(proof), documentSource: 'own', source: 'other_paid', chatgptVisitId: visitId
+      route, orderId: order, proof: digest(proof), documentSource: 'own', source: 'other_paid',
+      chatgptVisitId: visitId, chatgptClickRef: 'fixture-reference'
     });
-    assert.equal(JSON.stringify(requests).includes('fixture-reference'), false);
+    assert.equal(JSON.stringify(requests.slice(0, 3)).includes('fixture-reference'), false);
     assert.equal(JSON.stringify(requests).includes(proof), false);
     browser({ path, storage, requests });
     assert.equal(requests.at(-1).body.visitId, visitId);
   }
+});
+
+test('ChatGPT preview clicks and browser privacy opt-outs cannot contribute paid-order attribution', async () => {
+  const requests = [];
+  const path = '/start.html?utm_source=chatgpt&utm_medium=cpc&utm_campaign=online_notary_chatgpt';
+  assert.equal(browser({ path: path + '&oppref=fixture-reference', optedOut: true, requests }), undefined);
+  assert.deepEqual(requests, []);
+  await browser({ path: path + '&oppref=preview_mock', requests }).standard(standardId, requestId, 'own');
+  assert.equal(requests.at(-1).body.chatgptClickRef, undefined);
 });
 
 test('other paid visits and privacy opt-outs do not report ChatGPT stages', () => {
@@ -136,7 +146,7 @@ test('other paid visits and privacy opt-outs do not report ChatGPT stages', () =
 
 test('the supported booking pages load attribution before notifying it of a real order', () => {
   for (const file of ['start.html', 'start-ht.html', 'book.html', 'book-ht.html', 'premium.html']) {
-    assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=2" defer><\/script>/);
+    assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=3" defer><\/script>/);
   }
   for (const file of ['documents/vehicle-release-authorization.html', 'documents/library.html']) {
     assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=1" defer><\/script>/);
