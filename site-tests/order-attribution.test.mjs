@@ -16,9 +16,9 @@ const click = 'test-click-id-no-provider';
 const digest = value => createHash('sha256').update(value).digest('hex');
 
 function browser({ path, referrer = '', storage = new Map(), requests = [], optedOut = false, status = 204,
-  time = now, standardFormOpen = false }) {
+  time = now, standardFormOpen = false, analytics }) {
   const location = new URL(path, origin);
-  const window = {};
+  const window = { SafeNotarizeAnalytics: analytics };
   runInNewContext(source, {
     location, document: { referrer, getElementById: id => id === 'booking-form' && standardFormOpen
       ? { classList: { contains: () => false } } : null }, window, URL, URLSearchParams, crypto: webcrypto, TextEncoder,
@@ -146,10 +146,10 @@ test('other paid visits and privacy opt-outs do not report ChatGPT stages', () =
 
 test('the supported booking pages load attribution before notifying it of a real order', () => {
   for (const file of ['start.html', 'start-ht.html', 'book.html', 'book-ht.html', 'premium.html']) {
-    assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=3" defer><\/script>/);
+    assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=\d+" defer><\/script>/);
   }
   for (const file of ['documents/vehicle-release-authorization.html', 'documents/library.html']) {
-    assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=1" defer><\/script>/);
+    assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=\d+" defer><\/script>/);
   }
   for (const file of ['book.html', 'book-ht.html']) {
     assert.match(read(file), /const orderId = await submitIntake\(payload\);\s+await window\.SafeNotarizeOrderAttribution\?\.standard\(orderId, bookingRequestId, payload\.document_source\)/);
@@ -158,4 +158,14 @@ test('the supported booking pages load attribution before notifying it of a real
   assert.match(read('assets/premium/checkout.js'), /form\.addEventListener\('submit', continueToNotary\);\s+status\.textContent = '';\s+window\.SafeNotarizeOrderAttribution\?\.bookingStarted\?\.\('premium'\);/);
   assert.match(read('assets/premium/services.js'), /addEventListener\('click', \(\) => window\.SafeNotarizeOrderAttribution\?\.serviceSelected\?\.\(service\)\)/);
   assert.match(read('premium.html'), /id="premium-status" role="status">Loading secure checkout…</);
+});
+
+test('Analytics identity is attached only to the existing order proof and does not send customer fields', async () => {
+  const requests = [];
+  const identity = { clientId: '12345678.1795040000', sessionId: '1795040000' };
+  const api = browser({ path: '/book.html', requests, analytics: { context: async () => identity } });
+  await api.standard(standardId, requestId, 'own');
+  assert.deepEqual(requests[0].body.ga4, identity);
+  assert.equal(requests[0].body.proof, digest(requestId));
+  assert.doesNotMatch(JSON.stringify(requests[0].body), /email|phone|clientName|invoiceRecipient/);
 });

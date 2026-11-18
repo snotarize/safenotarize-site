@@ -119,10 +119,12 @@
     }).catch(() => {}).finally(() => inFlight.delete(key));
   }
 
-  function remember(route, orderId, proof, source, acquisition) {
+  async function remember(route, orderId, proof, source, acquisition) {
     const documentSource = ['library', 'generated', 'template'].includes(source) ? 'library' : 'own';
     const { startedAt, ...attribution } = acquisition;
-    const row = { route, orderId, proof, documentSource, ...attribution, createdAt: Date.now() };
+    const ga4 = await window.SafeNotarizeAnalytics?.context?.();
+    const row = { route, orderId, proof, documentSource, ...attribution,
+      ...(ga4 ? { ga4 } : {}), createdAt: Date.now() };
     const queue = pending();
     const previous = queue.find(item => orderKey(item) === orderKey(row));
     if (!previous) save(pendingKey, [...queue, row].slice(-8));
@@ -135,13 +137,14 @@
     },
     bookingStarted(route) {
       trackStage('booking_started', route);
+      window.SafeNotarizeAnalytics?.bookingStarted?.(route);
     },
     async standard(orderId, requestId, documentSource) {
       try {
         if (!standardId.test(orderId) || !uuid.test(requestId)) return;
         const acquisition = visit();
         const proof = await orderProof(requestId.toLowerCase());
-        remember('standard', orderId, proof, documentSource, acquisition);
+        await remember('standard', orderId, proof, documentSource, acquisition);
       } catch { /* Attribution is optional for order intake. */ }
     },
     async premium(orderId, access, documentSource) {
@@ -149,7 +152,7 @@
         if (!uuid.test(orderId) || !/^[0-9a-f]{64}$/.test(access)) return;
         const acquisition = visit();
         const proof = await orderProof(access);
-        remember('premium', orderId, proof, documentSource, acquisition);
+        await remember('premium', orderId, proof, documentSource, acquisition);
       } catch { /* Attribution is optional for checkout. */ }
     }
   };
@@ -159,6 +162,7 @@
     const standardForm = document.getElementById?.('booking-form');
     if (standardForm && !standardForm.classList.contains('intake-hidden')) {
       trackStage('booking_started', 'standard');
+      window.SafeNotarizeAnalytics?.bookingStarted?.('standard');
     }
     for (const row of pending()) send(row);
   } catch { /* The site remains usable when attribution is unavailable. */ }
