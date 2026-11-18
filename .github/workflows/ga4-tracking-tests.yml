@@ -1,0 +1,23 @@
+name: Verify booking and paid-purchase tracking
+on:
+  push:
+    branches: [fix/ga4-paid-purchase-tracking-2026-11-18]
+  pull_request:
+    paths:
+      - assets/ga4-tracking.js
+      - assets/order-attribution.js
+      - site-tests/**
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test site-tests/*.test.mjs
