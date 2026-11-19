@@ -134,6 +134,7 @@
   window.SafeNotarizeOrderAttribution = {
     serviceSelected(service) {
       trackStage('service_selected', service === 'regular' ? 'standard' : 'premium');
+      window.SafeNotarizeAnalytics?.serviceSelected?.(service);
     },
     bookingStarted(route) {
       trackStage('booking_started', route);
@@ -145,6 +146,7 @@
         const acquisition = visit();
         const proof = await orderProof(requestId.toLowerCase());
         await remember('standard', orderId, proof, documentSource, acquisition);
+        window.SafeNotarizeAnalytics?.intakeSubmitted?.('standard');
       } catch { /* Attribution is optional for order intake. */ }
     },
     async premium(orderId, access, documentSource) {
@@ -153,6 +155,7 @@
         const acquisition = visit();
         const proof = await orderProof(access);
         await remember('premium', orderId, proof, documentSource, acquisition);
+        window.SafeNotarizeAnalytics?.intakeSubmitted?.('premium');
       } catch { /* Attribution is optional for checkout. */ }
     }
   };

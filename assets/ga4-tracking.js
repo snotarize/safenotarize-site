@@ -7,13 +7,24 @@
       navigator.globalPrivacyControl === true || navigator.doNotTrack === '1' ||
       /^\/(?:premium-complete|thank-you(?:-ht)?|upload(?:-ht)?)(?:\.html)?$/.test(location.pathname) ||
       /^\/documents\/create(?:\/|(?:-ht)?\.html)/.test(location.pathname)) return;
+  if (window.SafeNotarizeAnalytics) return;
 
   const stream = 'G-EJKPHSTSNH';
   const params = new URLSearchParams(location.search);
-  const paid = ['gclid', 'gbraid', 'wbraid', 'msclkid'].some(key => params.has(key)) ||
-    /^(?:cpc|ppc|paid|cpm|display)$/.test(params.get('utm_medium') || '');
-  // Existing isolated analytics already measures the organic/referral vehicle-release journey.
-  if (/^\/documents\/(?:ht\/)?vehicle-release-authorization\.html$/.test(location.pathname) && !paid) return;
+  const hasPaidClick = ['gclid', 'dclid', 'gbraid', 'wbraid', 'msclkid'].some(key => params.has(key));
+  const medium = (params.get('utm_medium') || '').trim().toLowerCase();
+  let referringHost = '';
+  try { referringHost = new URL(document.referrer).hostname; } catch {}
+  // Existing isolated journeys own these specific page views. Direct visits
+  // and other traffic are measured here so the pages no longer have blind spots.
+  const official = /^\/documents\/(?:ht\/)?official\/(?:ds-3053|ps-1583)\.html$/.test(location.pathname);
+  const organicEngine = medium === 'organic' && ['google', 'bing'].includes((params.get('utm_source') || '').trim().toLowerCase());
+  const organicReferrer = /^(?:www\.)?(?:google\.(?:com|[a-z]{2}|(?:co|com)\.[a-z]{2})|bing\.com)$/.test(referringHost);
+  if (official && !hasPaidClick && (!medium || medium === 'organic') && (organicEngine || organicReferrer)) return;
+  const vehicle = /^\/documents\/(?:ht\/)?vehicle-release-authorization\.html$/.test(location.pathname);
+  if (vehicle && !hasPaidClick && params.get('utm_source') === 'ketterle_sons' &&
+      params.get('utm_medium') === 'referral' && params.get('utm_campaign') === 'vehicle_release' &&
+      ['counter_qr', 'checklist_pdf', 'website_link'].includes(params.get('utm_content') ?? 'website_link')) return;
 
   const page = new URL(location.pathname, location.origin);
   for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content']) {
@@ -44,7 +55,42 @@
     tag.referrerPolicy = 'no-referrer';
     document.head.append(tag);
   }
-  window.gtag('event', 'page_view', { ...fields, send_to: stream });
+  const recorded = new Set();
+  function event(name, values = {}, once = '') {
+    if (once && recorded.has(once)) return;
+    if (once) recorded.add(once);
+    try {
+      window.gtag('event', name, { ...fields, ...values, send_to: stream, transport_type: 'beacon' });
+    } catch { /* Optional measurement never blocks navigation or a booking. */ }
+  }
+  const routeFor = service => service === 'regular' || service === 'standard'
+    ? 'standard' : service === 'premium' ? 'premium' : null;
+  function bookingStep(route, step) {
+    const valid = route === 'standard' ? ['signer_details', 'session_details']
+      : route === 'premium' ? ['payment_details'] : [];
+    if (valid.includes(step)) event('notarization_booking_step', {
+      booking_route: route, booking_step: step
+    }, 'step:' + route + ':' + step);
+  }
+  event('page_view');
+
+  // Only fixed navigation categories are measured. Never read form values,
+  // link text, document contents, customer identifiers or destination queries.
+  document.addEventListener?.('click', click => {
+    try {
+      if (click.button > 0) return;
+      const link = click.target?.closest?.('a[href]');
+      if (!link) return;
+      const next = new URL(link.href, location.href);
+      if (!origins.has(next.origin)) return;
+      const target = /^\/start(?:-ht)?(?:\.html)?$/.test(next.pathname) ? 'start'
+        : /^\/book(?:-ht)?(?:\.html)?$/.test(next.pathname) ? 'standard_booking'
+        : /^\/premium(?:\.html)?$/.test(next.pathname) ? 'premium_booking'
+        : /^\/documents\/library(?:-ht)?(?:\.html)?$/.test(next.pathname) ? 'document_library'
+        : /^\/documents\/create(?:\/|(?:-ht)?\.html)/.test(next.pathname) ? 'document_editor' : null;
+      if (target) event('notarization_cta_click', { cta_target: target }, 'cta:' + target);
+    } catch { /* Malformed links do not affect the customer journey. */ }
+  }, { capture: true });
 
   function get(field) {
     return new Promise(resolve => {
@@ -63,7 +109,24 @@
     },
     bookingStarted(route) {
       if (!['standard', 'premium'].includes(route)) return;
-      window.gtag('event', 'begin_checkout', { ...fields, send_to: stream, booking_route: route });
+      event('begin_checkout', { booking_route: route }, 'checkout:' + route);
+      bookingStep(route, route === 'standard' ? 'signer_details' : 'payment_details');
+    },
+    serviceSelected(service) {
+      const route = routeFor(service);
+      if (route) event('notarization_service_selected', { booking_route: route }, 'service:' + route);
+    },
+    documentChoiceSelected(service, choice) {
+      const route = routeFor(service);
+      if (route && ['own', 'template'].includes(choice)) event('notarization_document_choice', {
+        booking_route: route, document_choice: choice
+      }, 'document:' + route + ':' + choice);
+    },
+    bookingStep,
+    intakeSubmitted(route) {
+      if (['standard', 'premium'].includes(route)) event('notarization_intake_submitted', {
+        booking_route: route
+      }, 'intake:' + route);
     }
   };
   // Purchases are emitted privately after payment verification; visiting a page never emits a purchase.

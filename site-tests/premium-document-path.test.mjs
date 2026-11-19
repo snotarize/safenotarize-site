@@ -131,7 +131,7 @@ for(const lang of ['en','ht']){
   test('all '+lang+' library creators carry the selected service through the shared PDF handoff',async()=>{
     const path='/documents/library'+suffix+'.html';
     const html=read(path.slice(1));
-    assert.match(html,/<script src="\/assets\/premium\/services\.js\?v=7" defer><\/script>/);
+    assert.match(html,/<script src="\/assets\/premium\/services\.js\?v=13" defer><\/script>/);
     const ownPanel=html.match(/<section[^>]+id="notarize-panel"[^>]*>[\s\S]*?<\/section>/)[0];
     assert.equal(anchorHref(ownPanel,'create-own-document'),'/documents/create'+suffix+'.html?type=custom');
     assert.equal(html.match(/type=custom/g).length,1);
