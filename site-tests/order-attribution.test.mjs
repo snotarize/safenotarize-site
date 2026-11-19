@@ -33,6 +33,22 @@ function browser({ path, referrer = '', storage = new Map(), requests = [], opte
   return window.SafeNotarizeOrderAttribution;
 }
 
+test('service and accepted intake callbacks expose only fixed routes to the public funnel', async () => {
+  const events = [];
+  const attribution = browser({ path: '/book.html', analytics: {
+    serviceSelected: service => events.push(['service', service]),
+    intakeSubmitted: route => events.push(['intake', route])
+  } });
+  attribution.serviceSelected('regular');
+  await attribution.standard('invalid', requestId, 'own');
+  await attribution.premium(premiumId, 'invalid', 'own');
+  assert.deepEqual(events, [['service', 'regular']]);
+  await attribution.standard(standardId, requestId, 'own');
+  await attribution.premium(premiumId, access, 'own');
+  assert.deepEqual(events, [['service', 'regular'], ['intake', 'standard'], ['intake', 'premium']]);
+  assert.doesNotMatch(JSON.stringify(events), new RegExp(standardId + '|' + requestId + '|' + access));
+});
+
 for (const [route, path, order, proof] of [
   ['standard', '/book.html', standardId, requestId],
   ['premium', '/premium.html', premiumId, access]

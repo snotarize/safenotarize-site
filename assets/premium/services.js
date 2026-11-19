@@ -281,6 +281,12 @@
     const libraryNext = document.createElement('small');
     libraryNext.textContent = copy.libraryNext;
     const needLink = documentAnswer(copy.needDocument, libraryNext);
+    for (const [link, choice] of [[readyLink, 'own'], [needLink, 'template']]) {
+      link.addEventListener('click', () => {
+        const service = new URL(link.href).searchParams.get('service');
+        window.SafeNotarizeAnalytics?.documentChoiceSelected?.(service, choice);
+      });
+    }
     const answers = document.createElement('div');
     answers.className = 'sn-document-answers';
     answers.append(readyLink, needLink);
