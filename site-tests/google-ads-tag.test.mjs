@@ -58,7 +58,8 @@ test('private URLs, documents, receipts and visitor opt-outs never load Ads', ()
 
 test('both Standard and Premium public booking URLs retain base measurement', () => {
   for (const path of ['/start-ht.html?service=regular', '/book.html?document_ready=1&document_source=own&service=regular',
-    '/premium.html?lang=ht&document_source=library&document_type=ds-3053', '/#pricing-block']) {
+    '/premium.html?lang=ht&document_source=library&document_type=ds-3053', '/#pricing-block',
+    '/?_dbg=1', '/start.html?gtm_debug=x', '/start.html?gtm_debug=1795582800000']) {
     const page = browser(path);
     assert.equal(page.tags.length, 1, path);
     assert.equal(page.commands()[0][1].page_location, 'https://safenotarize.com' + path.split('#')[0]);

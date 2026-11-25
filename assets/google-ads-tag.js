@@ -19,7 +19,8 @@
       'utm_term', 'service', 'document_source', 'document_type', 'lang', 'gclsrc'].includes(key)
       ? publicValue.test(value)
       : ['gclid', 'gbraid', 'wbraid'].includes(key) ? /^[A-Za-z0-9_-]{8,256}$/.test(value)
-      : ['document_ready', 'gad_source', 'gad_campaignid', 'gtm_debug'].includes(key) ? /^\d{1,30}$/.test(value)
+      : ['gtm_debug', '_dbg'].includes(key) ? /^(?:x|\d{1,30})$/.test(value)
+      : ['document_ready', 'gad_source', 'gad_campaignid'].includes(key) ? /^\d{1,30}$/.test(value)
       : false;
     if (!allowed) return;
   }
