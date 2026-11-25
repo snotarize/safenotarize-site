@@ -24,22 +24,23 @@ function browser(path, { optedOut = false, dnt = false, framed = false } = {}) {
   const runAds = () => runInNewContext(ads, context);
   runAds();
   return { window, tags, runAds, runAnalytics: () => runInNewContext(analytics, context),
-    commands: () => (window.dataLayer ?? []).map(args => [...args]) };
+    commands: () => Array.from(window.dataLayer ?? [], args => Array.from(args)) };
 }
 
 test('new account base tag loads once without issuing a sale or a legacy conversion', () => {
   const page = browser('/start.html?utm_source=google&utm_medium=cpc&utm_campaign=online_notary_fresh&gclid=fixture-click-123');
   page.runAds();
   assert.equal(page.tags.length, 1);
-  assert.equal(page.tags[0].src, 'https://www.googletagmanager.com/gtm.js?id=AW-18594593652');
+  assert.equal(page.tags[0].src, 'https://www.googletagmanager.com/gtag/js?id=AW-18594593652');
   assert.equal(page.tags[0].referrerPolicy, 'no-referrer');
   const commands = page.commands();
   assert.equal(commands.filter(args => args[0] === 'js').length, 1);
+  assert.deepEqual(commands.filter(args => args[0] === 'config').map(args => args[1]), ['AW-18594593652']);
   assert.equal(commands.some(args => args[0] === 'event'), false);
   assert.doesNotMatch(JSON.stringify(commands), /purchase|conversion|transaction_id|value|private-search|AW-18058269024|AW-17220906816/);
 });
 
-test('private URLs, documents, receipts, frames and visitor opt-outs never load Ads', () => {
+test('private URLs, documents, receipts and visitor opt-outs never load Ads', () => {
   for (const path of ['/book.html?email=private%40example.test', '/premium.html?access=private-token',
     '/start.html#resume=private-token', '/premium-complete.html', '/thank-you.html', '/thank-you-ht.html',
     '/upload.html', '/documents/create.html', '/documents/create/ds-3053.html',
@@ -48,14 +49,17 @@ test('private URLs, documents, receipts, frames and visitor opt-outs never load 
     assert.equal(page.tags.length, 0, path);
     assert.deepEqual(page.commands(), [], path);
   }
-  for (const options of [{ optedOut: true }, { dnt: true }, { framed: true }]) {
+  for (const options of [{ optedOut: true }, { dnt: true }]) {
     assert.equal(browser('/start.html', options).tags.length, 0);
   }
+  // Public pages remain measurable when opened by an embedded tag verifier.
+  assert.equal(browser('/start.html', { framed: true }).tags.length, 1);
 });
 
 test('both Standard and Premium public booking URLs retain base measurement', () => {
   for (const path of ['/start-ht.html?service=regular', '/book.html?document_ready=1&document_source=own&service=regular',
-    '/premium.html?lang=ht&document_source=library&document_type=ds-3053', '/#pricing-block']) {
+    '/premium.html?lang=ht&document_source=library&document_type=ds-3053', '/#pricing-block',
+    '/?_dbg=1', '/start.html?gtm_debug=x', '/start.html?gtm_debug=1795582800000']) {
     const page = browser(path);
     assert.equal(page.tags.length, 1, path);
     assert.equal(page.commands()[0][1].page_location, 'https://safenotarize.com' + path.split('#')[0]);
@@ -67,8 +71,7 @@ test('website Analytics and booking events keep their own destination and share 
   const page = browser('/book.html');
   page.runAnalytics();
   assert.deepEqual(page.tags.map(tag => tag.src), [
-    'https://www.googletagmanager.com/gtm.js?id=AW-18594593652',
-    'https://www.googletagmanager.com/gtag/js?id=G-EJKPHSTSNH'
+    'https://www.googletagmanager.com/gtag/js?id=AW-18594593652'
   ]);
   page.window.SafeNotarizeAnalytics.bookingStarted('standard');
   const commands = page.commands();
@@ -101,6 +104,7 @@ test('all public pages use the new loader and legacy Ads IDs are absent througho
       if (html.includes('/assets/ga4-tracking.js')) {
         assert.equal(count, 1, path);
         assert.ok(html.indexOf('/assets/google-ads-tag.js') < html.indexOf('/assets/ga4-tracking.js'), path);
+        assert.match(html, /<head>\s*<script src="\/assets\/google-ads-tag\.js\?v=20261125-explicit"><\/script>/, path);
       } else assert.equal(count, 0, path);
     }
   }
