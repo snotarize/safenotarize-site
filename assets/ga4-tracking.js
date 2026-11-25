@@ -41,7 +41,7 @@
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
   const needsTag = !document.querySelector('script[src*="googletagmanager.com/gtag/js"]');
-  if (needsTag) window.gtag('js', new Date());
+  if (needsTag && !window.SafeNotarizeGoogleAdsTag) window.gtag('js', new Date());
   // Apply clean URLs before configuring GA4 so access tokens, email addresses and order URLs stay private.
   window.gtag('set', fields);
   window.gtag('config', stream, {
