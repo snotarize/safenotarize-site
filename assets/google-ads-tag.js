@@ -4,7 +4,7 @@
   // New Google Ads account 787-234-8986. No legacy conversion labels or GA4 imports.
   const id = 'AW-18594593652';
   const origins = new Set(['https://safenotarize.com', 'https://www.safenotarize.com']);
-  if (!origins.has(location.origin) || window.parent !== window ||
+  if (!origins.has(location.origin) ||
       navigator.globalPrivacyControl === true || navigator.doNotTrack === '1' ||
       /^\/(?:premium-complete|thank-you(?:-ht)?|upload(?:-ht)?)(?:\.html)?$/.test(location.pathname) ||
       /^\/documents\/create(?:\/|(?:-ht)?\.html)/.test(location.pathname) ||
@@ -35,10 +35,16 @@
     allow_ad_personalization_signals: false
   });
   window.gtag('js', new Date());
+  // The supported gtag.js installation explicitly configures this destination.
+  // Loading a container URL alone does not prove that Ads has been initialized.
+  window.gtag('config', id, {
+    page_location: page.href, page_referrer: referrer,
+    allow_ad_personalization_signals: false
+  });
   window.SafeNotarizeGoogleAdsTag = id;
   const tag = document.createElement('script');
   tag.async = true;
-  tag.src = 'https://www.googletagmanager.com/gtm.js?id=' + id;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
   tag.referrerPolicy = 'no-referrer';
   document.head.append(tag);
   // Paid completions require a separately configured conversion action.
