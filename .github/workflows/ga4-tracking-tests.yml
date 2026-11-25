@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - assets/ga4-tracking.js
+      - assets/google-ads-tag.js
       - assets/order-attribution.js
       - site-tests/**
 permissions:
