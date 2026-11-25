@@ -185,3 +185,58 @@ test('Analytics identity is attached only to the existing order proof and does n
   assert.equal(requests[0].body.proof, digest(requestId));
   assert.doesNotMatch(JSON.stringify(requests[0].body), /email|phone|clientName|invoiceRecipient/);
 });
+
+for (const [route, path, order, proof] of [
+  ['standard', '/book.html', standardId, requestId],
+  ['premium', '/premium.html', premiumId, access]
+]) {
+  for (const clickType of ['gclid', 'gbraid', 'wbraid']) {
+    test(`new account ${route} ${clickType} reaches its private collector without waiting for old Analytics`, async () => {
+      const storage = new Map(), requests = [];
+      const entry = '/start.html?utm_source=google&utm_medium=cpc&utm_campaign=online_notary_7872348986&' + clickType + '=' + click;
+      browser({ path: entry, storage, requests });
+      let identityReads = 0;
+      const api = browser({ path, storage, requests, analytics: {
+        context: () => { identityReads++; throw new Error('Old Analytics unavailable'); }
+      } });
+      await api[route](order, proof, 'library');
+      assert.equal(identityReads, 0);
+      assert.equal(requests.length, 1);
+      assert.equal(requests[0].url, 'https://safenotarize-google-ads-7872348986.karlberryj.workers.dev/v1/orders');
+      assert.deepEqual(requests[0].body, {
+        route, orderId: order, proof: digest(proof), documentSource: 'library', source: 'google_ads',
+        campaign: 'online_notary_7872348986', clickType, clickId: click
+      });
+      assert.equal(requests[0].options.body.includes(proof), false);
+      assert.doesNotMatch(requests[0].options.body, /ga4|clientId|sessionId|email|phone/);
+    });
+  }
+}
+
+test('new account retries preserve their destination and invalid proofs cannot enter the queue', async () => {
+  const storage = new Map(), requests = [];
+  const path = '/book.html?utm_source=google&utm_medium=cpc&utm_campaign=online_notary_7872348986&gclid=' + click;
+  const api = browser({ path, storage, requests, status: 503 });
+  await api.standard(standardId, 'invalid', 'own');
+  await api.premium(premiumId, 'invalid', 'own');
+  assert.deepEqual(requests, []);
+  await api.standard(standardId, requestId, 'own');
+  browser({ path: '/thank-you.html?order_id=' + standardId, storage, requests });
+  assert.equal(requests.length, 2);
+  assert.equal(requests[1].url, requests[0].url);
+  assert.deepEqual(requests[1].body, requests[0].body);
+  assert.equal(requests[1].body.ga4, undefined);
+});
+
+test('previous account campaigns keep their existing endpoint and measurement context', async () => {
+  const requests = [], identity = { clientId: '12345678.1795040000', sessionId: '1795040000' };
+  for (const campaign of ['online_notary_transactions', 'vehicle_release_orlando']) {
+    await browser({ path: '/book.html?utm_source=google&utm_medium=cpc&utm_campaign=' + campaign + '&gclid=' + click,
+      requests, analytics: { context: async () => identity } }).standard(standardId, requestId, 'own');
+  }
+  assert.equal(requests.length, 2);
+  for (const request of requests) {
+    assert.equal(request.url, 'https://safenotarize-vehicle-release-metrics.karlberryj.workers.dev/v1/orders');
+    assert.deepEqual(request.body.ga4, identity);
+  }
+});

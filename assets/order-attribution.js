@@ -5,10 +5,12 @@
   if (!origins.has(location.origin) || navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
 
   const endpoint = 'https://safenotarize-vehicle-release-metrics.karlberryj.workers.dev/v1/';
+  const nativeCampaign = 'online_notary_7872348986';
+  const nativeEndpoint = 'https://safenotarize-google-ads-7872348986.karlberryj.workers.dev/v1/';
   const visitKey = 'sn_order_attribution_visit';
   const pendingKey = 'sn_order_attribution_pending';
   const lifetime = 24 * 60 * 60 * 1000;
-  const campaignNames = new Set(['online_notary_transactions', 'vehicle_release_orlando']);
+  const campaignNames = new Set(['online_notary_transactions', 'vehicle_release_orlando', nativeCampaign]);
   const clickTypes = ['gclid', 'gbraid', 'wbraid'];
   const clickPattern = /^[A-Za-z0-9_-]{8,256}$/;
   const openAiClickPattern = /^[A-Za-z0-9._~+\/=-]{8,512}$/;
@@ -95,7 +97,9 @@
   }
 
   function post(path, body) {
-    return fetch(endpoint + path, {
+    const target = path === 'orders' && body.source === 'google_ads' && body.campaign === nativeCampaign
+      ? nativeEndpoint : endpoint;
+    return fetch(target + path, {
       method: 'POST', body: JSON.stringify(body), keepalive: true,
       headers: { 'content-type': 'text/plain;charset=UTF-8' },
       credentials: 'omit', referrerPolicy: 'no-referrer', redirect: 'error'
@@ -122,7 +126,8 @@
   async function remember(route, orderId, proof, source, acquisition) {
     const documentSource = ['library', 'generated', 'template'].includes(source) ? 'library' : 'own';
     const { startedAt, ...attribution } = acquisition;
-    const ga4 = await window.SafeNotarizeAnalytics?.context?.();
+    const native = attribution.source === 'google_ads' && attribution.campaign === nativeCampaign;
+    const ga4 = native ? null : await window.SafeNotarizeAnalytics?.context?.();
     const row = { route, orderId, proof, documentSource, ...attribution,
       ...(ga4 ? { ga4 } : {}), createdAt: Date.now() };
     const queue = pending();
