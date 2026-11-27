@@ -13,7 +13,7 @@
   if (!document.querySelector('script[src*="/assets/visitor-journey.js"]')) {
     const journey = document.createElement('script');
     journey.async = true;
-    journey.src = '/assets/visitor-journey.js?v=20261127';
+    journey.src = '/assets/visitor-journey.js?v=20261127-2';
     journey.referrerPolicy = 'no-referrer';
     document.head.append(journey);
   }

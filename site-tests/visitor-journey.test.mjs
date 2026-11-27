@@ -102,6 +102,8 @@ test('background and resume record observed activity without inventing abandonme
 test('delayed widget loading preserves pending events across navigation and chains an existing callback', () => {
   let called = 0;
   const first = browser('/start.html', { ready: false });
+  const widget = first.tags.find(tag => tag.src?.startsWith('https://embed.tawk.to/'));
+  assert.equal(widget.referrerPolicy, 'strict-origin-when-cross-origin');
   first.api.record('notarization_cta_click', { cta_target: 'premium_booking' });
   assert.equal(first.events.length, 0);
   const next = browser('/premium.html', { storage: first.storage, ready: false, existingWidget: true, previousLoad: () => called++ });

@@ -163,6 +163,7 @@
 
   // Reuse the existing visitor system. Do not collect DOM, input values, files, stack traces or error messages.
   const api = window.Tawk_API = window.Tawk_API || {};
+  window.Tawk_LoadStart = window.Tawk_LoadStart || new Date();
   const alreadyEmbedded = document.querySelector('script[src*="embed.tawk.to/"]');
   const existingOnLoad = api.onLoad;
   function onReady() {
@@ -178,7 +179,8 @@
     const script = document.createElement('script');
     script.async = true;
     script.src = 'https://embed.tawk.to/67ada9c93a842732607e2b7e/1ijv5uenc';
-    script.referrerPolicy = 'no-referrer';
+    // The SDK requires an origin referrer; never send the page path or query.
+    script.referrerPolicy = 'strict-origin-when-cross-origin';
     script.setAttribute('crossorigin', '*');
     document.head.append(script);
   }
