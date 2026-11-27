@@ -24,10 +24,22 @@ function element(location,initialHref=''){
     set href(value){href=value;},
     setAttribute(name,value){attributes.set(name,value);},
     getAttribute(name){return attributes.get(name);},
-    append(...children){this.children.push(...children);},
+    append(...children){
+      for(const child of children){
+        if(child?.parentElement){const siblings=child.parentElement.children;siblings.splice(siblings.indexOf(child),1);}
+        this.children.push(child);
+        if(child&&typeof child==='object')child.parentElement=this;
+      }
+    },
     addEventListener(name,listener){listeners.set(name,listener);},
     click(){listeners.get('click')?.();},
-    focus(){this.focused=true;},scrollIntoView(){},after(){}
+    focus(){this.focused=true;},scrollIntoView(){this.scrolled=true;},
+    after(child){
+      if(!this.parentElement)return;
+      if(child?.parentElement){const siblings=child.parentElement.children;siblings.splice(siblings.indexOf(child),1);}
+      const siblings=this.parentElement.children;
+      siblings.splice(siblings.indexOf(this)+1,0,child);child.parentElement=this.parentElement;
+    }
   };
 }
 function anchorHref(html,id){
@@ -86,6 +98,52 @@ test('Premium keeps the vehicle release context through choosing and returning f
 for(const lang of ['en','ht']){
   const ht=lang==='ht';
   const suffix=ht?'-ht':'';
+  test('the '+lang+' mobile next step stays directly after the selected service through switching and resizing',()=>{
+    const selectors=chooser(true);
+    let resize;
+    const media={matches:true,addEventListener(name,listener){assert.equal(name,'change');resize=listener;}};
+    renderServices('/start'+suffix+'.html',{lang,selectors,window:{SN_PREMIUM:config,matchMedia(query){assert.equal(query,'(max-width: 620px)');return media;}}});
+    const holder=selectors['[data-sn-service-choice]'];
+    const [standard,onDemand]=holder.children;
+    const standardButton=standard.children.at(-1),premiumButton=onDemand.children.at(-1);
+    const options=documentOptions(selectors);
+    const [label,question,answers]=options.children;
+    standardButton.click();
+    assert.deepEqual(holder.children.slice(0,3),[standard,options,onDemand]);
+    assert.equal(options.hidden,false);
+    assert.equal(question.focused,true);
+    assert.equal(options.scrolled,true);
+    assert.equal(new URL(answers.children[0].href).pathname,'/book'+suffix+'.html');
+    premiumButton.click();
+    assert.deepEqual(holder.children.slice(0,3),[standard,onDemand,options]);
+    assert.equal(label.textContent,ht?'Sèvis ou chwazi: Sou demann 24/7':'Selected service: On-Demand 24/7');
+    assert.equal(new URL(answers.children[0].href).pathname,'/premium.html');
+    assert.equal(new URL(answers.children[0].href).searchParams.get('lang'),ht?'ht':null);
+    standardButton.click();
+    media.matches=false;resize();
+    assert.deepEqual(holder.children.slice(0,3),[standard,onDemand,options]);
+    media.matches=true;resize();
+    assert.deepEqual(holder.children.slice(0,3),[standard,options,onDemand]);
+    assert.equal(holder.children.filter(node=>node.id==='sn-document-options').length,1);
+    assert.equal(standardButton.getAttribute('aria-expanded'),'true');
+    assert.equal(premiumButton.getAttribute('aria-expanded'),'false');
+  });
+
+  test('the '+lang+' preselected mobile service and restricted history still expose usable document choices',()=>{
+    const selectors=chooser(true);
+    renderServices('/start'+suffix+'.html?service=regular',{lang,selectors,window:{SN_PREMIUM:config,
+      matchMedia:()=>({matches:true,addListener(){}}),history:{replaceState(){throw Error('restricted');}}}});
+    const holder=selectors['[data-sn-service-choice]'];
+    const options=documentOptions(selectors);
+    assert.equal(holder.children[1],options);
+    assert.equal(options.hidden,false);
+    const premium=holder.children[2];
+    assert.doesNotThrow(()=>premium.children.at(-1).click());
+    assert.equal(holder.children[2],options);
+    assert.equal(new URL(options.children[2].children[0].href).pathname,'/premium.html');
+    assert.equal(options.scrolled,true);
+  });
+
   test('the '+lang+' start reveals the document answers in place and updates both links when the service changes',()=>{
     const start='/start'+suffix+'.html';
     assert.match(read(start.slice(1)),/data-sn-service-intro data-sn-start-landing/);
@@ -96,13 +154,15 @@ for(const lang of ['en','ht']){
     const [standard,onDemand]=selectors['[data-sn-service-choice]'].children;
     const standardButton=standard.children.at(-1),onDemandButton=onDemand.children.at(-1);
     const options=documentOptions(selectors);
-    const [question,answers]=options.children;
+    const [selectedLabel,question,answers]=options.children;
     const [ready,need]=answers.children;
     assert.equal(options.hidden,true);
     standardButton.click();
     assert.equal(options.hidden,false);
     assert.equal(question.focused,true);
     assert.equal(standardButton.getAttribute('aria-pressed'),'true');
+    assert.equal(standardButton.getAttribute('aria-expanded'),'true');
+    assert.equal(selectedLabel.textContent,ht?'Sèvis ou chwazi: Estanda':'Selected service: Standard');
     assert.ok(standard.classes.has('sn-service-selected'));
     assert.equal(selectedUrl,start+'?service=regular');
     const standardUrl=new URL(ready.href);
@@ -114,6 +174,7 @@ for(const lang of ['en','ht']){
 
     onDemandButton.click();
     assert.equal(standardButton.getAttribute('aria-pressed'),'false');
+    assert.equal(standardButton.getAttribute('aria-expanded'),'false');
     assert.equal(onDemandButton.getAttribute('aria-pressed'),'true');
     assert.equal(selectedUrl,start+'?service=premium');
     const own=new URL(ready.href);
