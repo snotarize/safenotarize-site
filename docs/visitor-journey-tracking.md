@@ -41,6 +41,8 @@ Tawk.to is reused rather than adding a recording vendor or backend. On newly cov
 
 No document editor, upload, receipt, private resume link, form contents, payment-card details, arbitrary error message or stack trace enters the new events. The queue is bounded and revalidated after storage. The measurement respects Global Privacy Control and Do Not Track. Only known public query parameters are accepted before starting the widget. Event delivery failures never block the underlying booking.
 
+The widget script uses `strict-origin-when-cross-origin`, as required by tawk.to's widget guidance, so its request receives the public origin without a page path or query. tawk.to intentionally restricts bots/crawlers. Automated-browser delivery can therefore remain unverified even when the published UI and local acknowledgement tests pass; do not treat a local SDK stub as proof of live receipt.
+
 ## Reading the reports
 
 In GA4, use Realtime to spot recent public page views/events and the Pages and screens report for page totals. In Explore, use Path exploration to follow recorded pages/events and Funnel exploration to compare service selection, checkout and intake submission. Break down supported reports by country, device and session source/medium. Processed reports can lag behind Realtime.
