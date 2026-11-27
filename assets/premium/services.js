@@ -106,16 +106,16 @@
     heading: 'Kilè ou bezwen yon notè sou entènèt?',
     from: 'Apati',
     standard: 'Estanda',
-    standardDescription: 'Antre lè notè a pare oswa chwazi yon lè.',
+    standardDescription: isStartLanding ? 'Antre lè notè a pare, oswa pran randevou ak SafeNotarize.' : 'Antre lè notè a pare oswa chwazi yon lè.',
     standardIncluded: '1 siyatè, 2 so',
-    standardAction: 'Chwazi sèvis estanda',
+    standardAction: isStartLanding ? 'Chwazi Estanda' : 'Chwazi sèvis estanda',
     onDemand: 'Sou demann',
-    onDemandDescription: 'Bezwen yon notè vit oswa apre lè travay? Mande youn kounye a.',
+    onDemandDescription: isStartLanding ? 'Mande yon sesyon 24/7. Konekte lè yon notè disponib.' : 'Bezwen yon notè vit oswa apre lè travay? Mande youn kounye a.',
     onDemandIncluded: '1 siyatè, 1 so',
-    onDemandAction: 'Chwazi sèvis sou demann',
+    onDemandAction: isStartLanding ? 'Mande yon notè kounye a' : 'Chwazi sèvis sou demann',
     documentQuestion: 'Èske dokiman ou pare?',
     haveDocument: 'Wi, mwen gen dokiman mwen',
-    bookNext: 'Kontinye pou pran randevou',
+    bookNext: isStartLanding ? 'Kontinye nan notarizasyon' : 'Kontinye pou pran randevou',
     checkoutNext: 'Kontinye nan peman',
     needDocument: 'Mwen bezwen yon fòm oswa yon modèl',
     libraryNext: 'Louvri Bibliyotèk Dokiman an',
@@ -129,18 +129,18 @@
     heading: 'When do you need an online notary?',
     from: 'From',
     standard: 'Standard',
-    standardDescription: 'Join when a notary is ready or choose a time.',
+    standardDescription: isStartLanding ? 'Join when ready, or book a time with SafeNotarize.' : 'Join when a notary is ready or choose a time.',
     standardIncluded: '1 signer, 2 stamps',
-    standardAction: isStartLanding ? 'Book Standard' : 'Choose Standard',
+    standardAction: 'Choose Standard',
     onDemand: 'On-Demand',
     onDemandDescription: isStartLanding
-      ? 'Need it soon or after hours?'
+      ? 'Request 24/7. Connect when a notary is available.'
       : 'Need it soon or after hours? Request a notary now.',
     onDemandIncluded: '1 signer, 1 stamp',
     onDemandAction: isStartLanding ? 'Request a notary now' : 'Choose On-Demand',
     documentQuestion: 'Is your document ready?',
     haveDocument: 'Yes, I have my document',
-    bookNext: 'Continue to booking',
+    bookNext: isStartLanding ? 'Continue to notarization' : 'Continue to booking',
     checkoutNext: 'Continue to checkout',
     needDocument: 'I need a form or template',
     libraryNext: 'Open Document Library',
@@ -158,7 +158,7 @@
     const card = document.createElement('article');
     card.className = 'sn-service-card';
     card.setAttribute('data-sn-service', service);
-    const heading = document.createElement('h2');
+    const heading = document.createElement(isStartLanding ? 'h3' : 'h2');
     heading.textContent = name;
     const summary = document.createElement('p');
     summary.className = 'sn-service-description';

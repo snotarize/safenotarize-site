@@ -48,9 +48,12 @@ function renderServices(path,{lang='en',window={},elements={},selectors={},group
   runInNewContext(services,{window,document,location,URL,URLSearchParams});
   return window.SafeNotarizePremium;
 }
-function chooser(){
-  const options=element(origin),intro={querySelector:()=>element(origin),querySelectorAll:()=>[]};
-  return {'[data-sn-service-choice]':options,'[data-sn-service-intro]':intro};
+function chooser(landing=false){
+  const options=element(origin),heading=element(origin);
+  heading.textContent='Existing landing headline';
+  const intro={querySelector:()=>heading,querySelectorAll:()=>[]};
+  return {'[data-sn-service-choice]':options,'[data-sn-service-intro]':intro,
+    ...(landing?{'[data-sn-start-landing]':intro}:{})};
 }
 const premiumHref=selectors=>selectors['[data-sn-service-choice]'].children[1].children.at(-1).href;
 const documentOptions=selectors=>selectors['[data-sn-service-choice]'].children.find(node=>node.id==='sn-document-options');
@@ -85,9 +88,11 @@ for(const lang of ['en','ht']){
   const suffix=ht?'-ht':'';
   test('the '+lang+' start reveals the document answers in place and updates both links when the service changes',()=>{
     const start='/start'+suffix+'.html';
-    const selectors=chooser();
+    assert.match(read(start.slice(1)),/data-sn-service-intro data-sn-start-landing/);
+    const selectors=chooser(true);
     let selectedUrl;
     renderServices(start,{lang,window:{SN_PREMIUM:config,history:{replaceState(_state,_title,url){selectedUrl=url;}}},selectors});
+    assert.equal(selectors['[data-sn-service-intro]'].querySelector('h1').textContent,'Existing landing headline');
     const [standard,onDemand]=selectors['[data-sn-service-choice]'].children;
     const standardButton=standard.children.at(-1),onDemandButton=onDemand.children.at(-1);
     const options=documentOptions(selectors);
@@ -122,7 +127,7 @@ for(const lang of ['en','ht']){
     assert.equal(api.backPath,start+'?service=premium');
     assert.equal(api.libraryPath,'/documents/library'+suffix+'.html?service=premium');
 
-    const preselected=chooser();
+    const preselected=chooser(true);
     renderServices(selectedUrl,{lang,window:{SN_PREMIUM:config},selectors:preselected});
     assert.equal(documentOptions(preselected).hidden,false);
     assert.equal(preselected['[data-sn-service-choice]'].children[1].children.at(-1).getAttribute('aria-pressed'),'true');
