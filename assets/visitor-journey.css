@@ -1,0 +1,14 @@
+.sn-journey-feedback { margin: 1rem auto; padding: 0 .75rem; text-align: center; }
+.sn-journey-open { background: transparent; border: 0; color: #31556e; cursor: pointer; font: inherit; font-size: .95rem; min-height: 44px; padding: .6rem 1rem; text-decoration: underline; }
+.sn-journey-dialog { box-sizing: border-box; background: #fff; border: 1px solid #cbd5df; border-radius: 14px; box-shadow: 0 16px 60px #122c3d33; color: #192c3a; font-family: system-ui, sans-serif; max-width: 420px; padding: 1.5rem; text-align: left; width: calc(100% - 3rem); }
+.sn-journey-dialog::backdrop { background: #102b3d88; }
+.sn-journey-dialog h2 { font-size: 1.3rem; line-height: 1.35; margin: 0 0 .75rem; }
+.sn-journey-dialog p { font-size: 1rem; line-height: 1.5; }
+.sn-journey-dialog label { display: block; font-size: 1rem; margin: 1rem 0 .4rem; }
+.sn-journey-dialog select { appearance: none; background: #fff; border: 1px solid #9caeba; border-radius: 6px; color: #192c3a; font: inherit; min-height: 46px; padding: .65rem; width: 100%; }
+.sn-journey-actions { display: flex; gap: .75rem; justify-content: flex-end; margin-top: 1rem; }
+.sn-journey-actions button { background: #fff; border: 1px solid #879daa; border-radius: 6px; color: #192c3a; cursor: pointer; font: inherit; min-height: 44px; padding: .65rem 1rem; }
+.sn-journey-actions .sn-journey-send { background: #17364a; border-color: #17364a; color: #fff; }
+.sn-journey-actions button:disabled { cursor: default; opacity: .6; }
+.sn-journey-feedback button:focus-visible, .sn-journey-dialog select:focus-visible { outline: 3px solid #487fb5; outline-offset: 3px; }
+@media (max-width: 480px) { .sn-journey-dialog { padding: 1.2rem; } .sn-journey-actions { flex-wrap: wrap; } }

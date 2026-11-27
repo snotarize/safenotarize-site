@@ -38,8 +38,9 @@ test('ad visits record one page view without passing private URL fields or enabl
   assert.doesNotMatch(JSON.stringify(commands), /private-|private%40|search\?q|resume/);
   assert.match(config[2].page_location, /gclid=test-click-123/);
   assert.equal(config[2].page_referrer, 'https://www.google.com/');
-  assert.equal(tags.length, 1);
-  assert.equal(tags[0].referrerPolicy, 'no-referrer');
+  assert.equal(tags.filter(tag => tag.src.includes('googletagmanager.com/gtag/js')).length, 1);
+  assert.equal(tags.filter(tag => tag.src.includes('/assets/visitor-journey.js')).length, 1);
+  assert.ok(tags.every(tag => tag.referrerPolicy === 'no-referrer'));
 });
 
 test('bookings are checkout steps, and no public page emits purchases', async () => {

@@ -70,9 +70,10 @@ test('both Standard and Premium public booking URLs retain base measurement', ()
 test('website Analytics and booking events keep their own destination and share initialization safely', () => {
   const page = browser('/book.html');
   page.runAnalytics();
-  assert.deepEqual(page.tags.map(tag => tag.src), [
+  assert.deepEqual(page.tags.filter(tag => tag.src.includes('googletagmanager.com/gtag/js')).map(tag => tag.src), [
     'https://www.googletagmanager.com/gtag/js?id=AW-18594593652'
   ]);
+  assert.equal(page.tags.filter(tag => tag.src.includes('/assets/visitor-journey.js')).length, 1);
   page.window.SafeNotarizeAnalytics.bookingStarted('standard');
   const commands = page.commands();
   assert.equal(commands.filter(args => args[0] === 'js').length, 1);
@@ -85,8 +86,8 @@ test('website Analytics and booking events keep their own destination and share 
 test('private-query exclusions for Ads do not interrupt sanitized website Analytics', () => {
   const page = browser('/book.html?email=private%40example.test&access=private-token');
   page.runAnalytics();
-  assert.equal(page.tags.length, 1);
-  assert.equal(page.tags[0].src, 'https://www.googletagmanager.com/gtag/js?id=G-EJKPHSTSNH');
+  assert.equal(page.tags.filter(tag => tag.src.includes('googletagmanager.com/gtag/js')).length, 1);
+  assert.ok(page.tags.some(tag => tag.src === 'https://www.googletagmanager.com/gtag/js?id=G-EJKPHSTSNH'));
   assert.doesNotMatch(JSON.stringify(page.commands()), /private|access=/);
   assert.ok(page.window.SafeNotarizeAnalytics);
 });

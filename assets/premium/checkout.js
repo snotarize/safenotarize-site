@@ -61,6 +61,7 @@
   const config = service?.settings();
   const live = config?.mode === 'live';
   const estimated = live && config.estimatedAuthorization === true;
+  function recordIssue(category) { window.SafeNotarizeAnalytics?.failure?.('premium', category); }
   if (live) {
     const { base, notarization, service: delivery, additionalSigner, additionalStamp, witness } = config.pricing;
     const dollars = cents => '$' + (cents / 100);
@@ -90,12 +91,14 @@
   el('library').href = service?.libraryPath || (ht ? '/documents/library-ht.html' : '/documents/library.html');
 
   if (!config) {
+    recordIssue('checkout_unavailable');
     status.textContent = copy.unavailable;
     return;
   }
 
   const { source, pending } = service.documentContext();
   if (source === 'library' && !pending) {
+    recordIssue('saved_document_missing');
     status.textContent = copy.missing;
     el('library').hidden = false;
     return;
@@ -233,6 +236,7 @@
       if (estimated) el('estimate').disabled = true;
       const documentToken = current?.token;
       status.textContent = copy.authorizing;
+      window.SafeNotarizeAnalytics?.bookingStep?.('premium', 'authorizing_card');
       const payment = await request('/payment', { ...order, id, access, documentToken, turnstile: challenge });
       if (payment.orderId !== id || payment.amount !== amount || typeof payment.clientSecret !== 'string') {
         throw Error('payment_contract_invalid');
@@ -241,6 +245,7 @@
       await authorize(payment.clientSecret, amount);
 
       status.textContent = copy.opening;
+      window.SafeNotarizeAnalytics?.bookingStep?.('premium', 'opening_session');
       const session = await request('/session', { id, access, documentToken });
       const link = new URL(session.link);
       if (link.protocol !== 'https:' || link.host !== 'app.onenotary.us' || link.username || link.password) {
@@ -252,10 +257,19 @@
       el('join').hidden = false;
       status.textContent = '';
       joined = true;
+      window.SafeNotarizeAnalytics?.bookingStep?.('premium', 'session_ready');
       if (live) await window.SafeNotarizeFormAnalytics?.confirmPremiumBooking(params.get('document_type'), id);
       location.assign(link.href);
     } catch (error) {
       const code = error.message;
+      const observed = {
+        card_authorization_failed: 'card_authorization_failed', payment_contract_invalid: 'payment_contract_invalid',
+        invalid_quantity: 'invalid_quantity', document_access_denied: 'document_unavailable',
+        document_already_claimed: 'document_unavailable', document_unavailable: 'document_unavailable',
+        document_invalid: 'document_unavailable', order_needs_review: 'order_needs_review',
+        session_outcome_unknown: 'session_request_failed', premium_unavailable: 'checkout_unavailable'
+      };
+      recordIssue(Object.hasOwn(observed, code) ? observed[code] : 'submission_failed');
       status.textContent = code === 'card_authorization_failed' ? copy.cardError
         : code === 'invalid_quantity' ? copy.invalidEstimate
         : ['document_access_denied', 'document_already_claimed', 'document_unavailable', 'document_invalid'].includes(code) ? copy.missing
@@ -301,12 +315,13 @@
           submit.disabled = busy;
         },
         'expired-callback': clearChallenge,
-        'error-callback': clearChallenge
+        'error-callback': () => { recordIssue('security_check_failed'); clearChallenge(); }
       });
       form.addEventListener('submit', continueToNotary);
       status.textContent = '';
       window.SafeNotarizeOrderAttribution?.bookingStarted?.('premium');
     } catch {
+      recordIssue('checkout_unavailable');
       form.hidden = true;
       status.textContent = copy.unavailable;
     }

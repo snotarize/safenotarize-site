@@ -9,6 +9,15 @@
       /^\/documents\/create(?:\/|(?:-ht)?\.html)/.test(location.pathname)) return;
   if (window.SafeNotarizeAnalytics) return;
 
+  // Reuse the existing chat visitor timeline; only public, allowlisted events leave the page.
+  if (!document.querySelector('script[src*="/assets/visitor-journey.js"]')) {
+    const journey = document.createElement('script');
+    journey.async = true;
+    journey.src = '/assets/visitor-journey.js?v=20261127';
+    journey.referrerPolicy = 'no-referrer';
+    document.head.append(journey);
+  }
+
   const stream = 'G-EJKPHSTSNH';
   const params = new URLSearchParams(location.search);
   const hasPaidClick = ['gclid', 'dclid', 'gbraid', 'wbraid', 'msclkid'].some(key => params.has(key));
@@ -60,6 +69,13 @@
     if (once && recorded.has(once)) return;
     if (once) recorded.add(once);
     try {
+      if (window.SafeNotarizeJourney) window.SafeNotarizeJourney.record(name, values);
+      else {
+        const queue = window.SafeNotarizeJourneyQueue = window.SafeNotarizeJourneyQueue || [];
+        if (queue.length < 30) queue.push({ name, values });
+      }
+    } catch { /* Visitor timelines cannot interrupt measurement or booking. */ }
+    try {
       window.gtag('event', name, { ...fields, ...values, send_to: stream, transport_type: 'beacon' });
     } catch { /* Optional measurement never blocks navigation or a booking. */ }
   }
@@ -67,7 +83,7 @@
     ? 'standard' : service === 'premium' ? 'premium' : null;
   function bookingStep(route, step) {
     const valid = route === 'standard' ? ['signer_details', 'session_details']
-      : route === 'premium' ? ['payment_details'] : [];
+      : route === 'premium' ? ['payment_details', 'authorizing_card', 'opening_session', 'session_ready'] : [];
     if (valid.includes(step)) event('notarization_booking_step', {
       booking_route: route, booking_step: step
     }, 'step:' + route + ':' + step);
@@ -123,6 +139,15 @@
       }, 'document:' + route + ':' + choice);
     },
     bookingStep,
+    failure(route, category) {
+      const allowed = ['validation_failed', 'participant_conflict', 'saved_document_missing',
+        'intake_request_failed', 'intake_response_incomplete', 'submission_failed', 'checkout_unavailable',
+        'card_authorization_failed', 'payment_contract_invalid', 'invalid_quantity', 'document_unavailable',
+        'order_needs_review', 'session_request_failed', 'security_check_failed'];
+      if (['standard', 'premium'].includes(route) && allowed.includes(category)) event('notarization_issue', {
+        booking_route: route, error_type: category
+      });
+    },
     intakeSubmitted(route) {
       if (['standard', 'premium'].includes(route)) event('notarization_intake_submitted', {
         booking_route: route

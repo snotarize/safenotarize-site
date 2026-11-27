@@ -5,6 +5,8 @@ on:
   pull_request:
     paths:
       - assets/ga4-tracking.js
+      - assets/visitor-journey.js
+      - assets/visitor-journey.css
       - assets/google-ads-tag.js
       - assets/order-attribution.js
       - site-tests/**
