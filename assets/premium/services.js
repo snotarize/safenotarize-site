@@ -114,6 +114,7 @@
     onDemandIncluded: '1 siyatè, 1 so',
     onDemandAction: isStartLanding ? 'Mande yon notè kounye a' : 'Chwazi sèvis sou demann',
     documentQuestion: 'Èske dokiman ou pare?',
+    selectedService: 'Sèvis ou chwazi:',
     haveDocument: 'Wi, mwen gen dokiman mwen',
     bookNext: isStartLanding ? 'Kontinye nan notarizasyon' : 'Kontinye pou pran randevou',
     checkoutNext: 'Kontinye nan peman',
@@ -139,6 +140,7 @@
     onDemandIncluded: '1 signer, 1 stamp',
     onDemandAction: isStartLanding ? 'Request a notary now' : 'Choose On-Demand',
     documentQuestion: 'Is your document ready?',
+    selectedService: 'Selected service:',
     haveDocument: 'Yes, I have my document',
     bookNext: isStartLanding ? 'Continue to notarization' : 'Continue to booking',
     checkoutNext: 'Continue to checkout',
@@ -185,6 +187,7 @@
     } else {
       control.type = 'button';
       control.setAttribute('aria-pressed', 'false');
+      control.setAttribute('aria-expanded', 'false');
       control.setAttribute('aria-controls', 'sn-document-options');
       const check = document.createElement('span');
       check.className = 'sn-service-check';
@@ -271,11 +274,14 @@
     documentOptions.id = 'sn-document-options';
     documentOptions.className = 'sn-document-options';
     documentOptions.hidden = true;
+    const selectedLabel = document.createElement('p');
+    selectedLabel.id = 'sn-document-service';
+    selectedLabel.className = 'sn-document-service';
     const question = document.createElement('h2');
     question.id = 'sn-document-question';
     question.tabIndex = -1;
     question.textContent = copy.documentQuestion;
-    documentOptions.setAttribute('aria-labelledby', question.id);
+    documentOptions.setAttribute('aria-labelledby', selectedLabel.id + ' ' + question.id);
     const readyNext = document.createElement('small');
     const readyLink = documentAnswer(copy.haveDocument, readyNext);
     const libraryNext = document.createElement('small');
@@ -290,14 +296,29 @@
     const answers = document.createElement('div');
     answers.className = 'sn-document-answers';
     answers.append(readyLink, needLink);
-    documentOptions.append(question, answers);
+    documentOptions.append(selectedLabel, question, answers);
     chooser.append(documentOptions);
 
+    const stacked = typeof window.matchMedia === 'function' ? window.matchMedia('(max-width: 620px)') : null;
+    let activeService = null;
+    function placeDocumentOptions() {
+      if (!activeService) return;
+      const selected = serviceButtons.find(button => button.service === activeService);
+      // Match visual and keyboard order: on a phone, the next step follows its card.
+      // On wider screens both service cards stay together above the shared next step.
+      const anchor = stacked?.matches ? selected.card : serviceButtons[serviceButtons.length - 1].card;
+      anchor.after(documentOptions);
+    }
+    if (typeof stacked?.addEventListener === 'function') stacked.addEventListener('change', placeDocumentOptions);
+    else stacked?.addListener?.(placeDocumentOptions);
+
     function showDocumentOptions(service) {
+      activeService = service;
       const isOnDemand = service === 'premium';
       for (const button of serviceButtons) {
         const active = button.service === service;
         button.control.setAttribute('aria-pressed', String(active));
+        button.control.setAttribute('aria-expanded', String(active));
         button.card.classList.toggle('sn-service-selected', active);
       }
       readyLink.href = relative(isOnDemand ? onDemand : regular);
@@ -305,6 +326,8 @@
       const library = new URL(libraryPath);
       library.searchParams.set('service', service);
       needLink.href = relative(library);
+      selectedLabel.textContent = copy.selectedService + ' ' + (isOnDemand ? copy.onDemand + ' 24/7' : copy.standard);
+      placeDocumentOptions();
       documentOptions.hidden = false;
     }
 
@@ -313,7 +336,8 @@
         showDocumentOptions(service);
         const url = new URL(location.href);
         url.searchParams.set('service', service);
-        window.history.replaceState(window.history.state, '', relative(url));
+        try { window.history.replaceState(window.history.state, '', relative(url)); }
+        catch { /* A restricted browser history must not stop the document choices. */ }
         question.focus({ preventScroll: true });
         documentOptions.scrollIntoView({ block: 'nearest' });
       });

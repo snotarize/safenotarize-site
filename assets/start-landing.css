@@ -49,7 +49,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .sn-start-landing .sn-service-selected { box-shadow: 0 0 0 2px #13733a1a; }
 .sn-start-landing .sn-service-add-ons summary { padding: 12px 0 4px; font-size: 14px; }
 .sn-start-landing .sn-service-add-ons table, .sn-start-landing .sn-service-add-ons p { font-size: 14px; }
-.sn-start-landing .sn-document-options { padding: 22px 0 0; margin: 0; border-top: 1px solid var(--line); }
+.sn-start-landing .sn-document-options { padding: 18px; margin: 0; border: 1px solid #b8d7c3; border-radius: 10px; background: #f3faf6; }
 .sn-start-landing .sn-document-options h2, .sn-start-fallback h3 { margin: 0 0 14px; color: var(--navy); font-size: 20px; }
 .sn-start-landing .sn-document-answers { gap: 10px; }
 .sn-start-landing .sn-document-answer { min-width: 0; padding: 16px 12px; border-radius: 8px; background: #fff; }
