@@ -106,11 +106,11 @@
     heading: 'Kilè ou bezwen yon notè sou entènèt?',
     from: 'Apati',
     standard: 'Estanda',
-    standardDescription: isStartLanding ? 'Antre lè notè a pare, oswa pran randevou ak SafeNotarize.' : 'Antre lè notè a pare oswa chwazi yon lè.',
+    standardDescription: isStartLanding ? 'Antre lè notè a pare, oswa rezève.' : 'Antre lè notè a pare oswa chwazi yon lè.',
     standardIncluded: '1 siyatè, 2 so',
     standardAction: isStartLanding ? 'Chwazi Estanda' : 'Chwazi sèvis estanda',
     onDemand: 'Sou demann',
-    onDemandDescription: isStartLanding ? 'Mande yon sesyon 24/7. Konekte lè yon notè disponib.' : 'Bezwen yon notè vit oswa apre lè travay? Mande youn kounye a.',
+    onDemandDescription: isStartLanding ? 'Konekte lè yon notè disponib.' : 'Bezwen yon notè vit oswa apre lè travay? Mande youn kounye a.',
     onDemandIncluded: '1 siyatè, 1 so',
     onDemandAction: isStartLanding ? 'Mande yon notè kounye a' : 'Chwazi sèvis sou demann',
     documentQuestion: 'Èske dokiman ou pare?',
@@ -130,12 +130,12 @@
     heading: 'When do you need an online notary?',
     from: 'From',
     standard: 'Standard',
-    standardDescription: isStartLanding ? 'Join when ready, or book a time with SafeNotarize.' : 'Join when a notary is ready or choose a time.',
+    standardDescription: isStartLanding ? 'Join when ready or choose a time.' : 'Join when a notary is ready or choose a time.',
     standardIncluded: '1 signer, 2 stamps',
     standardAction: 'Choose Standard',
     onDemand: 'On-Demand',
     onDemandDescription: isStartLanding
-      ? 'Request 24/7. Connect when a notary is available.'
+      ? 'Connect when a notary is ready.'
       : 'Need it soon or after hours? Request a notary now.',
     onDemandIncluded: '1 signer, 1 stamp',
     onDemandAction: isStartLanding ? 'Request a notary now' : 'Choose On-Demand',

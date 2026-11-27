@@ -21,7 +21,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .sn-phone small { color: #c5d8e9; font-size: 14px; font-weight: 400; }
 .sn-phone strong { font-size: 16px; }
 .sn-top { background: linear-gradient(115deg, #f0f7fb 0%, #f8fbfd 58%, #edf5fa 100%); border-bottom: 1px solid var(--line); }
-.sn-top-grid { display: grid; grid-template-columns: .92fr 1.08fr; align-items: center; gap: 44px; padding-top: 52px; padding-bottom: 48px; }
+.sn-top-grid { display: grid; grid-template-columns: .92fr 1.08fr; grid-template-areas: "hero booking" "proof booking"; align-items: center; column-gap: 44px; row-gap: 0; padding-top: 52px; padding-bottom: 48px; }
+.hero { grid-area: hero; align-self: end; }
+.sn-proof { grid-area: proof; align-self: start; }
 .sn-eyebrow { margin: 0 0 15px; color: #376279; font-size: 14px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .hero h1 { margin: 0; color: var(--navy); font-size: clamp(36px, 3.8vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -.035em; }
 .hero h1 span { display: block; color: var(--green); }
@@ -31,7 +33,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .sn-trust { display: flex; flex-wrap: wrap; gap: 13px 18px; list-style: none; padding: 22px 0 0; margin: 22px 0 0; border-top: 1px solid #d3e1e9; }
 .sn-trust li { display: flex; align-items: center; gap: 7px; color: #294a61; font-size: 14px; font-weight: 600; }
 .sn-trust svg { flex: 0 0 auto; width: 19px; height: 19px; color: var(--green); }
-.sn-booking-panel { min-width: 0; }
+.sn-booking-panel { grid-area: booking; min-width: 0; }
 .sn-choice-heading { margin: 0 0 5px; color: var(--navy); font-size: 24px; line-height: 1.25; letter-spacing: -.02em; }
 .sn-choice-intro { margin: 0 0 18px; font-size: 16px; }
 .sn-start-landing .sn-service-options { max-width: none; margin: 0; gap: 14px; }
@@ -98,8 +100,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   .sn-shell { padding-left: 22px; padding-right: 22px; }
   .sn-landing-header .sn-shell { min-height: 72px; }
   .sn-landing-nav > a:not(.sn-phone) { display: none; }
-  .sn-top-grid { grid-template-columns: 1fr; gap: 30px; padding-top: 32px; padding-bottom: 32px; }
-  .hero { max-width: 620px; }
+  .sn-top-grid { grid-template-columns: 1fr; grid-template-areas: "hero" "booking" "proof"; gap: 30px; padding-top: 32px; padding-bottom: 32px; }
+  .hero { max-width: 620px; align-self: stretch; }
   .hero h1 { font-size: 42px; }
   .hero h1 span { display: inline; }
   .sn-lead { max-width: 590px; margin: 16px 0 14px; font-size: 17px; }
@@ -112,32 +114,39 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   .sn-steps li { grid-template-columns: 1fr; gap: 10px; }
   .sn-questions { grid-template-columns: 1fr; gap: 24px; }
 }
-@media (max-width: 480px) {
-  .sn-shell { padding-left: 20px; padding-right: 20px; }
-  .sn-landing-header .sn-shell { gap: 12px; min-height: 68px; }
+@media (max-width: 620px) {
+  .sn-shell { padding-left: 16px; padding-right: 16px; }
+  .sn-landing-header .sn-shell { gap: 12px; min-height: 60px; }
   .sn-landing-brand { gap: 7px; font-size: 17px; }
   .sn-landing-brand img { width: 31px; height: 31px; }
   .sn-phone { gap: 6px; }
   .sn-phone svg, .sn-phone small { display: none; }
   .sn-phone strong { font-size: 14px; }
-  .sn-top-grid { padding-top: 28px; padding-bottom: 26px; gap: 26px; }
-  .sn-eyebrow { margin-bottom: 12px; font-size: 14px; letter-spacing: .08em; }
-  .hero h1 { max-width: 340px; font-size: 36px; line-height: 1.1; }
-  .sn-lead { font-size: 16px; line-height: 1.55; }
+  .sn-top-grid { padding-top: 16px; padding-bottom: 20px; gap: 16px; }
+  .sn-eyebrow { display: none; }
+  .hero h1 { max-width: none; font-size: 28px; line-height: 1.08; }
+  .sn-lead { margin: 10px 0 0; font-size: 16px; line-height: 1.4; }
   .sn-common { font-size: 14px; }
-  .sn-trust { gap: 9px 14px; }
+  .sn-trust { margin-top: 12px; padding-top: 12px; gap: 9px 14px; }
   .sn-trust li { font-size: 14px; }
-  .sn-choice-heading { font-size: 23px; }
-  .sn-choice-intro { margin-bottom: 14px; font-size: 16px; }
-  .sn-start-landing .sn-service-options { gap: 12px; }
-  .sn-start-landing .sn-service-card { padding: 18px; }
-  .sn-start-landing .sn-service-card[data-sn-service] { padding-top: 16px; }
-  .sn-start-landing .sn-service-card h3 { font-size: 20px; margin-bottom: 8px; }
-  .sn-start-landing .sn-service-description { min-height: 0; margin-bottom: 12px; }
-  .sn-start-landing .sn-service-cost { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 16px; }
-  .sn-start-landing .sn-service-included { margin-top: 0; }
-  .sn-start-landing .sn-service-price strong { font-size: 32px; }
-  .sn-start-landing .sn-service-action { font-size: 16px; }
+  .sn-choice-heading { margin: 0 0 10px; font-size: 20px; line-height: 1.2; }
+  .sn-choice-intro { display: none; }
+  .sn-start-landing .sn-service-options { gap: 10px; }
+  .sn-start-landing .sn-service-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "name price" "description description" "included included" "action action";
+    gap: 4px 8px;
+    padding: 10px;
+  }
+  .sn-start-landing .sn-service-card[data-sn-service] { border-top-width: 3px; padding-top: 10px; }
+  .sn-start-landing .sn-service-card h3 { grid-area: name; align-self: center; margin: 0; font-size: 18px; line-height: 1.2; }
+  .sn-start-landing .sn-service-description { grid-area: description; min-height: 0; margin: 0; font-size: 16px; line-height: 1.3; }
+  .sn-start-landing .sn-service-cost { display: contents; }
+  .sn-start-landing .sn-service-price { grid-area: price; margin: 0; font-size: 14px; white-space: nowrap; }
+  .sn-start-landing .sn-service-price strong { font-size: 28px; line-height: 1; }
+  .sn-start-landing .sn-service-included { grid-area: included; margin: 0; font-size: 14px; line-height: 1.35; }
+  .sn-start-landing .sn-service-action { grid-area: action; min-height: 44px; margin-top: 6px; padding: 10px 12px; font-size: 16px; line-height: 1.3; }
   .sn-start-landing .sn-document-answers { grid-template-columns: 1fr; }
   .sn-steps { grid-template-columns: 1fr; gap: 24px; margin-top: 23px; }
   .sn-steps li { grid-template-columns: 40px 1fr; gap: 14px; }
