@@ -105,7 +105,7 @@
 <script src="/assets/premium/services.js?v=13" defer></script>
 <script src="/assets/vehicle-release-metrics.js" defer></script>
 <script src="/assets/official-forms/booking-analytics.js?v=2" defer></script>
-<script src="/assets/ga4-tracking.js?v=20261125-ads" defer></script>
+<script src="/assets/ga4-tracking.js?v=20261127-journey" defer></script>
 <script src="/assets/order-attribution.js?v=6" defer></script>
 </head>
 <body><header class="sn-site-header"><div class="sn-header-inner"><a class="sn-brand" href="/ht.html"><img alt="SafeNotarize" src="https://raw.githubusercontent.com/snotarize/safenotarize-site/8227ada29da0588e3de46c5a838cd7456bd373f8/White-logo-transparent-background.png"/><span>SafeNotarize</span></a><nav class="sn-desktop-nav"><a href="/ht.html">Akèy</a><a href="/haitian-online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/ht.html#pricing-block">Pri</a><a href="/ht.html#faq">Kesyon</a><a class="sn-start-btn" href="/start-ht.html">Kòmanse</a></nav><button aria-expanded="false" aria-label="Louvri meni an" class="sn-menu-btn" onclick="snToggleMenu(this)" type="button">☰</button></div><div class="sn-mobile-panel" id="sn-mobile-panel"><a href="/ht.html">Akèy</a><a href="/haitian-online-notary.html">Notè Online</a><a href="/documents/library-ht.html">Bibliyotèk Dokiman</a><a href="/ht.html#pricing-block">Pri</a><a href="/ht.html#faq">Kesyon</a><a class="sn-mobile-start" href="/start-ht.html">Kòmanse</a></div></header>
@@ -527,7 +527,7 @@
       for(const field of fields){
         if(field && !field.checkValidity()){ field.reportValidity(); field.focus(); return false; }
       }
-      if(!validateCoordinatorSignerConflicts({focusFirst:true,strict:true})) return false;
+      if(!validateCoordinatorSignerConflicts({focusFirst:true,strict:true})){ window.SafeNotarizeAnalytics?.failure?.('standard','participant_conflict'); return false; }
       return validateUniqueSessionPeople();
     }
 
@@ -1046,6 +1046,12 @@
       };
     }
 
+    function bookingIssue(message, category){
+      const error = new Error(message);
+      error.snJourneyCategory = category;
+      return error;
+    }
+
     async function submitIntake(payload){
       if(window.SafeNotarizeDocumentHandoff?.canBook(payload))return window.SafeNotarizeDocumentHandoff.book(payload);
       // Do not send a second booking to Make when the secure generated PDF is
@@ -1061,9 +1067,9 @@
       const text = await response.text();
       let responseData = {};
       try{ responseData = JSON.parse(text); }catch(error){ responseData = {success:true,order_id:text.trim()}; }
-      if(!response.ok) throw new Error(responseData.message || "Nou pa t ka sove enfòmasyon randevou a.");
+      if(!response.ok) throw bookingIssue(responseData.message || "Nou pa t ka sove enfòmasyon randevou a.","intake_request_failed");
       const orderId = responseData.order_id || responseData.record_id || responseData.id || "";
-      if(!orderId) throw new Error("Randevou a sove, men sistèm nan pa retounen order_id la.");
+      if(!orderId) throw bookingIssue("Randevou a sove, men sistèm nan pa retounen order_id la.","intake_response_incomplete");
       return orderId;
     }
 
@@ -1079,7 +1085,7 @@
       synchronizeActiveFields();
       const form = e.currentTarget;
       if(!form.checkValidity()){ form.reportValidity(); return; }
-      if(!validateCoordinatorSignerConflicts({focusFirst:true,strict:true})) return;
+      if(!validateCoordinatorSignerConflicts({focusFirst:true,strict:true})){ window.SafeNotarizeAnalytics?.failure?.('standard','participant_conflict'); return; }
       if(!validateUniqueSessionPeople()) return;
 
       submissionInProgress = true;
@@ -1106,6 +1112,7 @@
         if(transferConfirmed)window.SafeNotarizeDocumentHandoff?.clearPending();
         clearPendingBookingRequestId();
       }catch(error){
+        window.SafeNotarizeAnalytics?.failure?.('standard', error.snJourneyCategory || 'submission_failed');
         submissionInProgress = false;
         showStatus("error",error.message || "Gen yon bagay ki pa mache. Tanpri eseye ankò.");
         btn.disabled = false;

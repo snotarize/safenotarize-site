@@ -21,6 +21,26 @@ Private receipts, uploads, document editors, customer documents and embedded fra
 
 Repeated service, CTA, checkout and intake callbacks are deduplicated within each page load. A booking or card authorization is not a paid purchase. No new event was made a Google Ads primary conversion by this release.
 
+## Individual visitor timelines
+
+The shared public-page loader also connects the allowlisted steps to the existing tawk.to property. In tawk.to, open **Active > Visitors**, select a visitor, then inspect **Session Information > Timeline**. For a saved conversation, open the visitor in Inbox and choose Session Information > Timeline. The `sn-visit` attribute and each event's `visit` metadata link public activity within the same browser tab. Each event includes its original timestamp, public page, last recorded step and a sequence ID. Pending events may arrive after navigation, so use the `at` field for the original time rather than assuming arrival order is exact. No new chat message or customer booking is created by this instrumentation.
+
+The optional **Having trouble?** link on start and booking pages lets a visitor explicitly select a reason. It does not interrupt checkout, default to a reason, capture free text or force a response. Confirmation appears only when tawk.to acknowledges the event.
+
+Evidence has three distinct labels:
+
+| Label | Meaning |
+| --- | --- |
+| `activity-only` | A public page or booking step was recorded. `sn-page-hidden` means the page was backgrounded or left, not that the visitor abandoned. |
+| `technical-observation` | A fixed error category was observed, such as failed card authorization, unavailable checkout, failed intake request, browser offline or form validation. This does not prove the error caused the visitor to leave. |
+| `visitor-reported` | The visitor actively selected a feedback reason. This is the only personal explanation labeled as reported by the visitor. |
+
+There is no inferred "confirmed reason" for a visitor who gives no feedback. An intake reference, payment hold, or visible Join button is not a completed paid purchase. Payment success remains owned by the existing verified server reporting.
+
+Tawk.to is reused rather than adding a recording vendor or backend. On newly covered pages the widget stays hidden; the existing marketing-page widget behavior is preserved. Timelines are best effort: blocked scripts, missing consent, expired widget sessions, privacy controls, private URLs, disabled storage and abrupt browser closure can leave gaps. This does not create screen recordings or recover historical individual visits. Anonymous IDs are per browser tab and refresh on a new page after a 30-minute inactive period. Tawk.to's own visitor/session lifetime may differ.
+
+No document editor, upload, receipt, private resume link, form contents, payment-card details, arbitrary error message or stack trace enters the new events. The queue is bounded and revalidated after storage. The measurement respects Global Privacy Control and Do Not Track. Only known public query parameters are accepted before starting the widget. Event delivery failures never block the underlying booking.
+
 ## Reading the reports
 
 In GA4, use Realtime to spot recent public page views/events and the Pages and screens report for page totals. In Explore, use Path exploration to follow recorded pages/events and Funnel exploration to compare service selection, checkout and intake submission. Break down supported reports by country, device and session source/medium. Processed reports can lag behind Realtime.
