@@ -4,6 +4,10 @@ on:
     branches: [fix/ga4-paid-purchase-tracking-2026-11-18]
   pull_request:
     paths:
+      - start.html
+      - start-ht.html
+      - assets/start-landing.css
+      - assets/premium/services.js
       - assets/ga4-tracking.js
       - assets/visitor-journey.js
       - assets/visitor-journey.css
