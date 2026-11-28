@@ -86,7 +86,7 @@ test('official-form organic page views stay isolated and paid/direct visits are 
 });
 
 test('public ad entry and booking pages load Analytics before order attribution', () => {
-  for (const page of ['start.html', 'start-ht.html', 'book.html', 'book-ht.html', 'premium.html', 'documents/library.html']) {
+  for (const page of ['start.html', 'start-ht.html', 'florida-start.html', 'book.html', 'book-ht.html', 'premium.html', 'documents/library.html']) {
     const html = read(page);
     assert.ok(html.indexOf('/assets/ga4-tracking.js') > 0, page);
     assert.ok(html.indexOf('/assets/ga4-tracking.js') < html.indexOf('/assets/order-attribution.js'), page);

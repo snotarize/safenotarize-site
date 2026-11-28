@@ -6,6 +6,7 @@ on:
     paths:
       - start.html
       - start-ht.html
+      - florida-start.html
       - assets/start-landing.css
       - assets/premium/services.js
       - assets/ga4-tracking.js

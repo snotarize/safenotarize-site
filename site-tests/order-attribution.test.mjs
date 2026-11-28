@@ -161,7 +161,7 @@ test('other paid visits and privacy opt-outs do not report ChatGPT stages', () =
 });
 
 test('the supported booking pages load attribution before notifying it of a real order', () => {
-  for (const file of ['start.html', 'start-ht.html', 'book.html', 'book-ht.html', 'premium.html']) {
+  for (const file of ['start.html', 'start-ht.html', 'florida-start.html', 'book.html', 'book-ht.html', 'premium.html']) {
     assert.match(read(file), /<script src="\/assets\/order-attribution\.js\?v=\d+" defer><\/script>/);
   }
   for (const file of ['documents/vehicle-release-authorization.html', 'documents/library.html']) {
@@ -190,10 +190,11 @@ for (const [route, path, order, proof] of [
   ['standard', '/book.html', standardId, requestId],
   ['premium', '/premium.html', premiumId, access]
 ]) {
+  for (const landing of ['start.html', 'florida-start.html']) {
   for (const clickType of ['gclid', 'gbraid', 'wbraid']) {
-    test(`new account ${route} ${clickType} reaches its private collector without waiting for old Analytics`, async () => {
+    test(`new account ${route} ${clickType} from ${landing} reaches its private collector without waiting for old Analytics`, async () => {
       const storage = new Map(), requests = [];
-      const entry = '/start.html?utm_source=google&utm_medium=cpc&utm_campaign=online_notary_7872348986&' + clickType + '=' + click;
+      const entry = '/' + landing + '?utm_source=google&utm_medium=cpc&utm_campaign=online_notary_7872348986&' + clickType + '=' + click;
       browser({ path: entry, storage, requests });
       let identityReads = 0;
       const api = browser({ path, storage, requests, analytics: {
@@ -210,6 +211,7 @@ for (const [route, path, order, proof] of [
       assert.equal(requests[0].options.body.includes(proof), false);
       assert.doesNotMatch(requests[0].options.body, /ga4|clientId|sessionId|email|phone/);
     });
+  }
   }
 }
 
