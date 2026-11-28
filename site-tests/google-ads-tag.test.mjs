@@ -57,7 +57,7 @@ test('private URLs, documents, receipts and visitor opt-outs never load Ads', ()
 });
 
 test('both Standard and Premium public booking URLs retain base measurement', () => {
-  for (const path of ['/start-ht.html?service=regular', '/book.html?document_ready=1&document_source=own&service=regular',
+  for (const path of ['/florida-start.html?utm_source=google&utm_medium=cpc&utm_campaign=online_notary_7872348986', '/start-ht.html?service=regular', '/book.html?document_ready=1&document_source=own&service=regular',
     '/premium.html?lang=ht&document_source=library&document_type=ds-3053', '/#pricing-block',
     '/?_dbg=1', '/start.html?gtm_debug=x', '/start.html?gtm_debug=1795582800000']) {
     const page = browser(path);

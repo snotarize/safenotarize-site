@@ -70,6 +70,31 @@ function chooser(landing=false){
 const premiumHref=selectors=>selectors['[data-sn-service-choice]'].children[1].children.at(-1).href;
 const documentOptions=selectors=>selectors['[data-sn-service-choice]'].children.find(node=>node.id==='sn-document-options');
 
+test('the Florida ad page preserves its paid-click URL while both services reveal the correct document routes',()=>{
+  assert.match(read('florida-start.html'),/data-sn-service-intro data-sn-start-landing/);
+  const selectors=chooser(true);
+  let selectedUrl;
+  renderServices('/florida-start.html?utm_source=google&utm_medium=cpc&utm_campaign=online_notary_7872348986&gclid=fixture-click-123',{
+    selectors,window:{SN_PREMIUM:config,matchMedia:()=>({matches:true,addListener(){}}),
+      history:{replaceState(_state,_title,url){selectedUrl=new URL(url,origin);}}}
+  });
+  const holder=selectors['[data-sn-service-choice]'];
+  const [standard,onDemand]=holder.children;
+  const options=documentOptions(selectors);
+  standard.children.at(-1).click();
+  assert.equal(holder.children[1],options);
+  assert.equal(new URL(options.children[2].children[0].href).pathname,'/book.html');
+  assert.equal(new URL(options.children[2].children[1].href).searchParams.get('service'),'regular');
+  onDemand.children.at(-1).click();
+  assert.equal(holder.children[2],options);
+  assert.equal(new URL(options.children[2].children[0].href).pathname,'/premium.html');
+  assert.equal(new URL(options.children[2].children[1].href).searchParams.get('service'),'premium');
+  assert.equal(selectedUrl.pathname,'/florida-start.html');
+  assert.equal(selectedUrl.searchParams.get('gclid'),'fixture-click-123');
+  assert.equal(selectedUrl.searchParams.get('utm_campaign'),'online_notary_7872348986');
+  assert.equal(options.hidden,false);
+});
+
 test('a completed official form goes directly to checkout and retains its document type',()=>{
   const choices=chooser();
   renderServices('/book.html?document_ready=1&document_source=official&document_type=ps-1583',
